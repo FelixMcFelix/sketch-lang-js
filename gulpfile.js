@@ -27,8 +27,16 @@ gulp.task("build", function(){
 });
 
 //CLEAN TASKS
-gulp.task("clean", function(cb){
+gulp.task("clean",["clean:build", "clean:docs"], function(){
+	
+});
+
+gulp.task("clean:build", function(cb){
 	del(configs.destDir+"*", cb);
+});
+
+gulp.task("clean:docs", function(cb){
+	del(configs.docsDir+"*", cb);
 });
 
 //TESTING TASKS
@@ -39,7 +47,7 @@ gulp.task("test:lint", function(){
 			.pipe(jshint.reporter("fail"));
 });
 
-gulp.task("test",["test:lint", "build"], function(){
+gulp.task("test", ["test:lint", "build"], function(){
 	
 });
 

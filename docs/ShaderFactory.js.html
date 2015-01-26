@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ShaderManager.js</title>
+    <title>JSDoc: Source: ShaderFactory.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ShaderManager.js</h1>
+    <h1 class="page-title">Source: ShaderFactory.js</h1>
 
     
 
@@ -26,10 +26,28 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
-* @namespace ShaderManager
+* @classdesc
+* A Factory class designed to process objects, URLs, JSON and potentially other formats to generate
+* valid {@link ShaderManager.Shader} objects.
+*
+* This is a deliberate choice, to abstract some functionality away from the central {@link ShaderManager.Manager}
+* class.
+* @class ShaderManager.ShaderFactory
+* @description
+* Create a new ShaderFactory object - this is done automatically by {@link ShaderManager.Manager}.
+*
+* @constructor
+* @param {WebGLRenderingContext} gl - The context all shaders and programs will belong to and be compiled by.
 */
-var ShaderManager = ShaderManager || {};
-</code></pre>
+ShaderManager.ShaderFactory = function(gl){
+
+};
+
+ShaderManager.ShaderFactory.prototype = {
+
+}
+
+ShaderManager.ShaderFactory.prototype.constructor = ShaderManager.ShaderFactory;</code></pre>
         </article>
     </section>
 

@@ -1,3 +1,10 @@
+/**
+* @classdesc
+* The Program object, generated from linked pairs of vs-fs combinations.
+* @class ShaderManager.Program
+* @constructor
+* @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
+*/
 ShaderManager.Program = function(gl, vs, fs){
 	
 };
