@@ -5,5 +5,26 @@
 			"follow_symlinks": true,
 			"path": "."
 		}
+	],
+	"settings": {
+		"tab_size": 4
+	},
+	"build_systems": [
+		{
+			"name": "Initialise",
+			"cmd": ["npm", "install", "-g", "gulp"],
+			"cmd": ["npm", "install"],
+			"working_dir": "${project_path:${folder}}"
+		},
+		{
+			"name": "Build-Gulp",
+			"cmd": ["node","gulpfile.js"],
+			"working_dir": "${project_path:${folder}}"
+		},
+		{
+			"name": "Test-Gulp",
+			"cmd": ["gulp", "test"],
+			"working_dir": "${project_path:${folder}}"
+		}
 	]
 }

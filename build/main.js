@@ -21,19 +21,19 @@ ShaderManager.Manager = function(gl){
 	/**
     * An object storing all processed Vertex Shaders.
     * @property {object} vertShaders
-    * @protected
+    * @private
     */
 	this.vertShaders 	= {};
 	/**
     * An object storing all processed Fragment Shaders.
     * @property {object} fragShaders
-    * @protected
+    * @private
     */
 	this.fragShaders	= {};
 	/**
     * An object storing all processed Programs.
     * @property {object} programs
-    * @protected
+    * @private
     */
 	this.programs		= {};
 
@@ -56,10 +56,6 @@ ShaderManager.Manager.prototype = {
 	*/
 	addShader: function(shaderRef){
 		//TODO: Possibly fuse these w/ ShaderFactory?
-	},
-
-	addShaderFromURL: function(url){
-
 	},
 
 	/**
@@ -117,14 +113,36 @@ ShaderManager.Program = function(gl, vs, fs){
 };
 
 ShaderManager.Program.prototype = {
+	/**
+	* Draw a set of vertices with this program, with optional configuration. Configurations passed here do not overwrite the cached object.
+	* This method is accessed when {@link ShaderManager.Manager#draw} is called.
+	* @method ShaderManager.Program#draw
+	* @public
+	* @param {Float32Array} verts - Vertex list to pass to the GPU.
+	* @param {object} [conf1] - A set of attributes to pass down to the fragment shader.
+	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
+	*/
 	draw: function(verts, conf1, conf2){
 
 	},
 
+	/**
+	* Restore a program's object config for either shader or both.
+	* @method ShaderManager.Program#restoreDefaultConfig
+	* @public
+	* @param {integer} mode - The identifier for which config object to revert. Supports ShaderManager.Program.VS_MODE, ShaderManager.Program.FS_MODE, ShaderManager.Program.BOTH_MODE.
+	*/
 	restoreDefaultConfig: function(mode){
 
 	},
 
+	/**
+	* Set a program's object config for either shader or both with a given config object.
+	* @method ShaderManager.Program#setConfig
+	* @public
+	* @param {integer} mode - The identifier for which config object to revert. Supports ShaderManager.Program.VS_MODE, ShaderManager.Program.FS_MODE, ShaderManager.Program.BOTH_MODE.
+	* @param {object} conf - The config object to inject into the program state.
+	*/
 	setConfig: function(mode, conf){
 
 	}

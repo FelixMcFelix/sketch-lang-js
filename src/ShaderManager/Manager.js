@@ -21,19 +21,19 @@ ShaderManager.Manager = function(gl){
 	/**
     * An object storing all processed Vertex Shaders.
     * @property {object} vertShaders
-    * @protected
+    * @private
     */
 	this.vertShaders 	= {};
 	/**
     * An object storing all processed Fragment Shaders.
     * @property {object} fragShaders
-    * @protected
+    * @private
     */
 	this.fragShaders	= {};
 	/**
     * An object storing all processed Programs.
     * @property {object} programs
-    * @protected
+    * @private
     */
 	this.programs		= {};
 
@@ -56,10 +56,6 @@ ShaderManager.Manager.prototype = {
 	*/
 	addShader: function(shaderRef){
 		//TODO: Possibly fuse these w/ ShaderFactory?
-	},
-
-	addShaderFromURL: function(url){
-
 	},
 
 	/**
