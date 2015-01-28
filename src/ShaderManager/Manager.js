@@ -70,6 +70,7 @@ ShaderManager.Manager.prototype = {
 	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
 	*/
 	draw: function(vs, fs, verts, conf1, conf2){
+		//TODO: Lookup from string and exception throwing.
 		this.getProgram(vs, fs).draw(verts, conf1, conf2);
 	},
 
