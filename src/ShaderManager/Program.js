@@ -4,9 +4,13 @@
 * @class ShaderManager.Program
 * @constructor
 * @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
+* @param {ShaderManager.Shader} vs - The context the shaders of this program will belong to and be compiled by.
+* @param {ShaderManager.Shader} fs - The context the shaders of this program will belong to and be compiled by.
 */
 ShaderManager.Program = function(gl, vs, fs){
-	
+	this.gl = gl;
+	this.vs = vs;
+	this.fs = fs;
 };
 
 ShaderManager.Program.prototype = {

@@ -7,6 +7,7 @@ A web-based module for rendering graphics written in an experimental language.
 In the base directory, type:
 
 ```sh
+$ npm install -g gulp
 $ npm install
 ```
 

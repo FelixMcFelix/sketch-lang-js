@@ -1,0 +1,25 @@
+<!DOCTYPE html />
+<html>
+	<head>
+		<script type="text/javascript" src="../build/main.js" />
+		<script type="text/javascript">
+			var canvas = document.getElementById("testingcanvas");
+			var glctx = canvas.getContext("webgl");
+
+			var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
+
+			var manager = new ShaderManager.Manager(glctx);
+			manager.addShader("squareShaders.json");
+
+			Window.requestAnimationFrame(raf);
+
+			var raf = function(){
+				manager.draw("square", "square", squareVtx, null, {"color": [1.0, 0.0, 0.0]});
+				Window.requestAnimationFrame(raf);
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id="testingcanvas" width="800" height="600" />
+	</body>
+</html>
