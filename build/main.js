@@ -44,7 +44,7 @@ ShaderManager.Manager = function(gl){
     * @protected
     * @readonly
     */
-	this.shaderFactory	= new ShaderManager.ShaderFactory(gl);
+	this.shaderFactory	= new ShaderManager.ShaderFactory(this);
 };
 
 ShaderManager.Manager.prototype = {
@@ -55,7 +55,7 @@ ShaderManager.Manager.prototype = {
 	* @param {string|ShaderManager.Shader} shaderRef - URL, JSON or ShaderManager.Shader.
 	*/
 	addShader: function(shaderRef){
-		//TODO: Possibly fuse these w/ ShaderFactory?
+		this.shaderFactory.addShader(shaderRef);
 	},
 
 	/**
@@ -70,6 +70,7 @@ ShaderManager.Manager.prototype = {
 	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
 	*/
 	draw: function(vs, fs, verts, conf1, conf2){
+		//TODO: Lookup from string and exception throwing.
 		this.getProgram(vs, fs).draw(verts, conf1, conf2);
 	},
 
@@ -107,9 +108,13 @@ ShaderManager.Manager.prototype.constructor = ShaderManager.Manager;
 * @class ShaderManager.Program
 * @constructor
 * @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
+* @param {ShaderManager.Shader} vs - The context the shaders of this program will belong to and be compiled by.
+* @param {ShaderManager.Shader} fs - The context the shaders of this program will belong to and be compiled by.
 */
 ShaderManager.Program = function(gl, vs, fs){
-	
+	this.context = gl;
+	this.vs = vs;
+	this.fs = fs;
 };
 
 ShaderManager.Program.prototype = {
@@ -157,13 +162,19 @@ ShaderManager.Program.prototype.constructor = ShaderManager.Program;
 /**
 * @class ShaderManager.Shader
 * @constructor
+* @param {WebGLRenderingContext} gl - The context the shader will belong to and be compiled by.
 * @param {string} name - The name the shader object will be referred to by.
 * @param {number} type - The class of the shader contained, either ShaderManager.Shader.VS or ShaderManager.Shader.FS.
 * @param {string} source - The source code to compile the shader from.
+* @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
 * @param {object} [attrs] - The array which contains attribute names and default values, as an array of 2-tuples.
 */
-ShaderManager.Shader = function(name, type, source, attrs){
-
+ShaderManager.Shader = function(gl, name, type, source, attrs){
+	this.name = name;
+	this.type = type;
+	this.shader = 0;
+	this.context = gl;
+	this.attrs = attrs;
 };
 
 ShaderManager.Shader.VS		= 0;
@@ -184,15 +195,150 @@ ShaderManager.Shader.prototype.constructor = ShaderManager.Shader;
 * Create a new ShaderFactory object - this is done automatically by {@link ShaderManager.Manager}.
 *
 * @constructor
-* @param {WebGLRenderingContext} gl - The context all shaders and programs will belong to and be compiled by.
+* @param {ShaderManager.Manager} manager - The manager to place 
 */
-ShaderManager.ShaderFactory = function(gl){
-
+ShaderManager.ShaderFactory = function(manager){
+	/**
+    * An object reference to the parent {@link ShaderManager.Manager}.
+    * @property {ShaderManager.Manager} manager
+    * @readonly
+    * @protected
+    */
+	this.manager = manager;
 };
 
 ShaderManager.ShaderFactory.prototype = {
+	/**
+	* Begin the shader construction process.
+	* @method ShaderManager.ShaderFactory#addShader
+	* @public
+	* @param {string|ShaderManager.Shader} shader - URL, JSON, Shader Source Object or {@link ShaderManager.Shader}.
+	*/
+	addShader: function(shader){
+		var inShader;
+		var outShader;
 
-}
+		switch(this.establishType(shader)){
+			case ShaderManager.ShaderFactory.SOURCE_OBJECT:
+				inShader = shader;
+			case ShaderManager.ShaderFactory.JSON:
+				inShader = inShader || JSON.parse(shader);
+				outShader = this.createShaderObject(inShader);
+				break;
+
+			case ShaderManager.ShaderFactory.SHADER_OBJECT:
+				outShader = shader;
+				break;
+
+			case ShaderManager.ShaderFactory.URL:
+				this.downloadFromURL(shader);
+				break;
+			default:
+				throw new Exception("Not a valid type of shader.");
+		}
+
+		if(outShader) this.registerShader(outShader);
+	},
+
+	/**
+	* Create a shader from a source object.
+	* @method ShaderManager.ShaderFactory#createShaderObject
+	* @protected
+	* @param {object} sourceObject - Either a list of shaders or a single shader object is valid.
+	* @return {ShaderManager.Shader|null} Returns a {@link ShaderManager.Shader} if the Source Object was not a list. If it was a list, it adds all the children instead.
+	*/
+	createShaderObject: function(sourceObject){
+		switch(sourceObject.type){
+			case ShaderManager.Shader.VS:
+			case ShaderManager.Shader.FS:
+				return new Shader(this.manager.context, sourceObject.name, sourceObject.type, sourceObject.src, sourceObject.attrs);
+
+			case ShaderManager.Shader.LIST:
+				for (var i = sourceObject.content.length - 1; i >= 0; i--) {
+					this.addShader(sourceObject.content[i]);
+				}
+				break;
+
+			default:
+				throw new Exception("Tried to create an illegal class of shader.");
+		}
+	},
+
+	/**
+	* Download a file from the supplied URL, before adding it to the manager.
+	* @method ShaderManager.ShaderFactory#downloadFromURL
+	* @protected
+	* @param {string} url - URL corresponding to a Shader Source Object JSON file.
+	*/
+	downloadFromURL: function(url){
+		var rdr = new XMLHttpRequest();
+		rdr.open("GET", url, true);
+		rdr.onload = function(){
+			this.addShader(rdr.response);
+		};
+		rdr.send();
+	},
+
+	/**
+	* Determine the type of shader reference passed to the factory.
+	* @method ShaderManager.ShaderFactory#establishType
+	* @protected
+	* @param {string|ShaderManager.Shader} shader - URL, JSON or ShaderManager.Shader.
+	* @return {integer} Either ShaderManager.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
+	*/
+	establishType: function(shader){
+		var type = -1;
+		if(shader instanceof ShaderManager.Shader){
+			type = ShaderManager.ShaderFactory.SHADER_OBJECT;
+		} else if(shader.type && shader.name && (shader.content || shader.src)){
+			type = ShaderManager.ShaderFactory.SOURCE_OBJECT;
+		} else if(this.isJSON(shader)){
+			type = ShaderManager.ShaderFactory.JSON;
+		} else if(shader instanceof String){
+			type = ShaderManager.ShaderFactory.URL;
+		}
+		
+	},
+
+	/**
+	* Determine if a string is valid JSON.
+	* @method ShaderManager.ShaderFactory#isJSON
+	* @private
+	* @param {string} str - Suspected JSON string to check.
+	*/
+	isJSON: function(str){
+		try{
+			var k = JSON.parse(str);
+			return true;
+		} catch (e){
+			return false;
+		}
+	},
+
+	/**
+	* Add a shader directly into the manager's storage for future access.
+	* @method ShaderManager.ShaderFactory#registerShader
+	* @protected
+	* @param {ShaderManager.Shader} shaderObject - Compiled shader object to store in the {@link ShaderManager.Manager}.
+	*/
+	registerShader: function(shaderObject){
+		switch(shaderObject.type){
+			case ShaderManager.Shader.VS:
+				this.manager.vertShaders[shaderObject.name] = this.manager.vertShaders[shaderObject.name] || shaderObject;
+				break;
+			case ShaderManager.Shader.FS:
+				this.manager.fragShaders[shaderObject.name] = this.manager.fragShaders[shaderObject.name] || shaderObject;
+				break;
+			default:
+				throw new Exception("Tried to register an illegal class of shader.");
+		}
+	}
+};
+
+ShaderManager.ShaderFactory.SOURCE_OBJECT	= 0;
+ShaderManager.ShaderFactory.JSON			= 1;
+ShaderManager.ShaderFactory.URL				= 2;
+ShaderManager.ShaderFactory.SHADER_OBJECT	= 3;
 
 ShaderManager.ShaderFactory.prototype.constructor = ShaderManager.ShaderFactory;
 /**

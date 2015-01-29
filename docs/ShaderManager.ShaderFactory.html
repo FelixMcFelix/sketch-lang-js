@@ -43,7 +43,7 @@
     
         
 <dt>
-    <h4 class="name" id="ShaderFactory"><span class="type-signature"></span>new ShaderFactory<span class="signature">(gl)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ShaderFactory"><span class="type-signature"></span>new ShaderFactory<span class="signature">(manager)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -85,13 +85,13 @@
 
         <tr>
             
-                <td class="name"><code>gl</code></td>
+                <td class="name"><code>manager</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">WebGLRenderingContext</span>
+<span class="param-type"><a href="ShaderManager.Manager.html">ShaderManager.Manager</a></span>
 
 
             
@@ -101,7 +101,7 @@
 
             
 
-            <td class="description last">The context all shaders and programs will belong to and be compiled by.</td>
+            <td class="description last">The manager to place</td>
         </tr>
 
     
@@ -173,7 +173,770 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
 
+        <dl>
+            
+<dt>
+    <h4 class="name" id="manager"><span class="type-signature">&lt;protected, readonly> </span>manager<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        An object reference to the parent <a href="ShaderManager.Manager.html">ShaderManager.Manager</a>.
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+        <h5 class="subsection-title">Properties:</h5>
+
+        <dl>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>manager</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ShaderManager.Manager.html">ShaderManager.Manager</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table></dl>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="addShader"><span class="type-signature"></span>addShader<span class="signature">(shader)</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Begin the shader construction process.
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>shader</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL, JSON, Shader Source Object or <a href="ShaderManager.Shader.html">ShaderManager.Shader</a>.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="createShaderObject"><span class="type-signature">&lt;protected> </span>createShaderObject<span class="signature">(sourceObject)</span><span class="type-signature"> &rarr; {<a href="ShaderManager.Shader.html">ShaderManager.Shader</a>|null}</span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Create a shader from a source object.
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sourceObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Either a list of shaders or a single shader object is valid.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Returns a <a href="ShaderManager.Shader.html">ShaderManager.Shader</a> if the Source Object was not a list. If it was a list, it adds all the children instead.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="downloadFromURL"><span class="type-signature">&lt;protected> </span>downloadFromURL<span class="signature">(url)</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Download a file from the supplied URL, before adding it to the manager.
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL corresponding to a Shader Source Object JSON file.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="establishType"><span class="type-signature">&lt;protected> </span>establishType<span class="signature">(shader)</span><span class="type-signature"> &rarr; {integer}</span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Determine the type of shader reference passed to the factory.
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>shader</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL, JSON or ShaderManager.Shader.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Either ShaderManager.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">integer</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="registerShader"><span class="type-signature">&lt;protected> </span>registerShader<span class="signature">(shaderObject)</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Add a shader directly into the manager's storage for future access.
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>shaderObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Compiled shader object to store in the <a href="ShaderManager.Manager.html">ShaderManager.Manager</a>.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line133">line 133</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
     
 
     
@@ -195,7 +958,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Wed Jan 28 2015 11:10:00 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Thu Jan 29 2015 02:59:26 GMT+0000 (GMT Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

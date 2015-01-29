@@ -5,7 +5,10 @@
 			"type": 0,
 			"name": "square",
 			"src":"",
-			"attrs": []
+			"attrs": [
+				["pvMatrix"],
+				["mvMatrix"]
+			]
 		},
 		{
 			"type": 2,

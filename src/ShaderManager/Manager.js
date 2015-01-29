@@ -44,7 +44,7 @@ ShaderManager.Manager = function(gl){
     * @protected
     * @readonly
     */
-	this.shaderFactory	= new ShaderManager.ShaderFactory(gl);
+	this.shaderFactory	= new ShaderManager.ShaderFactory(this);
 };
 
 ShaderManager.Manager.prototype = {
@@ -55,7 +55,7 @@ ShaderManager.Manager.prototype = {
 	* @param {string|ShaderManager.Shader} shaderRef - URL, JSON or ShaderManager.Shader.
 	*/
 	addShader: function(shaderRef){
-		//TODO: Possibly fuse these w/ ShaderFactory?
+		this.shaderFactory.addShader(shaderRef);
 	},
 
 	/**

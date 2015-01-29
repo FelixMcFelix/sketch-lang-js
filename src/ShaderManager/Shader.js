@@ -11,9 +11,9 @@
 ShaderManager.Shader = function(gl, name, type, source, attrs){
 	this.name = name;
 	this.type = type;
-	this.source = source;
-	this.gl = gl;
-	this.attrs = attr;
+	this.shader = 0;
+	this.context = gl;
+	this.attrs = attrs;
 };
 
 ShaderManager.Shader.VS		= 0;

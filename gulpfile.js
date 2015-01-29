@@ -43,8 +43,8 @@ gulp.task("clean:docs", function(cb){
 gulp.task("test:lint", function(){
 	return gulp.src(configs.srcDir+"*/*.js")
 			.pipe(jshint())
-			.pipe(jshint.reporter("jshint-stylish"))
-			.pipe(jshint.reporter("fail"));
+			.pipe(jshint.reporter("jshint-stylish"));
+			//.pipe(jshint.reporter("fail"));
 });
 
 gulp.task("test", ["test:lint", "build"], function(){
