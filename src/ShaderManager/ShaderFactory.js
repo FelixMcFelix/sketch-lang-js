@@ -66,7 +66,7 @@ ShaderManager.ShaderFactory.prototype = {
 		switch(sourceObject.type){
 			case ShaderManager.Shader.VS:
 			case ShaderManager.Shader.FS:
-				return new Shader(this.manager.context, sourceObject.name, sourceObject.type, sourceObject.src, sourceObject.attrs);
+				return new ShaderManager.Shader(this.manager.context, sourceObject.name, sourceObject.type, sourceObject.src, sourceObject.attrs);
 
 			case ShaderManager.Shader.LIST:
 				for (var i = sourceObject.content.length - 1; i >= 0; i--) {
@@ -112,7 +112,7 @@ ShaderManager.ShaderFactory.prototype = {
 		} else if(shader instanceof String){
 			type = ShaderManager.ShaderFactory.URL;
 		}
-		
+		return type;
 	},
 
 	/**
@@ -123,7 +123,7 @@ ShaderManager.ShaderFactory.prototype = {
 	*/
 	isJSON: function(str){
 		try{
-			var k = JSON.parse(str);
+			JSON.parse(str);
 			return true;
 		} catch (e){
 			return false;
