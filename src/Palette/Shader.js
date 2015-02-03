@@ -1,3 +1,4 @@
+/* global Palette */
 /**
 * @classdesc Abstraction of shader references to allow easy manipulation.
 * @class Palette.Shader

@@ -1,3 +1,4 @@
+/* global Palette */
 /**
 * @classdesc
 * A Factory class designed to process objects, URLs, JSON and potentially other formats to generate
@@ -35,6 +36,7 @@ Palette.ShaderFactory.prototype = {
 		switch(this.establishType(shader)){
 			case Palette.ShaderFactory.SOURCE_OBJECT:
 				inShader = shader;
+				/* falls through */
 			case Palette.ShaderFactory.JSON:
 				inShader = inShader || JSON.parse(shader);
 				outShader = this.createShaderObject(inShader);

@@ -1,3 +1,4 @@
+/* global Palette */
 /**
 * @classdesc The core part of the system - initialise this to begin using the shader manager.
 * @class Palette.Manager

@@ -1,3 +1,4 @@
+/* global Palette */
 /**
 * @classdesc Abstraction of program references to allow easy manipulation.
 * @description The Program object, generated from linked pairs of vs-fs combinations.
@@ -47,7 +48,16 @@ Palette.Program = function(gl, vs, fs){
 	*/
 	this.compiled = false;
 
+	/**
+	* Where shall we keep our 
+	* @property {boolean} compiled
+	* @private
+	* @readonly
+	*/
+	this.attrStore = { vs: null, fs: null};
+
 	this.linkProgram();
+	this.prepareAttrStores();
 };
 
 Palette.Program.prototype = {
@@ -100,7 +110,8 @@ Palette.Program.prototype = {
 	},
 
 	prepareAttrStores: function(){
-		//TODO
+		//ACTIVATE PROGRAM
+		//location = gl.getAttribPointer(program, name);
 	}
 };
 

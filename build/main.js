@@ -1,3 +1,4 @@
+/* global Palette */
 /**
 * @classdesc The core part of the system - initialise this to begin using the shader manager.
 * @class Palette.Manager
@@ -105,6 +106,7 @@ Palette.Manager.prototype.constructor = Palette.Manager;
 */
 var Palette = Palette || {};
 
+/* global Palette */
 /**
 * @classdesc Abstraction of program references to allow easy manipulation.
 * @description The Program object, generated from linked pairs of vs-fs combinations.
@@ -154,7 +156,16 @@ Palette.Program = function(gl, vs, fs){
 	*/
 	this.compiled = false;
 
+	/**
+	* Where shall we keep our 
+	* @property {boolean} compiled
+	* @private
+	* @readonly
+	*/
+	this.attrStore = { vs: null, fs: null};
+
 	this.linkProgram();
+	this.prepareAttrStores();
 };
 
 Palette.Program.prototype = {
@@ -207,7 +218,8 @@ Palette.Program.prototype = {
 	},
 
 	prepareAttrStores: function(){
-		//TODO
+		//ACTIVATE PROGRAM
+		//location = gl.getAttribPointer(program, name);
 	}
 };
 
@@ -217,6 +229,7 @@ Palette.Program.BOTH_MODE 	= 2;
 
 Palette.Program.prototype.constructor = Palette.Program;
 
+/* global Palette */
 /**
 * @classdesc Abstraction of shader references to allow easy manipulation.
 * @class Palette.Shader
@@ -321,6 +334,7 @@ Palette.Shader.LIST		= 2;
 
 Palette.Shader.prototype.constructor = Palette.Shader;
 
+/* global Palette */
 /**
 * @classdesc
 * A Factory class designed to process objects, URLs, JSON and potentially other formats to generate
@@ -358,6 +372,7 @@ Palette.ShaderFactory.prototype = {
 		switch(this.establishType(shader)){
 			case Palette.ShaderFactory.SOURCE_OBJECT:
 				inShader = shader;
+				/* falls through */
 			case Palette.ShaderFactory.JSON:
 				inShader = inShader || JSON.parse(shader);
 				outShader = this.createShaderObject(inShader);
