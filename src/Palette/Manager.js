@@ -1,13 +1,11 @@
 /**
-* @classdesc
-* The core part of the system - initialise this to begin using the shader manager.
-* @class ShaderManager.Manager
-* @constructor
+* @classdesc The core part of the system - initialise this to begin using the shader manager.
+* @class Palette.Manager
 * @param {WebGLRenderingContext} gl - The context all shaders and programs will belong to and be compiled by.
 */
-ShaderManager.Manager = function(gl){
+Palette.Manager = function(gl){
 	if(!(gl instanceof WebGLRenderingContext)){
-		throw new TypeError("Error: attempted to create ShaderManager with illegal argument.");
+		throw new TypeError("Error: attempted to create Palette with illegal argument.");
 	}
 
 	/**
@@ -38,21 +36,21 @@ ShaderManager.Manager = function(gl){
 	this.programs		= {};
 
 	/**
-    * A {@link ShaderManager.ShaderFactory} object utilised by the manager
+    * A {@link Palette.ShaderFactory} object utilised by the manager
     * to generate valid shader objects from many sources for use.
-    * @property {ShaderManager.ShaderFactory} shaderFactory
+    * @property {Palette.ShaderFactory} shaderFactory
     * @protected
     * @readonly
     */
-	this.shaderFactory	= new ShaderManager.ShaderFactory(this);
+	this.shaderFactory	= new Palette.ShaderFactory(this);
 };
 
-ShaderManager.Manager.prototype = {
+Palette.Manager.prototype = {
 	/**
 	* Add a shader into the manager's storage for future access.
-	* @method ShaderManager.Manager#addShader
+	* @method Palette.Manager#addShader
 	* @public
-	* @param {string|ShaderManager.Shader} shaderRef - URL, JSON or ShaderManager.Shader.
+	* @param {string|Palette.Shader} shaderRef - URL, JSON or Palette.Shader.
 	*/
 	addShader: function(shaderRef){
 		this.shaderFactory.addShader(shaderRef);
@@ -61,10 +59,10 @@ ShaderManager.Manager.prototype = {
 	/**
 	* Send a draw call to a given vs-fs pair.
 	* The work is delegated down to the program's own draw method.
-	* @method ShaderManager.Manager#draw
+	* @method Palette.Manager#draw
 	* @public
-	* @param {string|ShaderManager.Shader} vs - The desired Vertex Shader.
-	* @param {string|ShaderManager.Shader} fs - The desired Fragment Shader.
+	* @param {string|Palette.Shader} vs - The desired Vertex Shader.
+	* @param {string|Palette.Shader} fs - The desired Fragment Shader.
 	* @param {Float32Array} verts - Vertex list to pass to the GPU.
 	* @param {object} [conf1] - A set of attributes to pass down to the fragment shader.
 	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
@@ -76,11 +74,11 @@ ShaderManager.Manager.prototype = {
 
 	/**
 	* Request a program object from a known vs-fs pair.
-	* @method ShaderManager.Manager#getProgram
+	* @method Palette.Manager#getProgram
 	* @public
-	* @param {string|ShaderManager.Shader} vs - The desired Vertex Shader.
-	* @param {string|ShaderManager.Shader} fs - The desired Fragment Shader.
-	* @return {ShaderManager.Program} The {@link ShaderManager.Program} either found or generated. If either shader was not found, NULL is returned.
+	* @param {string|Palette.Shader} vs - The desired Vertex Shader.
+	* @param {string|Palette.Shader} fs - The desired Fragment Shader.
+	* @return {Palette.Program} The {@link Palette.Program} either found or generated. If either shader was not found, NULL is returned.
 	*/
 	getProgram: function(vs, fs){
 		//TODO: Generate and link new programs for lookup miss.
@@ -89,15 +87,15 @@ ShaderManager.Manager.prototype = {
 
 	/**
 	* Request a shader object from storage using its type and name.
-	* @method ShaderManager.Manager#getShader
+	* @method Palette.Manager#getShader
 	* @public
-	* @param {integer} type - Either ShaderManager.Shader.VS or ShaderManager.Shader.FS.
+	* @param {integer} type - Either Palette.Shader.VS or Palette.Shader.FS.
 	* @param {string} name - The shader's identifier.
-	* @return {ShaderManager.Shader} The requested {@link ShaderManager.Shader}. If a shader was not found, NULL is returned.
+	* @return {Palette.Shader} The requested {@link Palette.Shader}. If a shader was not found, NULL is returned.
 	*/
 	getShader: function(type, name){
-		return (type === ShaderManager.Shader.VS) ? this.vertShaders[name] : this.fragShaders[name];
+		return (type === Palette.Shader.VS) ? this.vertShaders[name] : this.fragShaders[name];
 	}
 };
 
-ShaderManager.Manager.prototype.constructor = ShaderManager.Manager;
+Palette.Manager.prototype.constructor = Palette.Manager;

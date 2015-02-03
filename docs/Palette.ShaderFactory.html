@@ -27,12 +27,12 @@
 
 <header>
     <h2>
-        <span class="ancestors"><a href="ShaderManager.html">ShaderManager</a>.</span>
+        <span class="ancestors"><a href="Palette.html">Palette</a>.</span>
     
     ShaderFactory
     </h2>
     
-        <div class="class-description">ShaderManager.ShaderFactory</div>
+        <div class="class-description">A Factory class designed to process objects, URLs, JSON and potentially other formats to generatevalid <a href="Palette.Shader.html">Palette.Shader</a> objects.This is a deliberate choice, to abstract some functionality away from the central <a href="Palette.Manager.html">Palette.Manager</a>class.</div>
     
 </header>
 
@@ -51,7 +51,7 @@
 
     
     <div class="description">
-        Create a new ShaderFactory object - this is done automatically by <a href="ShaderManager.Manager.html">ShaderManager.Manager</a>.
+        Create a new ShaderFactory object - this is done automatically by <a href="Palette.Manager.html">Palette.Manager</a>.
     </div>
     
 
@@ -91,7 +91,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="ShaderManager.Manager.html">ShaderManager.Manager</a></span>
+<span class="param-type"><a href="Palette.Manager.html">Palette.Manager</a></span>
 
 
             
@@ -132,7 +132,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line15">line 15</a>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -172,117 +172,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Members</h3>
-
-        <dl>
-            
-<dt>
-    <h4 class="name" id="manager"><span class="type-signature">&lt;protected, readonly> </span>manager<span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        An object reference to the parent <a href="ShaderManager.Manager.html">ShaderManager.Manager</a>.
-    </div>
-    
-
-    
-
-    
-<dl class="details">
-    
-
-        <h5 class="subsection-title">Properties:</h5>
-
-        <dl>
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>manager</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="ShaderManager.Manager.html">ShaderManager.Manager</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table></dl>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-</dd>
-
-        </dl>
     
 
     
@@ -342,7 +231,7 @@
 <span class="param-type">string</span>
 |
 
-<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+<span class="param-type"><a href="Palette.Shader.html">Palette.Shader</a></span>
 
 
             
@@ -352,7 +241,7 @@
 
             
 
-            <td class="description last">URL, JSON, Shader Source Object or <a href="ShaderManager.Shader.html">ShaderManager.Shader</a>.</td>
+            <td class="description last">URL, JSON, Shader Source Object or <a href="Palette.Shader.html">Palette.Shader</a>.</td>
         </tr>
 
     
@@ -383,7 +272,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line26">line 26</a>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -413,7 +302,7 @@
         
             
 <dt>
-    <h4 class="name" id="createShaderObject"><span class="type-signature">&lt;protected> </span>createShaderObject<span class="signature">(sourceObject)</span><span class="type-signature"> &rarr; {<a href="ShaderManager.Shader.html">ShaderManager.Shader</a>|null}</span></h4>
+    <h4 class="name" id="createShaderObject"><span class="type-signature">&lt;protected> </span>createShaderObject<span class="signature">(sourceObject)</span><span class="type-signature"> &rarr; {<a href="Palette.Shader.html">Palette.Shader</a>|null}</span></h4>
 
     
 </dt>
@@ -502,7 +391,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line58">line 58</a>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -529,7 +418,7 @@
     
             
 <div class="param-desc">
-    Returns a <a href="ShaderManager.Shader.html">ShaderManager.Shader</a> if the Source Object was not a list. If it was a list, it adds all the children instead.
+    Returns a <a href="Palette.Shader.html">Palette.Shader</a> if the Source Object was not a list. If it was a list, it adds all the children instead.
 </div>
 
 
@@ -540,7 +429,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+<span class="param-type"><a href="Palette.Shader.html">Palette.Shader</a></span>
 |
 
 <span class="param-type">null</span>
@@ -646,7 +535,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line82">line 82</a>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -727,7 +616,7 @@
 <span class="param-type">string</span>
 |
 
-<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+<span class="param-type"><a href="Palette.Shader.html">Palette.Shader</a></span>
 
 
             
@@ -737,7 +626,7 @@
 
             
 
-            <td class="description last">URL, JSON or ShaderManager.Shader.</td>
+            <td class="description last">URL, JSON or Palette.Shader.</td>
         </tr>
 
     
@@ -768,7 +657,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line97">line 97</a>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -795,7 +684,7 @@
     
             
 <div class="param-desc">
-    Either ShaderManager.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
+    Either Palette.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
 </div>
 
 
@@ -868,7 +757,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="ShaderManager.Shader.html">ShaderManager.Shader</a></span>
+<span class="param-type"><a href="Palette.Shader.html">Palette.Shader</a></span>
 
 
             
@@ -878,7 +767,7 @@
 
             
 
-            <td class="description last">Compiled shader object to store in the <a href="ShaderManager.Manager.html">ShaderManager.Manager</a>.</td>
+            <td class="description last">Compiled shader object to store in the <a href="Palette.Manager.html">Palette.Manager</a>.</td>
         </tr>
 
     
@@ -909,7 +798,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line133">line 133</a>
+        <a href="ShaderFactory.js.html">ShaderFactory.js</a>, <a href="ShaderFactory.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -952,13 +841,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ShaderManager.Manager.html">Manager</a></li><li><a href="ShaderManager.Program.html">Program</a></li><li><a href="ShaderManager.Shader.html">Shader</a></li><li><a href="ShaderManager.ShaderFactory.html">ShaderFactory</a></li></ul><h3>Namespaces</h3><ul><li><a href="ShaderManager.html">ShaderManager</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Palette.Manager.html">Manager</a></li><li><a href="Palette.Program.html">Program</a></li><li><a href="Palette.Shader.html">Shader</a></li><li><a href="Palette.ShaderFactory.html">ShaderFactory</a></li></ul><h3>Namespaces</h3><ul><li><a href="Palette.html">Palette</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Thu Jan 29 2015 14:15:26 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Mon Feb 02 2015 22:57:50 GMT+0000 (GMT Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
