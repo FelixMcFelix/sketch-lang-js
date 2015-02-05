@@ -54,7 +54,9 @@ Palette.Program = function(gl, vs, fs){
 	* @private
 	* @readonly
 	*/
-	this.attrStore = { vs: null, fs: null};
+	this.attrStore = {vs: {}, fs: {}};
+
+	this.vtxBuffer = gl.createBuffer();
 
 	this.linkProgram();
 	this.prepareAttrStores();
@@ -71,7 +73,18 @@ Palette.Program.prototype = {
 	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
 	*/
 	draw: function(verts, conf1, conf2){
-		//TODO
+		this.context.useProgram(this.program);
+
+		//TODO: PARSE NEW CONFIGS.
+
+		var mode = (conf1 ? Palette.Program.VS_MODE : 0) | (conf2 ? Palette.Program.FS_MODE : 0);
+		this.passAttrstoProg(mode);
+
+		this.context.bindBuffer(this.context.ARRAY_BUFFER, this.vtxBuffer);
+		this.context.bufferData(this.context.ARRAY_BUFFER, new Float32Array(verts), this.context.DYNAMIC_DRAW);
+
+		//TODO: Possibly allow selection of desired draw mode?
+		this.context.drawArrays(this.context.TRIANGLES, 0, verts.length);
 	},
 
 	/**
@@ -81,7 +94,12 @@ Palette.Program.prototype = {
 	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE, Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
 	*/
 	restoreDefaultConfig: function(mode){
-		//TODO
+		var attrPointer;
+		var shaderPointer;
+
+		for(var j=0; j<2; j++){
+			//ToDo
+		}
 	},
 
 	/**
@@ -110,13 +128,117 @@ Palette.Program.prototype = {
 	},
 
 	prepareAttrStores: function(){
-		//ACTIVATE PROGRAM
-		//location = gl.getAttribPointer(program, name);
+		this.context.useProgram(this.program);
+		var shaderPointer;
+		var attrPointer;
+
+		for(var j=0; j<2; j++){
+			if(!j){shaderPointer = this.vs; attrPointer = this.attrs.vs;}
+			else {shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+
+			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
+				var attrData = shaderPointer.attrs[i];
+				var attrDest = attrPointer[attrData[0]];
+
+				attrDest.setFunction = Palette.Program.fetchSetter(this.context, attrData[1]);
+
+				if(attrData[1]!="vertexAttrib"){
+					attrDest.pointer = this.context.getUniformLocation(this.program, attrData[0]);
+					attrDest.value = attrData[2];
+				} else{
+					attrDest.pointer = this.context.getAttribLocation(this.program, attrData[0]);
+					alert("I have no idea what do with values here.");
+				}
+			}
+		}
+	},
+
+	passAttrstoProg: function(mode){
+		var attrPointer;
+		var valueLocation = "value";
+
+		for(var j=0; j<2; j++){
+			if(!j){
+				attrPointer = this.attrs.vs; 
+				if(mode===Palette.Program.VS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
+			}
+			else {
+				attrPointer = this.attrs.fs;
+				if(mode===Palette.Program.FS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
+				else valueLocation = "value";
+			}
+
+			for(var prop in attrPointer){
+				var attr = attrPointer[prop];
+				var attrValue = attr[valueLocation] || attr.value;
+
+				if(attr.type.substr(0,3) == "mat"){
+					attr.setFunction(attr.pointer, this.context.FALSE, attrValue);
+				} else{
+					attr.setFunction(attr.pointer, attrValue);
+				}
+			}
+		}
 	}
 };
 
-Palette.Program.VS_MODE 	= 0;
-Palette.Program.FS_MODE 	= 1;
-Palette.Program.BOTH_MODE 	= 2;
+Palette.Program.fetchSetter = function(gl, type){
+	//LAZY
+	//I'LL DO THIS MORE ELEGANTLY ONE DAY.
+	switch(type){
+		case "float":
+			return gl.uniform1f.bind(gl);
+		case "float[]":
+			return gl.uniform1fv.bind(gl);
+		case "int":
+			return gl.uniform1i.bind(gl);
+		case "int[]":
+			return gl.uniform1iv.bind(gl);
+		case "vec2":
+			return gl.uniform2f.bind(gl);
+		case "vec2[]":
+			return gl.uniform2fv.bind(gl);
+		case "ivec2":
+			return gl.uniform2i.bind(gl);
+		case "ivec2[]":
+			return gl.uniform2iv.bind(gl);
+		case "vec3":
+			return gl.uniform3f.bind(gl);
+		case "vec3[]":
+			return gl.uniform3fv.bind(gl);
+		case "ivec3":
+			return gl.uniform3i.bind(gl);
+		case "ivec3[]":
+			return gl.uniform3iv.bind(gl);
+		case "vec4":
+			return gl.uniform4f.bind(gl);
+		case "vec4[]":
+			return gl.uniform4fv.bind(gl);
+		case "ivec4":
+			return gl.uniform4i.bind(gl);
+		case "ivec4[]":
+			return gl.uniform4iv.bind(gl);
+		case "mat2":
+			return gl.uniformMatrix2fv.bind(gl);
+		case "mat3":
+			return gl.uniformMatrix3fv.bind(gl);
+		case "mat4":
+			return gl.uniformMatrix4fv.bind(gl);
+		case "texture":
+			alert("You're on your own, kid.");
+			return null;
+		case "vertexAttrib":
+			alert("You're still on your own, kid.");
+			return null;
+		default:
+			alert("Not gonna lie - you really messed up. I can't pass "+type+" onto the shader.");
+			return null;
+	}
+};
+
+Palette.Program.NONE_MODE	= 0;
+Palette.Program.VS_MODE 	= 1;
+Palette.Program.FS_MODE 	= 2;
+Palette.Program.BOTH_MODE 	= 3;
 
 Palette.Program.prototype.constructor = Palette.Program;

@@ -53,7 +53,7 @@ Palette.ShaderFactory.prototype = {
 				throw new Error("Not a valid type of shader.");
 		}
 
-		if(outShader) this.registerShader(outShader);
+		if(outShader){this.registerShader(outShader);}
 	},
 
 	/**
@@ -100,7 +100,7 @@ Palette.ShaderFactory.prototype = {
 	* @method Palette.ShaderFactory#establishType
 	* @protected
 	* @param {string|Palette.Shader} shader - URL, JSON or Palette.Shader.
-	* @return {integer} Either Palette.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
+	* @return {number} Either Palette.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
 	*/
 	establishType: function(shader){
 		var type = -1;

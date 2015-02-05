@@ -71,7 +71,7 @@ Palette.Shader.prototype = {
 	* @return {boolean} True if successful, false if unsuccessful.
 	*/
 	bakeShader: function(source){
-		if (this.compiled) return null;
+		if (this.compiled){return null;}
 
 		this.compiled = true;
 
