@@ -112,37 +112,65 @@ switch_case
     ;   
 
 expr
-    : sec_expr {return $1;}
+    : sec_expr 
+                {return $1;}
     ;
 
 sec_expr
-    :prim_expr  { return $1;}
-    | prim_expr PLUS sec_expr   {$$ = $1 + $3; }
-    | prim_expr MINUS sec_expr  { $$ = $1 - $3;}
-    | prim_expr STAR  sec_expr  {$$ =  $1 * $3;}
-    | prim_expr DIV sec_expr    {$$ =  $1 / $3;}
-    | prim_expr PERCENT sec_expr { $$ = $1 % $3;}
-    | prim_expr OP_ADD_ASSIGNMENT sec_expr {$1 = $1 + $3;}
-    | prim_expr OP_SUB_ASSIGNMENT sec_expr {$1 = $1 - $3;}
-    | prim_expr OP_MULT_ASSIGNMENT sec_expr{$1 = $1 * $3;}
-    | prim_expr OP_DIV_ASSIGNMENT sec_expr {$1 = $1 / $3;}
-    | prim_expr OP_MOD_ASSIGNMENT sec_expr {$1 = $1 % $3;}
-    | prim_expr OP_INC  {$1= $1 + 1;}
-    | prim_expr OP_DEC  {$1 = $1 -1;}
-    | prim_expr OP_AND sec_expr {$$ = $1 && $3;}
-    | prim_expr OP_OR  sec_expr {$$ = $1 || $3;}
-    | prim_expr CARET  sec_expr {$$ = $1 ^ $3;}
-    | prim_expr AMP   sec_expr {$$ = $1 & $3;}
-    | prim_expr BITWISE_OR sec_expr {$$ = $1 | $3; }
-    | prim_expr OP_RIGHT_SHIFT sec_expr { $$ = $1 >> $3; }
-    | prim_expr OP_LEFT_SHIFT sec_expr {$$ = $1 << $3; }
-    | prim_expr ZERO_FILL_RIGHT_SHIFT sec_expr {$$ = $1 >>> $3;}
-    | prim_expr OP_EQ sec_expr { $$ = $1 == $3;}
-    | prim_expr LT sec_expr {$$ = $1 < $3; }
-    | prim_expr GT  sec_expr{$$= $1 > $3;}
-    | prim_expr OP_NE sec_expr{$$ = ($1 <$3) || ($1>$3);}
-    | prim_expr OP_LE sec_expr{$$ = $1 <= $3;}
-    | prim_expr OP_GE sec_expr{$$ = $1 >= $3;}
+    :prim_expr  
+                {$$ =  $1;}
+    | prim_expr PLUS sec_expr   
+                {$$ = $1 + $3; }                               
+    | prim_expr MINUS sec_expr  
+                { $$ = $1 - $3;}
+    | prim_expr STAR  sec_expr  
+                {$$ =  $1 * $3;}
+    | prim_expr DIV sec_expr    
+                {$$ =  $1 / $3;}
+    | prim_expr PERCENT sec_expr 
+                { $$ = $1 % $3;}
+    | prim_expr OP_ADD_ASSIGNMENT sec_expr 
+                {$1 = $1 + $3;}
+    | prim_expr OP_SUB_ASSIGNMENT sec_expr 
+                {$1 = $1 - $3;}
+    | prim_expr OP_MULT_ASSIGNMENT sec_expr
+                {$1 = $1 * $3;}
+    | prim_expr OP_DIV_ASSIGNMENT sec_expr 
+                {$1 = $1 / $3;}
+    | prim_expr OP_MOD_ASSIGNMENT sec_expr 
+                {$1 = $1 % $3;}
+    | prim_expr OP_INC  
+                {$1= $1 + 1;}
+    | prim_expr OP_DEC  
+                {$1 = $1 -1;}
+    | prim_expr OP_AND sec_expr 
+                {$$ = $1 && $3;}
+    | prim_expr OP_OR  sec_expr 
+                {$$ = $1 || $3;}
+    | prim_expr CARET  sec_expr 
+                {$$ = $1 ^ $3;}
+    | prim_expr AMP   sec_expr 
+                {$$ = $1 & $3;}
+    | prim_expr BITWISE_OR sec_expr 
+                {$$ = $1 | $3; }
+    | prim_expr OP_RIGHT_SHIFT sec_expr 
+                { $$ = $1 >> $3; }
+    | prim_expr OP_LEFT_SHIFT sec_expr 
+                {$$ = $1 << $3; }
+    | prim_expr ZERO_FILL_RIGHT_SHIFT sec_expr 
+                {$$ = $1 >>> $3;}
+    | prim_expr OP_EQ sec_expr 
+                { $$ = $1 == $3;}
+    | prim_expr LT sec_expr 
+                {$$ = $1 < $3; }
+    | prim_expr GT  sec_expr
+                {$$= $1 > $3;}
+    | prim_expr OP_NE sec_expr
+                {$$ = ($1 <$3) || ($1>$3);}
+    | prim_expr OP_LE sec_expr
+                {$$ = $1 <= $3;}
+    | prim_expr OP_GE sec_expr
+                {$$ = $1 >= $3;}
     ; 
 
 prim_expr
