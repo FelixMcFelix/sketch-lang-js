@@ -75,9 +75,9 @@ var parser = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o};
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"compilationUnit":3,"compilation-unit":4,"EOF":5,"PROGRAM":6,"include":7,"out-decl":8,"seq_statement":9,"HASHTAG":10,"IMPORT":11,"IDENTIFIER":12,"FUNCTION":13,"OPEN_PARENS":14,"formal":15,"CLOSE_PARENS":16,"RETURN_TYPE":17,"type":18,"OPEN_BRACKET":19,"CLOSE_BRACKET":20,"COLON":21,"COMMA":22,"VOID":23,"in-decl":24,"TYPE":25,"ASSIGN":26,"expr":27,"seq-statement":28,"statement":29,"dir-statement":30,"SEMICOLON":31,"flow-statement":32,"RETURN":33,"BREAK":34,"CONTINUE":35,"while-statement":36,"for-statement":37,"do-while_statemnt":38,"if-statement":39,"switch-statement":40,"WHILE":41,"DO":42,"FOR":43,"epxr":44,"IF":45,"ELSE":46,"OPEN":47,"PARENS":48,"switch_statement":49,"SWITCH":50,"switch_case":51,"CASE":52,"DEFAULT":53,"sec_expr":54,"prim_expr":55,"PLUS":56,"MINUS":57,"STAR":58,"DIV":59,"PERCENT":60,"OP_ADD_ASSIGNMENT":61,"OP_SUB_ASSIGNMENT":62,"OP_MULT_ASSIGNMENT":63,"OP_DIV_ASSIGNMENT":64,"OP_MOD_ASSIGNMENT":65,"OP_INC":66,"OP_DEC":67,"OP_AND":68,"OP_OR":69,"CARET":70,"AMP":71,"BITWISE_OR":72,"OP_RIGHT_SHIFT":73,"OP_LEFT_SHIFT":74,"ZERO_FILL_RIGHT_SHIFT":75,"OP_EQ":76,"LT":77,"GT":78,"OP_NE":79,"OP_LE":80,"OP_GE":81,"DIGIT":82,"TRUE":83,"FALSE":84,"NOT":85,"BOOL":86,"NUM":87,"FLOAT":88,"POINT":89,"STRING":90,"VECTOR_2":91,"VECTOR_3":92,"VECTOR_4":93,"$accept":0,"$end":1},
-terminals_: {2:"error",4:"compilation-unit",5:"EOF",9:"seq_statement",10:"HASHTAG",11:"IMPORT",12:"IDENTIFIER",13:"FUNCTION",14:"OPEN_PARENS",16:"CLOSE_PARENS",17:"RETURN_TYPE",19:"OPEN_BRACKET",20:"CLOSE_BRACKET",21:"COLON",22:"COMMA",23:"VOID",25:"TYPE",26:"ASSIGN",31:"SEMICOLON",33:"RETURN",34:"BREAK",35:"CONTINUE",40:"switch-statement",41:"WHILE",42:"DO",43:"FOR",44:"epxr",45:"IF",46:"ELSE",47:"OPEN",48:"PARENS",50:"SWITCH",52:"CASE",53:"DEFAULT",56:"PLUS",57:"MINUS",58:"STAR",59:"DIV",60:"PERCENT",61:"OP_ADD_ASSIGNMENT",62:"OP_SUB_ASSIGNMENT",63:"OP_MULT_ASSIGNMENT",64:"OP_DIV_ASSIGNMENT",65:"OP_MOD_ASSIGNMENT",66:"OP_INC",67:"OP_DEC",68:"OP_AND",69:"OP_OR",70:"CARET",71:"AMP",72:"BITWISE_OR",73:"OP_RIGHT_SHIFT",74:"OP_LEFT_SHIFT",75:"ZERO_FILL_RIGHT_SHIFT",76:"OP_EQ",77:"LT",78:"GT",79:"OP_NE",80:"OP_LE",81:"OP_GE",82:"DIGIT",83:"TRUE",84:"FALSE",85:"NOT",86:"BOOL",87:"NUM",88:"FLOAT",89:"POINT",90:"STRING",91:"VECTOR_2",92:"VECTOR_3",93:"VECTOR_4"},
-productions_: [0,[3,2],[6,2],[6,2],[7,3],[8,10],[15,7],[15,1],[24,3],[24,5],[28,1],[29,2],[29,1],[30,3],[30,2],[30,1],[30,1],[30,1],[30,1],[32,1],[32,1],[32,1],[32,1],[32,1],[36,7],[38,8],[37,11],[39,7],[39,9],[39,10],[49,9],[51,2],[51,1],[27,1],[54,1],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,2],[54,2],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[54,3],[55,1],[55,1],[55,1],[55,1],[55,2],[55,3],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1]],
+symbols_: {"error":2,"compilationUnit":3,"compilation-unit":4,"EOF":5,"PROGRAM":6,"include":7,"out-decl":8,"seq_statement":9,"HASHTAG":10,"IMPORT":11,"IDENTIFIER":12,"FUNCTION":13,"OPEN_PARENS":14,"formal":15,"CLOSE_PARENS":16,"RETURN_TYPE":17,"type":18,"OPEN_BRACKET":19,"CLOSE_BRACKET":20,"COLON":21,"COMMA":22,"VOID":23,"in-decl":24,"TYPE":25,"ASSIGN":26,"expr":27,"seq-statement":28,"statement":29,"dir-statement":30,"SEMICOLON":31,"flow-statement":32,"RETURN":33,"BREAK":34,"CONTINUE":35,"while-statement":36,"for-statement":37,"do-while_statemnt":38,"if-statement":39,"switch-statement":40,"WHILE":41,"DO":42,"FOR":43,"epxr":44,"IF":45,"ELSE":46,"OPEN":47,"PARENS":48,"switch_statement":49,"SWITCH":50,"CASE":51,"DEFAULT":52,"sec_expr":53,"prim_expr":54,"PLUS":55,"MINUS":56,"STAR":57,"DIV":58,"PERCENT":59,"OP_ADD_ASSIGNMENT":60,"OP_SUB_ASSIGNMENT":61,"OP_MULT_ASSIGNMENT":62,"OP_DIV_ASSIGNMENT":63,"OP_MOD_ASSIGNMENT":64,"OP_INC":65,"OP_DEC":66,"OP_AND":67,"OP_OR":68,"CARET":69,"AMP":70,"BITWISE_OR":71,"OP_RIGHT_SHIFT":72,"OP_LEFT_SHIFT":73,"ZERO_FILL_RIGHT_SHIFT":74,"OP_EQ":75,"LT":76,"GT":77,"OP_NE":78,"OP_LE":79,"OP_GE":80,"DIGIT":81,"TRUE":82,"FALSE":83,"NOT":84,"BOOL":85,"NUM":86,"FLOAT":87,"POINT":88,"STRING":89,"VECTOR_2":90,"VECTOR_3":91,"VECTOR_4":92,"$accept":0,"$end":1},
+terminals_: {2:"error",4:"compilation-unit",5:"EOF",9:"seq_statement",10:"HASHTAG",11:"IMPORT",12:"IDENTIFIER",13:"FUNCTION",14:"OPEN_PARENS",16:"CLOSE_PARENS",17:"RETURN_TYPE",19:"OPEN_BRACKET",20:"CLOSE_BRACKET",21:"COLON",22:"COMMA",23:"VOID",25:"TYPE",26:"ASSIGN",31:"SEMICOLON",33:"RETURN",34:"BREAK",35:"CONTINUE",40:"switch-statement",41:"WHILE",42:"DO",43:"FOR",44:"epxr",45:"IF",46:"ELSE",47:"OPEN",48:"PARENS",50:"SWITCH",51:"CASE",52:"DEFAULT",55:"PLUS",56:"MINUS",57:"STAR",58:"DIV",59:"PERCENT",60:"OP_ADD_ASSIGNMENT",61:"OP_SUB_ASSIGNMENT",62:"OP_MULT_ASSIGNMENT",63:"OP_DIV_ASSIGNMENT",64:"OP_MOD_ASSIGNMENT",65:"OP_INC",66:"OP_DEC",67:"OP_AND",68:"OP_OR",69:"CARET",70:"AMP",71:"BITWISE_OR",72:"OP_RIGHT_SHIFT",73:"OP_LEFT_SHIFT",74:"ZERO_FILL_RIGHT_SHIFT",75:"OP_EQ",76:"LT",77:"GT",78:"OP_NE",79:"OP_LE",80:"OP_GE",81:"DIGIT",82:"TRUE",83:"FALSE",84:"NOT",85:"BOOL",86:"NUM",87:"FLOAT",88:"POINT",89:"STRING",90:"VECTOR_2",91:"VECTOR_3",92:"VECTOR_4"},
+productions_: [0,[3,2],[6,2],[6,2],[7,3],[8,10],[15,7],[15,1],[24,3],[24,5],[28,1],[29,2],[29,1],[30,3],[30,2],[30,1],[30,1],[30,1],[30,1],[32,1],[32,1],[32,1],[32,1],[32,1],[36,7],[38,8],[37,11],[39,7],[39,9],[39,10],[49,12],[27,1],[53,1],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,2],[53,2],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[53,3],[54,1],[54,1],[54,1],[54,1],[54,2],[54,3],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -91,89 +91,355 @@ case 1:
             };
         
 break;
-case 33:
-return $$[$0];
+case 3:
+this.$ = {
+                type: 'program',
+                arguments:[
+                $$[$0-1], 
+                $$[$01],
+                $$[$03]
+                ]
+            };
+        
 break;
-case 34:
+case 4:
+this.$ = { 
+            type: 'include',
+            arguments: [
+                $$[$0-2], 
+                $$[$0-1], 
+                $$[$0]]
+            };
+        
+break;
+case 5:
+this.$ = { 
+                        type: 'out-decl',
+                        arguments: [ 
+                            $$[$0-8], 
+                            $$[$0-6],
+                            $$[$0-3],
+                            $$[$0-1]]
+                            };
+                    
+break;
+case 13:
+this.$ = { 
+                        type: 'assign'
+                        arguments: [
+                            $$[$0];]
+                      };
+                
+break;
+case 14: case 17: case 32:
 this.$ =  $$[$0];
 break;
+case 18:
+this.$ = $$[$0];
+break;
+case 24:
+this.$ = { 
+                type: 'while-loop',
+                arguments:[
+                    $$[$0-4],
+                    $$[$0-1]]
+                };
+        
+break;
+case 25:
+this.$ = { 
+                type: 'do-while',
+                 arguments:[
+                   $$[$0-5],
+                   $$[$0-1]]
+               };
+        
+break;
+case 26:
+this.$ = {
+                type: "for-loop",
+                arguments: [ 
+                    $$[$0-8],
+                    $$[$0-6],
+                    $$[$0-4],
+                    $$[$0-1]]
+              };
+        
+break;
+case 27:
+this.$ = { 
+                type: 'if-statment',
+                arguments: [ 
+                    $$[$0-4],
+                    $$[$0-1]]
+               };
+        
+break;
+case 28:
+this.$ = {
+                type: 'if-else',
+                arguments: [
+                    $$[$0-6],
+                    $$[$0-3],
+                    $$[$0]]
+              };
+        
+break;
+case 29:
+this.$ = {
+                type: 'if-else-if',
+                arguments: [ 
+                    $$[$0-7],
+                    $$[$0-4],
+                    $$[$0-1]]
+               };
+        
+break;
+case 30:
+this.$ = { 
+                type: 'switch',
+                arguments: [ 
+                $$[$0-9],
+                $$[$0-5],
+                $$[$0-3],
+                $$[$0-1]]
+               };
+        
+break;
+case 31:
+return $$[$0];
+break;
+case 33:
+this.$ = {
+                        type: 'addition',
+                        arguments: [ 
+                            $$[$0-2],
+                            $$[$0]]
+                        }; 
+                
+break;
+case 34:
+this.$ = { 
+                        type: 'minus',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
+break;
 case 35:
-this.$ = $$[$0-2] + $$[$0]; 
+this.$ = { 
+                        type: 'multiplication',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 36:
- this.$ = $$[$0-2] - $$[$0];
+this.$ = { 
+                        type: 'division',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 37:
-this.$ =  $$[$0-2] * $$[$0];
+this.$ = { 
+                        type: 'modulo',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 38:
-this.$ =  $$[$0-2] / $$[$0];
+this.$ = { 
+                        type: 'add_assign',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 39:
- this.$ = $$[$0-2] % $$[$0];
+this.$ = { 
+                        type: 'sub_assign',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 40:
-$$[$0-2] = $$[$0-2] + $$[$0];
+this.$ = { 
+                        type: 'multi_assign',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 41:
-$$[$0-2] = $$[$0-2] - $$[$0];
+this.$ = { 
+                        type: 'div_assign',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 42:
-$$[$0-2] = $$[$0-2] * $$[$0];
+this.$ = { 
+                        type: 'mod_assign',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 43:
-$$[$0-2] = $$[$0-2] / $$[$0];
+this.$ = { 
+                        type: 'increments',
+                        arguments:[
+                            $$[$0-1]]
+                       };
+                
 break;
 case 44:
-$$[$0-2] = $$[$0-2] % $$[$0];
+this.$ = { 
+                        type: 'decrement',
+                        arguments:[
+                            $$[$0-1]]
+                       };
+                
 break;
 case 45:
-$$[$0-1]= $$[$0-1] + 1;
+this.$ = { 
+                        type: 'and',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 46:
-$$[$0-1] = $$[$0-1] -1;
+this.$ = { 
+                        type: 'or',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 47:
-this.$ = $$[$0-2] && $$[$0];
+this.$ = { 
+                        type: 'bit-XOR',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 48:
-this.$ = $$[$0-2] || $$[$0];
+this.$ = { 
+                        type: 'bit-AND',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 49:
-this.$ = $$[$0-2] ^ $$[$0];
+this.$ = { 
+                        type: 'bit-OR',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 50:
-this.$ = $$[$0-2] & $$[$0];
+this.$ = { 
+                        type: 'bit-right-shift',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 51:
-this.$ = $$[$0-2] | $$[$0]; 
+this.$ = { 
+                        type: 'bit-left-shift',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 52:
- this.$ = $$[$0-2] >> $$[$0]; 
+this.$ = { 
+                        type: 'zero-fill-right-shift',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 53:
-this.$ = $$[$0-2] << $$[$0]; 
+this.$ = { 
+                        type: 'equality',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 54:
-this.$ = $$[$0-2] >>> $$[$0];
+this.$ = { 
+                        type: 'less-than',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 55:
- this.$ = $$[$0-2] == $$[$0];
+this.$ = { 
+                        type: 'larger-than',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 56:
-this.$ = $$[$0-2] < $$[$0]; 
+this.$ = { 
+                        type: 'not-equal',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 57:
-this.$= $$[$0-2] > $$[$0];
+this.$ = { 
+                        type: 'less-than-or-equal ',
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 case 58:
-this.$ = ($$[$0-2] <$$[$0]) || ($$[$0-2]>$$[$0]);
-break;
-case 59:
-this.$ = $$[$0-2] <= $$[$0];
-break;
-case 60:
-this.$ = $$[$0-2] >= $$[$0];
+this.$ = { 
+                        type: 'greater-than-or-equal' ,
+                        arguments:[
+                            $$[$0-2], 
+                            $$[$0]]
+                       };
+                
 break;
 }
 },
@@ -665,23 +931,23 @@ case 5:/* skip */
 break;
 case 6:/* skip */
 break;
-case 7:return 86;
+case 7:return 85;
 break;
 case 8:return 34;
 break;
-case 9:return 52;
+case 9:return 51;
 break;
 case 10:return 35;
 break;
-case 11:return 53;
+case 11:return 52;
 break;
 case 12:return 42;
 break;
 case 13:return 46;
 break;
-case 14:return 84;
+case 14:return 83;
 break;
-case 15:return 88;
+case 15:return 87;
 break;
 case 16:return 43;
 break;
@@ -691,31 +957,31 @@ case 18:return 45;
 break;
 case 19:return 11;
 break;
-case 20:return 87;
+case 20:return 86;
 break;
-case 21:return 85;
+case 21:return 84;
 break;
 case 22:return 'NULL';
 break;
-case 23:return 89;
+case 23:return 88;
 break;
 case 24:return 33;
 break;
-case 25:return 90;
+case 25:return 89;
 break;
 case 26:return 50;
 break;
-case 27:return 83;
+case 27:return 82;
 break;
 case 28:return 23;
 break;
 case 29:return 41;
 break;
-case 30:return 91;
+case 30:return 90;
 break;
-case 31:return 92;
+case 31:return 91;
 break;
-case 32:return 93;
+case 32:return 92;
 break;
 case 33:return 10;
 break;
@@ -739,21 +1005,21 @@ case 42:return 31;
 break;
 case 43:return 26
 break;
-case 44:return 56;
+case 44:return 55;
 break;
-case 45:return 57;
+case 45:return 56;
 break;
-case 46:return 58;
+case 46:return 57;
 break;
-case 47:return 59;
+case 47:return 58;
 break;
-case 48:return 60;
+case 48:return 59;
 break;
-case 49:return 71;
+case 49:return 70;
 break;
-case 50:return 72;
+case 50:return 71;
 break;
-case 51:return 70;
+case 51:return 69;
 break;
 case 52:return 'EXCL';
 break;
@@ -761,35 +1027,35 @@ case 53:return 'TILDE';
 break;
 case 54:return 26;
 break;
-case 55:return 66;
+case 55:return 65;
 break;
-case 56:return 67;
+case 56:return 66;
 break;
-case 57:return 68;
+case 57:return 67;
 break;
-case 58:return 69;
+case 58:return 68;
 break;
-case 59:return 76;
+case 59:return 75;
 break;
-case 60:return 77;
+case 60:return 76;
 break;
-case 61:return 78;
+case 61:return 77;
 break;
-case 62:return 79;
+case 62:return 78;
 break;
-case 63:return 80;
+case 63:return 79;
 break;
-case 64:return 81;
+case 64:return 80;
 break;
-case 65:return 61;
+case 65:return 60;
 break;
-case 66:return 62;
+case 66:return 61;
 break;
-case 67:return 63;
+case 67:return 62;
 break;
-case 68:return 64;
+case 68:return 63;
 break;
-case 69:return 65;
+case 69:return 64;
 break;
 case 70:return 'OP_AND_ASSIGNMENT';
 break;
@@ -797,15 +1063,15 @@ case 71:return 'OP_OR_ASSIGNMENT';
 break;
 case 72:return 'OP_XOR_ASSIGNMENT';
 break;
-case 73:return 74;
+case 73:return 73;
 break;
 case 74:return 'OP_LEFT_SHIFT_ASSIGNMENT';
 break;
-case 75:return 73;
+case 75:return 72;
 break;
 case 76:return 'OP_RIGHT_SHIFT_ASSIGNMENT';
 break;
-case 77:return 75;
+case 77:return 74;
 break;
 case 78:return 17;
 break;

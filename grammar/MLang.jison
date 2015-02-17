@@ -34,16 +34,42 @@ compilationUnit
     ;
  
 PROGRAM
-    : include* (out-decl|seq_statement)* EOF 
+    : include* ( out-decl | seq_statement )* EOF 
+            {$$ = {
+                type: 'program',
+                arguments:[
+                $1, 
+                $3,
+                $5
+                ]
+            };
+        }
     ; 
 
 
 include
     : HASHTAG IMPORT IDENTIFIER 
+            {$$ = { 
+            type: 'include',
+            arguments: [
+                $1, 
+                $2, 
+                $3]
+            };
+        }
     ; 
 
 out-decl
     : FUNCTION IDENTIFIER OPEN_PARENS formal CLOSE_PARENS (RETURN_TYPE type )? OPEN_BRACKET seq_statement CLOSE_BRACKET
+                    {$$ = { 
+                        type: 'out-decl',
+                        arguments: [ 
+                            $2, 
+                            $4,
+                            $7,
+                            $9]
+                            };
+                    }
     ;
 
 formal 
@@ -67,11 +93,24 @@ statement
 
 dir-statement
     : IDENTIFIER ASSIGN expr
+                {$$ = { 
+                        type: 'assign'
+                        arguments: [
+                            $3;]
+                      };
+                }
+
     | RETURN expr
+                {$$ =  $2;}
+
     | BREAK
     | CONTINUE
+
     | in-decl
+                {$$ =  $1;}
+
     | expr
+                {$$ = $1;}
     ;
 
 flow-statement
@@ -82,34 +121,89 @@ flow-statement
     | switch-statement
     ;
 
+
 while-statement
     : WHILE OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET
+        {$$ = { 
+                type: 'while-loop',
+                arguments:[
+                    $3,
+                    $6]
+                };
+        }
     ;
 
 do-while_statemnt
     : DO OPEN_BRACKET seq_statement CLOSE_BRACKET WHILE OPEN_PARENS expr CLOSE_PARENS
-    ;
+       {$$ = { 
+                type: 'do-while',
+                 arguments:[
+                   $3,
+                   $7]
+               };
+        }
+        ;
 
 for-statement
     : FOR OPEN_PARENS expr SEMICOLON expr SEMICOLON epxr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET
+        {$$ = {
+                type: "for-loop",
+                arguments: [ 
+                    $3,
+                    $5,
+                    $7,
+                    $10]
+              };
+        }
     ;
 
 if-statement
     : IF OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET
+        {$$ = { 
+                type: 'if-statment',
+                arguments: [ 
+                    $3,
+                    $6]
+               };
+        }
+
     | IF OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET ELSE seq_statement
+        {$$ = {
+                type: 'if-else',
+                arguments: [
+                    $3,
+                    $6,
+                    $9]
+              };
+        }
+
     | IF OPEN PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET ELSE if-statement
+        {$$ = {
+                type: 'if-else-if',
+                arguments: [ 
+                    $3,
+                    $6,
+                    $9]
+               };
+        }
     ; 
  
 
- /*change it: can have more than one default case at the moment */
+
 switch_statement
-    : SWITCH OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET (switch_case COLON seq_statement)* CLOSE_BRACKET
+    : SWITCH OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET (CASE expr COLON seq_statement)* (DEFAULT seq_statement)* CLOSE_BRACKET
+        {$$ = { 
+                type: 'switch',
+                arguments: [ 
+                $3,
+                $7,
+                $9,
+                $11]
+               };
+        }
     ;
 
-switch_case
-    : CASE expr 
-    | DEFAULT 
-    ;   
+
 
 expr
     : sec_expr 
@@ -120,57 +214,233 @@ sec_expr
     :prim_expr  
                 {$$ =  $1;}
     | prim_expr PLUS sec_expr   
-                {$$ = $1 + $3; }                               
+                {$$ = {
+                        type: 'addition',
+                        arguments: [ 
+                            $1,
+                            $3]
+                        }; 
+                }
+
     | prim_expr MINUS sec_expr  
-                { $$ = $1 - $3;}
+                {$$ = { 
+                        type: 'minus',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr STAR  sec_expr  
-                {$$ =  $1 * $3;}
+                   {$$ = { 
+                        type: 'multiplication',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr DIV sec_expr    
-                {$$ =  $1 / $3;}
+                   {$$ = { 
+                        type: 'division',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr PERCENT sec_expr 
-                { $$ = $1 % $3;}
+                   {$$ = { 
+                        type: 'modulo',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_ADD_ASSIGNMENT sec_expr 
-                {$1 = $1 + $3;}
+                   {$$ = { 
+                        type: 'add_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_SUB_ASSIGNMENT sec_expr 
-                {$1 = $1 - $3;}
+                   {$$ = { 
+                        type: 'sub_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_MULT_ASSIGNMENT sec_expr
-                {$1 = $1 * $3;}
+                   {$$ = { 
+                        type: 'multi_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_DIV_ASSIGNMENT sec_expr 
-                {$1 = $1 / $3;}
+                   {$$ = { 
+                        type: 'div_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_MOD_ASSIGNMENT sec_expr 
-                {$1 = $1 % $3;}
+                   {$$ = { 
+                        type: 'mod_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_INC  
-                {$1= $1 + 1;}
+                   {$$ = { 
+                        type: 'increments',
+                        arguments:[
+                            $1]
+                       };
+                }
+
     | prim_expr OP_DEC  
-                {$1 = $1 -1;}
+                   {$$ = { 
+                        type: 'decrement',
+                        arguments:[
+                            $1]
+                       };
+                }
+
     | prim_expr OP_AND sec_expr 
-                {$$ = $1 && $3;}
+                   {$$ = { 
+                        type: 'and',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_OR  sec_expr 
-                {$$ = $1 || $3;}
+                   {$$ = { 
+                        type: 'or',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
     | prim_expr CARET  sec_expr 
-                {$$ = $1 ^ $3;}
+                   {$$ = { 
+                        type: 'bit-XOR',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr AMP   sec_expr 
-                {$$ = $1 & $3;}
+                   {$$ = { 
+                        type: 'bit-AND',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr BITWISE_OR sec_expr 
-                {$$ = $1 | $3; }
+                   {$$ = { 
+                        type: 'bit-OR',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_RIGHT_SHIFT sec_expr 
-                { $$ = $1 >> $3; }
+                   {$$ = { 
+                        type: 'bit-right-shift',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_LEFT_SHIFT sec_expr 
-                {$$ = $1 << $3; }
+                   {$$ = { 
+                        type: 'bit-left-shift',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
     | prim_expr ZERO_FILL_RIGHT_SHIFT sec_expr 
-                {$$ = $1 >>> $3;}
+                   {$$ = { 
+                        type: 'zero-fill-right-shift',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
     | prim_expr OP_EQ sec_expr 
-                { $$ = $1 == $3;}
+                  {$$ = { 
+                        type: 'equality',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr LT sec_expr 
-                {$$ = $1 < $3; }
+                   {$$ = { 
+                        type: 'less-than',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr GT  sec_expr
-                {$$= $1 > $3;}
+                   {$$ = { 
+                        type: 'larger-than',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_NE sec_expr
-                {$$ = ($1 <$3) || ($1>$3);}
+                   {$$ = { 
+                        type: 'not-equal',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_LE sec_expr
-                {$$ = $1 <= $3;}
+                   {$$ = { 
+                        type: 'less-than-or-equal ',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_GE sec_expr
-                {$$ = $1 >= $3;}
+                   {$$ = { 
+                        type: 'greater-than-or-equal' ,
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
     ; 
 
 prim_expr
