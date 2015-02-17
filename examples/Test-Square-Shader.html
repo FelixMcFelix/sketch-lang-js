@@ -1,25 +1,28 @@
 <!DOCTYPE html />
 <html>
 	<head>
-		<script type="text/javascript" src="../build/main.js" />
+		<script type="text/javascript" src="../build/Palette.js" ></script>
 		<script type="text/javascript">
-			var canvas = document.getElementById("testingcanvas");
-			var glctx = canvas.getContext("webgl");
+			window.onload = function(){
+				//debugger;
+				var canvas = document.getElementById("testingcanvas");
+				var glctx = canvas.getContext("webgl");
 
-			var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
+				var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
 
-			var manager = new Palette.Manager(glctx);
-			manager.addShader("squareShaders.json");
+				var manager = new Palette.Manager(glctx);
+				manager.addShader("squareShaders.json");
 
-			Window.requestAnimationFrame(raf);
+				var raf = function(){
+					manager.draw("square", "square", squareVtx, null, {"color": [1.0, 0.0, 0.0, 1.0]});
+					window.requestAnimationFrame(raf);
+				}
 
-			var raf = function(){
-				manager.draw("square", "square", squareVtx, null, {"color": [1.0, 0.0, 0.0]});
-				Window.requestAnimationFrame(raf);
+				window.requestAnimationFrame(raf);
 			}
 		</script>
 	</head>
 	<body>
-		<canvas id="testingcanvas" width="800" height="600" />
+		<canvas id="testingcanvas" width="800" height="600">Get a modern browser you spoon!</canvas>
 	</body>
 </html>

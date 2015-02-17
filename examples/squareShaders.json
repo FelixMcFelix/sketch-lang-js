@@ -1,22 +1,39 @@
 {
-	"type": 2,
-	"content": [
-		{
-			"type": 0,
-			"name": "square",
-			"src":"",
-			"attrs": [
-				["pvMatrix", "mat4", null],
-				["mvMatrix", "mat4", null]
-			]
-		},
-		{
-			"type": 2,
-			"name": "square",
-			"src":"",
-			"attrs": [
-				["color", "vec4", [0.0, 1.0, 0.0, 1.0]]
-			]
-		}
-	]
+    "type": 2,
+    "content": [
+        {
+            "type": 0,
+            "name": "square",
+            "src": "#version 100\n attribute aVertexPos;\n uniform mat4 mvMatrix;\n uniform mat4 pvMatrix;\n void main(){\n gl_Position = pvMatrix * mvMatrix * vec4(aVertexPos, 1.0);\n}",
+            "attrs": [
+                [
+                    "pvMatrix",
+                    "mat4",
+                    null
+                ],
+                [
+                    "mvMatrix",
+                    "mat4",
+                    null
+                ]
+            ]
+        },
+        {
+            "type": 1,
+            "name": "square",
+            "src": "#version 100\n precision mediump float;\n uniform vec4 color;\n void main(){gl_FragColor = color;}",
+            "attrs": [
+                [
+                    "color",
+                    "vec4",
+                    [
+                        0,
+                        1,
+                        0,
+                        1
+                    ]
+                ]
+            ]
+        }
+    ]
 }

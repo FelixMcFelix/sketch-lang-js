@@ -26,6 +26,15 @@ gulp.task("build", function(){
 			.pipe(gulp.dest(configs.destDir));
 });
 
+gulp.task("build:Palette", function(){
+	return gulp.src([configs.srcDir+"Palette/Palette.js",configs.srcDir+"Palette/*.js"])
+			.pipe(concat("Palette.js"))
+			.pipe(gulp.dest(configs.destDir))
+			.pipe(rename({suffix: ".min"}))
+			.pipe(uglify())
+			.pipe(gulp.dest(configs.destDir));
+});
+
 //CLEAN TASKS
 gulp.task("clean",["clean:build", "clean:docs"], function(){
 	

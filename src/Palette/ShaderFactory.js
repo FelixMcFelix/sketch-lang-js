@@ -19,7 +19,9 @@ Palette.ShaderFactory = function(manager){
     * @readonly
     * @protected
     */
+    that = this;
 	this.manager = manager;
+	this.downloadInProgress = false;
 };
 
 Palette.ShaderFactory.prototype = {
@@ -52,6 +54,8 @@ Palette.ShaderFactory.prototype = {
 			default:
 				throw new Error("Not a valid type of shader.");
 		}
+
+		while(this.downloadInProgress){}
 
 		if(outShader){this.registerShader(outShader);}
 	},
@@ -90,8 +94,11 @@ Palette.ShaderFactory.prototype = {
 		var rdr = new XMLHttpRequest();
 		rdr.open("GET", url, true);
 		rdr.onload = function(){
-			this.addShader(rdr.response);
+			console.log(that)
+			that.addShader(rdr.response);
+			that.downloadInProgress = false;
 		};
+		that.downloadInProgress = true;
 		rdr.send();
 	},
 
@@ -110,7 +117,7 @@ Palette.ShaderFactory.prototype = {
 			type = Palette.ShaderFactory.SOURCE_OBJECT;
 		} else if(this.isJSON(shader)){
 			type = Palette.ShaderFactory.JSON;
-		} else if(shader instanceof String){
+		} else if(this.isString(shader)){
 			type = Palette.ShaderFactory.URL;
 		}
 		return type;
@@ -129,6 +136,10 @@ Palette.ShaderFactory.prototype = {
 		} catch (e){
 			return false;
 		}
+	},
+
+	isString: function(s){
+    	return typeof(s) === 'string' || s instanceof String;
 	},
 
 	/**
