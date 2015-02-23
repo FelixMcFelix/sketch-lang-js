@@ -1,17 +1,29 @@
-<!DOCTYPE html />
+<!DOCTYPE html>
 <html>
 	<head>
 		<script type="text/javascript" src="../build/Palette.js" ></script>
+        <script type="text/javascript" src="gl-matrix-min.js"></script>
 		<script type="text/javascript">
 			window.onload = function(){
-				//debugger;
+				x = new XMLHttpRequest();
+				x.open("GET", "squareShaders.json", true);
+				x.onload = function(){
+					execute(x.response);
+				};
+				x.send();
+			}
+			
+			execute = function(text){
+                debugger;
+
 				var canvas = document.getElementById("testingcanvas");
 				var glctx = canvas.getContext("webgl");
 
 				var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
 
 				var manager = new Palette.Manager(glctx);
-				manager.addShader("squareShaders.json");
+				//manager.addShader("squareShaders.json");
+                manager.addShader(text);
 
 				var raf = function(){
 					manager.draw("square", "square", squareVtx, null, {"color": [1.0, 0.0, 0.0, 1.0]});

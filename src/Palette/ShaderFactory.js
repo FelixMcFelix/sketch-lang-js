@@ -55,7 +55,7 @@ Palette.ShaderFactory.prototype = {
 				throw new Error("Not a valid type of shader.");
 		}
 
-		while(this.downloadInProgress){}
+		//while(this.downloadInProgress){}
 
 		if(outShader){this.registerShader(outShader);}
 	},
@@ -113,7 +113,7 @@ Palette.ShaderFactory.prototype = {
 		var type = -1;
 		if(shader instanceof Palette.Shader){
 			type = Palette.ShaderFactory.SHADER_OBJECT;
-		} else if(shader.type && shader.name && (shader.content || shader.src)){
+		} else if((shader.type != undefined) && (shader.name != undefined) && (shader.content || shader.src)){
 			type = Palette.ShaderFactory.SOURCE_OBJECT;
 		} else if(this.isJSON(shader)){
 			type = Palette.ShaderFactory.JSON;
