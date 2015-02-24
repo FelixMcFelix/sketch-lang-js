@@ -82,8 +82,24 @@ Palette.Manager.prototype = {
 	* @return {Palette.Program} The {@link Palette.Program} either found or generated. If either shader was not found, NULL is returned.
 	*/
 	getProgram: function(vs, fs){
-		//TODO: Generate and link new programs for lookup miss.
-		return this.programs[vs][fs];
+		var vsName = this.getShaderName(vs);
+		var fsName = this.getShaderName(fs);
+		var vsObj;
+		var fsObj;
+
+		var output;
+
+		this.programs[vsName] = this.programs[vsName] || {};
+		this.programs[vsName][fsName] = this.programs[vsName][fsName] || {};
+
+		if(!(this.programs[vsName][fsName] instanceof Palette.Program)){
+			if(vs instanceof Palette.Shader){vsObj = vs;} else{vsObj = this.getShader(Palette.Shader.VS, vsName);}
+			if(fs instanceof Palette.Shader){fsObj = fs;} else{fsObj = this.getShader(Palette.Shader.FS, fsName);}
+			this.programs[vsName][fsName] = new Palette.Program(this.context, vsObj, fsObj);
+		}
+		output = this.programs[vsName][fsName];
+
+		return output;
 	},
 
 	/**
@@ -96,6 +112,23 @@ Palette.Manager.prototype = {
 	*/
 	getShader: function(type, name){
 		return (type === Palette.Shader.VS) ? this.vertShaders[name] : this.fragShaders[name];
+	},
+
+	/**
+	* Ensure that we have a shader's name, for lookup purposes in particular.
+	* @method Palette.Manager#getShaderName
+	* @public
+	* @param {string|Palette.Shader} input - The shader we need to sanity check the name of.
+	* @return {string} - The definite name of the shader.
+	*/
+	getShaderName: function(input){
+		var output;
+		if(input instanceof Palette.Shader){
+			output = input.name;
+		} else{
+			output = input;
+		}
+		return output;
 	}
 };
 

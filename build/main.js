@@ -82,8 +82,24 @@ Palette.Manager.prototype = {
 	* @return {Palette.Program} The {@link Palette.Program} either found or generated. If either shader was not found, NULL is returned.
 	*/
 	getProgram: function(vs, fs){
-		//TODO: Generate and link new programs for lookup miss.
-		return this.programs[vs][fs];
+		var vsName = this.getShaderName(vs);
+		var fsName = this.getShaderName(fs);
+		var vsObj;
+		var fsObj;
+
+		var output;
+
+		this.programs[vsName] = this.programs[vsName] || {};
+		this.programs[vsName][fsName] = this.programs[vsName][fsName] || {};
+
+		if(!(this.programs[vsName][fsName] instanceof Palette.Program)){
+			if(vs instanceof Palette.Shader){vsObj = vs;} else{vsObj = this.getShader(Palette.Shader.VS, vsName);}
+			if(fs instanceof Palette.Shader){fsObj = fs;} else{fsObj = this.getShader(Palette.Shader.FS, fsName);}
+			this.programs[vsName][fsName] = new Palette.Program(this.context, vsObj, fsObj);
+		}
+		output = this.programs[vsName][fsName];
+
+		return output;
 	},
 
 	/**
@@ -96,6 +112,23 @@ Palette.Manager.prototype = {
 	*/
 	getShader: function(type, name){
 		return (type === Palette.Shader.VS) ? this.vertShaders[name] : this.fragShaders[name];
+	},
+
+	/**
+	* Ensure that we have a shader's name, for lookup purposes in particular.
+	* @method Palette.Manager#getShaderName
+	* @public
+	* @param {string|Palette.Shader} input - The shader we need to sanity check the name of.
+	* @return {string} - The definite name of the shader.
+	*/
+	getShaderName: function(input){
+		var output;
+		if(input instanceof Palette.Shader){
+			output = input.name;
+		} else{
+			output = input;
+		}
+		return output;
 	}
 };
 
@@ -212,6 +245,7 @@ Palette.Program.prototype = {
 
 	/**
 	* Set a program's object config for either shader or both with a given config object.
+	* Object properties not in the supplied object will not overwrite the program state.
 	* @method Palette.Program#setConfig
 	* @public
 	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE, Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
@@ -241,12 +275,12 @@ Palette.Program.prototype = {
 		var attrPointer;
 
 		for(var j=0; j<2; j++){
-			if(!j){shaderPointer = this.vs; attrPointer = this.attrs.vs;}
-			else {shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+			if(!j){shaderPointer = this.vs; attrPointer = this.attrStore.vs;}
+			else {shaderPointer = this.fs; attrPointer = this.attrStore.fs;}
 
 			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
 				var attrData = shaderPointer.attrs[i];
-				var attrDest = attrPointer[attrData[0]];
+				var attrDest = attrPointer[attrData[0]] || {};
 
 				attrDest.setFunction = Palette.Program.fetchSetter(this.context, attrData[1]);
 
@@ -267,11 +301,11 @@ Palette.Program.prototype = {
 
 		for(var j=0; j<2; j++){
 			if(!j){
-				attrPointer = this.attrs.vs; 
+				attrPointer = this.attrStore.vs; 
 				if(mode===Palette.Program.VS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
 			}
 			else {
-				attrPointer = this.attrs.fs;
+				attrPointer = this.attrStore.fs;
 				if(mode===Palette.Program.FS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
 				else valueLocation = "value";
 			}
@@ -282,6 +316,8 @@ Palette.Program.prototype = {
 
 				if(attr.type.substr(0,3) == "mat"){
 					attr.setFunction(attr.pointer, this.context.FALSE, attrValue);
+				} else if(attr.type = vertexAttrib){
+
 				} else{
 					attr.setFunction(attr.pointer, attrValue);
 				}
@@ -337,7 +373,7 @@ Palette.Program.fetchSetter = function(gl, type){
 			return null;
 		case "vertexAttrib":
 			alert("You're still on your own, kid.");
-			return null;
+			return null;//gl.vertexAttribPointer.bind(gl);
 		default:
 			alert("Not gonna lie - you really messed up. I can't pass "+type+" onto the shader.");
 			return null;
@@ -477,7 +513,9 @@ Palette.ShaderFactory = function(manager){
     * @readonly
     * @protected
     */
+    that = this;
 	this.manager = manager;
+	this.downloadInProgress = false;
 };
 
 Palette.ShaderFactory.prototype = {
@@ -510,6 +548,8 @@ Palette.ShaderFactory.prototype = {
 			default:
 				throw new Error("Not a valid type of shader.");
 		}
+
+		//while(this.downloadInProgress){}
 
 		if(outShader){this.registerShader(outShader);}
 	},
@@ -548,8 +588,11 @@ Palette.ShaderFactory.prototype = {
 		var rdr = new XMLHttpRequest();
 		rdr.open("GET", url, true);
 		rdr.onload = function(){
-			this.addShader(rdr.response);
+			console.log(that)
+			that.addShader(rdr.response);
+			that.downloadInProgress = false;
 		};
+		that.downloadInProgress = true;
 		rdr.send();
 	},
 
@@ -564,11 +607,11 @@ Palette.ShaderFactory.prototype = {
 		var type = -1;
 		if(shader instanceof Palette.Shader){
 			type = Palette.ShaderFactory.SHADER_OBJECT;
-		} else if(shader.type && shader.name && (shader.content || shader.src)){
+		} else if((shader.type != undefined) && (shader.name != undefined) && (shader.content || shader.src)){
 			type = Palette.ShaderFactory.SOURCE_OBJECT;
 		} else if(this.isJSON(shader)){
 			type = Palette.ShaderFactory.JSON;
-		} else if(shader instanceof String){
+		} else if(this.isString(shader)){
 			type = Palette.ShaderFactory.URL;
 		}
 		return type;
@@ -587,6 +630,10 @@ Palette.ShaderFactory.prototype = {
 		} catch (e){
 			return false;
 		}
+	},
+
+	isString: function(s){
+    	return typeof(s) === 'string' || s instanceof String;
 	},
 
 	/**

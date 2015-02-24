@@ -6,7 +6,7 @@
 		<script type="text/javascript">
 			window.onload = function(){
 				x = new XMLHttpRequest();
-				x.open("GET", "squareShaders.json", true);
+				x.open("GET", "https://dl.dropboxusercontent.com/u/15574345/laughing-ironman/examples/squareShaders.json", true);
 				x.onload = function(){
 					execute(x.response);
 				};
@@ -14,10 +14,13 @@
 			}
 			
 			execute = function(text){
-                debugger;
-
 				var canvas = document.getElementById("testingcanvas");
 				var glctx = canvas.getContext("webgl");
+
+				var pvMatrix = [];
+				var mvMatrix = [];
+				mat4.perspective(pvMatrix, Math.PI/4, canvas.width/canvas.height, 0.1, 100);
+				mat4.identity(mvMatrix);
 
 				var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
 
@@ -26,7 +29,8 @@
                 manager.addShader(text);
 
 				var raf = function(){
-					manager.draw("square", "square", squareVtx, null, {"color": [1.0, 0.0, 0.0, 1.0]});
+					debugger;
+					manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [1.0, 0.0, 0.0, 1.0]});
 					window.requestAnimationFrame(raf);
 				}
 

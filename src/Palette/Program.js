@@ -104,6 +104,7 @@ Palette.Program.prototype = {
 
 	/**
 	* Set a program's object config for either shader or both with a given config object.
+	* Object properties not in the supplied object will not overwrite the program state.
 	* @method Palette.Program#setConfig
 	* @public
 	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE, Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
@@ -133,12 +134,12 @@ Palette.Program.prototype = {
 		var attrPointer;
 
 		for(var j=0; j<2; j++){
-			if(!j){shaderPointer = this.vs; attrPointer = this.attrs.vs;}
-			else {shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+			if(!j){shaderPointer = this.vs; attrPointer = this.attrStore.vs;}
+			else {shaderPointer = this.fs; attrPointer = this.attrStore.fs;}
 
 			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
 				var attrData = shaderPointer.attrs[i];
-				var attrDest = attrPointer[attrData[0]];
+				var attrDest = attrPointer[attrData[0]] || {};
 
 				attrDest.setFunction = Palette.Program.fetchSetter(this.context, attrData[1]);
 
@@ -159,11 +160,11 @@ Palette.Program.prototype = {
 
 		for(var j=0; j<2; j++){
 			if(!j){
-				attrPointer = this.attrs.vs; 
+				attrPointer = this.attrStore.vs; 
 				if(mode===Palette.Program.VS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
 			}
 			else {
-				attrPointer = this.attrs.fs;
+				attrPointer = this.attrStore.fs;
 				if(mode===Palette.Program.FS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
 				else valueLocation = "value";
 			}
@@ -174,6 +175,8 @@ Palette.Program.prototype = {
 
 				if(attr.type.substr(0,3) == "mat"){
 					attr.setFunction(attr.pointer, this.context.FALSE, attrValue);
+				} else if(attr.type = vertexAttrib){
+
 				} else{
 					attr.setFunction(attr.pointer, attrValue);
 				}
@@ -229,7 +232,7 @@ Palette.Program.fetchSetter = function(gl, type){
 			return null;
 		case "vertexAttrib":
 			alert("You're still on your own, kid.");
-			return null;
+			return null;//gl.vertexAttribPointer.bind(gl);
 		default:
 			alert("Not gonna lie - you really messed up. I can't pass "+type+" onto the shader.");
 			return null;
