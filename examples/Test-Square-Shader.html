@@ -22,7 +22,10 @@
 				mat4.perspective(pvMatrix, Math.PI/4, canvas.width/canvas.height, 0.1, 100);
 				mat4.identity(mvMatrix);
 
-				var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
+				//var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
+				var squareVtx = new Float32Array([0, 0, 0,
+												  0, 1.0, 0,
+												  0, 1.0, 1.0]);
 
 				var manager = new Palette.Manager(glctx);
 				//manager.addShader("squareShaders.json");

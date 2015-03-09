@@ -19,7 +19,12 @@
 				[
 					"aVertexPos",
 					"vertexAttrib",
-					null
+					"vertexBuffer"
+				],
+				[
+					"vertexBuffer",
+					"buffer",
+					3
 				]
             ]
         },
@@ -30,7 +35,7 @@
             "attrs": [
                 [
                     "color",
-                    "vec4",
+                    "vec4[]",
                     [
                         0,
                         1,

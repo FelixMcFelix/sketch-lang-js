@@ -17,7 +17,7 @@ gulp.task("default", ["clean"], function(){
 
 
 //BUILD TASKS
-gulp.task("build", function(){
+gulp.task("build",["build:Palette"], function(){
 	return gulp.src(configs.srcDir+"*/*.js")
 			.pipe(concat("main.js"))
 			.pipe(gulp.dest(configs.destDir))
