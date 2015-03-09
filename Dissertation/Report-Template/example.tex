@@ -1,0 +1,147 @@
+% This example An LaTeX document showing how to use the l3proj class to
+% write your report. Use pdflatex and bibtex to process the file, creating 
+% a PDF file as output (there is no need to use dvips when using pdflatex).
+
+% Modified 
+
+
+\documentclass{l3proj}
+\usepackage{listings}
+\begin{document}
+\title{Design and implement your own programming language}
+\author{Kyle Simpson\\
+		Kristiyan Dimitrov\\
+        Darren Findlay\\
+        David Creigh\\
+		Gerard Docherty}
+\date{27 March 2015}
+\maketitle
+\begin{abstract}
+
+The abstract goes here
+
+\end{abstract}
+\educationalconsent
+\tableofcontents
+%==============================================================================
+\chapter{Introduction}
+\label{intro}
+
+
+%==============================================================================
+\chapter{Language Tutorial}
+\label{tut}
+This chapter comprises of a brief introduction of how to use our language.
+\section{1.1 Getting Started}
+In every language, the first program to write is always 'hello world' - where you would print the words "hello world". However, as this language is mainly a graphical language, the equivalent would be 'hello square', and the aim is to draw a square. In MLang, the program required to draw a square is:\\
+\begin{lstlisting}
+#EXAMPLE 1.1
+Update(){
+	Polygon square = ({0,0} + {5,0}) * 4}
+	draw(square)}
+}
+\end{lstlisting}
+to run this program on machines running a UNIX operating system, you must create a file with the the suffix ".m"
+\textbf{Need compiling commands}
+
+Any MLang program you write will have to consist of at least one function, and variables. These functions and variables can be named anything you like. You can call other functions to help carry out the task, only ones that you have written, as there are no libraries provided as such. 
+
+In Mlang, implicit semi-colons exist at the end of every line. This means that, you dont have to end each line wih a semi-colon, and whether you do or not will not have an effect on the compilation of the program. 
+
+The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the cnavas. This will be talked about in detail later.
+
+One way in which you can pass data between functions is by including variables in the calling statement as arguments. However, you can only do this if the function that is being called is expecting the same number and type of variables. An example is:\\
+\begin{lstlisting}
+#EXAMPLE 1.2
+main(){
+	num n = 2;
+	takesParams(num n){
+		print(n);
+	}
+	takesParams(n);
+}
+\end{lstlisting}
+Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If there was another argument included, for example \textit{takesParams(n, 7)}, or the wrong types, then it would not compile. This will be talked about in more detail in 1.7. As you can see in example 1.1, the code inside of a function is enclosed by curly braces {   }. The statement draw takes in one argument - either a Line, Point or Polygon, and draws it to the canvas.
+
+\textbf{newlines?}
+
+\section{1.2 Variables and arithmetics operators}
+This next section will use a more complicated program than before, introducing more features, such as comments, loops, and exapnd on previously touched on features, such as variables.
+\begin{lstlisting}
+#EXAMPLE 1.3
+#This Program will draw 3 different shapes - triangle, square and pentagon.
+main(){
+	num sides = 5;
+	num counter = 3;
+	Point pt1 = {3,1}
+	pt2 = {1,3}
+	Line l1 = (pt1 + pt2);
+	while(counter <= sides){
+		Polygon shape =	1 * counter;
+		draw(shape);
+		counter++;
+	}
+}
+\end{lstlisting}
+
+The initial lines indicate how to show comments in your code in MLang. Using a hashsign will be ignored by the compiler, and show that the current line is a comment. These can be used to explain how your programs works, and make it easier to read and understand, for you or other users.
+
+As you can see in example 1.3, there are two ways of declaring variables. A variable declaration must always consist of 
+
+implicit/explicit types
+while loop
+points
+lines
+shapes
+++ and arithmetic operators
+
+
+
+%==============================================================================
+\chapter{Language Reference Manual}
+\label{manual}
+
+%==============================================================================
+\chapter{Project Plan}
+\label{plan}
+
+%==============================================================================
+\chapter{Language Evolution}
+\label{evo}
+
+%==============================================================================
+\chapter{Compiler Architecture}
+\label{arch}
+
+%==============================================================================
+\chapter{Development Environment}
+\label{dev}
+
+%==============================================================================
+\chapter{Test Plan and test suites}
+\label{test}
+
+%==============================================================================
+\chapter{Conclusion}
+\label{conc}
+
+%------------------------------------------------------------------------------
+\section{Contributions}
+\label{cont}
+Here we explain that Lewis Carroll wrote chapter  John Wayne
+was out riding his horse every day and didn't do anything. Marilyn Monroe
+was great at getting the requirements specification and coordinating the
+writing of the report. Betty Davis did the coding of the kernel of the
+project, described in Chapter \ref{impl}.  James Dean handled the
+multimedia content of the project.
+%==============================================================================
+\chapter{Appendix A}
+\label{appa}
+
+Includes full source listing of compiler
+
+
+%==============================================================================
+\bibliographystyle{plain}
+\bibliography{example}
+\end{document}
