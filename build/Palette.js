@@ -223,10 +223,9 @@ Palette.Program.prototype = {
 	*/
 	draw: function(verts, conf1, conf2){
 		this.context.useProgram(this.program);
+		if(!conf1) conf1 = {};
+		conf1.vertexBuffer = verts;
 
-		conf1.vertexBuffer = conf1.vertexBuffer || verts;
-
-		//TODO: PARSE NEW CONFIGS.
 		this.generateSend(this.attrs.vs, conf1);
 		this.generateSend(this.attrs.fs, conf2);
 
