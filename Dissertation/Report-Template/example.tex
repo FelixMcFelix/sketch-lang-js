@@ -7,6 +7,7 @@
 
 \documentclass{l3proj}
 \usepackage{listings}
+\usepackage{hyperref}
 \begin{document}
 \title{Design and implement your own programming language}
 \author{Kyle Simpson\\
@@ -32,7 +33,7 @@ The abstract goes here
 \chapter{Language Tutorial}
 \label{tut}
 This chapter comprises of a brief introduction of how to use our language.
-\section{1.1 Getting Started}
+\section{Getting Started}
 In every language, the first program to write is always 'hello world' - where you would print the words "hello world". However, as this language is mainly a graphical language, the equivalent would be 'hello square', and the aim is to draw a square. In MLang, the program required to draw a square is:\\
 \begin{lstlisting}
 #EXAMPLE 1.1
@@ -65,7 +66,7 @@ Here, you see that the calling statement - \textit{takesParams(n);} - provides t
 
 \textbf{newlines?}
 
-\section{1.2 Variables and arithmetics operators}
+\section{Variables and Arithmetic operators}
 This next section will use a more complicated program than before, introducing more features, such as comments, loops, and exapnd on previously touched on features, such as variables.
 \begin{lstlisting}
 #EXAMPLE 1.3
@@ -112,6 +113,41 @@ shapes
 %==============================================================================
 \chapter{Compiler Architecture}
 \label{arch}
+
+%==============================================================================
+\section{Overview}
+\label{arch-over}
+
+Our program module, as part of the role it plays, contains a combination of a compiler, bytecode executor and WebGL interface - written in JavaScript as required by the platform. This section aims to provide a view of the overall architecture and connection between these components, as well a brief explanation of each component's function and design considerations.
+
+The core language module can be divided into 5 main parts:\begin{enumerate}
+\item \textbf{Lexer and Parser} --- The program component charged with tokenising and interpreting MLang programs, generating an abstract syntax tree for use in code generation.
+\item \textbf{Code Generator} --- The program component responsible for conversion of abstract syntax trees into bytecode sequences, for execution by the abstract machine.
+\item \textbf{Shader Manager} --- An active subsystem of the module responsible for management, selection and execution of shader programs for drawing at runtime.
+\item \textbf{Abstract Machine} --- The main active subsystem present in the module, responsible for all runtime code execution. The abstract machine relies on the shader manager to make draw calls, but handles direct WebGL manipulation for certain key functions separately.
+\item \textbf{Module Facade} --- The active component responsible for managing the interconnections and operation of the above components, as well as exposing the module interface to programmers and for use with.
+\end{enumerate}
+Individual and detailed discussion of each system is provided below. The module's subsystems are then connected as shown in Figure $(\left. number\right.) $.
+
+%==============================================================================
+\section{Lexer and Parser}
+\label{arch-lex}
+
+%==============================================================================
+\section{Code Generator}
+\label{arch-gen}
+
+%==============================================================================
+\section{Shader Manager}
+\label{arch-shad}
+
+%==============================================================================
+\section{Abstract Machine}
+\label{arch-abs}
+
+%==============================================================================
+\section{Module Facade}
+\label{arch-module}
 
 %==============================================================================
 \chapter{Development Environment}

@@ -1,13 +1,19 @@
-\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}
-\contentsline {chapter}{\numberline {2}Language Tutorial}{4}{chapter.2}
-\contentsline {section}{\numberline {2.1}1.1 Getting Started}{4}{section.2.1}
-\contentsline {section}{\numberline {2.2}1.2 Variables and arithmetics operators}{5}{section.2.2}
-\contentsline {chapter}{\numberline {3}Language Reference Manual}{6}{chapter.3}
-\contentsline {chapter}{\numberline {4}Project Plan}{7}{chapter.4}
-\contentsline {chapter}{\numberline {5}Language Evolution}{8}{chapter.5}
-\contentsline {chapter}{\numberline {6}Compiler Architecture}{9}{chapter.6}
-\contentsline {chapter}{\numberline {7}Development Environment}{10}{chapter.7}
-\contentsline {chapter}{\numberline {8}Test Plan and test suites}{11}{chapter.8}
-\contentsline {chapter}{\numberline {9}Conclusion}{12}{chapter.9}
-\contentsline {section}{\numberline {9.1}Contributions}{12}{section.9.1}
-\contentsline {chapter}{\numberline {10}Appendix A}{13}{chapter.10}
+\contentsline {chapter}{\numberline {1}Introduction}{4}{chapter.1}
+\contentsline {chapter}{\numberline {2}Language Tutorial}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Getting Started}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Variables and Arithmetic operators}{6}{section.2.2}
+\contentsline {chapter}{\numberline {3}Language Reference Manual}{7}{chapter.3}
+\contentsline {chapter}{\numberline {4}Project Plan}{8}{chapter.4}
+\contentsline {chapter}{\numberline {5}Language Evolution}{9}{chapter.5}
+\contentsline {chapter}{\numberline {6}Compiler Architecture}{10}{chapter.6}
+\contentsline {section}{\numberline {6.1}Overview}{10}{section.6.1}
+\contentsline {section}{\numberline {6.2}Lexer and Parser}{11}{section.6.2}
+\contentsline {section}{\numberline {6.3}Code Generator}{11}{section.6.3}
+\contentsline {section}{\numberline {6.4}Shader Manager}{11}{section.6.4}
+\contentsline {section}{\numberline {6.5}Abstract Machine}{11}{section.6.5}
+\contentsline {section}{\numberline {6.6}Module Facade}{11}{section.6.6}
+\contentsline {chapter}{\numberline {7}Development Environment}{12}{chapter.7}
+\contentsline {chapter}{\numberline {8}Test Plan and test suites}{13}{chapter.8}
+\contentsline {chapter}{\numberline {9}Conclusion}{14}{chapter.9}
+\contentsline {section}{\numberline {9.1}Contributions}{14}{section.9.1}
+\contentsline {chapter}{\numberline {10}Appendix A}{15}{chapter.10}
