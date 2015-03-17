@@ -331,7 +331,17 @@ var MVM = function() {
 					}
 					break;
 				case opCodes.RETURN:
-					
+					var shouldReturnValue = this.codeStore[this.cp];
+					var returnValue;
+					if (shouldReturnValue) {
+						returnValue = this.dataStore[this.sp - 1]
+					};
+					var returnAddress = this.dataStore[this.fp + this.RA];
+					this.cp = returnAddress;
+					this.sp = this.fp;
+					this.fp = this.dataStore[this.fp + this.DLA];
+					this.dataStore[this.sp] = returnValue;
+					this.sp++;
 				case 999: // Print top of stack
 					if(this.debugMode) console.log(this.dataStore[this.sp - 1]);
 					break;
