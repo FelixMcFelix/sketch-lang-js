@@ -6,7 +6,8 @@
 		<script type="text/javascript">
 			window.onload = function(){
 				x = new XMLHttpRequest();
-				x.open("GET", "https://dl.dropboxusercontent.com/u/15574345/laughing-ironman/examples/squareShaders.json", true);
+				x.open("GET", "https://dl.dropboxusercontent.com/u/15574345/laughing-ironman/examples/squareShaders.json", false);
+//                x.open("GET", "https://dl.dropboxusercontent.com/u/15574345/laughing-ironman/examples/squareShadersSimple.json", false);
 				x.onload = function(){
 					execute(x.response);
 				};
@@ -19,18 +20,26 @@
 
 				var pvMatrix = [];
 				var mvMatrix = [];
-				mat4.perspective(pvMatrix, Math.PI/4, canvas.width/canvas.height, 0.1, 100);
-				mat4.identity(mvMatrix);
 
-				var squareVtx = new Float32Array([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0]);
+				//mat4.perspective(pvMatrix, Math.PI/4, canvas.width/canvas.height, 0.1, 100);
+				mat4.identity(mvMatrix);
+                mat4.identity(pvMatrix);
+
+				var squareVtx = new Float32Array([-0.5, -0.5, 0,
+                                                0.5, -0.5, 0,
+                                                -0.5, 0.5, 0,
+                                                0.5, 0.5, 0]);
 
 				var manager = new Palette.Manager(glctx);
 				//manager.addShader("squareShaders.json");
                 manager.addShader(text);
+                manager.getProgram("square", "square").setDrawMode(Palette.Program.TRIANGLE_STRIP);
+                glctx.clearColor(0.0,0.0,0.0,1.0);
 
 				var raf = function(){
-					debugger;
-					manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [1.0, 0.0, 0.0, 1.0]});
+					//debugger;
+                    glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
+					manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [1.0, 0.0, 1.0, 1.0]});
 					window.requestAnimationFrame(raf);
 				}
 

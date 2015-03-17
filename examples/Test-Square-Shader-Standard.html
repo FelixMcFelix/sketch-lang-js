@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="../build/Palette.js" ></script>
+        <script type="text/javascript" src="gl-matrix-min.js"></script>
+        <script type="x-shader/x-vertex" id="squareVs">
+            #version 100
+            attribute vec3 aVertexPos;
+
+            void main(){
+                gl_Position = vec4(aVertexPos, 1.0);
+            }
+        </script>
+        <script type="x-shader/x-fragment" id="squareFs">
+            #version 100
+            precision mediump float;
+
+            uniform vec4 color;
+
+            void main(){
+                gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+            }
+        </script>
+		<script type="text/javascript">
+			window.onload = function(){
+				x = new XMLHttpRequest();
+				x.open("GET", "https://dl.dropboxusercontent.com/u/15574345/laughing-ironman/examples/squareShadersSimple.json", true);
+				x.onload = function(){
+					execute(x.response);
+				};
+				x.send();
+			}
+			
+			execute = function(text){
+				var canvas = document.getElementById("testingcanvas");
+				var glctx = canvas.getContext("webgl");
+
+				var pvMatrix = [];
+				var mvMatrix = [];
+
+				mat4.perspective(pvMatrix, Math.PI/4, canvas.width/canvas.height, 0.1, 100);
+				mat4.identity(mvMatrix);
+
+                var vtxShad = getShader(glctx, "squareVs");
+                var fragShad = getShader(glctx, "squareFs");
+
+                var prog = glctx.createProgram();
+                glctx.attachShader(prog, vtxShad);
+                glctx.attachShader(prog, fragShad);
+                glctx.linkProgram(prog);
+
+                var vtxBuf = glctx.createBuffer();
+                var vtxAttrPtr = glctx.getAttribLocation(prog, "aVertexPos");
+                glctx.enableVertexAttribArray(vtxAttrPtr);
+
+				var squareVtx = new Float32Array([1.0, 0, 0,
+												  0, 1.0, 0,
+												  1.0, 1.0,0]);
+
+				//var manager = new Palette.Manager(glctx);
+
+                //manager.addShader(text);
+                //var prog = manager.getProgram("square","square");
+                glctx.useProgram(prog);
+                glctx.clearColor(0.0,0.0,0.0,1.0);
+
+				var raf = function(){
+					//debugger;
+                    glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
+					//manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [1.0, 0.0, 0.0, 1.0]});
+                    glctx.bindBuffer(glctx.ARRAY_BUFFER, vtxBuf);
+                    glctx.bufferData(glctx.ARRAY_BUFFER, squareVtx, glctx.DYNAMIC_DRAW);
+                    glctx.vertexAttribPointer(vtxAttrPtr, 3, glctx.FLOAT, false, 0, 0);
+                    glctx.drawArrays(glctx.TRIANGLES, 0, squareVtx.length/3);
+					window.requestAnimationFrame(raf);
+				}
+
+				window.requestAnimationFrame(raf);
+			}
+
+            function getShader(gl, id) {
+                var shaderScript, theSource, currentChild, shader;
+                shaderScript = document.getElementById(id);
+
+                if (!shaderScript) {
+                    return null;
+                }
+
+                theSource = "";
+                currentChild = shaderScript.firstChild;
+
+                while (currentChild) {
+                    if (currentChild.nodeType == currentChild.TEXT_NODE) {
+                        theSource += currentChild.textContent;
+                    }
+
+                    currentChild = currentChild.nextSibling;
+                }
+
+                if (shaderScript.type == "x-shader/x-fragment") {
+                    shader = gl.createShader(gl.FRAGMENT_SHADER);
+                } else if (shaderScript.type == "x-shader/x-vertex") {
+                    shader = gl.createShader(gl.VERTEX_SHADER);
+                } else {
+                    return null;
+                }
+
+                gl.shaderSource(shader, theSource);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    alert("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+                    return null;
+                }
+
+                return shader;
+            }
+		</script>
+	</head>
+	<body>
+		<canvas id="testingcanvas" width="800" height="600">Get a modern browser you spoon!</canvas>
+	</body>
+</html>

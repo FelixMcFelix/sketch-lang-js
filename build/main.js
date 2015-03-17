@@ -1,3 +1,305 @@
+// M Bytecode interperator
+
+var MVM = function() {
+
+	/*	Op codes
+	*	
+	*	MNEMONIC	OPCODE	OPERANDS	DESCRIPTION
+	*	STOREG		0		2			store global at address
+	*	LOADG		1		1			push global at address
+	*	STOREL		2		1			store local at address
+	*	LOADL		3		1			push local at local address
+	*	LOADC		4		1			push constant
+	*	IADD		5		0			i = pop off stack. j = pop off stack. push j + i
+	*	ISUB		6		0			i = pop off stack. j = pop off stack. push j - i
+	*	IMUL		7		0			i = pop off stack. j = pop off stack. push j * i
+	*	IDIV		8		0			i = pop off stack. j = pop off stack. push j / i
+	*	FADD		9		0			i = pop off stack. j = pop off stack. push j + i
+	*	FSUB		10		0			i = pop off stack. j = pop off stack. push j - i
+	*	FMUL		11		0			i = pop off stack. j = pop off stack. push j * i
+	*	FDIV		12		0			i = pop off stack. j = pop off stack. push j / i
+	*	NCMPEQ		13		0			i = pop off stack. j = pop off stack. push result of j == i
+	*	NCMPLT		14		0			i = pop off stack. j = pop off stack. push result of j < i
+	*	NCMPGT		15		0			i = pop off stack. j = pop off stack. push result of j > i
+	*	JUMP		16		1			jump to address
+	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
+	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
+	*	CALL		19		2			Takes the address of the function and number of args
+	*/
+
+	this.opCodes = {
+		STOREG: 0,
+		LOADG: 	1,
+		STOREL: 2,
+		LOADL: 	3,
+		LOADC: 	4,
+		IADD: 	5,
+		ISUB: 	6,
+		IMUL: 	7,
+		IDIV: 	8,
+		FADD: 	9,		//	Floating point arithmatic ops take
+		FSUB: 	10,		//	address into the constant pool.
+		FMUL: 	11,
+		FDIV: 	12,
+		NCMPEQ: 13,
+		NCMPLT: 14,
+		NCMPGT: 15,
+		JUMP: 	16,
+		JUMPT: 	17, 
+		JUMPF: 	18,
+		CALL: 	19 
+	};
+
+	// Holds program instructions
+	this.codeStore =	[this.opCodes.LOADC,	16,
+						 this.opCodes.STOREG,	0,		// 	LIMIT = 10
+						 this.opCodes.LOADC,	0,
+						 this.opCodes.STOREL,	0,		//	i = 0
+						 this.opCodes.LOADC,	2,
+						 this.opCodes.STOREL,	1,		//	j = 1
+						 this.opCodes.LOADL,	0,
+						 this.opCodes.LOADG,	0,
+						 this.opCodes.NCMPLT,			//	i < LIMIT
+						 this.opCodes.JUMPF,	35,
+						 this.opCodes.LOADL,	1,
+						 this.opCodes.LOADC,	2,
+						 this.opCodes.IMUL,
+						 this.opCodes.STOREL,	1,		//	j = j * 2
+						 this.opCodes.LOADL,	0,
+						 this.opCodes.LOADC,	1,
+						 this.opCodes.IADD,
+						 this.opCodes.STOREL,	0,		//	i++
+						 this.opCodes.JUMP,		12,		//	JUMP
+						 this.opCodes.LOADL,	1,
+						 999];	//					37
+
+	// Points to the next instruction in the code store to execute
+	this.cp = 0;
+
+	// Points to the first free location after the program
+	this.cl = 38;
+
+	// Data store (Stack)
+	this.dataStore = [];
+
+	// Points to the first free space at the top of the data store
+	this.sp = 0;
+
+	// Points to the first location of the top most frame
+	this.fp = 0;
+
+	// Global data store
+	this.globalStore = [];
+
+	// (May not be required)
+	// Points to the first free space at the top of the global store
+	//var gp = 0;
+
+	// Prints details to the console. For Debugging
+	this.debugMode = 0;
+
+/*
+*		Need a way to determine the size of each frame.
+*		Maybe all data local to a frame is stored before anything is pushed onto the stack for that frame.
+*/
+	this.interpret = function() {
+
+		// For debugging
+		var lc = 0;
+
+		var opCodes = this.opCodes;
+		while (this.cp < this.cl) {
+			lc++
+			var opCode = this.codeStore[this.cp];
+			//console.log(this.cp + " " + opCode);
+			this.cp++;
+			switch (opCode) {
+				case opCodes.STOREG:
+					var address = this.codeStore[this.cp]
+					this.cp++;
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.globalStore[address] = i;
+					if(this.debugMode) console.log("STOREG: " + i + " " + address);
+					break;
+				case opCodes.LOADG:
+					var address = this.codeStore[this.cp];
+					this.cp++;
+					this.dataStore[this.sp] = this.globalStore[address];
+					this.sp++;
+					if(this.debugMode) console.log("LOADG: " + i + " " + address);
+					break;
+				case opCodes.STOREL:
+					var localAddress = this.codeStore[this.cp];
+					this.cp++;
+					this.sp--;
+					this.dataStore[this.fp + localAddress] = this.dataStore[this.sp];
+					this.sp++;
+					if(this.debugMode) console.log("STOREL: " + this.dataStore[this.sp - 1] + " " + localAddress);
+					break;
+				case opCodes.LOADL:
+					var localAddress = this.codeStore[this.cp];
+					this.cp++;
+					this.dataStore[this.sp] = this.dataStore[this.fp + localAddress];
+					this.sp++;
+					if(this.debugMode) console.log("LOADL: " + this.dataStore[this.sp - 1] + " " + localAddress);
+					break;
+				case opCodes.LOADC:
+					var contsant = this.codeStore[this.cp];
+					this.cp++;
+					this.dataStore[this.sp] = contsant;
+					this.sp++;
+					if(this.debugMode) console.log("LOADC: " + contsant);
+					break;
+				case opCodes.IADD:
+					this.sp--;
+					var i = Math.floor(this.dataStore[this.sp]);
+					this.sp--;
+					var j = Math.floor(this.dataStore[this.sp]);
+					var result = j + i
+					this.dataStore[this.sp] = result;
+					this.sp++
+					if(this.debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
+					break;
+				case opCodes.ISUB:
+					this.sp--;
+					var i = Math.floor(this.dataStore[this.sp]);
+					this.sp--;
+					var j = Math.floor(this.dataStore[this.sp]);
+					var result = j - i;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
+					break;
+				case opCodes.IMUL:
+					this.sp--;
+					var i = Math.floor(this.dataStore[this.sp]);
+					this.sp--;
+					var j = Math.floor(this.dataStore[this.sp]);
+					var result = j * i;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
+					break;
+				case opCodes.IDIV:
+					this.sp--;
+					var i = Math.floor(this.dataStore[this.sp]);
+					this.sp--;
+					var j = Math.floor(this.dataStore[this.sp]);
+					var result = Math.floor(j / i);
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
+					break;
+				case opCodes.FADD:
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.sp--;
+					var j = this.dataStore[this.sp];
+					var result = j + i;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
+					break;
+				case opCodes.FSUB:
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.sp--;
+					var j = this.dataStore[this.sp];
+					this.dataStore[this.sp] = j - i;
+					this.sp++;
+					if(this.debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
+					break;
+				case opCodes.FMUL:
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.sp--;
+					var j = this.dataStore[this.sp];
+					var result = j * i;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
+					break;
+				case opCodes.FDIV:
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.sp--;
+					var j = this.dataStore[this.sp];
+					var result = j / i;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+					break;
+				case opCodes.NCMPEQ:
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.sp--;
+					var j = this.dataStore[this.sp];
+					var result = (j == i) ? 1 : 0;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("NCMPEQ: " + j + " == " + i + " = " + result);
+					break;
+				case opCodes.NCMPLT:
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.sp--;
+					var j = this.dataStore[this.sp];
+					var result = (j < i) ? 1 : 0;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("NCMPLT: " + j + " < " + i + " = " + result);
+					break;
+				case opCodes.NCMPGT:
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					this.sp--;
+					var j = this.dataStore[this.sp];
+					var result = (j > i) ? 1 : 0;
+					this.dataStore[this.sp] = result;
+					this.sp++;
+					if(this.debugMode) console.log("NCMPLT: " + j + " > " + i + " = " + result);
+					break;
+				case opCodes.JUMP:
+					var address = this.codeStore[this.cp];
+					this.cp = address;
+					if(this.debugMode) console.log("JUMP: " + address);
+					break;
+				case opCodes.JUMPT:
+					var address = this.codeStore[this.cp];
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					result = i == 1;
+					if (result) {
+						this.cp = this.codeStore[this.cp];
+					}
+					else {
+						this.cp++;
+					}
+					if(this.debugMode) console.log("JUMPT: " + i + " " + result);
+					break;
+				case opCodes.JUMPF:
+					var address = this.codeStore[this.cp];
+					this.sp--;
+					var i = this.dataStore[this.sp];
+					var result = i == 0;
+					if(this.debugMode) console.log("JUMPF: " + i + " " + result);
+					if (result) {
+						this.cp = this.codeStore[this.cp];
+					}
+					else {
+						this.cp++;
+					}
+					break;
+				case 999: // Print top of stack
+					if(this.debugMode) console.log(this.dataStore[this.sp - 1]);
+					break;
+			}
+			lc++;
+			if (lc > 100000) {console.log("INF LOOP");break};
+		}
+	}
+}
 /* global Palette */
 /**
 * @classdesc The core part of the system - initialise this to begin using the shader manager.
@@ -190,14 +492,21 @@ Palette.Program = function(gl, vs, fs){
 	this.compiled = false;
 
 	/**
-	* Where shall we keep our 
-	* @property {boolean} compiled
+	* Attribute Storage - temporary and set.
+	* @property {Object} attrs
 	* @private
 	* @readonly
 	*/
-	this.attrStore = {vs: {}, fs: {}};
+	this.attrs = {vs: {access:{},store:{},send:{}}
+					, fs: {access:{},store:{},send:{}}};
 
-	this.vtxBuffer = gl.createBuffer();
+	/**
+	* The Selected Draw Mode for the program.
+	* @property {number} drawMode
+	* @private
+	* @readonly
+	*/
+	this.drawMode = Palette.Program.TRIANGLES;
 
 	this.linkProgram();
 	this.prepareAttrStores();
@@ -205,7 +514,8 @@ Palette.Program = function(gl, vs, fs){
 
 Palette.Program.prototype = {
 	/**
-	* Draw a set of vertices with this program, with optional configuration. Configurations passed here do not overwrite the cached object.
+	* Draw a set of vertices with this program, with optional configuration. Configurations passed here do not
+	* overwrite the cached object.
 	* This method is accessed when {@link Palette.Manager#draw} is called.
 	* @method Palette.Program#draw
 	* @public
@@ -215,31 +525,47 @@ Palette.Program.prototype = {
 	*/
 	draw: function(verts, conf1, conf2){
 		this.context.useProgram(this.program);
+		if(!conf1) conf1 = {};
+		conf1.vertexBuffer = verts;
 
-		//TODO: PARSE NEW CONFIGS.
+		this.generateSend(this.attrs.vs, conf1);
+		this.generateSend(this.attrs.fs, conf2);
 
-		var mode = (conf1 ? Palette.Program.VS_MODE : 0) | (conf2 ? Palette.Program.FS_MODE : 0);
-		this.passAttrstoProg(mode);
+		//var mode = (conf1 ? Palette.Program.VS_MODE : 0) | (conf2 ? Palette.Program.FS_MODE : 0);
+		this.passAttrstoProg();
 
-		this.context.bindBuffer(this.context.ARRAY_BUFFER, this.vtxBuffer);
-		this.context.bufferData(this.context.ARRAY_BUFFER, new Float32Array(verts), this.context.DYNAMIC_DRAW);
+		//this.context.bindBuffer(this.context.ARRAY_BUFFER, this.vtxBuffer);
+		//this.context.bufferData(this.context.ARRAY_BUFFER, new Float32Array(verts), this.context.DYNAMIC_DRAW);
 
-		//TODO: Possibly allow selection of desired draw mode?
-		this.context.drawArrays(this.context.TRIANGLES, 0, verts.length);
+		this.context.drawArrays(this.drawMode, 0
+			, this.attrs.vs.send.vertexBuffer.length/this.attrs.vs.access.vertexBuffer.itemSize);
 	},
 
 	/**
 	* Restore a program's object config for either shader or both.
 	* @method Palette.Program#restoreDefaultConfig
 	* @public
-	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE, Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
+	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE,
+	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
 	*/
 	restoreDefaultConfig: function(mode){
 		var attrPointer;
 		var shaderPointer;
 
 		for(var j=0; j<2; j++){
-			//ToDo
+			if(!j){if(!mode&Palette.Program.VS_MODE)continue; shaderPointer = this.vs; attrPointer = this.attrs.vs;}
+			else {if(!mode&Palette.Program.FS_MODE)continue; shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+
+			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
+				var attrData = shaderPointer.attrs[i];
+				var name = attrData[0];
+
+				if(attrData[1]=="buffer" || attrData[1]=="vertexAttrib"){
+					attrPointer.store[name] = null;
+				} else if(attrData[1]!="vertexAttrib"){
+					attrPointer.store[name] = attrData[2];
+				}
+			}
 		}
 	},
 
@@ -248,7 +574,8 @@ Palette.Program.prototype = {
 	* Object properties not in the supplied object will not overwrite the program state.
 	* @method Palette.Program#setConfig
 	* @public
-	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE, Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
+	* @param {integer} mode - The identifier for which config object to set. Supports Palette.Program.VS_MODE,
+	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
 	* @param {object} conf - The config object to inject into the program state.
 	*/
 	setConfig: function(mode, conf){
@@ -275,53 +602,76 @@ Palette.Program.prototype = {
 		var attrPointer;
 
 		for(var j=0; j<2; j++){
-			if(!j){shaderPointer = this.vs; attrPointer = this.attrStore.vs;}
-			else {shaderPointer = this.fs; attrPointer = this.attrStore.fs;}
+			if(!j){shaderPointer = this.vs; attrPointer = this.attrs.vs;}
+			else {shaderPointer = this.fs; attrPointer = this.attrs.fs;}
 
 			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
 				var attrData = shaderPointer.attrs[i];
-				var attrDest = attrPointer[attrData[0]] || {};
+				var name = attrData[0];
+				attrPointer.access[name] = attrPointer.access[name] || {};
+				var attrAccessDest = attrPointer.access[name];
 
-				attrDest.setFunction = Palette.Program.fetchSetter(this.context, attrData[1]);
+				attrAccessDest.setFunction = Palette.Program.fetchSetter(this.context, attrData[1]);
 
-				if(attrData[1]!="vertexAttrib"){
-					attrDest.pointer = this.context.getUniformLocation(this.program, attrData[0]);
-					attrDest.value = attrData[2];
+				if(attrData[1]=="vertexAttrib"){
+					attrAccessDest.pointer = this.context.getAttribLocation(this.program, attrData[0]);
+					this.context.enableVertexAttribArray(attrAccessDest.pointer);
+					attrAccessDest.bufferName = attrData[2];
+				}	else if(attrData[1]=="buffer"){
+					attrAccessDest.pointer = this.context.createBuffer();
+					attrAccessDest.itemSize = attrData[2];
+				}	else{
+					attrAccessDest.pointer = this.context.getUniformLocation(this.program, attrData[0]);
+				}
+
+				attrAccessDest.type = attrData[1];
+			}
+		}
+		this.restoreDefaultConfig(Palette.Program.BOTH_MODE);
+	},
+
+	passAttrstoProg: function(){
+		var attrPointer;
+
+		for(var j=0; j<2; j++){
+			if(!j){attrPointer = this.attrs.vs;}
+			else {attrPointer = this.attrs.fs;}
+
+			for(var prop in attrPointer.access){
+				var attrDest = attrPointer.send[prop];
+				var attrAccessDest = attrPointer.access[prop];
+
+				if(attrAccessDest.type.substr(0,3) == "mat"){
+					attrAccessDest.setFunction(attrAccessDest.pointer, this.context.FALSE, attrDest);
+				} else if(attrAccessDest.type == "vertexAttrib"){
+					var buffer = this.attrs.vs.access[attrAccessDest.bufferName];
+					attrAccessDest.setFunction(attrAccessDest, buffer);
+				} else if(attrAccessDest.type == "buffer"){
+					attrAccessDest.setFunction(attrAccessDest, attrDest);
 				} else{
-					attrDest.pointer = this.context.getAttribLocation(this.program, attrData[0]);
-					alert("I have no idea what do with values here.");
+					attrAccessDest.setFunction(attrAccessDest.pointer, attrDest);
 				}
 			}
 		}
 	},
 
-	passAttrstoProg: function(mode){
-		var attrPointer;
-		var valueLocation = "value";
+	/**
+	* Set a program's draw mode.
+	* @method Palette.Program#setDrawMode
+	* @public
+	* @param {integer} mode - The gl code for drawing mode. Supports Palette.Program.POINTS, .LINES, .LINE_LOOP,
+	* .LINE_STRIP, .TRIANGLES, .TRIANGLE_STRIP, .TRIANGLE_FAN.
+	*/
+	setDrawMode: function(mode){
+		this.drawMode = mode;
+	},
 
-		for(var j=0; j<2; j++){
-			if(!j){
-				attrPointer = this.attrStore.vs; 
-				if(mode===Palette.Program.VS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
-			}
-			else {
-				attrPointer = this.attrStore.fs;
-				if(mode===Palette.Program.FS_MODE || mode===Palette.Program.BOTH_MODE) valueLocation = "tempValue";
-				else valueLocation = "value";
-			}
-
-			for(var prop in attrPointer){
-				var attr = attrPointer[prop];
-				var attrValue = attr[valueLocation] || attr.value;
-
-				if(attr.type.substr(0,3) == "mat"){
-					attr.setFunction(attr.pointer, this.context.FALSE, attrValue);
-				} else if(attr.type = vertexAttrib){
-
-				} else{
-					attr.setFunction(attr.pointer, attrValue);
-				}
-			}
+	generateSend: function(dest, conf){
+		var toSend;
+		for(name in dest.access){
+			if(conf[name]) toSend = conf[name];
+			else toSend = dest.store[name];
+			dest.send[name] = toSend;
 		}
 	}
 };
@@ -372,8 +722,20 @@ Palette.Program.fetchSetter = function(gl, type){
 			alert("You're on your own, kid.");
 			return null;
 		case "vertexAttrib":
-			alert("You're still on your own, kid.");
-			return null;//gl.vertexAttribPointer.bind(gl);
+			var k = function(attrib, buffer){
+				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
+				gl.vertexAttribPointer(attrib.pointer, buffer.itemSize, gl.FLOAT, false, 0, 0);
+			}
+			return k.bind(gl);
+		case "buffer":
+			var k = function(buffer, bufferData){
+				//var buffer = this.vs.attrs[bufferName].access;
+				//var bufferData = this.vs.send[bufferName];
+				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bufferData)
+					, gl.DYNAMIC_DRAW);
+			}
+			return k.bind(gl);
 		default:
 			alert("Not gonna lie - you really messed up. I can't pass "+type+" onto the shader.");
 			return null;
@@ -384,6 +746,14 @@ Palette.Program.NONE_MODE	= 0;
 Palette.Program.VS_MODE 	= 1;
 Palette.Program.FS_MODE 	= 2;
 Palette.Program.BOTH_MODE 	= 3;
+
+Palette.Program.POINTS			= 0;
+Palette.Program.LINES			= 1;
+Palette.Program.LINE_LOOP		= 2;
+Palette.Program.LINE_STRIP		= 3;
+Palette.Program.TRIANGLES		= 4;
+Palette.Program.TRIANGLE_STRIP	= 5;
+Palette.Program.TRIANGLE_FAN	= 6;
 
 Palette.Program.prototype.constructor = Palette.Program;
 
