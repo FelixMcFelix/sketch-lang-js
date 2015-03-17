@@ -24,7 +24,8 @@ var MVM = function() {
 	*	JUMP		16		1			jump to address
 	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
 	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
-	*	CALL		19		2			Takes the address of the function and number of args
+	*	CALL		19		2			arg 1 = address of function. arg2 = number of params
+	*	RETURN		20		2			Takes the number of values to return
 	*/
 
 	this.opCodes = {
@@ -47,7 +48,8 @@ var MVM = function() {
 		JUMP: 	16,
 		JUMPT: 	17, 
 		JUMPF: 	18,
-		CALL: 	19 
+		CALL: 	19, 
+		RETURN: 20 
 	};
 
 	// Holds program instructions
@@ -87,6 +89,9 @@ var MVM = function() {
 
 	// Points to the first location of the top most frame
 	this.fp = 0;
+
+	// Local Offset. The off set of the first local address from the frame pointer
+	this.LO = 2;
 
 	// Global data store
 	this.globalStore = [];
@@ -289,6 +294,31 @@ var MVM = function() {
 					}
 					else {
 						this.cp++;
+					}
+					break;
+				case opCodes.CALL:
+					var address = this.codeStore[this.cp];
+					cp++;
+					var numArgs = this.codeStore[this.cp];
+					cp++;
+					var returnAddress = this.cp;
+					var dynamicLink = this.fp;
+					var args = [];
+					// Copy Args
+					int i = 0;
+					while(i < numArgs) {
+						sp--;
+						args[i] = this.dataStore[sp];
+						i++;
+					}
+					// Add new Frame
+					this.fp = this.sp;
+					this.sp += 2;
+					// Add args as locals
+					while(i >= 0) {
+						i--;
+						this.dataStore[this.sp] = arg[i];
+						sp++;
 					}
 					break;
 				case 999: // Print top of stack
