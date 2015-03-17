@@ -25,7 +25,7 @@ var MVM = function() {
 	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
 	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
 	*	CALL		19		2			arg 1 = address of function. arg2 = number of params
-	*	RETURN		20		2			Takes the number of values to return
+	*	RETURN		20		1			Takes the number of values to return
 	*/
 
 	this.opCodes = {
@@ -92,6 +92,12 @@ var MVM = function() {
 
 	// Local Offset. The off set of the first local address from the frame pointer
 	this.LO = 2;
+
+	// Address of the dynamic link in a frame
+	this.DLA = 0;
+
+	// Retrun address of a frame
+	this.RA = 1;
 
 	// Global data store
 	this.globalStore = [];
@@ -313,7 +319,10 @@ var MVM = function() {
 					}
 					// Add new Frame
 					this.fp = this.sp;
-					this.sp += 2;
+					this.dataStore[sp] = dynamicLink;
+					this.sp++;
+					this.dataStore[sp] = returnAddress;
+					this.sp++;
 					// Add args as locals
 					while(i >= 0) {
 						i--;
@@ -321,6 +330,8 @@ var MVM = function() {
 						sp++;
 					}
 					break;
+				case opCodes.RETURN:
+					
 				case 999: // Print top of stack
 					if(this.debugMode) console.log(this.dataStore[this.sp - 1]);
 					break;
