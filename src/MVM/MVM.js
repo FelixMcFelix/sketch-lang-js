@@ -311,7 +311,7 @@ var MVM = function() {
 					var dynamicLink = this.fp;
 					var args = [];
 					// Copy Args
-					int i = 0;
+					var i = 0;
 					while(i < numArgs) {
 						sp--;
 						args[i] = this.dataStore[sp];

@@ -11,7 +11,8 @@ Palette.Manager = function(gl){
 
 	/**
     * A reference to the defining WebGLRenderingContext.
-    * @property {WebGLRenderingContext} context
+    * @name Palette.Manager#context
+	* @type WebGLRenderingContext
     * @protected
     * @readonly
     */
@@ -19,19 +20,22 @@ Palette.Manager = function(gl){
 	
 	/**
     * An object storing all processed Vertex Shaders.
-    * @property {object} vertShaders
+    * @name Palette.Manager#vertShaders
+	* @type Object
     * @private
     */
 	this.vertShaders 	= {};
 	/**
     * An object storing all processed Fragment Shaders.
-    * @property {object} fragShaders
+    * @name Palette.Manager#fragShaders
+	* @type Object
     * @private
     */
 	this.fragShaders	= {};
 	/**
     * An object storing all processed Programs.
-    * @property {object} programs
+    * @name Palette.Manager#programs
+	* @type Object
     * @private
     */
 	this.programs		= {};
@@ -39,7 +43,8 @@ Palette.Manager = function(gl){
 	/**
     * A {@link Palette.ShaderFactory} object utilised by the manager
     * to generate valid shader objects from many sources for use.
-    * @property {Palette.ShaderFactory} shaderFactory
+    * @name Palette.Manager#shaderFactory
+	* @type Palette.ShaderFactory
     * @protected
     * @readonly
     */
@@ -69,7 +74,6 @@ Palette.Manager.prototype = {
 	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
 	*/
 	draw: function(vs, fs, verts, conf1, conf2){
-		//TODO: Lookup from string and exception throwing.
 		this.getProgram(vs, fs).draw(verts, conf1, conf2);
 	},
 

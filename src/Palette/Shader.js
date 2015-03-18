@@ -13,7 +13,8 @@
 Palette.Shader = function(gl, name, type, source, attrs){
 	/**
 	* The shader's name.
-	* @property {string} name
+	* @name Palette.Shader#name
+	* @type String
 	* @protected
 	* @readonly
 	*/
@@ -21,7 +22,8 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* The type of shader, either Palette.Shader.VS or Palette.Shader.FS for objects.
-	* @property {integer} type
+	* @name Palette.Shader#type
+	* @type Integer
 	* @protected
 	* @readonly
 	*/
@@ -29,7 +31,8 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* The shader's attached context.
-	* @property {WebGLRenderingContext} context
+	* @name Palette.Shader#context
+	* @type WebGLRenderingContext
 	* @protected
 	* @readonly
 	*/
@@ -37,15 +40,17 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* The shader's attribute array.
-	* @property {Array[]} attrs
+	* @name Palette.Shader#attrs
+	* @type Array[]
 	* @protected
 	* @readonly
 	*/
 	this.attrs = attrs;
 
 	/**
-	* The reference to the compiled shader in the WebGLRenderingCOntext.
-	* @property {WebGLShader} name
+	* The reference to the compiled shader in the WebGLRenderingContext.
+	* @name Palette.Shader#shader
+	* @type WebGLShader
 	* @protected
 	* @readonly
 	*/
@@ -53,7 +58,8 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* Has the shader attempted compilation yet?
-	* @property {boolean} compiled
+	* @name Palette.Shader#compiled
+	* @type Boolean
 	* @private
 	* @readonly
 	*/

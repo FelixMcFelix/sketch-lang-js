@@ -16,7 +16,8 @@ Palette.Manager = function(gl){
 
 	/**
     * A reference to the defining WebGLRenderingContext.
-    * @property {WebGLRenderingContext} context
+    * @name Palette.Manager#context
+	* @type WebGLRenderingContext
     * @protected
     * @readonly
     */
@@ -24,19 +25,22 @@ Palette.Manager = function(gl){
 	
 	/**
     * An object storing all processed Vertex Shaders.
-    * @property {object} vertShaders
+    * @name Palette.Manager#vertShaders
+	* @type Object
     * @private
     */
 	this.vertShaders 	= {};
 	/**
     * An object storing all processed Fragment Shaders.
-    * @property {object} fragShaders
+    * @name Palette.Manager#fragShaders
+	* @type Object
     * @private
     */
 	this.fragShaders	= {};
 	/**
     * An object storing all processed Programs.
-    * @property {object} programs
+    * @name Palette.Manager#programs
+	* @type Object
     * @private
     */
 	this.programs		= {};
@@ -44,7 +48,8 @@ Palette.Manager = function(gl){
 	/**
     * A {@link Palette.ShaderFactory} object utilised by the manager
     * to generate valid shader objects from many sources for use.
-    * @property {Palette.ShaderFactory} shaderFactory
+    * @name Palette.Manager#shaderFactory
+	* @type Palette.ShaderFactory
     * @protected
     * @readonly
     */
@@ -74,7 +79,6 @@ Palette.Manager.prototype = {
 	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
 	*/
 	draw: function(vs, fs, verts, conf1, conf2){
-		//TODO: Lookup from string and exception throwing.
 		this.getProgram(vs, fs).draw(verts, conf1, conf2);
 	},
 
@@ -151,7 +155,8 @@ Palette.Manager.prototype.constructor = Palette.Manager;
 Palette.Program = function(gl, vs, fs){
 	/**
 	* The program's attached context.
-	* @property {WebGLRenderingContext} context
+	* @name Palette.Program#context
+	* @type WebGLRenderingContext
 	* @protected
 	* @readonly
 	*/
@@ -159,7 +164,8 @@ Palette.Program = function(gl, vs, fs){
 	
 	/**
 	* The program's attached vertex shader.
-	* @property {Palette.Shader} vs
+	* @name Palette.Program#vs
+	* @type Palette.Shader
 	* @protected
 	* @readonly
 	*/
@@ -167,7 +173,8 @@ Palette.Program = function(gl, vs, fs){
 	
 	/**
 	* The program's attached fragment shader.
-	* @property {Palette.Shader} fs
+	* @name Palette.Program#fs
+	* @type Palette.Shader
 	* @protected
 	* @readonly
 	*/
@@ -175,7 +182,8 @@ Palette.Program = function(gl, vs, fs){
 
 	/**
 	* The program as seen by WebGL.
-	* @property {WebGLProgram} program
+	* @name Palette.Program#program
+	* @type WebGLProgram
 	* @protected
 	* @readonly
 	*/
@@ -183,7 +191,8 @@ Palette.Program = function(gl, vs, fs){
 
 	/**
 	* Has the program attempted compilation yet?
-	* @property {boolean} compiled
+	* @name Palette.Program#compiled
+	* @type Boolean
 	* @private
 	* @readonly
 	*/
@@ -191,7 +200,8 @@ Palette.Program = function(gl, vs, fs){
 
 	/**
 	* Attribute Storage - temporary and set.
-	* @property {Object} attrs
+	* @name Palette.Program#attrs
+	* @type Object
 	* @private
 	* @readonly
 	*/
@@ -200,7 +210,8 @@ Palette.Program = function(gl, vs, fs){
 
 	/**
 	* The Selected Draw Mode for the program.
-	* @property {number} drawMode
+	* @name Palette.Program#drawMode
+	* @type Integer
 	* @private
 	* @readonly
 	*/
@@ -229,11 +240,7 @@ Palette.Program.prototype = {
 		this.generateSend(this.attrs.vs, conf1);
 		this.generateSend(this.attrs.fs, conf2);
 
-		//var mode = (conf1 ? Palette.Program.VS_MODE : 0) | (conf2 ? Palette.Program.FS_MODE : 0);
 		this.passAttrstoProg();
-
-		//this.context.bindBuffer(this.context.ARRAY_BUFFER, this.vtxBuffer);
-		//this.context.bufferData(this.context.ARRAY_BUFFER, new Float32Array(verts), this.context.DYNAMIC_DRAW);
 
 		this.context.drawArrays(this.drawMode, 0
 			, this.attrs.vs.send.vertexBuffer.length/this.attrs.vs.access.vertexBuffer.itemSize);
@@ -277,9 +284,28 @@ Palette.Program.prototype = {
 	* @param {object} conf - The config object to inject into the program state.
 	*/
 	setConfig: function(mode, conf){
-		//TODO
+		var attrPointer;
+		var shaderPointer;
+
+		for(var j=0; j<2; j++){
+			if(!j){if(!mode&Palette.Program.VS_MODE)continue; shaderPointer = this.vs; attrPointer = this.attrs.vs;}
+			else {if(!mode&Palette.Program.FS_MODE)continue; shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+
+			for(var prop in attrPointer.access){
+				var attrDest = attrPointer.store[prop];
+
+				if(conf[prop]!= undefined)
+					attrDest = conf[prop];
+			}
+		}
 	},
 
+	/**
+	* Compile the set of shader attached to this program as a compilation unit.
+	* Can only be run once per Program object, i.e. per vs-fs pair.
+	* @method Palette.Program#linkProgram
+	* @private
+	*/
 	linkProgram: function(){
 		if (this.compiled) return false;
 		this.compiled = true;
@@ -294,6 +320,12 @@ Palette.Program.prototype = {
 		return true;
 	},
 
+	/**
+	* Fetches the default values for program attributes, and fetches setter methods
+	* for execution at run time. 
+	* @method Palette.Program#prepareAttrStores
+	* @private
+	*/
 	prepareAttrStores: function(){
 		this.context.useProgram(this.program);
 		var shaderPointer;
@@ -328,6 +360,12 @@ Palette.Program.prototype = {
 		this.restoreDefaultConfig(Palette.Program.BOTH_MODE);
 	},
 
+	/**
+	* Run through the setters for each attribute, passing the values in the send
+	* section of the store to the context.
+	* @method Palette.Program#passAttrsToProg
+	* @private
+	*/
 	passAttrstoProg: function(){
 		var attrPointer;
 
@@ -364,6 +402,12 @@ Palette.Program.prototype = {
 		this.drawMode = mode;
 	},
 
+	/**
+	* Generate the "send" region of the vs and fs attribute stores from the necessary
+	* sub-stores.
+	* @method Palette.Program#generateSend
+	* @private
+	*/
 	generateSend: function(dest, conf){
 		var toSend;
 		for(name in dest.access){
@@ -373,41 +417,66 @@ Palette.Program.prototype = {
 		}
 	}
 };
-
+/**
+* Returns the relevant setter function for each 
+* @method Palette.Program.fetchSetter
+* @private
+*/
 Palette.Program.fetchSetter = function(gl, type){
 	//LAZY
 	//I'LL DO THIS MORE ELEGANTLY ONE DAY.
+	var oneParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0]);
+		}
+	}
+	var twoParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0],array[1]);
+		}
+	}
+	var threeParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0],array[1],array[2]);
+		}
+	}
+	var fourParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0],array[1],array[2],array[3]);
+		}
+	}
+
 	switch(type){
 		case "float":
-			return gl.uniform1f.bind(gl);
+			return oneParamFromArray(gl.uniform1f.bind(gl));
 		case "float[]":
 			return gl.uniform1fv.bind(gl);
 		case "int":
-			return gl.uniform1i.bind(gl);
+			return oneParamFromArray(gl.uniform1i.bind(gl));
 		case "int[]":
 			return gl.uniform1iv.bind(gl);
 		case "vec2":
-			return gl.uniform2f.bind(gl);
+			return twoParamFromArray(gl.uniform2f.bind(gl));
 		case "vec2[]":
 			return gl.uniform2fv.bind(gl);
 		case "ivec2":
-			return gl.uniform2i.bind(gl);
+			return twoParamFromArray(gl.uniform2i.bind(gl));
 		case "ivec2[]":
 			return gl.uniform2iv.bind(gl);
 		case "vec3":
-			return gl.uniform3f.bind(gl);
+			return threeParamFromArray(gl.uniform3f.bind(gl));
 		case "vec3[]":
 			return gl.uniform3fv.bind(gl);
 		case "ivec3":
-			return gl.uniform3i.bind(gl);
+			return threeParamFromArray(gl.uniform3i.bind(gl));
 		case "ivec3[]":
 			return gl.uniform3iv.bind(gl);
 		case "vec4":
-			return gl.uniform4f.bind(gl);
+			return fourParamFromArray(gl.uniform4f.bind(gl));
 		case "vec4[]":
 			return gl.uniform4fv.bind(gl);
 		case "ivec4":
-			return gl.uniform4i.bind(gl);
+			return fourParamFromArray(gl.uniform4i.bind(gl));
 		case "ivec4[]":
 			return gl.uniform4iv.bind(gl);
 		case "mat2":
@@ -427,11 +496,8 @@ Palette.Program.fetchSetter = function(gl, type){
 			return k.bind(gl);
 		case "buffer":
 			var k = function(buffer, bufferData){
-				//var buffer = this.vs.attrs[bufferName].access;
-				//var bufferData = this.vs.send[bufferName];
 				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
-				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bufferData)
-					, gl.DYNAMIC_DRAW);
+				gl.bufferData(gl.ARRAY_BUFFER, bufferData, gl.DYNAMIC_DRAW);
 			}
 			return k.bind(gl);
 		default:
@@ -470,7 +536,8 @@ Palette.Program.prototype.constructor = Palette.Program;
 Palette.Shader = function(gl, name, type, source, attrs){
 	/**
 	* The shader's name.
-	* @property {string} name
+	* @name Palette.Shader#name
+	* @type String
 	* @protected
 	* @readonly
 	*/
@@ -478,7 +545,8 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* The type of shader, either Palette.Shader.VS or Palette.Shader.FS for objects.
-	* @property {integer} type
+	* @name Palette.Shader#type
+	* @type Integer
 	* @protected
 	* @readonly
 	*/
@@ -486,7 +554,8 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* The shader's attached context.
-	* @property {WebGLRenderingContext} context
+	* @name Palette.Shader#context
+	* @type WebGLRenderingContext
 	* @protected
 	* @readonly
 	*/
@@ -494,15 +563,17 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* The shader's attribute array.
-	* @property {Array[]} attrs
+	* @name Palette.Shader#attrs
+	* @type Array[]
 	* @protected
 	* @readonly
 	*/
 	this.attrs = attrs;
 
 	/**
-	* The reference to the compiled shader in the WebGLRenderingCOntext.
-	* @property {WebGLShader} name
+	* The reference to the compiled shader in the WebGLRenderingContext.
+	* @name Palette.Shader#shader
+	* @type WebGLShader
 	* @protected
 	* @readonly
 	*/
@@ -510,7 +581,8 @@ Palette.Shader = function(gl, name, type, source, attrs){
 
 	/**
 	* Has the shader attempted compilation yet?
-	* @property {boolean} compiled
+	* @name Palette.Shader#compiled
+	* @type Boolean
 	* @private
 	* @readonly
 	*/
@@ -577,7 +649,8 @@ Palette.Shader.prototype.constructor = Palette.Shader;
 Palette.ShaderFactory = function(manager){
 	/**
     * An object reference to the parent {@link Palette.Manager}.
-    * @property {Palette.Manager} manager
+    * @name Palette.ShaderFactory#manager
+	* @type Palette.Manager
     * @readonly
     * @protected
     */

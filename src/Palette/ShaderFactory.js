@@ -15,7 +15,8 @@
 Palette.ShaderFactory = function(manager){
 	/**
     * An object reference to the parent {@link Palette.Manager}.
-    * @property {Palette.Manager} manager
+    * @name Palette.ShaderFactory#manager
+	* @type Palette.Manager
     * @readonly
     * @protected
     */

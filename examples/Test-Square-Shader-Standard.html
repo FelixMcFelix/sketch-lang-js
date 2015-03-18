@@ -56,18 +56,11 @@
 				var squareVtx = new Float32Array([1.0, 0, 0,
 												  0, 1.0, 0,
 												  1.0, 1.0,0]);
-
-				//var manager = new Palette.Manager(glctx);
-
-                //manager.addShader(text);
-                //var prog = manager.getProgram("square","square");
                 glctx.useProgram(prog);
                 glctx.clearColor(0.0,0.0,0.0,1.0);
 
 				var raf = function(){
-					//debugger;
                     glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
-					//manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [1.0, 0.0, 0.0, 1.0]});
                     glctx.bindBuffer(glctx.ARRAY_BUFFER, vtxBuf);
                     glctx.bufferData(glctx.ARRAY_BUFFER, squareVtx, glctx.DYNAMIC_DRAW);
                     glctx.vertexAttribPointer(vtxAttrPtr, 3, glctx.FLOAT, false, 0, 0);

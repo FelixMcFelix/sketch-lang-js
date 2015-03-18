@@ -37,9 +37,8 @@
                 glctx.clearColor(0.0,0.0,0.0,1.0);
 
 				var raf = function(){
-					//debugger;
                     glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
-					manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [1.0, 0.0, 1.0, 1.0]});
+					manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [Math.random(), Math.random(), Math.random(), 1.0]});
 					window.requestAnimationFrame(raf);
 				}
 
