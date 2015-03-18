@@ -1,3 +1,4 @@
+init(){
 // lopp till n is less than 5 
 for(int n = 0; n?<5; n++){
 		n++;
@@ -8,5 +9,5 @@ for(int n = 0; n?<5; n++){
 		n = 2;
 	}
 	print(n);
-
+}
 

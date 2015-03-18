@@ -1,3 +1,4 @@
+init(){
 int n = 1;
 #testing comments 
 n += 1;
@@ -8,3 +9,4 @@ n -= 1;
 n = (n+3) * 2;
 //final comment 
 print(n);
+}

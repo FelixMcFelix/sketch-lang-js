@@ -1,3 +1,4 @@
+init(){
 #if else if and else statement
 
 	int n = 6;
@@ -10,4 +11,4 @@
 	else{
 		print(n);	
 	}
-
+}
