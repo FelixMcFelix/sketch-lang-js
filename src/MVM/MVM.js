@@ -52,8 +52,40 @@ var MVM = function() {
 		RETURN: 20 
 	};
 
-	// Holds program instructions
-	this.codeStore =	[this.opCodes.LOADC,	16,
+
+	this.interpret = function(debugMode, codeStore) {
+
+		// Loop Counter - For debugging
+		var lc = 0;
+
+		// Points to the next instruction in the code store to execute
+		var cp = 0;
+
+		// Points to the first free location after the program
+		var cl = codeStore.length;
+
+		// Data store (Stack)
+		var dataStore = [];
+
+		// Points to the first free space at the top of the data store
+		var sp = 0;
+
+		// Points to the first location of the top most frame
+		var fp = 0;
+
+		// Local Offset. The off set of the first local address from the frame pointer
+		var LO = 2;
+
+		// Address of the dynamic link in a frame
+		var DLA = 0;
+
+		// Address of the retrun address of a frame
+		var RA = 1;
+
+		// Global data store
+		var globalStore = [];
+
+		codeStore = 	[this.opCodes.LOADC,	16,
 						 this.opCodes.STOREG,	0,		// 	LIMIT = 10
 						 this.opCodes.LOADC,	0,
 						 this.opCodes.STOREL,	0,		//	i = 0
@@ -73,277 +105,233 @@ var MVM = function() {
 						 this.opCodes.STOREL,	0,		//	i++
 						 this.opCodes.JUMP,		12,		//	JUMP
 						 this.opCodes.LOADL,	1,
-						 999];	//					37
-
-	// Points to the next instruction in the code store to execute
-	this.cp = 0;
-
-	// Points to the first free location after the program
-	this.cl = 38;
-
-	// Data store (Stack)
-	this.dataStore = [];
-
-	// Points to the first free space at the top of the data store
-	this.sp = 0;
-
-	// Points to the first location of the top most frame
-	this.fp = 0;
-
-	// Local Offset. The off set of the first local address from the frame pointer
-	this.LO = 2;
-
-	// Address of the dynamic link in a frame
-	this.DLA = 0;
-
-	// Retrun address of a frame
-	this.RA = 1;
-
-	// Global data store
-	this.globalStore = [];
-
-	// (May not be required)
-	// Points to the first free space at the top of the global store
-	//var gp = 0;
-
-	// Prints details to the console. For Debugging
-	this.debugMode = 0;
-
-/*
-*		Need a way to determine the size of each frame.
-*		Maybe all data local to a frame is stored before anything is pushed onto the stack for that frame.
-*/
-	this.interpret = function() {
-
-		// For debugging
-		var lc = 0;
+						 999];							//	37
 
 		var opCodes = this.opCodes;
-		while (this.cp < this.cl) {
+		while (cp < cl) {
 			lc++
-			var opCode = this.codeStore[this.cp];
-			//console.log(this.cp + " " + opCode);
-			this.cp++;
+			var opCode = codeStore[cp];
+			cp++;
 			switch (opCode) {
 				case opCodes.STOREG:
-					var address = this.codeStore[this.cp]
-					this.cp++;
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.globalStore[address] = i;
-					if(this.debugMode) console.log("STOREG: " + i + " " + address);
+					var address = codeStore[cp]
+					cp++;
+					sp--;
+					var i = dataStore[sp];
+					globalStore[address] = i;
+					if(debugMode) console.log("STOREG: " + i + " " + address);
 					break;
 				case opCodes.LOADG:
-					var address = this.codeStore[this.cp];
-					this.cp++;
-					this.dataStore[this.sp] = this.globalStore[address];
-					this.sp++;
-					if(this.debugMode) console.log("LOADG: " + i + " " + address);
+					var address = codeStore[cp];
+					cp++;
+					dataStore[sp] = globalStore[address];
+					sp++;
+					if(debugMode) console.log("LOADG: " + i + " " + address);
 					break;
 				case opCodes.STOREL:
-					var localAddress = this.codeStore[this.cp];
-					this.cp++;
-					this.sp--;
-					this.dataStore[this.fp + localAddress] = this.dataStore[this.sp];
-					this.sp++;
-					if(this.debugMode) console.log("STOREL: " + this.dataStore[this.sp - 1] + " " + localAddress);
+					var localAddress = codeStore[cp];
+					cp++;
+					sp--;
+					dataStore[fp + localAddress] = dataStore[sp];
+					sp++;
+					if(debugMode) console.log("STOREL: " + dataStore[sp - 1] + " " + localAddress);
 					break;
 				case opCodes.LOADL:
-					var localAddress = this.codeStore[this.cp];
-					this.cp++;
-					this.dataStore[this.sp] = this.dataStore[this.fp + localAddress];
-					this.sp++;
-					if(this.debugMode) console.log("LOADL: " + this.dataStore[this.sp - 1] + " " + localAddress);
+					var localAddress = codeStore[cp];
+					cp++;
+					dataStore[sp] = dataStore[fp + localAddress];
+					sp++;
+					if(debugMode) console.log("LOADL: " + dataStore[sp - 1] + " " + localAddress);
 					break;
 				case opCodes.LOADC:
-					var contsant = this.codeStore[this.cp];
-					this.cp++;
-					this.dataStore[this.sp] = contsant;
-					this.sp++;
-					if(this.debugMode) console.log("LOADC: " + contsant);
+					var contsant = codeStore[cp];
+					cp++;
+					dataStore[sp] = contsant;
+					sp++;
+					if(debugMode) console.log("LOADC: " + contsant);
 					break;
 				case opCodes.IADD:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
 					var result = j + i
-					this.dataStore[this.sp] = result;
-					this.sp++
-					if(this.debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++
+					if(debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.ISUB:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
 					var result = j - i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.IMUL:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
 					var result = j * i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.IDIV:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
 					var result = Math.floor(j / i);
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.FADD:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
 					var result = j + i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.FSUB:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					this.dataStore[this.sp] = j - i;
-					this.sp++;
-					if(this.debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					dataStore[sp] = j - i;
+					sp++;
+					if(debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.FMUL:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
 					var result = j * i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.FDIV:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
 					var result = j / i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.NCMPEQ:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
 					var result = (j == i) ? 1 : 0;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("NCMPEQ: " + j + " == " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("NCMPEQ: " + j + " == " + i + " = " + result);
 					break;
 				case opCodes.NCMPLT:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
 					var result = (j < i) ? 1 : 0;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("NCMPLT: " + j + " < " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("NCMPLT: " + j + " < " + i + " = " + result);
 					break;
 				case opCodes.NCMPGT:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
 					var result = (j > i) ? 1 : 0;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("NCMPLT: " + j + " > " + i + " = " + result);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("NCMPLT: " + j + " > " + i + " = " + result);
 					break;
 				case opCodes.JUMP:
-					var address = this.codeStore[this.cp];
-					this.cp = address;
-					if(this.debugMode) console.log("JUMP: " + address);
+					var address = codeStore[cp];
+					cp = address;
+					if(debugMode) console.log("JUMP: " + address);
 					break;
 				case opCodes.JUMPT:
-					var address = this.codeStore[this.cp];
-					this.sp--;
-					var i = this.dataStore[this.sp];
+					var address = codeStore[cp];
+					sp--;
+					var i = dataStore[sp];
 					result = i == 1;
 					if (result) {
-						this.cp = this.codeStore[this.cp];
+						cp = codeStore[cp];
 					}
 					else {
-						this.cp++;
+						cp++;
 					}
-					if(this.debugMode) console.log("JUMPT: " + i + " " + result);
+					if(debugMode) console.log("JUMPT: " + i + " " + result);
 					break;
 				case opCodes.JUMPF:
-					var address = this.codeStore[this.cp];
-					this.sp--;
-					var i = this.dataStore[this.sp];
+					var address = codeStore[cp];
+					sp--;
+					var i = dataStore[sp];
 					var result = i == 0;
-					if(this.debugMode) console.log("JUMPF: " + i + " " + result);
+					if(debugMode) console.log("JUMPF: " + i + " " + result);
 					if (result) {
-						this.cp = this.codeStore[this.cp];
+						cp = codeStore[cp];
 					}
 					else {
-						this.cp++;
+						cp++;
 					}
 					break;
 				case opCodes.CALL:
-					var address = this.codeStore[this.cp];
+					var address = codeStore[cp];
 					cp++;
-					var numArgs = this.codeStore[this.cp];
+					var numArgs = codeStore[cp];
 					cp++;
-					var returnAddress = this.cp;
-					var dynamicLink = this.fp;
+					var returnAddress = cp;
+					var dynamicLink = fp;
 					var args = [];
 					// Copy Args
 					var i = 0;
 					while(i < numArgs) {
 						sp--;
-						args[i] = this.dataStore[sp];
+						args[i] = dataStore[sp];
 						i++;
 					}
 					// Add new Frame
-					this.fp = this.sp;
-					this.dataStore[sp] = dynamicLink;
-					this.sp++;
-					this.dataStore[sp] = returnAddress;
-					this.sp++;
+					fp = sp;
+					dataStore[sp] = dynamicLink;
+					sp++;
+					dataStore[sp] = returnAddress;
+					sp++;
 					// Add args as locals
 					while(i >= 0) {
 						i--;
-						this.dataStore[this.sp] = arg[i];
+						dataStore[sp] = arg[i];
 						sp++;
 					}
 					break;
 				case opCodes.RETURN:
-					var shouldReturnValue = this.codeStore[this.cp];
+					var shouldReturnValue = codeStore[cp];
 					var returnValue;
 					if (shouldReturnValue) {
-						returnValue = this.dataStore[this.sp - 1]
+						returnValue = dataStore[sp - 1]
 					};
-					var returnAddress = this.dataStore[this.fp + this.RA];
-					this.cp = returnAddress;
-					this.sp = this.fp;
-					this.fp = this.dataStore[this.fp + this.DLA];
-					this.dataStore[this.sp] = returnValue;
-					this.sp++;
+					var returnAddress = dataStore[fp + RA];
+					cp = returnAddress;
+					sp = fp;
+					fp = dataStore[fp + DLA];
+					dataStore[sp] = returnValue;
+					sp++;
 				case 999: // Print top of stack
-					if(this.debugMode) console.log(this.dataStore[this.sp - 1]);
+					if(debugMode) console.log(dataStore[sp - 1]);
 					break;
 			}
 			lc++;
