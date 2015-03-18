@@ -1,0 +1,31 @@
+<!doctype html>
+<head>
+	<script type="text/javascript" src="../build/Palette.min.js"></script>
+	<script type="text/javascript" src="lib/codemirror.js"></script>
+	<script type="text/javascript" src="addons/mode/simple.js"></script>
+	<link rel="stylesheet" href="lib/codemirror.css">
+	<script src="mode/mlang/mlang.js"></script>
+	<script type="text/javascript">
+	window.onload = function(){
+
+	var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('mlang-box'),{
+		value: "main(){\n\tPoint pt1 = {1,1}\n\tPoint pt2 = {5,2}\n\tLine l = pt1 + pt2;\n\n\tshapeWithParams(Line l1) -> Polygon{\n\t\tPolygon triangle = l1 * 3;\n\t\tdraw(triangle);\n\t}\n\n\tshapeWithParams(l);\n}",
+		mode: "mlang"
+	});
+
+	}
+	</script>
+	<style type="text/css">
+	body{
+		background-color: beige;
+	}
+	</style>
+	<title>MLang dev platform!</title>
+</head>
+<body>
+	<p>
+		The canvas.<br />
+		<canvas id="mlang-canvas" width="800" height="600">You still need a modern browser...............</canvas>
+	</p>
+	<textarea id="mlang-box" autofocus="true" cols="50" rows="6">Test Text</textarea>
+</body>
