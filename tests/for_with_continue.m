@@ -1,5 +1,5 @@
-forWithContinue(){
-	for(num n = 0; n<5; n++){
+// lopp till n is less than 5 
+for(int n = 0; n?<5; n++){
 		n++;
 		if(n ?= 3){
 			n = 5;
@@ -9,4 +9,4 @@ forWithContinue(){
 	}
 	print(n);
 
-}
+

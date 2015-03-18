@@ -5,7 +5,7 @@ main(){
 
 	shapeWithParams(Line l1) -> Polygon{
 		Polygon triangle = l1 * 3;
-		draw();
+		draw(triangle);
 	}
 
 	shapeWithParams(l);

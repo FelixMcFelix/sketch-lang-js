@@ -37,11 +37,7 @@ Whitespace_characters 		{Whitespace_character}+
 Whitespace_characters           {UNICODE_CLASS_Sp}|[\u0009]|[\u000B]|[\u000C]|[\s]
 
 
-//Template 
-IDENTIFIER 				{Letter}({Letter}|{Digit}| {Dash})?
-Letter					{UNICODE_CLASS_Uc}|{UNICODE_CLASS_Lc}
-Digit   				{UNICODE_CLASS_Nu}
-Dash 					{UNICODE_CLASS_Co}
+
 
 
 
@@ -59,6 +55,7 @@ Dash 					{UNICODE_CLASS_Co}
 
 
 /* Keywords */
+[A-Za-z]                               return 'IDENTIFIER';
 "bool"                                 return 'BOOL';
 "break"                                return 'BREAK';
 "case"                                 return 'CASE';

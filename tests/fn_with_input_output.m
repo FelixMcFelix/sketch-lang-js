@@ -1,8 +1,6 @@
-main(){
-	givesOutput(num n) -> num{
-		return(n);
+function givesOutput( int  n) -> int{
+		return n;
 	}
 	givesOutput(4);
 
 
-}

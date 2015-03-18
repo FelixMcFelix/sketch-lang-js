@@ -1,10 +1,7 @@
-main(){
-	num n = 2;
-	takesParams(num n){
+int n = 2;
+function takesParams(int n){
 		n++;
 		print(n);
 	}
-	takesParams(n);
+takesParams(n);
 
-
-}

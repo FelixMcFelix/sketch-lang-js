@@ -1,10 +1,11 @@
-main(){
-	takesParams(num n, String s){
+//function declaration 
+function takesParams(int n, String s){
 		n++;
+                // print n and S
 		print(n);
 		print(s);
 	}
-	takesParams(4, "hello");
+//function call      
+takesParams(4, "hello");
 
 
-}

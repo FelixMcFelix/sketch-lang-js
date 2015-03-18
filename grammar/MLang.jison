@@ -1,464 +1,280 @@
-%token IDENTIFIER DIGIT 
 
-%token BOOL BREAK CASE  CONTINUE DEFAULT DO ELSE ELSE_IF FALSE FLOAT FOR FUNCTION IF IMPORT NUM NOT NULL RETURN STRING SWITCH TRY VOID WHILE 
-%token VECTOR_2 VECTOR_3 VECTOR_4
+/* description: Parses end executes mathematical expressions. */
 
-%token HASHTAG OPEN_BRACE CLOSE_BRACE OPEN_BRACKET CLOSE_BRACKET OPEN_PARENS CLOSE_PARENS COMMA COLON SEMICOLON ASSIGN PLUS MINUS STAR DIV PERCENT
-%token AMP BITWISE_OR CARET EXCL TILDE ASSIGN LT GT OP_INC OP_DEC OP_AND OP_OR  OP_EQ OP_NE OP_LE OP_GE OP_ADD_ASSIGNMENT OP_SUB_ASSIGNMENT
-%token OP_MULT_ASSIGNMENT OP_DIV_ASSIGNMENT OP_MOD_ASSIGNMENT OP_AND_ASSIGNMNET OP_OR_ASSIGNMENT OP_XOR_ASSIGNMNET OP_LEFT_SHIFT OP_RIGHT_SHIFT
-%token OP_LEFT_SHIFT_ASSIGNMENT OP_RIGHT_SHIFT_ASSIGNMENT ZERO_FILL_RIGHT_SHIFT RETURN_TYPE
+/* lexical grammar */
+%lex
+%%
+
+\s+                  /* skip whitespace */
+"//".*                      /* ignore comment */
+"#".*                      /* ignore comment */
+
+"bool"                                 return 'BOOL';
+"break"                                return 'BREAK';
+"clear"                                return 'CLEAR'; 
+"continue"                             return 'CONTINUE';
+"do"                                   return 'DO';
+"else"                                 return 'ELSE';
+"false"                                return 'FALSE';
+"float"                                return 'FLOAT';
+"for"                                  return 'FOR';
+"function"                             return 'FUNCTION'
+"if"                                   return 'IF';
+"Line"                             return 'LINE';
+"int"                                  return 'INT';
+"not"                                  return 'NOT';
+"null"                                 return 'NULL';
+"Point"                                return 'POINT';
+"Polygon"                              return 'POLYGON';
+"return"                               return 'RETURN';
+"String"                               return 'STRING';
+"true"                                 return 'TRUE';
+"void"                                 return 'VOID';
+"while"                                return 'WHILE';
+"vector(2)"                            return 'VECTOR_2';
+"vector(3)"                            return 'VECTOR_3';
+"vector(4)"                            return 'VECTOR_4';
 
 
-%token EOF
+"{"                        return 'OPEN_BRACE';
+"}"                        return 'CLOSE_BRACE';
+"["                        return 'OPEN_BRACKET';
+"]"                        return 'CLOSE_BRACKET';
+"("                        return 'OPEN_PARENS';
+")"                        return 'CLOSE_PARENS';
+","                        return 'COMMA';
+":"                        return 'COLON';
+";"                        return 'SEMICOLON';
+"->"                       return 'RETURN_TYPE';
+"="                        return 'ASSIGN';
+"+="                       return 'OP_ADD_ASSIGNMENT';
+"++"                       return 'OP_INC';
+"+"                        return 'PLUS';
+"-="                       return 'OP_SUB_ASSIGNMENT';
+"--"                       return 'OP_DEC';
+"-"                        return 'MINUS';
+"*="                       return 'OP_MULT_ASSIGNMENT';
+"*"                        return 'ASTERIX';
+"/="                       return 'OP_DIV_ASSIGNMENT';
+"/"                        return 'DIV';
+"%="                       return 'OP_MOD_ASSIGNMENT';
+"%"                        return 'MODULO';
+"&&"                       return 'OP_AND';
+"&="                       return 'OP_AND_ASSIGNMENT';
+"&"                        return 'AMP';
+"||"                       return 'OP_OR';
+"|="                       return 'OP_OR_ASSIGNMENT';
+"|"                        return 'BITWISE_OR';
+"^="                       return 'OP_XOR_ASSIGNMENT';
+"^"                        return 'CARET';
+"~"                        return 'TILDE';
+"?="                       return 'OP_EQ';
+"?<"                       return 'LT';
+"?>"                       return 'GT';
+"!="                       return 'OP_NE';
+"!>"                       return 'OP_LE';
+"!<"                       return 'OP_GE';
+"!"                        return 'EXCL';
+"<<="                      return 'OP_LEFT_SHIFT_ASSIGNMENT';
+"<<"                       return 'OP_LEFT_SHIFT';
+">>="                      return 'OP_RIGHT_SHIFT_ASSIGNMENT';
+">>>"                      return 'ZERO_FILL_RIGHT_SHIFT';
+">>"                       return 'OP_RIGHT_SHIFT';
+<<EOF>>                    return 'EOF';
+
+\"[^"]+\"                 yytext = yytext.slice(1,-1); return 'STRINGT'
+[0-9]+("."[0-9]*)?        return 'DIGIT';
+"."[0-9]+                 return 'DIGIT';
+[a-zA-Z_]+[a-zA-Z0-9_]*   return 'IDENTIFIER';
+
+
+
+/lex
+
+
 /* operator associations and precedence */
-/*more to be added */
-%left PLUS MINUS 
-%left STAR DIV 
-%left PERCENT 
-%left OP_AND OP_OR 
+
+%left '+' '-'
+%left '*' '/'
+%left '^'
+%right '!'
+%right '%'
+%left UMINUS
+%nonassoc IF_WITHOUT_ELSE
+%nonassoc ELSE
 
 
-
-%start compilationUnit
+%start start
 
 %%
-compilationUnit
-    : compilation-unit EOF
-        {   
-            return {
-                "node": "CompilationUnit1",
-                "unicode": "1231"
-            };
-        }
-    
-    ;
- 
-PROGRAM
-    : include* ( out-decl | seq_statement )* EOF 
-            {$$ = {
-                type: 'program',
-                arguments:[
-                $1, 
-                $3,
-                $5
-                ]
-            };
-        }
-    ; 
+start 
+ : program EOF
+    {return " blop";}
+; 
+program 
+   : declarations 
+   | program declarations 
+; 
 
+declarations
+   : out-decl 
+   | in-decl 
+   | statement
 
-include
-    : HASHTAG IMPORT IDENTIFIER 
-            {$$ = { 
-            type: 'include',
-            arguments: [
-                $1, 
-                $2, 
-                $3]
-            };
-        }
-    ; 
+; 
 
 out-decl
-    : FUNCTION IDENTIFIER OPEN_PARENS formal CLOSE_PARENS (RETURN_TYPE type )? OPEN_BRACKET seq_statement CLOSE_BRACKET
-                    {$$ = { 
-                        type: 'out-decl',
-                        arguments: [ 
-                            $2, 
-                            $4,
-                            $7,
-                            $9]
-                            };
-                    }
-    ;
+  :FUNCTION declarator declaration_list func_return body 
 
-formal 
-    : (type COLON IDENTIFIER COMMA)* type COLON IDENTIFIER
-    | VOID 
-    ;
+  ;
 
-in-decl
-    : TYPE COLON IDENTIFIER 
-    | TYPE COLON IDENTIFIER ASSIGN expr
-    ;
+in-decl 
+  : type declarator ASSIGN exp semi
+;
+func_return  
+  : RETURN_TYPE type
+  |
+;
 
-seq-statement
-    : (statement)*
-    ;
+ declaration_list 
+  : OPEN_PARENS CLOSE_PARENS
+  | OPEN_PARENS param_list CLOSE_PARENS
+  ;
+
+param_list
+  : param 
+  | param_list COMMA param 
+ ;
+
+ param 
+   : type declarator 
+ ; 
+
+body
+  : OPEN_BRACE CLOSE_BRACE
+  | OPEN_BRACE statement_list CLOSE_BRACE
+  | OPEN_BRACE in-decl statement_list CLOSE_BRACE
+;
 
 statement
-    : dir-statement (SEMICOLON)? 
-    | flow-statement
-    ;
-
-dir-statement
-    : IDENTIFIER ASSIGN expr
-                {$$ = { 
-                        type: 'assign'
-                        arguments: [
-                            $3;]
-                      };
-                }
-
-    | RETURN expr
-                {$$ =  $2;}
-
-    | BREAK
-    | CONTINUE
-
-    | in-decl
-                {$$ =  $1;}
-
-    | expr
-                {$$ = $1;}
-    ;
-
-flow-statement
-    : while-statement 
-    | for-statement 
-    | do-while_statemnt 
-    | if-statement 
-    | switch-statement
-    ;
+  : exp semi
+  | body
+  | condition_statements
+  | iteration_statements
+  | jump_statements
+;
 
 
-while-statement
-    : WHILE OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET
-        {$$ = { 
-                type: 'while-loop',
-                arguments:[
-                    $3,
-                    $6]
-                };
-        }
-    ;
 
-do-while_statemnt
-    : DO OPEN_BRACKET seq_statement CLOSE_BRACKET WHILE OPEN_PARENS expr CLOSE_PARENS
-       {$$ = { 
-                type: 'do-while',
-                 arguments:[
-                   $3,
-                   $7]
-               };
-        }
-        ;
 
-for-statement
-    : FOR OPEN_PARENS expr SEMICOLON expr SEMICOLON epxr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET
-        {$$ = {
-                type: "for-loop",
-                arguments: [ 
-                    $3,
-                    $5,
-                    $7,
-                    $10]
-              };
-        }
-    ;
 
-if-statement
-    : IF OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET
-        {$$ = { 
-                type: 'if-statment',
-                arguments: [ 
-                    $3,
-                    $6]
-               };
-        }
 
-    | IF OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET ELSE seq_statement
-        {$$ = {
-                type: 'if-else',
-                arguments: [
-                    $3,
-                    $6,
-                    $9]
-              };
-        }
+condition_statements  
+  : IF OPEN_PARENS exp CLOSE_PARENS statement %prec IF_WITHOUT_ELSE
+  | IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement 
+;
 
-    | IF OPEN PARENS expr CLOSE_PARENS OPEN_BRACKET seq_statement CLOSE_BRACKET ELSE if-statement
-        {$$ = {
-                type: 'if-else-if',
-                arguments: [ 
-                    $3,
-                    $6,
-                    $9]
-               };
-        }
-    ; 
+iteration_statements  
+  : WHILE OPEN_PARENS exp CLOSE_PARENS statement
+  | DO statement WHILE OPEN_PARENS exp CLOSE_PARENS semi
+  | FOR OPEN_PARENS in-decl semi exp semi exp CLOSE_PARENS statement
+;
+
+jump_statements 
+  : CONTINUE semi
+  | BREAK semi 
+  | RETURN exp  semi 
+  | RETURN  semi 
+;
+
+
+statement_list 
+  : statement
+  | statement_list statement
  
-
-
-switch_statement
-    : SWITCH OPEN_PARENS expr CLOSE_PARENS OPEN_BRACKET (CASE expr COLON seq_statement)* (DEFAULT seq_statement)* CLOSE_BRACKET
-        {$$ = { 
-                type: 'switch',
-                arguments: [ 
-                $3,
-                $7,
-                $9,
-                $11]
-               };
-        }
-    ;
-
-
-
-expr
-    : sec_expr 
-                {return $1;}
-    ;
-
-sec_expr
-    :prim_expr  
-                {$$ =  $1;}
-    | prim_expr PLUS sec_expr   
-                {$$ = {
-                        type: 'addition',
-                        arguments: [ 
-                            $1,
-                            $3]
-                        }; 
-                }
-
-    | prim_expr MINUS sec_expr  
-                {$$ = { 
-                        type: 'minus',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr STAR  sec_expr  
-                   {$$ = { 
-                        type: 'multiplication',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr DIV sec_expr    
-                   {$$ = { 
-                        type: 'division',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr PERCENT sec_expr 
-                   {$$ = { 
-                        type: 'modulo',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_ADD_ASSIGNMENT sec_expr 
-                   {$$ = { 
-                        type: 'add_assign',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_SUB_ASSIGNMENT sec_expr 
-                   {$$ = { 
-                        type: 'sub_assign',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_MULT_ASSIGNMENT sec_expr
-                   {$$ = { 
-                        type: 'multi_assign',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_DIV_ASSIGNMENT sec_expr 
-                   {$$ = { 
-                        type: 'div_assign',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_MOD_ASSIGNMENT sec_expr 
-                   {$$ = { 
-                        type: 'mod_assign',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_INC  
-                   {$$ = { 
-                        type: 'increments',
-                        arguments:[
-                            $1]
-                       };
-                }
-
-    | prim_expr OP_DEC  
-                   {$$ = { 
-                        type: 'decrement',
-                        arguments:[
-                            $1]
-                       };
-                }
-
-    | prim_expr OP_AND sec_expr 
-                   {$$ = { 
-                        type: 'and',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_OR  sec_expr 
-                   {$$ = { 
-                        type: 'or',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-    | prim_expr CARET  sec_expr 
-                   {$$ = { 
-                        type: 'bit-XOR',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr AMP   sec_expr 
-                   {$$ = { 
-                        type: 'bit-AND',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr BITWISE_OR sec_expr 
-                   {$$ = { 
-                        type: 'bit-OR',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_RIGHT_SHIFT sec_expr 
-                   {$$ = { 
-                        type: 'bit-right-shift',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_LEFT_SHIFT sec_expr 
-                   {$$ = { 
-                        type: 'bit-left-shift',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-    | prim_expr ZERO_FILL_RIGHT_SHIFT sec_expr 
-                   {$$ = { 
-                        type: 'zero-fill-right-shift',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-    | prim_expr OP_EQ sec_expr 
-                  {$$ = { 
-                        type: 'equality',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr LT sec_expr 
-                   {$$ = { 
-                        type: 'less-than',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr GT  sec_expr
-                   {$$ = { 
-                        type: 'larger-than',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_NE sec_expr
-                   {$$ = { 
-                        type: 'not-equal',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_LE sec_expr
-                   {$$ = { 
-                        type: 'less-than-or-equal ',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_GE sec_expr
-                   {$$ = { 
-                        type: 'greater-than-or-equal' ,
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-    ; 
+   
+;
+list
+   : prim_expr 
+   | list COMMA prim_expr
+   | 
+;
+point_assign 
+  : prim_expr
+  | point_assign COMMA prim_expr
+;
+  
+exp
+    :prim_expr       
+    | prim_expr PLUS exp     
+    | prim_expr MINUS exp  
+    | prim_expr ASTERIX  exp  
+    | prim_expr DIV exp         
+    | prim_expr MODULO exp            
+    | prim_expr OP_ADD_ASSIGNMENT exp                  
+    | prim_expr OP_SUB_ASSIGNMENT exp            
+    | prim_expr OP_MULT_ASSIGNMENT exp        
+    | prim_expr OP_DIV_ASSIGNMENT exp            
+    | prim_expr OP_MOD_ASSIGNMENT exp 
+    | prim_expr OP_INC            
+    | prim_expr OP_DEC             
+    | prim_expr OP_AND exp          
+    | prim_expr OP_OR  exp       
+    | prim_expr CARET  exp           
+    | prim_expr AMP   exp            
+    | prim_expr BITWISE_OR exp             
+    | prim_expr OP_RIGHT_SHIFT exp              
+    | prim_expr OP_LEFT_SHIFT exp         
+    | prim_expr ZERO_FILL_RIGHT_SHIFT exp            
+    | prim_expr OP_EQ exp              
+    | prim_expr LT exp         
+    | prim_expr GT  exp           
+    | prim_expr OP_NE exp            
+    | prim_expr OP_LE exp           
+    | prim_expr OP_GE exp          
+    | prim_expr ASSIGN exp  
+;
 
 prim_expr
-    : IDENTIFIER
-    | DIGIT 
+    : IDENTIFIER 
+    |  DIGIT 
     | TRUE 
     | FALSE
-    | NOT prim_expr 
-    | OPEN_PARENS expr CLOSE_PARENS
+    | STRINGT
+    | NOT prim_expr
+    | OPEN_PARENS exp CLOSE_PARENS
+    |  IDENTIFIER OPEN_PARENS init_list CLOSE_PARENS semi
+    | OPEN_BRACE init_list CLOSE_BRACE
+    | OPEN_PARENS init_list CLOSE_PARENS;
+//not mandatory semicolon 
+semi
+  : SEMICOLON
+  |
 ;
-    
+ declarator 
+   :IDENTIFIER
+;
+declaration 
+  : init_list
+  | declarator OPEN_PARENS init_list CLOSE_PARENS
+  ;
+
+ init_list 
+   : prim_expr
+   | init_list COMMA prim_expr
+   |
+;
+
 type
-    : BOOL
-    | NUM
-    | FLOAT 
-    | POINT 
-    | STRING
-    | VECTOR_2
-    | VECTOR_3
-    | VECTOR_4
+   :VOID 
+   |STRING 
+   | INT
+   | FLOAT 
+   |BOOL
+   |POINT 
+   |VECTOR_2
+   |VECTOR_3
+   |VECTOR_4
+   |LINE
+   |POLYGON
 ;

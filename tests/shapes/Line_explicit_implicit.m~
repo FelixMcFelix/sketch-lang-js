@@ -3,5 +3,5 @@ buildAShape(){
 	pt2 = {5,2}
 	
 	Line l1 = pt1 + pt2;
-	draw();
+	draw(l1);
 }
