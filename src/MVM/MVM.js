@@ -323,7 +323,7 @@ var MVM = function() {
 					var returnValue;
 					if (shouldReturnValue) {
 						returnValue = dataStore[sp - 1]
-					};
+					}
 					var returnAddress = dataStore[fp + RA];
 					cp = returnAddress;
 					sp = fp;

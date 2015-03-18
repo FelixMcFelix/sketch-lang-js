@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="MVM.js"></script>	
+</head>
+<body></body>
+
+<script type="text/javascript">
+	
+	var mvm = new MVM();
+	var codeStore = 	[mvm.opCodes.LOADC,		16,
+						 mvm.opCodes.STOREG,	0,		// 	LIMIT = 10
+						 mvm.opCodes.LOADC,		0,
+						 mvm.opCodes.STOREL,	0,		//	i = 0
+						 mvm.opCodes.LOADC,		2,
+						 mvm.opCodes.STOREL,	1,		//	j = 1
+						 mvm.opCodes.LOADL,		0,
+						 mvm.opCodes.LOADG,		0,
+						 mvm.opCodes.NCMPLT,			//	i < LIMIT
+						 mvm.opCodes.JUMPF,		35,
+						 mvm.opCodes.LOADL,		1,
+						 mvm.opCodes.LOADC,		2,
+						 mvm.opCodes.IMUL,
+						 mvm.opCodes.STOREL,	1,		//	j = j * 2
+						 mvm.opCodes.LOADL,		0,
+						 mvm.opCodes.LOADC,		1,
+						 mvm.opCodes.IADD,
+						 mvm.opCodes.STOREL,	0,		//	i++
+						 mvm.opCodes.JUMP,		12,		//	JUMP
+						 mvm.opCodes.LOADL,		1,
+						 999];
+	mvm.interpret(1,codeStore);
+</script>
+
+</body>
+</html>
