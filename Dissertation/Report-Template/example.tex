@@ -8,6 +8,7 @@
 \documentclass{l3proj}
 \usepackage{listings}
 \usepackage{hyperref}
+\setlength\parindent{24pt}
 \begin{document}
 \title{Design and implement your own programming language}
 \author{Kyle Simpson\\
@@ -133,38 +134,51 @@ The for loop statement has three parts. Firstly, the control variable is initial
 \chapter{Compiler Architecture}
 \label{arch}
 
-%==============================================================================
+%------------------------------------------------------------------------------
 \section{Overview}
 \label{arch-over}
 
 Our program module, as part of the role it plays, contains a combination of a compiler, bytecode executor and WebGL interface - written in JavaScript as required by the platform. This section aims to provide a view of the overall architecture and connection between these components, as well a brief explanation of each component's function and design considerations.
 
-The core language module can be divided into 5 main parts:\begin{enumerate}
+The core language module can be divided into 5 main parts:
+\begin{enumerate}
 \item \textbf{Lexer and Parser} --- The program component charged with tokenising and interpreting MLang programs, generating an abstract syntax tree for use in code generation.
 \item \textbf{Code Generator} --- The program component responsible for conversion of abstract syntax trees into bytecode sequences, for execution by the abstract machine.
 \item \textbf{Shader Manager} --- An active subsystem of the module responsible for management, selection and execution of shader programs for drawing at runtime.
 \item \textbf{Abstract Machine} --- The main active subsystem present in the module, responsible for all runtime code execution. The abstract machine relies on the shader manager to make draw calls, but handles direct WebGL manipulation for certain key functions separately.
 \item \textbf{Module Facade} --- The active component responsible for managing the interconnections and operation of the above components, as well as exposing the module interface to programmers and for use with.
 \end{enumerate}
-Individual and detailed discussion of each system is provided below. The module's subsystems are then connected as shown in Figure $(\left. number\right.) $.
+Individual and detailed discussion of each system is provided below. The module's subsystems are then connected as shown in Figure (number).
 
-%==============================================================================
+%------------------------------------------------------------------------------
 \section{Lexer and Parser}
 \label{arch-lex}
 
-%==============================================================================
+%------------------------------------------------------------------------------
 \section{Code Generator}
 \label{arch-gen}
 
-%==============================================================================
+%------------------------------------------------------------------------------
 \section{Shader Manager}
 \label{arch-shad}
 
-%==============================================================================
+In designing our system, it was established that regardless of the chosen compilation and execution pathway all of our library's \textit{shaders} would have to be intelligently managed; both during runtime and for storage purposes inside the module itself.
+
+Shaders are the graphics card level program units used in the conversion from vertex arrays into two-dimensional projections in the screen space, and in the selection of pixel colours to populate the screen space from that projection. In WebGL, in older versions of OpenGL and in its subsets such as GLES, shaders must always come in pairs: a \textit{vertex shader} and \textit{fragment shader} comprise each \textit{shader program}. This may then be accessed, modified and called through the WebGL API.
+
+The unique needs of our module created an interesting set of design requirements for the subsystem - mandating a somewhat in-depth understanding of the WebGL API to manipulate the canvas as required. Upon examination, the shader manager's requirements were found to be:
+\begin{itemize}
+\item \textbf{Extensibility} --- The language would need to support future extension with various shapes, shaders and other such additions beyond its standard library - most shader programs require writing tailored code in, say, an object's .draw() method.
+\item \textbf{Ease of Use} --- Definition of new shader files should be intuitive and an easy process, provided the user has valid shader code. The linking and compilation of shaders and shader programs must be handled internally, and completely sequestered from external control to centralise most of the API manipulation.
+\item \textbf{Configurable} --- Shader programs should have variable control methods exposed as an external interface, to provide a simple means of control over the intricacies of the WebGL API.
+\item \textbf{Simplicity} --- Interactions with the module should be designed with brevity in mind - being able to execute variable update and draw functions as a single method call makes WebGL usage simpler in the other subsystem implementations.
+\end{itemize}
+
+%------------------------------------------------------------------------------
 \section{Abstract Machine}
 \label{arch-abs}
 
-%==============================================================================
+%------------------------------------------------------------------------------
 \section{Module Facade}
 \label{arch-module}
 
@@ -183,12 +197,20 @@ Individual and detailed discussion of each system is provided below. The module'
 %------------------------------------------------------------------------------
 \section{Contributions}
 \label{cont}
-Here we explain that Lewis Carroll wrote chapter  John Wayne
-was out riding his horse every day and didn't do anything. Marilyn Monroe
-was great at getting the requirements specification and coordinating the
-writing of the report. Betty Davis did the coding of the kernel of the
-project, described in Chapter \ref{impl}.  James Dean handled the
-multimedia content of the project.
+
+%------------------------------------------------------------------------------
+\subsection{Report}
+\label{cont-report}
+
+\textit{\textbf{Writing:}}
+\begin{itemize}
+\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}
+\end{itemize}
+\textit{\textbf{Editing:}}
+%------------------------------------------------------------------------------
+\subsection{Program}
+\label{cont-prog}
+
 %==============================================================================
 \chapter{Appendix A}
 \label{appa}
