@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script type="text/javascript" src="../build/Palette.js"></script>
 	<script type="text/javascript" src="../src/MVM/MVM.js"></script>	
 </head>
-<body></body>
-
+<body>
+	<canvas id="mvm-can" width="800" height="600"></canvas>
 <script type="text/javascript">
 	
 	var mvm = new MVM();
-	var codeStore = 	[mvm.opCodes.LOADC,		16,
+	/*var codeStore = 	[mvm.opCodes.LOADC,		16,
 						 mvm.opCodes.STOREG,	0,		// 	LIMIT = 10
 						 mvm.opCodes.LOADC,		0,
 						 mvm.opCodes.STOREL,	0,		//	i = 0
@@ -28,9 +29,10 @@
 						 mvm.opCodes.STOREL,	0,		//	i++
 						 mvm.opCodes.JUMP,		12,		//	JUMP
 						 mvm.opCodes.LOADL,		1,
-						 999];
+						 999];*/
+	var codeStore = [21];
 	mvm.interpret(1,codeStore);
 </script>
-
 </body>
+
 </html>

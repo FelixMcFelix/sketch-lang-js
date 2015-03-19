@@ -49,9 +49,56 @@ var MVM = function() {
 		JUMPT: 	17, 
 		JUMPF: 	18,
 		CALL: 	19, 
-		RETURN: 20 
+		RETURN: 20,
+		LNDRAW: 21
 	};
 
+	var can = document.getElementById("mvm-can");
+	this.glctx = can.getContext("webgl");
+	this.manager = new Palette.Manager(this.glctx);
+
+	var shaderStore = '{'+
+    '"type": 2,' +
+    '"content": [' +
+        '{' +
+            '"type": 0,' +
+            '"name": "square",' +
+            '"src": "\u0023version 100\\n attribute vec3 aVertexPos;\\n uniform mat4 mvMatrix;\\n uniform mat4 pvMatrix;\\n void main(){gl_Position = pvMatrix * mvMatrix * vec4(aVertexPos, 1.0);}",' +
+            '"attrs": [' +
+				'[' +
+					'"aVertexPos",' +
+					'"vertexAttrib",' +
+					'"vertexBuffer"' +
+				'],' +
+				'[' +
+					'"vertexBuffer",' +
+					'"buffer",' +
+					'3' +
+				']' +
+            ']' +
+        '},' +
+        '{' +
+            '"type": 1,' +
+            '"name": "square",' +
+            '"src": "\u0023version 100\\n precision mediump float;\\n uniform vec4 color;\\n void main(){gl_FragColor = color;}",' +
+            '"attrs": [' +
+                '[' +
+                    '"color",' +
+                    '"vec4",' +
+                    '[' +
+                        '0,' +
+                        '1,' +
+                        '0,' +
+                        '1' +
+                    ']' +
+                ']' +
+            ']' +
+        '}' +
+    ']' +
+'}'
+
+	this.manager.addShader(shaderStore);
+	this.glctx.clearColor(0.0,0.0,0.0,1.0);
 
 	this.interpret = function(debugMode, codeStore) {
 
@@ -85,27 +132,7 @@ var MVM = function() {
 		// Global data store
 		var globalStore = [];
 
-		codeStore = 	[this.opCodes.LOADC,	16,
-						 this.opCodes.STOREG,	0,		// 	LIMIT = 10
-						 this.opCodes.LOADC,	0,
-						 this.opCodes.STOREL,	0,		//	i = 0
-						 this.opCodes.LOADC,	2,
-						 this.opCodes.STOREL,	1,		//	j = 1
-						 this.opCodes.LOADL,	0,
-						 this.opCodes.LOADG,	0,
-						 this.opCodes.NCMPLT,			//	i < LIMIT
-						 this.opCodes.JUMPF,	35,
-						 this.opCodes.LOADL,	1,
-						 this.opCodes.LOADC,	2,
-						 this.opCodes.IMUL,
-						 this.opCodes.STOREL,	1,		//	j = j * 2
-						 this.opCodes.LOADL,	0,
-						 this.opCodes.LOADC,	1,
-						 this.opCodes.IADD,
-						 this.opCodes.STOREL,	0,		//	i++
-						 this.opCodes.JUMP,		12,		//	JUMP
-						 this.opCodes.LOADL,	1,
-						 999];							//	37
+									//	37
 
 		var opCodes = this.opCodes;
 		while (cp < cl) {
@@ -330,8 +357,14 @@ var MVM = function() {
 					fp = dataStore[fp + DLA];
 					dataStore[sp] = returnValue;
 					sp++;
+				case opCodes.LNDRAW:
+					this.glctx.clear(this.glctx.COLOR_BUFFER_BIT|this.glctx.DEPTH_BUFFER_BIT);
+					var theLine = new Float32Array([-0.5,-0.5,0,0.5,0.5,0]);
+					var prog = this.manager.getProgram("square", 'square')
+					prog.setDrawMode(Palette.Program.LINES);
+					prog.draw(theLine, {}, {color: [Math.random(),Math.random(),Math.random(),1.0]});
 				case 999: // Print top of stack
-					if(debugMode) console.log(dataStore[sp - 1]);
+					//if(debugMode) console.log(dataStore[sp - 1]);
 					break;
 			}
 			lc++;
