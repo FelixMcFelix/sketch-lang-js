@@ -4,18 +4,8 @@
         {
             "type": 0,
             "name": "square",
-            "src": "#version 100\n attribute vec3 aVertexPos;\n uniform mat4 mvMatrix;\n uniform mat4 pvMatrix;\n void main(){gl_Position = pvMatrix * mvMatrix * vec4(aVertexPos, 1.0);}",
+            "src": "#version 100\n attribute vec3 aVertexPos;\n void main(){gl_Position = vec4(aVertexPos, 1.0);}",
             "attrs": [
-                [
-                    "pvMatrix",
-                    "mat4",
-                    null
-                ],
-                [
-                    "mvMatrix",
-                    "mat4",
-                    null
-                ],
 				[
 					"aVertexPos",
 					"vertexAttrib",

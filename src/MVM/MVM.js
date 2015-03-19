@@ -1,6 +1,6 @@
 // M Bytecode interperator
 
-var MVM = function() {
+var MVM = function(glctx, manager) {
 
 	/*	Op codes
 	*	
@@ -53,52 +53,8 @@ var MVM = function() {
 		LNDRAW: 21
 	};
 
-	var can = document.getElementById("mvm-can");
-	this.glctx = can.getContext("webgl");
-	this.manager = new Palette.Manager(this.glctx);
-
-	var shaderStore = '{'+
-    '"type": 2,' +
-    '"content": [' +
-        '{' +
-            '"type": 0,' +
-            '"name": "square",' +
-            '"src": "\u0023version 100\\n attribute vec3 aVertexPos;\\n uniform mat4 mvMatrix;\\n uniform mat4 pvMatrix;\\n void main(){gl_Position = pvMatrix * mvMatrix * vec4(aVertexPos, 1.0);}",' +
-            '"attrs": [' +
-				'[' +
-					'"aVertexPos",' +
-					'"vertexAttrib",' +
-					'"vertexBuffer"' +
-				'],' +
-				'[' +
-					'"vertexBuffer",' +
-					'"buffer",' +
-					'3' +
-				']' +
-            ']' +
-        '},' +
-        '{' +
-            '"type": 1,' +
-            '"name": "square",' +
-            '"src": "\u0023version 100\\n precision mediump float;\\n uniform vec4 color;\\n void main(){gl_FragColor = color;}",' +
-            '"attrs": [' +
-                '[' +
-                    '"color",' +
-                    '"vec4",' +
-                    '[' +
-                        '0,' +
-                        '1,' +
-                        '0,' +
-                        '1' +
-                    ']' +
-                ']' +
-            ']' +
-        '}' +
-    ']' +
-'}'
-
-	this.manager.addShader(shaderStore);
-	this.glctx.clearColor(0.0,0.0,0.0,1.0);
+	this.glctx = glctx;
+	this.manager = manager;
 
 	this.interpret = function(debugMode, codeStore) {
 
@@ -358,9 +314,11 @@ var MVM = function() {
 					dataStore[sp] = returnValue;
 					sp++;
 				case opCodes.LNDRAW:
+					this.glctx.clearColor(0.0,0.0,0.0,1.0);
 					this.glctx.clear(this.glctx.COLOR_BUFFER_BIT|this.glctx.DEPTH_BUFFER_BIT);
-					var theLine = new Float32Array([-0.5,-0.5,0,0.5,0.5,0]);
-					var prog = this.manager.getProgram("square", 'square')
+					var theLine = new Float32Array([-0.5,-0.5,0,
+													0.5,0.5,0]);
+					var prog = this.manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.LINES);
 					prog.draw(theLine, {}, {color: [Math.random(),Math.random(),Math.random(),1.0]});
 				case 999: // Print top of stack
