@@ -1,4 +1,5 @@
 //creating function 
+init(){
  	function givesOutput(int n, String s) -> String{
 		n++
 		s = "world"
@@ -7,6 +8,6 @@
         #function call 
 	String s = givesOutput(4,"hello");
 	print (s);
-
+}
 
 

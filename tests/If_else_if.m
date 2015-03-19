@@ -1,3 +1,4 @@
+init(){
 #if + else if statement
 
 	num n = 6;
@@ -7,4 +8,4 @@
 	else if(n ?= 6){
 		print(n);
 	}
-
+}

@@ -1,3 +1,4 @@
+init(){
 #if and else
 
 
@@ -9,3 +10,4 @@
 		print(n);
 	}
 
+}

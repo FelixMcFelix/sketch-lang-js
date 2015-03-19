@@ -1,4 +1,4 @@
-whileWithContinue(){
+init(){
 	num n = 0;
 	bool b = true;
 	while(b){

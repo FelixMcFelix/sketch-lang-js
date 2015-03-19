@@ -1,3 +1,4 @@
+draw(){
 Point pt1 = {1,1}
 Point pt2 = {5,2}
 	

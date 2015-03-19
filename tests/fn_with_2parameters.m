@@ -1,3 +1,4 @@
+init(){}
 //function declaration 
 function takesParams(int n, String s){
 		n++;
@@ -7,5 +8,5 @@ function takesParams(int n, String s){
 	}
 //function call      
 takesParams(4, "hello");
-
+}
 

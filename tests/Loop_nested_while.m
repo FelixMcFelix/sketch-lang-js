@@ -1,3 +1,4 @@
+init(){
 #nested while loop
 
 
@@ -14,4 +15,4 @@
 
 	print(n);
 	print(i);
-
+}
