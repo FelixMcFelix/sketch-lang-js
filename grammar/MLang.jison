@@ -137,8 +137,13 @@ out-decl
 
 in-decl 
   : type declarator ASSIGN exp semi
-   { $$ = { type: 'assign',
+   { $$ = { type: 'variable-decl-assign',
            arguments: [ $1,$2,$4]};}
+  | type declarator semi 
+     {$$ = {
+          type: 'variable-decl',
+          arguments: [$1,$2]};
+    }
 ;
 func_return  
   : RETURN_TYPE type
@@ -171,9 +176,9 @@ body
       { $$ = "";}
   | OPEN_BRACE statement_list CLOSE_BRACE
      {$$ = $2;}
-  | OPEN_BRACE in_decl_list CLOSE_BRACE
+  | OPEN_BRACE decl_list CLOSE_BRACE
        {$$ = $2;}
-  | OPEN_BRACE in_decl_list statement_list CLOSE_BRACE
+  | OPEN_BRACE decl_list statement_list CLOSE_BRACE
          {$$= [$2,$3];} 
 ;
 
@@ -183,6 +188,7 @@ statement
   | condition_statements
   | iteration_statements
   | jump_statements
+
 ;
 
 
@@ -243,10 +249,14 @@ jump_statements
   | RETURN  semi 
 ;
 
-in_decl_list
+decl_list
  :in-decl 
- | in_decl_list in-decl
+ | out-decl 
+ | decl_list in-decl
     {$$= [$1,$2];} 
+ | decl_list out-decl
+    {$$= [$1,$2];} 
+
 ;
 
 statement_list 
@@ -263,12 +273,6 @@ list
    | list COMMA prim_expr
      {$$= [$1,$2];} 
    | 
-;
-point_assign 
-  : prim_expr
-  | point_assign COMMA prim_expr
-     {$$= [$1,$2];} 
-   
 ;
   
 exp
