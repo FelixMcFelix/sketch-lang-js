@@ -14,6 +14,7 @@
 "clear"                                return 'CLEAR'; 
 "continue"                             return 'CONTINUE';
 "do"                                   return 'DO';
+
 "else"                                 return 'ELSE';
 "false"                                return 'FALSE';
 "float"                                return 'FLOAT';
@@ -109,11 +110,15 @@
 %%
 start 
  : program EOF
-    {return " blop";}
+    {
+           {typeof console !== 'undefined' ? console.log("%j",$1) : print($1);
+          return $1; }
+        }
 ; 
 program 
    : declarations 
    | program declarations 
+    {$$ = [$1,$2];}
 ; 
 
 declarations
@@ -125,35 +130,51 @@ declarations
 
 out-decl
   :FUNCTION declarator declaration_list func_return body 
+   {$$ = {type: "fucntion",
+          arguments: [$2,$3,$4,$5]};}
 
   ;
 
 in-decl 
   : type declarator ASSIGN exp semi
+   { $$ = { type: 'assign',
+           arguments: [ $1,$2,$4]};}
 ;
 func_return  
   : RETURN_TYPE type
+     {$$ = $2;}
   |
+    {$$ = "void";}
 ;
 
  declaration_list 
   : OPEN_PARENS CLOSE_PARENS
+      {$$ = "";} 
   | OPEN_PARENS param_list CLOSE_PARENS
+      {$$ = $2;}
   ;
 
 param_list
   : param 
-  | param_list COMMA param 
+      {$$ = $1;}
+  | param_list COMMA param
+       {$$= [$1,$3];} 
  ;
 
  param 
-   : type declarator 
+   : type declarator
+       {$$ = [$1, $2];} 
  ; 
 
 body
   : OPEN_BRACE CLOSE_BRACE
+      { $$ = "";}
   | OPEN_BRACE statement_list CLOSE_BRACE
-  | OPEN_BRACE in-decl statement_list CLOSE_BRACE
+     {$$ = $2;}
+  | OPEN_BRACE in_decl_list CLOSE_BRACE
+       {$$ = $2;}
+  | OPEN_BRACE in_decl_list statement_list CLOSE_BRACE
+         {$$= [$2,$3];} 
 ;
 
 statement
@@ -171,68 +192,326 @@ statement
 
 condition_statements  
   : IF OPEN_PARENS exp CLOSE_PARENS statement %prec IF_WITHOUT_ELSE
+       { $$ = { type: "if",
+                arguments : [$3,
+                             $5]
+               };
+       }
+
   | IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement 
+       {$$ = { type : "ifelse",
+               arguments : [ $3,
+                             $5,
+                             $6
+                           ]
+             };
+     }
 ;
 
 iteration_statements  
   : WHILE OPEN_PARENS exp CLOSE_PARENS statement
+       {$$ = {type : "while", 
+              arguments: [ $3,
+                           $4
+                         ]
+            }; 
+     }
+
   | DO statement WHILE OPEN_PARENS exp CLOSE_PARENS semi
+               {$$ = {type : "do_while", 
+              arguments: [ $2,
+                           $5
+                         ]
+            }; 
+     }
   | FOR OPEN_PARENS in-decl semi exp semi exp CLOSE_PARENS statement
+                     {$$ = {type : "while", 
+              arguments: [ $3,
+                           $5,
+                           $7,
+                           $9
+                         ]
+            }; 
+     }
 ;
 
 jump_statements 
   : CONTINUE semi
   | BREAK semi 
   | RETURN exp  semi 
+      { $$ = [$1, $2];}
   | RETURN  semi 
 ;
 
+in_decl_list
+ :in-decl 
+ | in_decl_list in-decl
+    {$$= [$1,$2];} 
+;
 
 statement_list 
   : statement
   | statement_list statement
+     {$$= [$1,$2];} 
+      
+
  
    
 ;
 list
    : prim_expr 
    | list COMMA prim_expr
+     {$$= [$1,$2];} 
    | 
 ;
 point_assign 
   : prim_expr
   | point_assign COMMA prim_expr
+     {$$= [$1,$2];} 
+   
 ;
   
 exp
-    :prim_expr       
-    | prim_expr PLUS exp     
-    | prim_expr MINUS exp  
-    | prim_expr ASTERIX  exp  
-    | prim_expr DIV exp         
-    | prim_expr MODULO exp            
-    | prim_expr OP_ADD_ASSIGNMENT exp                  
-    | prim_expr OP_SUB_ASSIGNMENT exp            
-    | prim_expr OP_MULT_ASSIGNMENT exp        
-    | prim_expr OP_DIV_ASSIGNMENT exp            
+    :prim_expr
+    | prim_expr PLUS exp 
+                {$$ = {
+                        type: 'addition',
+                        arguments: [ 
+                            $1,
+                            $3]
+                        }; 
+                }
+
+    | prim_expr MINUS exp
+                {$$ = { 
+                        type: 'minus',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr ASTERIX  exp
+                   {$$ = { 
+                        type: 'multiplication',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr DIV exp  
+                   {$$ = { 
+                        type: 'division',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr PERCENT exp 
+                   {$$ = { 
+                        type: 'modulo',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_ADD_ASSIGNMENT exp 
+                   {$$ = { 
+                        type: 'add_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_SUB_ASSIGNMENT exp 
+                   {$$ = { 
+                        type: 'sub_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_MULT_ASSIGNMENT exp
+                   {$$ = { 
+                        type: 'multi_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_DIV_ASSIGNMENT exp 
+                   {$$ = { 
+                        type: 'div_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
     | prim_expr OP_MOD_ASSIGNMENT exp 
-    | prim_expr OP_INC            
-    | prim_expr OP_DEC             
-    | prim_expr OP_AND exp          
-    | prim_expr OP_OR  exp       
-    | prim_expr CARET  exp           
-    | prim_expr AMP   exp            
-    | prim_expr BITWISE_OR exp             
-    | prim_expr OP_RIGHT_SHIFT exp              
-    | prim_expr OP_LEFT_SHIFT exp         
-    | prim_expr ZERO_FILL_RIGHT_SHIFT exp            
-    | prim_expr OP_EQ exp              
-    | prim_expr LT exp         
-    | prim_expr GT  exp           
-    | prim_expr OP_NE exp            
-    | prim_expr OP_LE exp           
-    | prim_expr OP_GE exp          
+                   {$$ = { 
+                        type: 'mod_assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_INC  
+                   {$$ = { 
+                        type: 'increments',
+                        arguments:[
+                            $1]
+                       };
+                }
+
+    | prim_expr OP_DEC  
+                   {$$ = { 
+                        type: 'decrement',
+                        arguments:[
+                            $1]
+                       };
+                }
+
+    | prim_expr OP_AND exp 
+                   {$$ = { 
+                        type: 'and',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_OR  exp 
+                   {$$ = { 
+                        type: 'or',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+    | prim_expr CARET  exp 
+                   {$$ = { 
+                        type: 'bit-XOR',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr AMP   exp 
+                   {$$ = { 
+                        type: 'bit-AND',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr BITWISE_OR exp 
+                   {$$ = { 
+                        type: 'bit-OR',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_RIGHT_SHIFT exp 
+                   {$$ = { 
+                        type: 'bit-right-shift',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_LEFT_SHIFT exp 
+                   {$$ = { 
+                        type: 'bit-left-shift',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+    | prim_expr ZERO_FILL_RIGHT_SHIFT exp 
+                   {$$ = { 
+                        type: 'zero-fill-right-shift',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+    | prim_expr OP_EQ exp 
+                  {$$ = { 
+                        type: 'equality',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr LT exp 
+                   {$$ = { 
+                        type: 'less-than',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr GT  exp
+                   {$$ = { 
+                        type: 'larger-than',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_NE exp
+                   {$$ = { 
+                        type: 'not-equal',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_LE exp
+                   {$$ = { 
+                        type: 'less-than-or-equal ',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+
+    | prim_expr OP_GE exp
+                   {$$ = { 
+                        type: 'greater-than-or-equal' ,
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+   
+     
     | prim_expr ASSIGN exp  
+               {$$ = { 
+                        type: 'assign',
+                        arguments:[
+                            $1, 
+                            $3]
+                       };
+                }
+      
 ;
 
 prim_expr
@@ -242,10 +521,18 @@ prim_expr
     | FALSE
     | STRINGT
     | NOT prim_expr
+           {$$ = [$1,$2];}
     | OPEN_PARENS exp CLOSE_PARENS
+             { $$ = $2;}
     |  IDENTIFIER OPEN_PARENS init_list CLOSE_PARENS semi
+         {$$ = [$1,$3];}
     | OPEN_BRACE init_list CLOSE_BRACE
-    | OPEN_PARENS init_list CLOSE_PARENS;
+         { $$ = $2;}
+    | OPEN_PARENS init_list CLOSE_PARENS
+         { $$ = $2;}
+;
+
+
 //not mandatory semicolon 
 semi
   : SEMICOLON
@@ -257,19 +544,21 @@ semi
 declaration 
   : init_list
   | declarator OPEN_PARENS init_list CLOSE_PARENS
+       {$$ = [$1,$3];}
   ;
 
  init_list 
    : prim_expr
    | init_list COMMA prim_expr
+          {$$ = [$1,$3];}
    |
 ;
 
 type
    :VOID 
    |STRING 
-   | INT
-   | FLOAT 
+   |INT
+   |FLOAT 
    |BOOL
    |POINT 
    |VECTOR_2
@@ -278,3 +567,5 @@ type
    |LINE
    |POLYGON
 ;
+
+
