@@ -29,6 +29,35 @@ The abstract goes here
 \chapter{Introduction}
 \label{intro}
 
+\subsection{Project Outline}
+
+For our project we chose to do project number 3924; design and implement your own programming language. This project involves designing a programming language, by creating a BNF, system diagram, and the syntax and semantics of the language, among others and then implementing it, using a parser, compiler, and abstract machine.
+
+\subsection{Motivation}
+
+Our Motivation behind the choosing of this particular project is that, especially in the past few years, computing has come to the forefront of teaching. Many parents now want their children to learn how to code to some degree., with computing science now being a much more prevalent subject in primary and secondary schools. Now in our third year of university, we have all taken part in a fair amount of coding, however, none of us have ever attempted to write our own language to code in. This project seemed challenging, but achievable, and very rewarding – not to mention interesting.
+
+\subsection{Aim}
+
+The aim for this project is to create a graphical programming language that is simple to use and read, and can be picked up by nearly any novice user, but is also powerful, and can be used to create drawings, or edit pictures. Our idea for a simple language came from Processing, a graphical language created by Casey Reas, and the basis for the language is going to be WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, for example using {} for functions and loops and keeping the familiar structure of the for and while loops, and making sure our language follows them, while finding what we believe to be confusing or annoying common features of programming languages, like the double equals for the comparison of two objects, and replace them with what we find suitable and more 
+
+\subsection{WebGL Background}
+
+Web Graphics Library (WebGL) is a JavaScript API, that makes use of the <canvas> element available in HTML to render interactive 2d/3d graphics. It is a branch of the Open Graphics Library Embedded Systems 2.0 (OpenGL ES 2.0), and is supported by most modern browsers, like Google Chrome and Mozilla Firefox, with no necessary plugin (as it makes use of <canvas>). A WebGL program consists of control code written in JavaScript, and function code (shader code) that is executed by a computers GPU. 
+
+\subsection{Outline of report}
+
+The remaining sections of this report will cover the following topics:
+\begin{itemize}
+\item Language Tutorial :- This will comprise of a brief introduction to our programming language, called \textbf{I CANT HANDLE THE STRESS OF NAMING IT}
+\item Language Reference Manual :- This will contain the grammar, and describe the language
+\item Project Plan :- This will cover a timeline and basic structure of our project, and what we aimed to acheive from it. \textbf{I think so anyway}
+\item Language Evolution :- This will describe the decisions we made for the language syntax and type \textbf{could do with a better word here}, and why we made them
+\item Compiler Architecture :- This section will cover the 5 different sections of the compiler (Lexer and Parser, Code Generator, Shader Manager, Abstract Machine, Module Facade)
+\item Development Environment:- The environment(s) that we used to help structure and create this programming language
+\item Test Plan and Test Suites :- An overview on how we tested the language, using what, and any bugs we discovered
+\item Conclusions :- This will cover what, as a team, we learned and discovered during this project, any problems we encountered, and anything we would try differently.
+\end{itemize}
 
 %==============================================================================
 \chapter{Language Tutorial}
@@ -39,26 +68,27 @@ This chapter comprises of a brief introduction of how to use our language.
 In every language, the first program to write is always 'hello world' - where you would print the words "hello world". However, as this language is mainly a graphical language, the equivalent would be 'hello square', and the aim is to draw a square. In MLang, the program required to draw a square is:\\
 \begin{lstlisting}
 #EXAMPLE 1.1
-Update(){
+draw(){
 	Polygon square = ({0,0} + {5,0}) * 4}
-	draw(square)}
+	#draw(square)}
 }
 \end{lstlisting}
 to run this program on machines running a UNIX operating system, you must create a file with the the suffix ".m"
-\textbf{Need compiling commands}
+
+To compile any Magic drawing language program, insert the code into the browser page for out project \textbf{need this yo} and click execute. The output from the program will be shown on the canvas.
 
 Any MLang program you write will have to consist of at least one function, and variables. These functions and variables can be named anything you like. You can call other functions to help carry out the task, only ones that you have written, as there are no libraries provided as such. 
 
 In Mlang, implicit semi-colons exist at the end of every line. This means that, you dont have to end each line wih a semi-colon, and whether you do or not will not have an effect on the compilation of the program. 
 
-The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the cnavas. This will be talked about in detail later.
+The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the cnavas. This will be talked about in detail later.\textbf{possibly a load a shite}
 
 One way in which you can pass data between functions is by including variables in the calling statement as arguments. However, you can only do this if the function that is being called is expecting the same number and type of variables. An example is:\\
 \begin{lstlisting}
 #EXAMPLE 1.2
-main(){
-	num n = 2;
-	takesParams(num n){
+init(){
+	int n = 2;
+	takesParams(int n){
 		print(n);
 	}
 	takesParams(n);
@@ -66,18 +96,16 @@ main(){
 \end{lstlisting}
 Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If there was another argument included, for example \textit{takesParams(n, 7)}, or the wrong types, then it would not compile. This will be talked about in more detail in 1.7. As you can see in example 1.1, the code inside of a function is enclosed by curly braces {   }. The statement draw takes in one argument - either a Line, Point or Polygon, and draws it to the canvas.
 
-\textbf{newlines?}
-
 \section{Variables and Arithmetic operators}
 \label{vars}
 This next section will use a more complicated program than before, introducing more features, such as comments, loops, and expand on previously touched on features, such as variables.
 \begin{lstlisting}
 #EXAMPLE 1.3
 #This Program will draw 3 different shapes - triangle, square and pentagon.
-main(){
-	num sides;
+draw(){
+	int sides;
 	sides = 5;
-	num counter = 3;
+	int counter = 3;
 	Point pt1 = {3,1}
 	pt2 = {1,3}
 	Line l1 = (pt1 + pt2);
@@ -85,7 +113,7 @@ main(){
 	while(counter <= sides){
 		clear;
 		Polygon shape =	11 * counter;
-		draw(shape);
+		#draw(shape);
 		counter++;
 	}
 }
@@ -111,9 +139,41 @@ for(num counter = 3; counter < 5; counter ++){
 \end{lstListing}
 The for loop statement has three parts. Firstly, the control variable is initialised (it also does not need to be declared beforehand), then the statement that will be checked after every execute of the body, and finally, the incrementation of the control variable. The general functionality is the same as the while loop
 
+\section{If statement and comparitive operators}
+\label{comp}
+This section will cover how to perform comparing statements in \textbf{mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm}. The following is an if statement which compares to check if a varaible is equal to something else:
+\begin{lstlisting}
+init(){
+	#example 1.4
+	int n = 5;
+	if(n ?= 5){
+		print(n);
+	}
+	else if(n ?> 5){
+		print("less than 5");
+	}
+	else if(n ?< 5){
+		print("greater than 5");
+	} 
+}
+\end{lstlisting}
 
+If statements are a way of executing a series of commands, but only if a particular statement returns true. To compare to elements, a comparitive operator is needed. In \textbf{im just calling it magic drawing language from now on}, there exists a series of six comparative operators:
+\begin{itemize}
+\item ?= - will return true if left hand side is equal to right hand side
+\item ?> - will return true if left hand side is greater than right hand side
+\item ?< - will return true if left hand side is less than right hand side
+\item != - will return true if left hand side does not equal right hand side
+\item !> - will return true if left hand side is not greater than right hand side (ie is less than or equal to)
+\item !< - will return true if left hand side is not less than right hand side (ie is greater than or equal to)
+\end{itemize}
+An exclamation mark can be inserted infront of the check statement in the if, to receive the inverse of what it returns.
 
+\section{Modifying operators}
 
+\section{Functions}
+
+\section{draw()}
 ++ and arithmetic operators
 
 

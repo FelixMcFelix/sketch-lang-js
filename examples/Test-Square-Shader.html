@@ -16,29 +16,35 @@
 			
 			execute = function(text){
 				var canvas = document.getElementById("testingcanvas");
-				var glctx = canvas.getContext("webgl");
+				var glctx = canvas.getContext("webgl", { preserveDrawingBuffer: true });
 
-				var pvMatrix = [];
-				var mvMatrix = [];
+				// var pvMatrix = [];
+				// var mvMatrix = [];
 
-				//mat4.perspective(pvMatrix, Math.PI/4, canvas.width/canvas.height, 0.1, 100);
-				mat4.identity(mvMatrix);
-                mat4.identity(pvMatrix);
+				// //mat4.perspective(pvMatrix, Math.PI/4, canvas.width/canvas.height, 0.1, 100);
+				// mat4.identity(mvMatrix);
+    //             mat4.identity(pvMatrix);
 
-				var squareVtx = new Float32Array([-0.5, -0.5, 0,
-                                                0.5, -0.5, 0,
-                                                -0.5, 0.5, 0,
-                                                0.5, 0.5, 0]);
+				// var squareVtx = new Float32Array([-0.5, -0.5, 0,
+    //                                             0.5, -0.5, 0,
+    //                                             -0.5, 0.5, 0,
+    //                                             0.5, 0.5, 0]);
+
+				var squareVtx = new Float32Array([Math.random()*2 -1, Math.random()*2 -1, 0,
+                                                Math.random()*2 -1, Math.random()*2 -1, 0]);
 
 				var manager = new Palette.Manager(glctx);
 				//manager.addShader("squareShaders.json");
                 manager.addShader(text);
-                manager.getProgram("square", "square").setDrawMode(Palette.Program.TRIANGLE_STRIP);
+                var prog = manager.getProgram("square", 'square');
+                prog.setDrawMode(Palette.Program.LINES);
                 glctx.clearColor(0.0,0.0,0.0,1.0);
-
+                glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
 				var raf = function(){
-                    glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
-					manager.draw("square", "square", squareVtx, {pvMatrix: pvMatrix, mvMatrix: mvMatrix}, {color: [Math.random(), Math.random(), Math.random(), 1.0]});
+                    
+                    squareVtx.set([Math.random()*2 -1, Math.random()*2 -1, 0,
+                                                Math.random()*2 -1, Math.random()*2 -1, 0]);
+					prog.draw(squareVtx, {}, {color: [Math.random(), Math.random(), Math.random(), 1.0]});
 					window.requestAnimationFrame(raf);
 				}
 

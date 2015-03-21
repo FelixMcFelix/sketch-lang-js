@@ -7,6 +7,8 @@
 
 \documentclass{l3proj}
 \usepackage{listings}
+\usepackage{hyperref}
+\setlength\parindent{24pt}
 \begin{document}
 \title{Design and implement your own programming language}
 \author{Kyle Simpson\\
@@ -27,12 +29,42 @@ The abstract goes here
 \chapter{Introduction}
 \label{intro}
 
+\subsection{Project Outline}
+
+For our project we chose to do project number 3924; design and implement your own programming language. This project involves designing a programming language, by creating a BNF, system diagram, and the syntax and semantics of the language, among others and then implementing it, using a parser, compiler, and abstract machine.
+
+\subsection{Motivation}
+
+Our Motivation behind the choosing of this particular project is that, especially in the past few years, computing has come to the forefront of teaching. Many parents now want their children to learn how to code to some degree., with computing science now being a much more prevalent subject in primary and secondary schools. Now in our third year of university, we have all taken part in a fair amount of coding, however, none of us have ever attempted to write our own language to code in. This project seemed challenging, but achievable, and very rewarding – not to mention interesting.
+
+\subsection{Aim}
+
+The aim for this project is to create a graphical programming language that is simple to use and read, and can be picked up by nearly any novice user, but is also powerful, and can be used to create drawings, or edit pictures. Our idea for a simple language came from Processing, a graphical language created by Casey Reas, and the basis for the language is going to be WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, for example using {} for functions and loops and keeping the familiar structure of the for and while loops, and making sure our language follows them, while finding what we believe to be confusing or annoying common features of programming languages, like the double equals for the comparison of two objects, and replace them with what we find suitable and more 
+
+\subsection{WebGL Background}
+
+Web Graphics Library (WebGL) is a JavaScript API, that makes use of the <canvas> element available in HTML to render interactive 2d/3d graphics. It is a branch of the Open Graphics Library Embedded Systems 2.0 (OpenGL ES 2.0), and is supported by most modern browsers, like Google Chrome and Mozilla Firefox, with no necessary plugin (as it makes use of <canvas>). A WebGL program consists of control code written in JavaScript, and function code (shader code) that is executed by a computers GPU. 
+
+\subsection{Outline of report}
+
+The remaining sections of this report will cover the following topics:
+\begin{itemize}
+\item Language Tutorial :- This will comprise of a brief introduction to our programming language, called \textbf{I CANT HANDLE THE STRESS OF NAMING IT}
+\item Language Reference Manual :- This will contain the grammar, and describe the language
+\item Project Plan :- This will cover a timeline and basic structure of our project, and what we aimed to acheive from it. \textbf{I think so anyway}
+\item Language Evolution :- This will describe the decisions we made for the language syntax and type \textbf{could do with a better word here}, and why we made them
+\item Compiler Architecture :- This section will cover the 5 different sections of the compiler (Lexer and Parser, Code Generator, Shader Manager, Abstract Machine, Module Facade)
+\item Development Environment:- The environment(s) that we used to help structure and create this programming language
+\item Test Plan and Test Suites :- An overview on how we tested the language, using what, and any bugs we discovered
+\item Conclusions :- This will cover what, as a team, we learned and discovered during this project, any problems we encountered, and anything we would try differently.
+
 
 %==============================================================================
 \chapter{Language Tutorial}
 \label{tut}
 This chapter comprises of a brief introduction of how to use our language.
-\section{1.1 Getting Started}
+\section{Getting Started}
+\label{start}
 In every language, the first program to write is always 'hello world' - where you would print the words "hello world". However, as this language is mainly a graphical language, the equivalent would be 'hello square', and the aim is to draw a square. In MLang, the program required to draw a square is:\\
 \begin{lstlisting}
 #EXAMPLE 1.1
@@ -65,28 +97,54 @@ Here, you see that the calling statement - \textit{takesParams(n);} - provides t
 
 \textbf{newlines?}
 
-\section{1.2 Variables and arithmetics operators}
-This next section will use a more complicated program than before, introducing more features, such as comments, loops, and exapnd on previously touched on features, such as variables.
+\section{Variables and Arithmetic operators}
+\label{vars}
+This next section will use a more complicated program than before, introducing more features, such as comments, loops, and expand on previously touched on features, such as variables.
 \begin{lstlisting}
 #EXAMPLE 1.3
 #This Program will draw 3 different shapes - triangle, square and pentagon.
 main(){
-	num sides = 5;
+	num sides;
+	sides = 5;
 	num counter = 3;
 	Point pt1 = {3,1}
 	pt2 = {1,3}
 	Line l1 = (pt1 + pt2);
+	#this will loop for the number of sides
 	while(counter <= sides){
-		Polygon shape =	1 * counter;
+		clear;
+		Polygon shape =	11 * counter;
 		draw(shape);
+		counter++;
 	}
 }
 \end{lstlisting}
 
-The initial lines indicate how to show comments in your code in MLang. Using a hashsign will be ignored by the compiler, and show that the current line is a comment. These can be used to explain how your programs works, and make it easier to read and understand, for you or other users.
+The initial lines indicate how to show comments in your code in MLang. Using a hashsign will be ignored by the compiler, and show that the current line is a comment. These can be used to explain how your programs works, and make it easier to read and understand, for you or other users. The 'clear' function in this example is a reserved keyword, and is used to clear the canvas. A reserved keyword is a word that cannot be used otherwise, for variable names, of function calls.
 
-implicit/explicit types
-while loop
+As you can see in example 1.3, there are two ways of declaring variables, explicitly and implicitly. Each variable declaration must include the variable name, which is an alphanumeric string that always begins with a letter. To explicitly define your variable, each variable name must be preceeded by the intended type. For example, the variables 'sides' and 'counter' in example 1.3 are declared explicitly. Explicit declaration allows for the ability to not initialise the variable immediately. Implicit declaration is when the type is not defined by the user, but instead taken from the context. The type is inferred from the initialization of the variable afterwards. For example, 'pt2' in example 1.3 is implicitly defined, and from the context, the compiler will recognise that it is of type Point. However, with implicit types, you must immediately initialise the variable so its type can be inferred.
+
+The while loop in MLang is of standard format and standard functionality. This means that the condition contained in the parentheses is tested, and if it returns true, then the body of the loop, and whatever statement(s) it may contain, is executed. Then the original condition is retested. if true, it again executes the body. This continues until the condition is false, at which point, the body of the loop is not executed, and the next command outside the loop is executed and the program continues. A while loop has the format: \begin{lstlisting}
+				while(condition){#insert body here} 
+		\end{lstlisting}
+
+MLang has three main types for drawing shapes lines and so forth. These are Point, Line and Polygon. Lets start with Point; Point is the basis of all possible shapes. Points make the vertices on which the shapes will be drawn about. A point is defined in the following format {xCo-ordinate, yCo-ordinate}. An example of both implicit and explicit declaration is shown in example 1.3 with 'pt1' and 'pt2'. These points can be added together to create a Line. Lines are a collection of two points joined together. The format for defining a line, shown by 'l1' in example 1.3, is Line = (Point1 + Point2). Lines can be extended from the centre point by multiplying it. For example, multiplying a line by 4 will make it 4 times the size. Finally, variables of type Polygon are a collection of lines, displayed as a closed circuit. Polygons can be defined by either adding multiple lines together, but the must all join, or by defining one line, and multiplying it by the number of sides you would like. This would create a shape of the stated number of lines, closed off, with the origin being the first co-ordinate of the line. The format of this would be either Polygon = (Line2 + Line2 ... + LineN) or Polygon = Line * N. In these examples, N is the number of sides desired.
+
+The line 'counter++' increments the counter, using the modifying operator '++'. We will explain modifying operators later in this tutorial.
+
+MLang also has one more type of loop - a for loop. The for loop has a completely different structure to the while loop, but has, more or less, the same functionality. The choice between these two types is based on the context, which one would make more sense, for example, incrementations should be used in for loops, while boolean variables should be the control in while loops. The following is the while loop from example 1.3 but as a for loop:
+\begin{lstListing}
+for(num counter = 3; counter < 5; counter ++){
+...
+}
+\end{lstListing}
+The for loop statement has three parts. Firstly, the control variable is initialised (it also does not need to be declared beforehand), then the statement that will be checked after every execute of the body, and finally, the incrementation of the control variable. The general functionality is the same as the while loop
+
+
+
+
+++ and arithmetic operators
+
 
 
 %==============================================================================
@@ -105,6 +163,54 @@ while loop
 \chapter{Compiler Architecture}
 \label{arch}
 
+%------------------------------------------------------------------------------
+\section{Overview}
+\label{arch-over}
+
+Our program module, as part of the role it plays, contains a combination of a compiler, bytecode executor and WebGL interface - written in JavaScript as required by the platform. This section aims to provide a view of the overall architecture and connection between these components, as well a brief explanation of each component's function and design considerations.
+
+The core language module can be divided into 5 main parts:
+\begin{enumerate}
+\item \textbf{Lexer and Parser} --- The program component charged with tokenising and interpreting MLang programs, generating an abstract syntax tree for use in code generation.
+\item \textbf{Code Generator} --- The program component responsible for conversion of abstract syntax trees into bytecode sequences, for execution by the abstract machine.
+\item \textbf{Shader Manager} --- An active subsystem of the module responsible for management, selection and execution of shader programs for drawing at runtime.
+\item \textbf{Abstract Machine} --- The main active subsystem present in the module, responsible for all runtime code execution. The abstract machine relies on the shader manager to make draw calls, but handles direct WebGL manipulation for certain key functions separately.
+\item \textbf{Module Facade} --- The active component responsible for managing the interconnections and operation of the above components, as well as exposing the module interface to programmers and for use with.
+\end{enumerate}
+Individual and detailed discussion of each system is provided below. The module's subsystems are then connected as shown in Figure (number).
+
+%------------------------------------------------------------------------------
+\section{Lexer and Parser}
+\label{arch-lex}
+
+%------------------------------------------------------------------------------
+\section{Code Generator}
+\label{arch-gen}
+
+%------------------------------------------------------------------------------
+\section{Shader Manager}
+\label{arch-shad}
+
+In designing our system, it was established that regardless of the chosen compilation and execution pathway all of our library's \textit{shaders} would have to be intelligently managed; both during runtime and for storage purposes inside the module itself.
+
+Shaders are the graphics card level program units used in the conversion from vertex arrays into two-dimensional projections in the screen space, and in the selection of pixel colours to populate the screen space from that projection. In WebGL, in older versions of OpenGL and in its subsets such as GLES, shaders must always come in pairs: a \textit{vertex shader} and \textit{fragment shader} comprise each \textit{shader program}. This may then be accessed, modified and called through the WebGL API.
+
+The unique needs of our module created an interesting set of design requirements for the subsystem - mandating a somewhat in-depth understanding of the WebGL API to manipulate the canvas as required. Upon examination, the shader manager's requirements were found to be:
+\begin{itemize}
+\item \textbf{Extensibility} --- The language would need to support future extension with various shapes, shaders and other such additions beyond its standard library - most shader programs require writing tailored code in, say, an object's .draw() method.
+\item \textbf{Ease of Use} --- Definition of new shader files should be intuitive and an easy process, provided the user has valid shader code. The linking and compilation of shaders and shader programs must be handled internally, and completely sequestered from external control to centralise most of the API manipulation.
+\item \textbf{Configurable} --- Shader programs should have variable control methods exposed as an external interface, to provide a simple means of control over the intricacies of the WebGL API.
+\item \textbf{Simplicity} --- Interactions with the module should be designed with brevity in mind - being able to execute variable update and draw functions as a single method call makes WebGL usage simpler in the other subsystem implementations.
+\end{itemize}
+
+%------------------------------------------------------------------------------
+\section{Abstract Machine}
+\label{arch-abs}
+
+%------------------------------------------------------------------------------
+\section{Module Facade}
+\label{arch-module}
+
 %==============================================================================
 \chapter{Development Environment}
 \label{dev}
@@ -120,12 +226,20 @@ while loop
 %------------------------------------------------------------------------------
 \section{Contributions}
 \label{cont}
-Here we explain that Lewis Carroll wrote chapter  John Wayne
-was out riding his horse every day and didn't do anything. Marilyn Monroe
-was great at getting the requirements specification and coordinating the
-writing of the report. Betty Davis did the coding of the kernel of the
-project, described in Chapter \ref{impl}.  James Dean handled the
-multimedia content of the project.
+
+%------------------------------------------------------------------------------
+\subsection{Report}
+\label{cont-report}
+
+\textit{\textbf{Writing:}}
+\begin{itemize}
+\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}
+\end{itemize}
+\textit{\textbf{Editing:}}
+%------------------------------------------------------------------------------
+\subsection{Program}
+\label{cont-prog}
+
 %==============================================================================
 \chapter{Appendix A}
 \label{appa}
