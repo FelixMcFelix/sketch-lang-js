@@ -268,13 +268,6 @@ statement_list
  
    
 ;
-list
-   : prim_expr 
-   | list COMMA prim_expr
-     {$$= [$1,$2];} 
-   | 
-;
-  
 exp
     :prim_expr
     | prim_expr PLUS exp 
