@@ -1,6 +1,6 @@
 // M Bytecode interperator
 
-var MVM = function(glctx, manager) {
+var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 	/*	Op codes
 	*	
@@ -28,7 +28,7 @@ var MVM = function(glctx, manager) {
 	*	RETURN		20		1			Takes the number of values to return
 	*/
 
-	this.opCodes = {
+	var opCodes = {
 		STOREG: 0,
 		LOADG: 	1,
 		STOREL: 2,
@@ -50,48 +50,62 @@ var MVM = function(glctx, manager) {
 		JUMPF: 	18,
 		CALL: 	19, 
 		RETURN: 20,
-		LNDRAW: 21
+		LNDRAW: 21,
+		REQAN: 	22,
+		RENDER: 100,
+		CLEAR: 	101,
+		PRINTST:102,
+		PRINTS: 103,
+		EXIT: 	999,
 	};
 
-	this.glctx = glctx;
-	this.manager = manager;
+	var glctx = glctx;
+	var manager = manager;
 
-	this.interpret = function(debugMode, codeStore) {
+	var lastRender;
 
-		// Loop Counter - For debugging
-		var lc = 0;
+	// Loop Counter - For debugging
+	var lc = 0;
 
-		// Points to the next instruction in the code store to execute
-		var cp = 0;
+	// Points to the next instruction in the code store to execute
+	var cp = 0;
 
-		// Points to the first free location after the program
-		var cl = codeStore.length;
+	// Points to the first free location after the program
+	var cl;
 
-		// Data store (Stack)
-		var dataStore = [];
+	// Data store (Stack)
+	this.dataStore = [];
 
-		// Points to the first free space at the top of the data store
-		var sp = 0;
+	// Points to the first free space at the top of the data store
+	var sp = 0;
 
-		// Points to the first location of the top most frame
-		var fp = 0;
+	// Points to the first location of the top most frame
+	var fp = 0;
 
-		// Local Offset. The off set of the first local address from the frame pointer
-		var LO = 2;
+	// Local Offset. The off set of the first local address from the frame pointer
+	var LO = 2;
 
-		// Address of the dynamic link in a frame
-		var DLA = 0;
+	// Address of the dynamic link in a frame
+	var DLA = 0;
 
-		// Address of the retrun address of a frame
-		var RA = 1;
+	// Address of the retrun address of a frame
+	var RA = 1;
 
-		// Global data store
-		var globalStore = [];
+	// Global data store
+	var globalStore = [];
 
-									//	37
+	var needsUpdate = 0;
 
-		var opCodes = this.opCodes;
-		while (cp < cl) {
+	var needsClear = 0;
+
+	this.interpret = function() {
+
+		var dataStore = this.dataStore;
+
+		cl = codeStore.length;
+
+		//var opCodes = this.opCodes;
+		while (cp < cl && needsUpdate == 0) {
 			lc++
 			var opCode = codeStore[cp];
 			cp++;
@@ -115,14 +129,14 @@ var MVM = function(glctx, manager) {
 					var localAddress = codeStore[cp];
 					cp++;
 					sp--;
-					dataStore[fp + localAddress] = dataStore[sp];
+					dataStore[fp + localAddress + 2] = dataStore[sp];
 					sp++;
 					if(debugMode) console.log("STOREL: " + dataStore[sp - 1] + " " + localAddress);
 					break;
 				case opCodes.LOADL:
 					var localAddress = codeStore[cp];
 					cp++;
-					dataStore[sp] = dataStore[fp + localAddress];
+					dataStore[sp] = dataStore[fp + localAddress + 2];
 					sp++;
 					if(debugMode) console.log("LOADL: " + dataStore[sp - 1] + " " + localAddress);
 					break;
@@ -141,6 +155,7 @@ var MVM = function(glctx, manager) {
 					var result = j + i
 					dataStore[sp] = result;
 					sp++
+					dataStore.splice(sp, 1);
 					if(debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.ISUB:
@@ -295,11 +310,14 @@ var MVM = function(glctx, manager) {
 					dataStore[sp] = returnAddress;
 					sp++;
 					// Add args as locals
-					while(i >= 0) {
+					while(i > 0) {
 						i--;
-						dataStore[sp] = arg[i];
+						dataStore[sp] = args[i];
 						sp++;
 					}
+					// jump to address
+					cp = address;
+					if(debugMode) console.log("CALL: " + address + " " + numArgs);
 					break;
 				case opCodes.RETURN:
 					var shouldReturnValue = codeStore[cp];
@@ -308,25 +326,80 @@ var MVM = function(glctx, manager) {
 						returnValue = dataStore[sp - 1]
 					}
 					var returnAddress = dataStore[fp + RA];
+					var firstElement = fp;
+					if (shouldReturnValue) {firstElement++;}
+					var elementsInFrame = sp - fp;
 					cp = returnAddress;
 					sp = fp;
 					fp = dataStore[fp + DLA];
 					dataStore[sp] = returnValue;
 					sp++;
+					dataStore.splice(firstElement,elementsInFrame);
+					if(debugMode) console.log("RETURN: " + numArgs + " returnValue: " + returnValue);
+					break;
 				case opCodes.LNDRAW:
-					this.glctx.clearColor(0.0,0.0,0.0,1.0);
-					this.glctx.clear(this.glctx.COLOR_BUFFER_BIT|this.glctx.DEPTH_BUFFER_BIT);
-					var theLine = new Float32Array([-0.5,-0.5,0,
-													0.5,0.5,0]);
-					var prog = this.manager.getProgram("square", "square");
+					// Get line
+					sp--;
+					var lineAddress = dataStore[sp];
+					var line = constantPool[lineAddress];
+					var pt1 = line[0];
+					var pt2 = line[1];
+					var pt1x = pt1[0];
+					var pt1y = pt1[1];
+					var pt2x = pt2[0];
+					var pt2y = pt2[1];
+					var color = line[2];
+					var r = color[0];
+					var g = color[1];
+					var b = color[2];
+					var a = color[3];
+					var theLine = new Float32Array([pt1x,pt1y,0,
+													pt2x,pt2y,0]);
+					var theColor = new Float32Array([r,g,b,a]);
+					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.LINES);
-					prog.draw(theLine, {}, {color: [Math.random(),Math.random(),Math.random(),1.0]});
-				case 999: // Print top of stack
-					//if(debugMode) console.log(dataStore[sp - 1]);
+					prog.draw(theLine, {}, {color: theColor});
+					if(debugMode) console.log("LNDRAW: " + line);
+					break;
+				case opCodes.RENDER:
+					needsUpdate = 1;
+					break;
+				case opCodes.CLEAR:
+					needsClear = 1;
+					glctx.clearColor(0.0,0.0,0.0,1.0);
+					glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
+					break;
+				case opCodes.REQAN:
+					needsUpdate = 1;
+					break;
+				case opCodes.EXIT:
+					cp = cl;
+					console.log("EXIT");
+					break;
+				case opCodes.PRINTST: // Print top of stack
+					if(debugMode) console.log(dataStore[sp - 1]);
+					break;
+				case opCodes.PRINTS: // Print top of stack
+					if(debugMode) console.log(dataStore);
 					break;
 			}
+			//console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
+			//console.log(codeStore);
+			if(debugMode) console.log(JSON.stringify(dataStore));
 			lc++;
-			if (lc > 100000) {console.log("INF LOOP");break};
+			if (/*lc > 50*/0) {console.log("INF LOOP");break};
 		}
+		if (needsUpdate) {render();}
+	}
+
+	render = function() {
+		if (needsClear) {
+			needsClear = 0
+			//glctx.clearColor(0.0,0.0,0.0,1.0);
+			//glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
+		}
+		needsUpdate = 0;
+		//setTimeout(window.mvm.interpret,1);
+		window.requestAnimationFrame(window.mvm.interpret);
 	}
 }
