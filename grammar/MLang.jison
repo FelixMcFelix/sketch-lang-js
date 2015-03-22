@@ -130,19 +130,19 @@ declarations
 
 out-decl
   :FUNCTION declarator declaration_list func_return body 
-   {$$ = {type: "fucntion",
+   {$$ = {type: "function",
           arguments: [$2,$3,$4,$5]};}
 
   ;
 
 in-decl 
-  : type declarator ASSIGN exp semi
+  : param ASSIGN exp semi
    { $$ = { type: 'variable-decl-assign',
-           arguments: [ $1,$2,$4]};}
-  | type declarator semi 
+           arguments: [ $1,$3]};}
+  | param semi 
      {$$ = {
           type: 'variable-decl',
-          arguments: [$1,$2]};
+          arguments: $1};
     }
 ;
 func_return  
@@ -231,7 +231,7 @@ iteration_statements
             }; 
      }
   | FOR OPEN_PARENS in-decl semi exp semi exp CLOSE_PARENS statement
-                     {$$ = {type : "while", 
+                     {$$ = {type : "for", 
               arguments: [ $3,
                            $5,
                            $7,
