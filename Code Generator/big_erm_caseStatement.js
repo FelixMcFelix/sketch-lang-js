@@ -210,31 +210,4 @@ function walkModAssign(a){
 function walkIncrements(a){
 	var varToDect = a[0];
 }
-			break;
-		case "decrement":
-			walkDecrement(obj.arguments);
-			break;
-		case "and":
-			walkAnd(obj.arguments);
-			break;
-		case "or":
-			walkOr(obj.arguments);
-			break;
-		case "bit-XOR":
-			walkBitXOR(obj.arguments);
-			break;
-		case "bit-AND":
-			walkBitAND(obj.arguments);
-			break;
-		case "bit-OR":
-			walkBitOR(obj.arguments);
-			break;
-		case "bit-right-shift":
-			walkBitRightShift(obj.arguments);
-			break;
-		case "bit-left-shift":
-			walkBitLeftShift(obj.arguments);
-			break;
-		case "zero-fill-right-shift":
-			walkZeroFillRightShift(obj.arguments);
-			break;
+	
