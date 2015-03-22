@@ -29,7 +29,7 @@ gulp.task("build",["build:Palette", "build:parser", "build:MVM","build:generator
 });
 
 gulp.task("build:parser", function(){
-	return gulp.src([configs.srcDir+"grammar.jison"])
+	return gulp.src([configs.srcDir+"grammar/MLang.jison"])
 			.pipe(jison({}))
 			.pipe(gulp.dest(configs.interDir));
 });

@@ -397,7 +397,7 @@ function walkIncrement(arguments){
  * for example in x--
  * name = x
  */
-var walkDecrement = function(obj arguments){
+var walkDecrement = function(arguments){
 	var name = arguments[0];
 	
 	// x-- expands to x = x - 1
@@ -410,7 +410,7 @@ var walkDecrement = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkAnd = function(obj arguments){
+var walkAnd = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 	
@@ -425,7 +425,7 @@ var walkAnd = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkOr = function(obj arguments){
+var walkOr = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 	
@@ -455,7 +455,7 @@ var walkAssign = function(arguments){
  * left = x
  * right = 2
  */
-var walkBitAND = function(obj arguments){
+var walkBitAND = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -465,7 +465,7 @@ var walkBitAND = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkZeroFillRightShift = function(obj arguments){
+var walkZeroFillRightShift = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -475,7 +475,7 @@ var walkZeroFillRightShift = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkBitOR = function(obj arguments){
+var walkBitOR = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -485,7 +485,7 @@ var walkBitOR = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkBitRightShift = function(obj arguments){
+var walkBitRightShift = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -495,7 +495,7 @@ var walkBitRightShift = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkBitLeftShift = function(obj arguments){
+var walkBitLeftShift = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -505,7 +505,7 @@ var walkBitLeftShift = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkbitXOR = function(obj arguments){
+var walkbitXOR = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -517,7 +517,7 @@ var walkbitXOR = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkNotEqual = function(obj arguments){
+var walkNotEqual = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -527,7 +527,7 @@ var walkNotEqual = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkLessThanOrEqual = function(obj arguments){
+var walkLessThanOrEqual = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -537,7 +537,7 @@ var walkLessThanOrEqual = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkLessThan = function(obj arguments){
+var walkLessThan = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -547,7 +547,7 @@ var walkLessThan = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkLargerThan = function(obj arguments){
+var walkLargerThan = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -557,7 +557,7 @@ var walkLargerThan = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkGreaterThanOrEqual = function(obj arguments){
+var walkGreaterThanOrEqual = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
@@ -567,7 +567,7 @@ var walkGreaterThanOrEqual = function(obj arguments){
  * left = x
  * right = 2
  */
-var walkEquality = function(obj arguments){
+var walkEquality = function(arguments){
 	var left = arguments[0];
 	var right = arguments[1];
 }
