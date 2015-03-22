@@ -1,3 +1,811 @@
+//big fuck off case statement
+var walk = function (obj) {
+
+	switch(obj.type){
+		case "function":
+			walkFunction(obj.arguments);
+			break;
+		case "variable-decl-assign":
+			walkVaraibleDeclAssign(obj.arguments);
+			break;
+		case "variable-decl":
+			walkVariableDecl(obj.arguments);
+			break;
+		case "addition":
+			walkIf(obj.arguments);
+			break;
+		case "ifelse":
+		      walkIfElse(obj.arguments);
+		      break;
+		case "while":
+		       walkWhile(obj.arguments);  
+		       break;
+		case "do_while":
+		       walkDoWhile(obj.arguments);
+		       break;
+		case  "for":
+		        walkFor(obj.arguments);
+		        break; 
+		case "addition":
+		       walkAddition(obj.arguments);
+		       break;                  
+		case "minus":
+			walkMinus(obj.arguments);
+			break;
+		case "multiplication":
+			walkMultiplication(obj.arguments);
+			break;
+		case "division":
+			walkDivision(obj.arguments);
+			break
+		case "modulo":
+			walkModulo(obj.arguments);
+			break;
+		case "add_assign":
+			walkAddAssign(obj.arguments);
+			break;
+		case "sub_assign":
+			walkSubAssign(obj.arguments);
+			break;
+		case "multi_assign":
+			walkMultiAssign(obj.arguments);
+			break;
+		case "div_assign":
+			walkDivAssign(obj.arguments);
+			break;
+		case "mod_assign":
+			walkModAssign(obj.arguments);
+			break;
+		case "increments":
+			walkIncrements(obj.arguments);
+			break;
+		case "decrement":
+			walkDecrement(obj.arguments);
+			break;
+		case "and":
+			walkAnd(obj.arguments);
+			break;
+		case "or":
+			walkOr(obj.arguments);
+			break;
+		case "bit-XOR":
+			walkBitXOR(obj.arguments);
+			break;
+		case "bit-AND":
+			walkBitAND(obj.arguments);
+			break;
+		case "bit-OR":
+			walkBitOR(obj.arguments);
+			break;
+		case "bit-right-shift":
+			walkBitRightShift(obj.arguments);
+			break;
+		case "bit-left-shift":
+			walkBitLeftShift(obj.arguments);
+			break;
+		case "zero-fill-right-shift":
+			walkZeroFillRightShift(obj.arguments);
+			break;
+		case "equality":
+			walkEquality(obj.arguments);
+			break
+		case "less-than":
+			walkLessThan(obj.arguments);
+			break;
+		case "larger-than":
+			walkLargerThan(obj.arguments);
+			break;
+		case "not-equal":
+			walkNotEqual(obj.arguments);
+			break;
+		case "less-than-or-equal":
+			walkLessThanOrEqual(obj.arguments);
+			break;
+		case "greater-than-or-equal":
+			walkGreaterThanOrEqual(obj.arguments);
+			break;
+		case "assign":
+			walkAssign(obj.arguments);
+			break;
+
+
+		}
+}
+
+//Walkers for all different types of node
+
+//for example in 
+//Function Foo(int x) -> int{
+//	int y = x + 1;
+//	return y;
+//	}
+//declarator = "Foo"
+//declarationList = ["int", "x"]
+//returnType = "int"
+//functionBody would consist of a decl list and a statement list for what is contained in the body
+	
+function walkFunction(a){
+	var declarator  =a[0];
+	var declarationList = a[1];
+	var returnType = a[2];
+	var functionBody = a[3];
+}
+
+//for example in int x = 1
+//type = int
+//declarator = x
+//exp = 1
+	
+function walkVaraibleDeclAssign(a){
+	var type = a[0];
+	var declarator = a[1];
+	var exp = a[2];
+}
+
+//for example in int x;
+//type = int
+//declarator = x
+	
+function walkVariableDecl(a){
+	var type = a[0];
+	var declarator = a[1];
+}
+
+//for example in if(x ?= 1){*do some code"}
+//expression would be a equality check node for x and 1
+//statements would be a statement list with some code
+	
+function walkIf(a){
+	var expression = a[0];
+	var statements = a[1];
+}
+
+//for example in if(x ?= 1){...} else{...}
+//exp would be a equality check node for x and 1
+//statementswould be a statement list with the code from the if statement body
+//elseStatements would a statement list with the code from the else body 
+	
+function  walkIfElse(a){
+	var exp = a[0];
+	var statements = a[1];
+	var elseStatements= a[2];
+}
+
+//for example in while(b ?= true){...}
+//exp would be an equality check node for b and true
+//body would be a statement list with the code from the while loop body
+	
+function  walkWhile(a){
+	var exp = a[0];
+	var body = a[1];
+}
+
+//for example Do{...}while(b = true)
+//exp would be an equality check node for b and true
+//body would be a statement list with the code from the do while loop body
+	
+function  walkDoWhile(a){
+	var exp = a[0];
+	var body = a[1];
+}
+
+//for example in For(int i = 0; i ?< 5; i++){...}
+//decl would be a VaraibleDeclAssign node for int i = 0
+//condition would be a equality check node between variable i and 5
+//update would be an increments node for i
+//body would be a statement list with the code from the for loop body
+
+function walkFor(a){
+	var decl = a[0];
+	var condition = a[1];
+	var update = a[2];
+	var body = a[3];
+}
+
+//assigns variables to both sides of statement
+//for example in x + y
+//left = x
+//right = y
+	
+function walkAddition(a){
+	var left = a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x - y
+//left = x
+//right = y
+	
+function walkMinus(a){
+	var left = a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x * y
+//left = x
+//right = y
+	
+function walkMultiplication(a){
+	var left = a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x / y
+//left = x
+//right = y
+			
+function walkDivision(a){
+	var left = a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x % y
+//left = x
+//right = y
+
+function walkModulo(a){
+	var left = a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x += y
+//left = x
+//right = y
+	
+function walkAddAssign(a){
+    var left = a[0];
+    var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x -= y
+//left = x
+//right = y
+	
+function walkSubAssign(a){
+	var left = a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x *= y
+//left = x
+//right = y
+				
+function walkMultiAssign(a){
+	var left =a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x /= y
+//left = x
+//right = y
+	
+function walkDivAssign(a){
+	var left = a[0];
+	var rigth = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x %= y
+//left = x
+//right = y
+			
+function walkModAssign(a){
+	var left = a[0];
+	var right = a[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x++
+//name = x
+		
+function walkIncrements(a){
+	var varToDect = a[0];
+}
+
+//assigns variables to both sides of statement
+//for example in x--
+//name = x
+
+var walkDecrement = function(obj arguments){
+	var name = arguments[0];
+}
+
+//assigns variables to both sides of statement
+//for example in x && 2
+//left = x
+//right = 2
+
+var walkAnd = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x || 2
+//left = x
+//right = 2
+
+var walkOr = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x = 2
+//left = x
+//right = 2
+
+var walkAssign = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x & 2
+//left = x
+//right = 2
+
+var walkBitAND = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x >>> 2
+//left = x
+//right = 2
+
+var walkZeroFillRightShift = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x | 2
+//left = x
+//right = 2
+
+var walkBitOR = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x >> 2
+//left = x
+//right = 2
+
+var walkBitRightShift = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x << 2
+//left = x
+//right = 2
+
+var walkBitLeftShift = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x ^ 2
+//left = x
+//right = 2
+
+var walkbitXOR = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in != 2
+//left = x
+//right = 2
+
+var walkNotEqual = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x <= 2
+//left = x
+//right = 2
+
+var walkLessThanOrEqual = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x < 2
+//left = x
+//right = 2
+
+var walkLessThan = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x > 2
+//left = x
+//right = 2
+
+var walkLargerThan = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x >= 2
+//left = x
+//right = 2
+
+var walkGreaterThanOrEqual = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+//assigns variables to both sides of statement
+//for example in x ?= 2
+//left = x
+//right = 2
+
+var walkEquality = function(obj arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+	
+
+// M Bytecode interperator
+
+var MVM = function(glctx, manager) {
+
+	/*	Op codes
+	*	
+	*	MNEMONIC	OPCODE	OPERANDS	DESCRIPTION
+	*	STOREG		0		2			store global at address
+	*	LOADG		1		1			push global at address
+	*	STOREL		2		1			store local at address
+	*	LOADL		3		1			push local at local address
+	*	LOADC		4		1			push constant
+	*	IADD		5		0			i = pop off stack. j = pop off stack. push j + i
+	*	ISUB		6		0			i = pop off stack. j = pop off stack. push j - i
+	*	IMUL		7		0			i = pop off stack. j = pop off stack. push j * i
+	*	IDIV		8		0			i = pop off stack. j = pop off stack. push j / i
+	*	FADD		9		0			i = pop off stack. j = pop off stack. push j + i
+	*	FSUB		10		0			i = pop off stack. j = pop off stack. push j - i
+	*	FMUL		11		0			i = pop off stack. j = pop off stack. push j * i
+	*	FDIV		12		0			i = pop off stack. j = pop off stack. push j / i
+	*	NCMPEQ		13		0			i = pop off stack. j = pop off stack. push result of j == i
+	*	NCMPLT		14		0			i = pop off stack. j = pop off stack. push result of j < i
+	*	NCMPGT		15		0			i = pop off stack. j = pop off stack. push result of j > i
+	*	JUMP		16		1			jump to address
+	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
+	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
+	*	CALL		19		2			arg 1 = address of function. arg2 = number of params
+	*	RETURN		20		1			Takes the number of values to return
+	*/
+
+	this.opCodes = {
+		STOREG: 0,
+		LOADG: 	1,
+		STOREL: 2,
+		LOADL: 	3,
+		LOADC: 	4,
+		IADD: 	5,
+		ISUB: 	6,
+		IMUL: 	7,
+		IDIV: 	8,
+		FADD: 	9,		//	Floating point arithmatic ops take
+		FSUB: 	10,		//	address into the constant pool.
+		FMUL: 	11,
+		FDIV: 	12,
+		NCMPEQ: 13,
+		NCMPLT: 14,
+		NCMPGT: 15,
+		JUMP: 	16,
+		JUMPT: 	17, 
+		JUMPF: 	18,
+		CALL: 	19, 
+		RETURN: 20,
+		LNDRAW: 21
+	};
+
+	this.glctx = glctx;
+	this.manager = manager;
+
+	this.interpret = function(debugMode, codeStore) {
+
+		// Loop Counter - For debugging
+		var lc = 0;
+
+		// Points to the next instruction in the code store to execute
+		var cp = 0;
+
+		// Points to the first free location after the program
+		var cl = codeStore.length;
+
+		// Data store (Stack)
+		var dataStore = [];
+
+		// Points to the first free space at the top of the data store
+		var sp = 0;
+
+		// Points to the first location of the top most frame
+		var fp = 0;
+
+		// Local Offset. The off set of the first local address from the frame pointer
+		var LO = 2;
+
+		// Address of the dynamic link in a frame
+		var DLA = 0;
+
+		// Address of the retrun address of a frame
+		var RA = 1;
+
+		// Global data store
+		var globalStore = [];
+
+									//	37
+
+		var opCodes = this.opCodes;
+		while (cp < cl) {
+			lc++
+			var opCode = codeStore[cp];
+			cp++;
+			switch (opCode) {
+				case opCodes.STOREG:
+					var address = codeStore[cp]
+					cp++;
+					sp--;
+					var i = dataStore[sp];
+					globalStore[address] = i;
+					if(debugMode) console.log("STOREG: " + i + " " + address);
+					break;
+				case opCodes.LOADG:
+					var address = codeStore[cp];
+					cp++;
+					dataStore[sp] = globalStore[address];
+					sp++;
+					if(debugMode) console.log("LOADG: " + i + " " + address);
+					break;
+				case opCodes.STOREL:
+					var localAddress = codeStore[cp];
+					cp++;
+					sp--;
+					dataStore[fp + localAddress] = dataStore[sp];
+					sp++;
+					if(debugMode) console.log("STOREL: " + dataStore[sp - 1] + " " + localAddress);
+					break;
+				case opCodes.LOADL:
+					var localAddress = codeStore[cp];
+					cp++;
+					dataStore[sp] = dataStore[fp + localAddress];
+					sp++;
+					if(debugMode) console.log("LOADL: " + dataStore[sp - 1] + " " + localAddress);
+					break;
+				case opCodes.LOADC:
+					var contsant = codeStore[cp];
+					cp++;
+					dataStore[sp] = contsant;
+					sp++;
+					if(debugMode) console.log("LOADC: " + contsant);
+					break;
+				case opCodes.IADD:
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
+					var result = j + i
+					dataStore[sp] = result;
+					sp++
+					if(debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
+					break;
+				case opCodes.ISUB:
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
+					var result = j - i;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
+					break;
+				case opCodes.IMUL:
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
+					var result = j * i;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
+					break;
+				case opCodes.IDIV:
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
+					var result = Math.floor(j / i);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
+					break;
+				case opCodes.FADD:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					var result = j + i;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
+					break;
+				case opCodes.FSUB:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					dataStore[sp] = j - i;
+					sp++;
+					if(debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
+					break;
+				case opCodes.FMUL:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					var result = j * i;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
+					break;
+				case opCodes.FDIV:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					var result = j / i;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+					break;
+				case opCodes.NCMPEQ:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					var result = (j == i) ? 1 : 0;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("NCMPEQ: " + j + " == " + i + " = " + result);
+					break;
+				case opCodes.NCMPLT:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					var result = (j < i) ? 1 : 0;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("NCMPLT: " + j + " < " + i + " = " + result);
+					break;
+				case opCodes.NCMPGT:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					var result = (j > i) ? 1 : 0;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("NCMPLT: " + j + " > " + i + " = " + result);
+					break;
+				case opCodes.JUMP:
+					var address = codeStore[cp];
+					cp = address;
+					if(debugMode) console.log("JUMP: " + address);
+					break;
+				case opCodes.JUMPT:
+					var address = codeStore[cp];
+					sp--;
+					var i = dataStore[sp];
+					result = i == 1;
+					if (result) {
+						cp = codeStore[cp];
+					}
+					else {
+						cp++;
+					}
+					if(debugMode) console.log("JUMPT: " + i + " " + result);
+					break;
+				case opCodes.JUMPF:
+					var address = codeStore[cp];
+					sp--;
+					var i = dataStore[sp];
+					var result = i == 0;
+					if(debugMode) console.log("JUMPF: " + i + " " + result);
+					if (result) {
+						cp = codeStore[cp];
+					}
+					else {
+						cp++;
+					}
+					break;
+				case opCodes.CALL:
+					var address = codeStore[cp];
+					cp++;
+					var numArgs = codeStore[cp];
+					cp++;
+					var returnAddress = cp;
+					var dynamicLink = fp;
+					var args = [];
+					// Copy Args
+					var i = 0;
+					while(i < numArgs) {
+						sp--;
+						args[i] = dataStore[sp];
+						i++;
+					}
+					// Add new Frame
+					fp = sp;
+					dataStore[sp] = dynamicLink;
+					sp++;
+					dataStore[sp] = returnAddress;
+					sp++;
+					// Add args as locals
+					while(i >= 0) {
+						i--;
+						dataStore[sp] = arg[i];
+						sp++;
+					}
+					break;
+				case opCodes.RETURN:
+					var shouldReturnValue = codeStore[cp];
+					var returnValue;
+					if (shouldReturnValue) {
+						returnValue = dataStore[sp - 1]
+					}
+					var returnAddress = dataStore[fp + RA];
+					cp = returnAddress;
+					sp = fp;
+					fp = dataStore[fp + DLA];
+					dataStore[sp] = returnValue;
+					sp++;
+				case opCodes.LNDRAW:
+					this.glctx.clearColor(0.0,0.0,0.0,1.0);
+					this.glctx.clear(this.glctx.COLOR_BUFFER_BIT|this.glctx.DEPTH_BUFFER_BIT);
+					var theLine = new Float32Array([-0.5,-0.5,0,
+													0.5,0.5,0]);
+					var prog = this.manager.getProgram("square", "square");
+					prog.setDrawMode(Palette.Program.LINES);
+					prog.draw(theLine, {}, {color: [Math.random(),Math.random(),Math.random(),1.0]});
+				case 999: // Print top of stack
+					//if(debugMode) console.log(dataStore[sp - 1]);
+					break;
+			}
+			lc++;
+			if (lc > 100000) {console.log("INF LOOP");break};
+		}
+	}
+}
+/**
+* @namespace Palette
+*/
+var Palette = Palette || {};
+
 /* global Palette */
 /**
 * @classdesc The core part of the system - initialise this to begin using the shader manager.
@@ -137,11 +945,6 @@ Palette.Manager.prototype = {
 };
 
 Palette.Manager.prototype.constructor = Palette.Manager;
-
-/**
-* @namespace Palette
-*/
-var Palette = Palette || {};
 
 /* global Palette */
 /**
@@ -803,356 +1606,3 @@ Palette.ShaderFactory.URL				= 2;
 Palette.ShaderFactory.SHADER_OBJECT	= 3;
 
 Palette.ShaderFactory.prototype.constructor = Palette.ShaderFactory;
-// M Bytecode interperator
-
-var MVM = function() {
-
-	/*	Op codes
-	*	
-	*	MNEMONIC	OPCODE	OPERANDS	DESCRIPTION
-	*	STOREG		0		2			store global at address
-	*	LOADG		1		1			push global at address
-	*	STOREL		2		1			store local at address
-	*	LOADL		3		1			push local at local address
-	*	LOADC		4		1			push constant
-	*	IADD		5		0			i = pop off stack. j = pop off stack. push j + i
-	*	ISUB		6		0			i = pop off stack. j = pop off stack. push j - i
-	*	IMUL		7		0			i = pop off stack. j = pop off stack. push j * i
-	*	IDIV		8		0			i = pop off stack. j = pop off stack. push j / i
-	*	FADD		9		0			i = pop off stack. j = pop off stack. push j + i
-	*	FSUB		10		0			i = pop off stack. j = pop off stack. push j - i
-	*	FMUL		11		0			i = pop off stack. j = pop off stack. push j * i
-	*	FDIV		12		0			i = pop off stack. j = pop off stack. push j / i
-	*	NCMPEQ		13		0			i = pop off stack. j = pop off stack. push result of j == i
-	*	NCMPLT		14		0			i = pop off stack. j = pop off stack. push result of j < i
-	*	NCMPGT		15		0			i = pop off stack. j = pop off stack. push result of j > i
-	*	JUMP		16		1			jump to address
-	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
-	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
-	*	CALL		19		2			arg 1 = address of function. arg2 = number of params
-	*	RETURN		20		1			Takes the number of values to return
-	*/
-
-	this.opCodes = {
-		STOREG: 0,
-		LOADG: 	1,
-		STOREL: 2,
-		LOADL: 	3,
-		LOADC: 	4,
-		IADD: 	5,
-		ISUB: 	6,
-		IMUL: 	7,
-		IDIV: 	8,
-		FADD: 	9,		//	Floating point arithmatic ops take
-		FSUB: 	10,		//	address into the constant pool.
-		FMUL: 	11,
-		FDIV: 	12,
-		NCMPEQ: 13,
-		NCMPLT: 14,
-		NCMPGT: 15,
-		JUMP: 	16,
-		JUMPT: 	17, 
-		JUMPF: 	18,
-		CALL: 	19, 
-		RETURN: 20 
-	};
-
-	// Holds program instructions
-	this.codeStore =	[this.opCodes.LOADC,	16,
-						 this.opCodes.STOREG,	0,		// 	LIMIT = 10
-						 this.opCodes.LOADC,	0,
-						 this.opCodes.STOREL,	0,		//	i = 0
-						 this.opCodes.LOADC,	2,
-						 this.opCodes.STOREL,	1,		//	j = 1
-						 this.opCodes.LOADL,	0,
-						 this.opCodes.LOADG,	0,
-						 this.opCodes.NCMPLT,			//	i < LIMIT
-						 this.opCodes.JUMPF,	35,
-						 this.opCodes.LOADL,	1,
-						 this.opCodes.LOADC,	2,
-						 this.opCodes.IMUL,
-						 this.opCodes.STOREL,	1,		//	j = j * 2
-						 this.opCodes.LOADL,	0,
-						 this.opCodes.LOADC,	1,
-						 this.opCodes.IADD,
-						 this.opCodes.STOREL,	0,		//	i++
-						 this.opCodes.JUMP,		12,		//	JUMP
-						 this.opCodes.LOADL,	1,
-						 999];	//					37
-
-	// Points to the next instruction in the code store to execute
-	this.cp = 0;
-
-	// Points to the first free location after the program
-	this.cl = 38;
-
-	// Data store (Stack)
-	this.dataStore = [];
-
-	// Points to the first free space at the top of the data store
-	this.sp = 0;
-
-	// Points to the first location of the top most frame
-	this.fp = 0;
-
-	// Local Offset. The off set of the first local address from the frame pointer
-	this.LO = 2;
-
-	// Address of the dynamic link in a frame
-	this.DLA = 0;
-
-	// Retrun address of a frame
-	this.RA = 1;
-
-	// Global data store
-	this.globalStore = [];
-
-	// (May not be required)
-	// Points to the first free space at the top of the global store
-	//var gp = 0;
-
-	// Prints details to the console. For Debugging
-	this.debugMode = 0;
-
-/*
-*		Need a way to determine the size of each frame.
-*		Maybe all data local to a frame is stored before anything is pushed onto the stack for that frame.
-*/
-	this.interpret = function() {
-
-		// For debugging
-		var lc = 0;
-
-		var opCodes = this.opCodes;
-		while (this.cp < this.cl) {
-			lc++
-			var opCode = this.codeStore[this.cp];
-			//console.log(this.cp + " " + opCode);
-			this.cp++;
-			switch (opCode) {
-				case opCodes.STOREG:
-					var address = this.codeStore[this.cp]
-					this.cp++;
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.globalStore[address] = i;
-					if(this.debugMode) console.log("STOREG: " + i + " " + address);
-					break;
-				case opCodes.LOADG:
-					var address = this.codeStore[this.cp];
-					this.cp++;
-					this.dataStore[this.sp] = this.globalStore[address];
-					this.sp++;
-					if(this.debugMode) console.log("LOADG: " + i + " " + address);
-					break;
-				case opCodes.STOREL:
-					var localAddress = this.codeStore[this.cp];
-					this.cp++;
-					this.sp--;
-					this.dataStore[this.fp + localAddress] = this.dataStore[this.sp];
-					this.sp++;
-					if(this.debugMode) console.log("STOREL: " + this.dataStore[this.sp - 1] + " " + localAddress);
-					break;
-				case opCodes.LOADL:
-					var localAddress = this.codeStore[this.cp];
-					this.cp++;
-					this.dataStore[this.sp] = this.dataStore[this.fp + localAddress];
-					this.sp++;
-					if(this.debugMode) console.log("LOADL: " + this.dataStore[this.sp - 1] + " " + localAddress);
-					break;
-				case opCodes.LOADC:
-					var contsant = this.codeStore[this.cp];
-					this.cp++;
-					this.dataStore[this.sp] = contsant;
-					this.sp++;
-					if(this.debugMode) console.log("LOADC: " + contsant);
-					break;
-				case opCodes.IADD:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
-					var result = j + i
-					this.dataStore[this.sp] = result;
-					this.sp++
-					if(this.debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
-					break;
-				case opCodes.ISUB:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
-					var result = j - i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
-					break;
-				case opCodes.IMUL:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
-					var result = j * i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
-					break;
-				case opCodes.IDIV:
-					this.sp--;
-					var i = Math.floor(this.dataStore[this.sp]);
-					this.sp--;
-					var j = Math.floor(this.dataStore[this.sp]);
-					var result = Math.floor(j / i);
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
-					break;
-				case opCodes.FADD:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					var result = j + i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
-					break;
-				case opCodes.FSUB:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					this.dataStore[this.sp] = j - i;
-					this.sp++;
-					if(this.debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
-					break;
-				case opCodes.FMUL:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					var result = j * i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
-					break;
-				case opCodes.FDIV:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					var result = j / i;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
-					break;
-				case opCodes.NCMPEQ:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					var result = (j == i) ? 1 : 0;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("NCMPEQ: " + j + " == " + i + " = " + result);
-					break;
-				case opCodes.NCMPLT:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					var result = (j < i) ? 1 : 0;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("NCMPLT: " + j + " < " + i + " = " + result);
-					break;
-				case opCodes.NCMPGT:
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					this.sp--;
-					var j = this.dataStore[this.sp];
-					var result = (j > i) ? 1 : 0;
-					this.dataStore[this.sp] = result;
-					this.sp++;
-					if(this.debugMode) console.log("NCMPLT: " + j + " > " + i + " = " + result);
-					break;
-				case opCodes.JUMP:
-					var address = this.codeStore[this.cp];
-					this.cp = address;
-					if(this.debugMode) console.log("JUMP: " + address);
-					break;
-				case opCodes.JUMPT:
-					var address = this.codeStore[this.cp];
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					result = i == 1;
-					if (result) {
-						this.cp = this.codeStore[this.cp];
-					}
-					else {
-						this.cp++;
-					}
-					if(this.debugMode) console.log("JUMPT: " + i + " " + result);
-					break;
-				case opCodes.JUMPF:
-					var address = this.codeStore[this.cp];
-					this.sp--;
-					var i = this.dataStore[this.sp];
-					var result = i == 0;
-					if(this.debugMode) console.log("JUMPF: " + i + " " + result);
-					if (result) {
-						this.cp = this.codeStore[this.cp];
-					}
-					else {
-						this.cp++;
-					}
-					break;
-				case opCodes.CALL:
-					var address = this.codeStore[this.cp];
-					cp++;
-					var numArgs = this.codeStore[this.cp];
-					cp++;
-					var returnAddress = this.cp;
-					var dynamicLink = this.fp;
-					var args = [];
-					// Copy Args
-					var i = 0;
-					while(i < numArgs) {
-						sp--;
-						args[i] = this.dataStore[sp];
-						i++;
-					}
-					// Add new Frame
-					this.fp = this.sp;
-					this.dataStore[sp] = dynamicLink;
-					this.sp++;
-					this.dataStore[sp] = returnAddress;
-					this.sp++;
-					// Add args as locals
-					while(i >= 0) {
-						i--;
-						this.dataStore[this.sp] = arg[i];
-						sp++;
-					}
-					break;
-				case opCodes.RETURN:
-					var shouldReturnValue = this.codeStore[this.cp];
-					var returnValue;
-					if (shouldReturnValue) {
-						returnValue = this.dataStore[this.sp - 1]
-					};
-					var returnAddress = this.dataStore[this.fp + this.RA];
-					this.cp = returnAddress;
-					this.sp = this.fp;
-					this.fp = this.dataStore[this.fp + this.DLA];
-					this.dataStore[this.sp] = returnValue;
-					this.sp++;
-				case 999: // Print top of stack
-					if(this.debugMode) console.log(this.dataStore[this.sp - 1]);
-					break;
-			}
-			lc++;
-			if (lc > 100000) {console.log("INF LOOP");break};
-		}
-	}
-}
