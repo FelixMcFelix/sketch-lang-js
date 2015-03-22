@@ -4,7 +4,6 @@ for(int n = 0; n?<5; n++){
 		n++;
 		if(n ?= 3){
 			n = 5;
-			continue;
 		}
 		n = 2;
 	}

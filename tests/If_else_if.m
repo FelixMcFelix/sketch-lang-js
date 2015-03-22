@@ -1,7 +1,7 @@
 init(){
 #if + else if statement
 
-	num n = 6;
+	int n = 6;
 	if(n ?= 5){
 		print("hi");
 	}
