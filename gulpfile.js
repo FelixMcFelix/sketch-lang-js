@@ -36,8 +36,8 @@ gulp.task("build",["build:Palette", "build:parser", "build:MVM","build:generator
 
 gulp.task("build:parser", function(){
 	return gulp.src([configs.srcDir+"grammar/MLang.jison"])
-			.pipe(jison({}))
-			.pipe(gulp.rename("sketchParse.js"))
+			.pipe(jison({moduleName: "sketchParse"}))
+			//.pipe(gulp.rename("sketchParse.js"))
 			.pipe(gulp.dest(configs.interDir));
 });
 
