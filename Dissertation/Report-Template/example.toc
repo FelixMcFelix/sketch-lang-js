@@ -1,21 +1,30 @@
 \contentsline {chapter}{\numberline {1}Introduction}{4}{chapter.1}
-\contentsline {chapter}{\numberline {2}Language Tutorial}{5}{chapter.2}
-\contentsline {section}{\numberline {2.1}Getting Started}{5}{section.2.1}
-\contentsline {section}{\numberline {2.2}Variables and Arithmetic operators}{6}{section.2.2}
-\contentsline {chapter}{\numberline {3}Language Reference Manual}{8}{chapter.3}
-\contentsline {chapter}{\numberline {4}Project Plan}{9}{chapter.4}
-\contentsline {chapter}{\numberline {5}Language Evolution}{10}{chapter.5}
-\contentsline {chapter}{\numberline {6}Compiler Architecture}{11}{chapter.6}
-\contentsline {section}{\numberline {6.1}Overview}{11}{section.6.1}
-\contentsline {section}{\numberline {6.2}Lexer and Parser}{12}{section.6.2}
-\contentsline {section}{\numberline {6.3}Code Generator}{12}{section.6.3}
-\contentsline {section}{\numberline {6.4}Shader Manager}{12}{section.6.4}
-\contentsline {section}{\numberline {6.5}Abstract Machine}{12}{section.6.5}
-\contentsline {section}{\numberline {6.6}Module Facade}{12}{section.6.6}
-\contentsline {chapter}{\numberline {7}Development Environment}{13}{chapter.7}
-\contentsline {chapter}{\numberline {8}Test Plan and test suites}{14}{chapter.8}
-\contentsline {chapter}{\numberline {9}Conclusion}{15}{chapter.9}
-\contentsline {section}{\numberline {9.1}Contributions}{15}{section.9.1}
-\contentsline {subsection}{\numberline {9.1.1}Report}{15}{subsection.9.1.1}
-\contentsline {subsection}{\numberline {9.1.2}Program}{15}{subsection.9.1.2}
-\contentsline {chapter}{\numberline {10}Appendix A}{16}{chapter.10}
+\contentsline {subsection}{\numberline {1.0.1}Project Outline}{4}{subsection.1.0.1}
+\contentsline {subsection}{\numberline {1.0.2}Motivation}{4}{subsection.1.0.2}
+\contentsline {subsection}{\numberline {1.0.3}Aim}{4}{subsection.1.0.3}
+\contentsline {subsection}{\numberline {1.0.4}WebGL Background}{5}{subsection.1.0.4}
+\contentsline {subsection}{\numberline {1.0.5}Outline of report}{5}{subsection.1.0.5}
+\contentsline {chapter}{\numberline {2}Language Tutorial}{6}{chapter.2}
+\contentsline {section}{\numberline {2.1}Getting Started}{6}{section.2.1}
+\contentsline {section}{\numberline {2.2}Variables and Arithmetic operators}{7}{section.2.2}
+\contentsline {section}{\numberline {2.3}If statement and comparitive operators}{9}{section.2.3}
+\contentsline {section}{\numberline {2.4}Modifying operators}{9}{section.2.4}
+\contentsline {section}{\numberline {2.5}Functions}{9}{section.2.5}
+\contentsline {section}{\numberline {2.6}draw()}{9}{section.2.6}
+\contentsline {chapter}{\numberline {3}Language Reference Manual}{10}{chapter.3}
+\contentsline {chapter}{\numberline {4}Project Plan}{11}{chapter.4}
+\contentsline {chapter}{\numberline {5}Language Evolution}{12}{chapter.5}
+\contentsline {chapter}{\numberline {6}Compiler Architecture}{13}{chapter.6}
+\contentsline {section}{\numberline {6.1}Overview}{13}{section.6.1}
+\contentsline {section}{\numberline {6.2}Lexer and Parser}{14}{section.6.2}
+\contentsline {section}{\numberline {6.3}Code Generator}{14}{section.6.3}
+\contentsline {section}{\numberline {6.4}Shader Manager}{14}{section.6.4}
+\contentsline {section}{\numberline {6.5}Abstract Machine}{14}{section.6.5}
+\contentsline {section}{\numberline {6.6}Module Facade}{14}{section.6.6}
+\contentsline {chapter}{\numberline {7}Development Environment}{15}{chapter.7}
+\contentsline {chapter}{\numberline {8}Test Plan and test suites}{16}{chapter.8}
+\contentsline {chapter}{\numberline {9}Conclusion}{17}{chapter.9}
+\contentsline {section}{\numberline {9.1}Contributions}{17}{section.9.1}
+\contentsline {subsection}{\numberline {9.1.1}Report}{17}{subsection.9.1.1}
+\contentsline {subsection}{\numberline {9.1.2}Program}{17}{subsection.9.1.2}
+\contentsline {chapter}{\numberline {10}Appendix A}{18}{chapter.10}
