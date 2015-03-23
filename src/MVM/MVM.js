@@ -56,7 +56,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		CLEAR: 	101,
 		PRINTST:102,
 		PRINTS: 103,
-		EXIT: 	999,
+		EXIT: 	999
 	};
 
 	var glctx = glctx;
