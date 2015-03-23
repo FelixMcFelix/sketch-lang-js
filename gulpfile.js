@@ -4,6 +4,7 @@ var configs = {
 		interDir: "mid-build/",
 		docsDir: "docs/"
 	},
+	browserify = require("browserify"),
 	gulp = require("gulp"),
 	jshint = require("gulp-jshint"),
 	concat = require("gulp-concat"),
@@ -11,7 +12,12 @@ var configs = {
 	rename = require("gulp-rename"),
 	jison  = require("gulp-jison"),
 	del    = require("del"),
-	jsdoc  = require("gulp-jsdoc");
+	transform = require('vinyl-transform'),
+	jsdoc  = require("gulp-jsdoc"),
+	browserified = transform(function(filename) {
+		var b = browserify({entries: filename, debug: true});
+		return b.bundle();
+	});
 
 gulp.task("default", ["clean"], function(){
 	gulp.start("build", "doc");
@@ -36,6 +42,7 @@ gulp.task("build:parser", function(){
 
 gulp.task("build:Palette", function(){
 	return gulp.src([configs.srcDir+"Palette/Palette.js",configs.srcDir+"Palette/*.js"])
+			.pipe(browserified)
 			.pipe(concat("Palette.js"))
 			.pipe(gulp.dest(configs.interDir));
 			//.pipe(rename({suffix: ".min"}))
