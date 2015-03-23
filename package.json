@@ -1,27 +1,27 @@
 {
-  "name": "laughing-ironman",
-  "version": "0.0.1",
-  "description": "A web-based module for rendering graphics written in an experimental language, combined with a shader management system.",
-  "author": "Team M (Kyle Simpson, Gerry Docherty, David Creigh, Kris Dimitrov, Darren Findlay)",
-  "bugs": "https://github.com/felixmcfelix/laughing-ironman/issues",
-  "license": "WTFPL",
-  "licenseUrl": "http://www.wtfpl.net/about/",
-  "scripts": {
-    "test": "NODE_ENV=test gulp test"
-  },
-  "private": true,
-  "devDependencies": {
-	"browserify": "^9.0.3",
-    "del": "^1.1.1",
-	"earcut": "^1.4.2",
-    "gulp": "^3.8.10",
-    "gulp-concat": "^2.4.3",
-    "gulp-jsdoc": "^0.1.4",
-    "gulp-jshint": "^1.9.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-uglify": "^1.1.0",
-	"gulp-jison": "^1.2.0",
-    "jshint-stylish": "^1.0.0",
-	"vinyl-transform": "^1.0.0"
-  }
+	"name": "laughing-ironman",
+	"version": "0.0.1",
+	"description": "A web-based module for rendering graphics written in an experimental language, combined with a shader management system.",
+	"author": "Team M (Kyle Simpson, Gerry Docherty, David Creigh, Kris Dimitrov, Darren Findlay)",
+	"bugs": "https://github.com/felixmcfelix/laughing-ironman/issues",
+	"license": "WTFPL",
+	"licenseUrl": "http://www.wtfpl.net/about/",
+	"scripts": {
+		"test": "NODE_ENV=test gulp test"
+	},
+	"private": true,
+	"devDependencies": {
+		"browserify": "^9.0.3",
+		"del": "^1.1.1",
+		"earcut": "^1.4.2",
+		"gulp": "^3.8.10",
+		"gulp-concat": "^2.4.3",
+		"gulp-jsdoc": "^0.1.4",
+		"gulp-jshint": "^1.9.0",
+		"gulp-rename": "^1.2.0",
+		"gulp-uglify": "^1.1.0",
+		"gulp-jison": "^1.2.0",
+		"jshint-stylish": "^1.0.0",
+		"vinyl-transform": "^1.0.0"
+	}
 }

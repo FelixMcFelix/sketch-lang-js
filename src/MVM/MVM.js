@@ -4,28 +4,44 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 	/*	Op codes
 	*	
-	*	MNEMONIC	OPCODE	OPERANDS	DESCRIPTION
-	*	STOREG		0		2			store global at address
-	*	LOADG		1		1			push global at address
-	*	STOREL		2		1			store local at address
-	*	LOADL		3		1			push local at local address
-	*	LOADC		4		1			push constant
-	*	IADD		5		0			i = pop off stack. j = pop off stack. push j + i
-	*	ISUB		6		0			i = pop off stack. j = pop off stack. push j - i
-	*	IMUL		7		0			i = pop off stack. j = pop off stack. push j * i
-	*	IDIV		8		0			i = pop off stack. j = pop off stack. push j / i
-	*	FADD		9		0			i = pop off stack. j = pop off stack. push j + i
-	*	FSUB		10		0			i = pop off stack. j = pop off stack. push j - i
-	*	FMUL		11		0			i = pop off stack. j = pop off stack. push j * i
-	*	FDIV		12		0			i = pop off stack. j = pop off stack. push j / i
-	*	NCMPEQ		13		0			i = pop off stack. j = pop off stack. push result of j == i
-	*	NCMPLT		14		0			i = pop off stack. j = pop off stack. push result of j < i
-	*	NCMPGT		15		0			i = pop off stack. j = pop off stack. push result of j > i
-	*	JUMP		16		1			jump to address
-	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
-	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
-	*	CALL		19		2			arg 1 = address of function. arg2 = number of params
-	*	RETURN		20		1			Takes the number of values to return
+	*	MNEMONIC	OPERANDS	DESCRIPTION
+	*	STOREG		2			store global at address
+	*	LOADG		1			push global at address
+	*	STOREL		1			store local at address
+	*	LOADL		1			push local at local address
+	*	LOADC		1			push constant
+	*	IADD		0			i = pop off stack. j = pop off stack. push j + i
+	*	ISUB		0			i = pop off stack. j = pop off stack. push j - i
+	*	IMUL		0			i = pop off stack. j = pop off stack. push j * i
+	*	IDIV		0			i = pop off stack. j = pop off stack. push j / i
+	*	FADD		0			i = pop off stack. j = pop off stack. push j + i
+	*	FSUB		0			i = pop off stack. j = pop off stack. push j - i
+	*	FMUL		0			i = pop off stack. j = pop off stack. push j * i
+	*	FDIV		0			i = pop off stack. j = pop off stack. push j / i
+	*	NCMPEQ		0			i = pop off stack. j = pop off stack. push result of j == i
+	*	NCMPLT		0			i = pop off stack. j = pop off stack. push result of j < i
+	*	NCMPGT		0			i = pop off stack. j = pop off stack. push result of j > i
+	*	JUMP		1			jump to address
+	*	JUMPT		1			pop value off stack. Jump to address if value == 1
+	*	JUMPF		1			pop value off stack. Jump to address if value == 0
+	*	CALL		2			arg 1 = address of function. arg2 = number of params
+	*	RETURN		1			Takes the number of values to return
+
+	*	LOADIDX		2			arg1 = index into the constant pool. arg2 = index into the array.
+	*/
+
+	/*
+	*	Struct layouts
+	*	
+	*				  x    y
+	*	Point 		[100, 150]
+	*
+	*				  r    g   b   a   x1  y1  x2  y2
+	*	Line 		[ 0 ,  0 ,255,255,100,100,200,200]
+	*
+	*				  r    g   b   a   x1  y1  x2  y2  x3  y3 	0 or More points
+	*	Polygon 	[ 0 ,  0 ,255,255,100,100,200,200,150, 0 ,.............]
+	*
 	*/
 
 	var opCodes = {
@@ -56,7 +72,10 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		CLEAR: 	101,
 		PRINTST:102,
 		PRINTS: 103,
-		EXIT: 	999
+		LOADIDX:104,
+		SETIDX: 105,
+		PGDARW: 106,
+		EXIT: 	999,
 	};
 
 	var glctx = glctx;
@@ -341,25 +360,41 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					// Get line
 					sp--;
 					var lineAddress = dataStore[sp];
-					var line = constantPool[lineAddress];
-					var pt1 = line[0];
-					var pt2 = line[1];
-					var pt1x = pt1[0];
-					var pt1y = pt1[1];
-					var pt2x = pt2[0];
-					var pt2y = pt2[1];
-					var color = line[2];
-					var r = color[0];
-					var g = color[1];
-					var b = color[2];
-					var a = color[3];
+					var lineStruct = constantPool[lineAddress];
+					var r = lineStruct[0];
+					var g = lineStruct[1];
+					var b = lineStruct[2];
+					var a = lineStruct[3];
+					var pt1x = lineStruct[4];
+					var pt1y = lineStruct[5];
+					var pt2x = lineStruct[6];
+					var pt2y = lineStruct[7];
 					var theLine = new Float32Array([pt1x,pt1y,0,
 													pt2x,pt2y,0]);
 					var theColor = new Float32Array([r,g,b,a]);
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.LINES);
 					prog.draw(theLine, {}, {color: theColor});
-					if(debugMode) console.log("LNDRAW: " + line);
+					if(debugMode) console.log("LNDRAW: " + lineStruct);
+					break;
+				case opCodes.PGDARW:
+					var polygonAddress = codeStore[cp];
+					cp++;
+					var polygonStruct = constantPool[polygonAddress];
+					var r = polygonStruct[0];
+					var g = polygonStruct[1];
+					var b = polygonStruct[2];
+					var a = polygonStruct[3];
+					var theColor = Float32Array([r,g,b,a]);
+
+					var points = [];
+					var i;
+					for (i = 4; i < polygonStruct.length; i+=2) {
+						var pt = [polygonStruct[i],polygonStruct[i+1]];
+					}
+					var prog = manager.getProgram("square", "square");
+					prog.setDrawMode(Palette.Program.POLYGON);
+					prog.draw(points, {}, {color: theColor});
 					break;
 				case opCodes.RENDER:
 					needsUpdate = 1;
@@ -382,9 +417,28 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 				case opCodes.PRINTS: // Print top of stack
 					if(debugMode) console.log(dataStore);
 					break;
+				case opCodes.LOADIDX:
+					var constPoolindex = codeStore[cp];
+					cp++;
+					var arrayIndex = codeStore[cp];
+					cp++;
+					var arr = constantPool[constPoolindex];
+					var value = arr[arrayIndex];
+					dataStore[sp] = value;
+					sp++;
+					break;
+				case opCodes.SETIDX:
+					var constPoolindex = codeStore[cp];
+					cp++;
+					var arrayIndex = codeStore[cp];
+					cp++;
+					var arr = constantPool[constPoolindex];
+					sp--;
+					var value = dataStore[sp];
+					arr[arrayIndex] = value;
+					break;
 			}
-			//console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
-			//console.log(codeStore);
+			console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
 			if(debugMode) console.log(JSON.stringify(dataStore));
 			lc++;
 			if (/*lc > 50*/0) {console.log("INF LOOP");break};

@@ -90,7 +90,31 @@ Palette.Program.prototype = {
 	draw: function(verts, conf1, conf2){
 		this.context.useProgram(this.program);
 		if(!conf1) conf1 = {};
-		conf1.vertexBuffer = verts;
+		if(verts != null){
+		switch(this.drawMode){
+			case Palette.Program.POLYGON:
+				var temp = Palette.earcut(verts, true);
+				var temper = new Float32Array(temp[1].length * this.attrs.vs.access.vertexBuffer.itemSize);
+				for(var i=0; i<temp[1].length; i++){
+					switch(temp[0][0].length){
+						case 3:
+							temper[i+2] = temp[0] [temp[1][i]] [i+2];
+							/**falls through*/
+						case 2:
+							temper[i+1] = temp[0] [temp[1][i]] [i+1];
+							/**falls through*/
+						case 1:
+							temper[i] = temp[0] [temp[1][i]] [i];
+							/**falls through*/
+					}
+				}
+				conf1.vertexBuffer = temp;
+				break;
+			default:
+				conf1.vertexBuffer = verts;
+				break;
+		}
+		}
 
 		this.generateSend(this.attrs.vs, conf1);
 		this.generateSend(this.attrs.fs, conf2);
@@ -366,6 +390,7 @@ Palette.Program.VS_MODE 	= 1;
 Palette.Program.FS_MODE 	= 2;
 Palette.Program.BOTH_MODE 	= 3;
 
+//WEBGL
 Palette.Program.POINTS			= 0;
 Palette.Program.LINES			= 1;
 Palette.Program.LINE_LOOP		= 2;
@@ -373,5 +398,8 @@ Palette.Program.LINE_STRIP		= 3;
 Palette.Program.TRIANGLES		= 4;
 Palette.Program.TRIANGLE_STRIP	= 5;
 Palette.Program.TRIANGLE_FAN	= 6;
+//MINE
+Palette.Program.POLYGON			= 7;
+
 
 Palette.Program.prototype.constructor = Palette.Program;

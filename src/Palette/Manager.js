@@ -5,9 +5,9 @@
 * @param {WebGLRenderingContext} gl - The context all shaders and programs will belong to and be compiled by.
 */
 Palette.Manager = function(gl){
-	if(!(gl instanceof WebGLRenderingContext)){
-		throw new TypeError("Error: attempted to create Palette with illegal argument.");
-	}
+	// if(!(gl instanceof WebGLRenderingContext)){
+	// 	throw new TypeError("Error: attempted to create Palette with illegal argument.");
+	// }
 
 	/**
     * A reference to the defining WebGLRenderingContext.

@@ -1,9 +1,9 @@
 \BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{subsection.1.0.1}{Project Outline}{chapter.1}% 2
-\BOOKMARK [2][-]{subsection.1.0.2}{Motivation}{subsection.1.0.1}% 3
-\BOOKMARK [2][-]{subsection.1.0.3}{Aim}{subsection.1.0.1}% 4
-\BOOKMARK [2][-]{subsection.1.0.4}{WebGL Background}{subsection.1.0.1}% 5
-\BOOKMARK [2][-]{subsection.1.0.5}{Outline of report}{subsection.1.0.1}% 6
+\BOOKMARK [1][-]{section.1.1}{Project Outline}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{Motivation}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.3}{Aim}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.4}{WebGL Background}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.5}{Outline of report}{chapter.1}% 6
 \BOOKMARK [0][-]{chapter.2}{Language Tutorial}{}% 7
 \BOOKMARK [1][-]{section.2.1}{Getting Started}{chapter.2}% 8
 \BOOKMARK [1][-]{section.2.2}{Variables and Arithmetic operators}{chapter.2}% 9
