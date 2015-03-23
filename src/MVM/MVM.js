@@ -4,28 +4,44 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 	/*	Op codes
 	*	
-	*	MNEMONIC	OPCODE	OPERANDS	DESCRIPTION
-	*	STOREG		0		2			store global at address
-	*	LOADG		1		1			push global at address
-	*	STOREL		2		1			store local at address
-	*	LOADL		3		1			push local at local address
-	*	LOADC		4		1			push constant
-	*	IADD		5		0			i = pop off stack. j = pop off stack. push j + i
-	*	ISUB		6		0			i = pop off stack. j = pop off stack. push j - i
-	*	IMUL		7		0			i = pop off stack. j = pop off stack. push j * i
-	*	IDIV		8		0			i = pop off stack. j = pop off stack. push j / i
-	*	FADD		9		0			i = pop off stack. j = pop off stack. push j + i
-	*	FSUB		10		0			i = pop off stack. j = pop off stack. push j - i
-	*	FMUL		11		0			i = pop off stack. j = pop off stack. push j * i
-	*	FDIV		12		0			i = pop off stack. j = pop off stack. push j / i
-	*	NCMPEQ		13		0			i = pop off stack. j = pop off stack. push result of j == i
-	*	NCMPLT		14		0			i = pop off stack. j = pop off stack. push result of j < i
-	*	NCMPGT		15		0			i = pop off stack. j = pop off stack. push result of j > i
-	*	JUMP		16		1			jump to address
-	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
-	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
-	*	CALL		19		2			arg 1 = address of function. arg2 = number of params
-	*	RETURN		20		1			Takes the number of values to return
+	*	MNEMONIC	OPERANDS	DESCRIPTION
+	*	STOREG		2			store global at address
+	*	LOADG		1			push global at address
+	*	STOREL		1			store local at address
+	*	LOADL		1			push local at local address
+	*	LOADC		1			push constant
+	*	IADD		0			i = pop off stack. j = pop off stack. push j + i
+	*	ISUB		0			i = pop off stack. j = pop off stack. push j - i
+	*	IMUL		0			i = pop off stack. j = pop off stack. push j * i
+	*	IDIV		0			i = pop off stack. j = pop off stack. push j / i
+	*	FADD		0			i = pop off stack. j = pop off stack. push j + i
+	*	FSUB		0			i = pop off stack. j = pop off stack. push j - i
+	*	FMUL		0			i = pop off stack. j = pop off stack. push j * i
+	*	FDIV		0			i = pop off stack. j = pop off stack. push j / i
+	*	NCMPEQ		0			i = pop off stack. j = pop off stack. push result of j == i
+	*	NCMPLT		0			i = pop off stack. j = pop off stack. push result of j < i
+	*	NCMPGT		0			i = pop off stack. j = pop off stack. push result of j > i
+	*	JUMP		1			jump to address
+	*	JUMPT		1			pop value off stack. Jump to address if value == 1
+	*	JUMPF		1			pop value off stack. Jump to address if value == 0
+	*	CALL		2			arg 1 = address of function. arg2 = number of params
+	*	RETURN		1			Takes the number of values to return
+
+	*	LOADIDX		2			arg1 = index into the constant pool. arg2 = index into the array.
+	*/
+
+	/*
+	*	Struct layouts
+	*	
+	*				  x    y
+	*	Point 		[100, 150]
+	*
+	*				  r    g   b   a   x1  y1  x2  y2
+	*	Line 		[ 0 ,  0 ,255,255,100,100,200,200]
+	*
+	*				  r    g   b   a   x1  y1  x2  y2  x3  y3 	0 or More points
+	*	Polygon 	[ 0 ,  0 ,255,255,100,100,200,200,150, 0 ,.............]
+	*
 	*/
 
 	var opCodes = {
@@ -56,6 +72,8 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		CLEAR: 	101,
 		PRINTST:102,
 		PRINTS: 103,
+		LOADIDX:104,
+		SETIDX: 105,
 		EXIT: 	999,
 	};
 
@@ -382,9 +400,28 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 				case opCodes.PRINTS: // Print top of stack
 					if(debugMode) console.log(dataStore);
 					break;
+				case opCodes.LOADIDX:
+					var constPoolindex = codeStore[cp];
+					cp++;
+					var arrayIndex = codeStore[cp];
+					cp++;
+					var arr = constantPool[constPoolindex];
+					var value = arr[arrayIndex];
+					dataStore[sp] = value;
+					sp++;
+					break;
+				case opCodes.SETIDX:
+					var constPoolindex = codeStore[cp];
+					cp++;
+					var arrayIndex = codeStore[cp];
+					cp++;
+					var arr = constantPool[constPoolindex];
+					sp--;
+					var value = dataStore[sp];
+					arr[arrayIndex] = value;
+					break;
 			}
-			//console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
-			//console.log(codeStore);
+			console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
 			if(debugMode) console.log(JSON.stringify(dataStore));
 			lc++;
 			if (/*lc > 50*/0) {console.log("INF LOOP");break};
