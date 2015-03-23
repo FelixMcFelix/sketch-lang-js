@@ -74,6 +74,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		PRINTS: 103,
 		LOADIDX:104,
 		SETIDX: 105,
+		PGDARW: 106,
 		EXIT: 	999,
 	};
 
@@ -359,25 +360,41 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					// Get line
 					sp--;
 					var lineAddress = dataStore[sp];
-					var line = constantPool[lineAddress];
-					var pt1 = line[0];
-					var pt2 = line[1];
-					var pt1x = pt1[0];
-					var pt1y = pt1[1];
-					var pt2x = pt2[0];
-					var pt2y = pt2[1];
-					var color = line[2];
-					var r = color[0];
-					var g = color[1];
-					var b = color[2];
-					var a = color[3];
+					var lineStruct = constantPool[lineAddress];
+					var r = lineStruct[0];
+					var g = lineStruct[1];
+					var b = lineStruct[2];
+					var a = lineStruct[3];
+					var pt1x = lineStruct[4];
+					var pt1y = lineStruct[5];
+					var pt2x = lineStruct[6];
+					var pt2y = lineStruct[7];
 					var theLine = new Float32Array([pt1x,pt1y,0,
 													pt2x,pt2y,0]);
 					var theColor = new Float32Array([r,g,b,a]);
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.LINES);
 					prog.draw(theLine, {}, {color: theColor});
-					if(debugMode) console.log("LNDRAW: " + line);
+					if(debugMode) console.log("LNDRAW: " + lineStruct);
+					break;
+				case opCodes.PGDARW:
+					var polygonAddress = codeStore[cp];
+					cp++;
+					var polygonStruct = constantPool[polygonAddress];
+					var r = polygonStruct[0];
+					var g = polygonStruct[1];
+					var b = polygonStruct[2];
+					var a = polygonStruct[3];
+					var theColor = Float32Array([r,g,b,a]);
+
+					var points = [];
+					var i;
+					for (i = 4; i < polygonStruct.length; i+=2) {
+						var pt = [polygonStruct[i],polygonStruct[i+1]];
+					}
+					var prog = manager.getProgram("square", "square");
+					prog.setDrawMode(Palette.Program.POLYGON);
+					prog.draw(points, {}, {color: theColor});
 					break;
 				case opCodes.RENDER:
 					needsUpdate = 1;
