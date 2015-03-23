@@ -37,6 +37,7 @@ gulp.task("build",["build:Palette", "build:parser", "build:MVM","build:generator
 gulp.task("build:parser", function(){
 	return gulp.src([configs.srcDir+"grammar/MLang.jison"])
 			.pipe(jison({}))
+			.pipe(gulp.rename("sketchParse.js"))
 			.pipe(gulp.dest(configs.interDir));
 });
 
@@ -69,7 +70,7 @@ gulp.task("build:Sketch", function(){
 });
 
 //CLEAN TASKS
-gulp.task("clean",["clean:build", "clean:docs"], function(){
+gulp.task("clean",["clean:build", "clean:docs","clean:mid-build"], function(){
 	
 });
 
@@ -79,6 +80,10 @@ gulp.task("clean:build", function(cb){
 
 gulp.task("clean:docs", function(cb){
 	del(configs.docsDir+"*", cb);
+});
+
+gulp.task("clean:mid-build", function(cb){
+	del(configs.interDir+"*", cb);
 });
 
 //TESTING TASKS
