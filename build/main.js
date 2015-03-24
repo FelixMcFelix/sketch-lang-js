@@ -1,3 +1,578 @@
+/* Recursive Descent Tree Walker
+ * 
+ * 		Embedded Heterogeneous Tree Walker pattern
+ * 
+ */
+
+// case statement corresponds with each of the structures in the BNF.
+//  (this could just as easily be implemented as a big if/else block)
+var walk = function (obj) {
+
+	switch(obj.type){
+		case "function":
+			walkFunction(obj.arguments);
+			break;
+		case "variable-decl-assign":
+			walkVaraibleDeclAssign(obj.arguments);
+			break;
+		case "variable-decl":
+			walkVariableDecl(obj.arguments);
+			break;
+		case "addition":
+			walkIf(obj.arguments);
+			break;
+		case "ifelse":
+			walkIfElse(obj.arguments);
+			break;
+		case "while":
+			walkWhile(obj.arguments);
+			break;
+		case "do_while":
+			walkDoWhile(obj.arguments);
+			break;
+		case "for":
+			walkFor(obj.arguments);
+			break; 
+		case "addition":
+			walkAddition(obj.arguments);
+			break;
+		case "minus":
+			walkMinus(obj.arguments);
+			break;
+		case "multiplication":
+			walkMultiplication(obj.arguments);
+			break;
+		case "division":
+			walkDivision(obj.arguments);
+			break
+		case "modulo":
+			walkModulo(obj.arguments);
+			break;
+		case "add_assign":
+			walkAddAssign(obj.arguments);
+			break;
+		case "sub_assign":
+			walkSubAssign(obj.arguments);
+			break;
+		case "multi_assign":
+			walkMultiAssign(obj.arguments);
+			break;
+		case "div_assign":
+			walkDivAssign(obj.arguments);
+			break;
+		case "mod_assign":
+			walkModAssign(obj.arguments);
+			break;
+		case "increment":
+			walkIncrement(obj.arguments);
+			break;
+		case "decrement":
+			walkDecrement(obj.arguments);
+			break;
+		case "and":
+			walkAnd(obj.arguments);
+			break;
+		case "or":
+			walkOr(obj.arguments);
+			break;
+		case "bit-XOR":
+			walkBitXOR(obj.arguments);
+			break;
+		case "bit-AND":
+			walkBitAND(obj.arguments);
+			break;
+		case "bit-OR":
+			walkBitOR(obj.arguments);
+			break;
+		case "bit-right-shift":
+			walkBitRightShift(obj.arguments);
+			break;
+		case "bit-left-shift":
+			walkBitLeftShift(obj.arguments);
+			break;
+		case "zero-fill-right-shift":
+			walkZeroFillRightShift(obj.arguments);
+			break;
+		case "equality":
+			walkEquality(obj.arguments);
+			break
+		case "less-than":
+			walkLessThan(obj.arguments);
+			break;
+		case "larger-than":
+			walkLargerThan(obj.arguments);
+			break;
+		case "not-equal":
+			walkNotEqual(obj.arguments);
+			break;
+		case "less-than-or-equal":
+			walkLessThanOrEqual(obj.arguments);
+			break;
+		case "greater-than-or-equal":
+			walkGreaterThanOrEqual(obj.arguments);
+			break;
+		case "assign":
+			walkAssign(obj.arguments);
+			break;
+		}
+}
+
+/* Walkers for all different types of node
+
+/* 
+ * for example in 
+ * 	 Function Foo(int x) -> int{
+ * 		int y = x + 1;
+ * 		return y;
+ * 	 }
+ * declarator = "Foo"
+ * declarationList = ["int", "x"]
+ * returnType = "int"
+ *  functionBody would consist of a decl list and a statement list for what is contained in the body
+ */
+function walkFunction(arguments){
+	var declarator = arguments[0];			// name of function
+	var declarationList = arguments[1];		// list of parameters
+	var returnType = arguments[2];			// return type of function
+	var functionBody = arguments[3];		// optional decl/statement_lists
+	
+	// add function name/return type to symbol table
+	// walk list of parameters (which implies adding them to symbol table also)
+	// walk body
+}
+
+/* for example in int x = 1
+ * type = int
+ * declarator = x
+ * exp = 1
+ */
+function walkVaraibleDeclAssign(arguments){
+	var type = arguments[0];
+	var declarator = arguments[1];
+	var exp = arguments[2];
+	
+	// walkVariableDecl ([type, declarator])
+	// walkAssign ([type, arguments]) ?
+}
+
+/* for example in int x;
+ * type = int
+ * declarator = x
+ */
+function walkVariableDecl(arguments){
+	var type = arguments[0];
+	var declarator = arguments[1];		// name of variable
+	
+	// add varable type/declarator to symbol table
+}
+
+/* for example in if(x ?= 1){*do some code"}
+ * expression would be a equality check node for x and 1
+ * statements would be a statement list with some code
+ */
+function walkIf(arguments){
+	var expression = arguments[0];
+	var statements = arguments[1];
+	
+	// evaluate expression?
+	// walk statements if true
+}
+
+/* for example in if(x ?= 1){...} else{...}
+ * exp would be a equality check node for x and 1
+ * statementswould be a statement list with the code from the if statement body
+ * elseStatements would a statement list with the code from the else body 
+ */
+function walkIfElse(arguments){
+	var exp = arguments[0];
+	var statements = arguments[1];
+	var elseStatements= arguments[2];
+	
+	// walkIf ([expression, statements])
+	// walkStatements () // TODO: find equivalent of walkStatments
+}
+
+/* for example in while(b ?= true){...}
+ * exp would be an equality check node for b and true
+ * body would be a statement list with the code from the while loop body
+ */
+function walkWhile(arguments){
+	var exp = arguments[0];
+	var body = arguments[1];
+	
+	// evaluate exp to see whether we should walk body
+}
+
+/* for example Do{...}while(b = true)
+ * exp would be an equality check node for b and true
+ * body would be a statement list with the code from the do while loop body
+ */
+function walkDoWhile(arguments){
+	var exp = arguments[0];
+	var body = arguments[1];
+	
+	// walk body
+	// evaluate exp to see whether we should walk body again
+}
+
+/* for example in For(int i = 0; i ?< 5; i++){...}
+ * decl would be a VaraibleDeclAssign node for int i = 0
+ * condition would be a equality check node between variable i and 5
+ * update would be an increment node for i
+ * body would be a statement list with the code from the for loop body
+ */
+function walkFor(arguments){
+	var decl = arguments[0];
+	var condition = arguments[1];
+	var update = arguments[2];
+	var body = arguments[3];
+	
+	// walk declaration, add stuff to symbol table		// TODO check with Kris, seems like this necessitates a new variable be declared every time, meaning we can't use others.
+	// evaluate condition to see if we should walk body
+	// walk body
+	// walk update clause and return to beginning.
+}
+
+// TODO: mathematical operation type checking? overloading?
+
+/* assigns variables to both sides of statement
+ * for example in x + y
+ * left = x
+ * right = y
+ */
+function walkAddition(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// if int, opcodes to push left and right to stack
+	// if float, opcodes to push left and right to constant pool
+	// other types, not sure what to do here. operator overloading?
+	// after things pushed to their appropriate places, send opcodes for addition.
+}
+
+/* assigns variables to both sides of statement
+ * for example in x - y
+ * left = x
+ * right = y
+ */
+function walkMinus(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+		// if int, opcodes to push left and right to stack
+	// if float, opcodes to push left and right to constant pool
+	// other types, not sure what to do here. operator overloading?
+	// after things pushed to their appropriate places, send opcodes for subtraction.
+}
+
+/* assigns variables to both sides of statement
+ * for example in x * y
+ * left = x
+ * right = y
+ */
+function walkMultiplication(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// if int, opcodes to push left and right to stack
+	// if float, opcodes to push left and right to constant pool
+	// other types, not sure what to do here. operator overloading?
+	// after things pushed to their appropriate places, send opcodes for multiplition.
+}
+
+/* assigns variables to both sides of statement
+ * for example in x / y
+ * left = x
+ * right = y
+ */
+function walkDivision(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// if int, opcodes to push left and right to stack
+	// if float, opcodes to push left and right to constant pool
+	// other types, not sure what to do here. operator overloading?
+	// after things pushed to their appropriate places, send opcodes for division.
+}
+
+/* assigns variables to both sides of statement
+ * for example in x % y
+ * left = x
+ * right = y
+ */
+function walkModulo(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// if int, opcodes to push left and right to stack
+	// if float, opcodes to push left and right to constant pool
+	// other types, not sure what to do here. operator overloading?
+// after things pushed to their appropriate places, send opcodes for modulo arithetic.
+}
+
+/* assigns variables to both sides of statement
+/for example in x += y
+ * left = x
+ * right = y
+ */
+function walkAddAssign(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// operation x += y expands to x = x + y
+	// this means we need to add x and y, then assign result to x
+	// so, walkAssign(x, walkAdd(x,y))
+}
+
+/* assigns variables to both sides of statement
+ * for example in x -= y
+ * left = x
+ * right = y
+ */
+function walkSubAssign(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// operation x -= y expands to x = x - y
+	// this means we need to subtract y from x, then assign the result to x
+	// so, walkAssign(x, walkSubtract(x,y))
+}
+
+/* assigns variables to both sides of statement
+ * for example in x * = y
+ * left = x
+ * right = y
+ */
+function walkMultiAssign(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// operation x *= expands to x = x * y
+	// this means we need to multiply x by y, then assign to x
+	// so, walkAssign(x, walkMultiply(x,y))
+}
+
+/* assigns variables to both sides of statement
+ * for example in x /= y
+ * left = x
+ * right = y
+ */
+function walkDivAssign(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// operation x /= yexpands to x = x / y
+	// this means we need to divide x by y, then assign to x
+	// so, walkAssign(x, walkDivide(x,y))
+}
+
+/* assigns variables to both sides of statement
+ * for example in x %= y
+ * left = x
+ * right = y
+ */
+function walkModAssign(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// operation x %= y expands to x = x % y
+	// this means we need to get x % y, then assign to x
+	// so, walkAssign(x, walkModulo(x+y))
+}
+
+/* assigns variables to both sides of statement
+ * for example in x++
+ * name = x
+ */
+function walkIncrement(arguments){
+	var name = arguments[0];
+	
+	// x++ expands to x = x + 1
+	// so, walkAssign(walkAdd(x,1))
+}
+
+//----------TODO: check which is the better syntax: function ...(...) or var ... = function (...)------------------------------------------------------------------------
+
+/* assigns variables to both sides of statement
+ * for example in x--
+ * name = x
+ */
+var walkDecrement = function(arguments){
+	var name = arguments[0];
+	
+	// x-- expands to x = x - 1
+	// so, walkAssign(walkSubtract(x,1))
+	// or, walkAssign(walkAdd(x,-1))
+}
+
+/* assigns variables to both sides of statement
+ * for example in x && 2
+ * left = x
+ * right = 2
+ */
+var walkAnd = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// TODO: make evaluate function
+	// check both evaluate to true.
+	// Evaluate(left)
+	// Evaluate(right)
+}
+
+/* assigns variables to both sides of statement
+ * for example in x || 2
+ * left = x
+ * right = 2
+ */
+var walkOr = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// check if either evaluates to true.
+	// Evaluate(left)
+	// Evaluate(right)
+}
+
+/* assigns variables to both sides of statement
+ * for example in x = 2
+ * left = x
+ * right = 2
+ */
+var walkAssign = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+	
+	// find left in symbol table/scope tree, warn about undeclared if not there.
+	// evaluate (walk) right.
+	
+}
+
+	// TODO check with Darren about bitwise operator opcodes.
+
+/* assigns variables to both sides of statement
+ * for example in x & 2
+ * left = x
+ * right = 2
+ */
+var walkBitAND = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x >>> 2
+ * left = x
+ * right = 2
+ */
+var walkZeroFillRightShift = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x | 2
+ * left = x
+ * right = 2
+ */
+var walkBitOR = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x >> 2
+ * left = x
+ * right = 2
+ */
+var walkBitRightShift = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x << 2
+ * left = x
+ * right = 2
+ */
+var walkBitLeftShift = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x ^ 2
+ * left = x
+ * right = 2
+ */
+var walkbitXOR = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+// TODO: evaluation function for boolean logic
+
+/* assigns variables to both sides of statement
+ * for example in != 2
+ * left = x
+ * right = 2
+ */
+var walkNotEqual = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x <= 2
+ * left = x
+ * right = 2
+ */
+var walkLessThanOrEqual = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x < 2
+ * left = x
+ * right = 2
+ */
+var walkLessThan = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x > 2
+ * left = x
+ * right = 2
+ */
+var walkLargerThan = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x >= 2
+ * left = x
+ * right = 2
+ */
+var walkGreaterThanOrEqual = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+/* assigns variables to both sides of statement
+ * for example in x ?= 2
+ * left = x
+ * right = 2
+ */
+var walkEquality = function(arguments){
+	var left = arguments[0];
+	var right = arguments[1];
+}
+
+
 /* parser generated by jison 0.4.15 */
 /*
   Returns a Parser object of the following structure:
@@ -1099,28 +1674,44 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 	/*	Op codes
 	*	
-	*	MNEMONIC	OPCODE	OPERANDS	DESCRIPTION
-	*	STOREG		0		2			store global at address
-	*	LOADG		1		1			push global at address
-	*	STOREL		2		1			store local at address
-	*	LOADL		3		1			push local at local address
-	*	LOADC		4		1			push constant
-	*	IADD		5		0			i = pop off stack. j = pop off stack. push j + i
-	*	ISUB		6		0			i = pop off stack. j = pop off stack. push j - i
-	*	IMUL		7		0			i = pop off stack. j = pop off stack. push j * i
-	*	IDIV		8		0			i = pop off stack. j = pop off stack. push j / i
-	*	FADD		9		0			i = pop off stack. j = pop off stack. push j + i
-	*	FSUB		10		0			i = pop off stack. j = pop off stack. push j - i
-	*	FMUL		11		0			i = pop off stack. j = pop off stack. push j * i
-	*	FDIV		12		0			i = pop off stack. j = pop off stack. push j / i
-	*	NCMPEQ		13		0			i = pop off stack. j = pop off stack. push result of j == i
-	*	NCMPLT		14		0			i = pop off stack. j = pop off stack. push result of j < i
-	*	NCMPGT		15		0			i = pop off stack. j = pop off stack. push result of j > i
-	*	JUMP		16		1			jump to address
-	*	JUMPT		17		1			pop value off stack. Jump to address if value == 1
-	*	JUMPF		18		1			pop value off stack. Jump to address if value == 0
-	*	CALL		19		2			arg 1 = address of function. arg2 = number of params
-	*	RETURN		20		1			Takes the number of values to return
+	*	MNEMONIC	OPERANDS	DESCRIPTION
+	*	STOREG		2			store global at address
+	*	LOADG		1			push global at address
+	*	STOREL		1			store local at address
+	*	LOADL		1			push local at local address
+	*	LOADC		1			push constant
+	*	IADD		0			i = pop off stack. j = pop off stack. push j + i
+	*	ISUB		0			i = pop off stack. j = pop off stack. push j - i
+	*	IMUL		0			i = pop off stack. j = pop off stack. push j * i
+	*	IDIV		0			i = pop off stack. j = pop off stack. push j / i
+	*	FADD		0			i = pop off stack. j = pop off stack. push j + i
+	*	FSUB		0			i = pop off stack. j = pop off stack. push j - i
+	*	FMUL		0			i = pop off stack. j = pop off stack. push j * i
+	*	FDIV		0			i = pop off stack. j = pop off stack. push j / i
+	*	NCMPEQ		0			i = pop off stack. j = pop off stack. push result of j == i
+	*	NCMPLT		0			i = pop off stack. j = pop off stack. push result of j < i
+	*	NCMPGT		0			i = pop off stack. j = pop off stack. push result of j > i
+	*	JUMP		1			jump to address
+	*	JUMPT		1			pop value off stack. Jump to address if value == 1
+	*	JUMPF		1			pop value off stack. Jump to address if value == 0
+	*	CALL		2			arg 1 = address of function. arg2 = number of params
+	*	RETURN		1			Takes the number of values to return
+
+	*	LOADIDX		2			arg1 = index into the constant pool. arg2 = index into the array.
+	*/
+
+	/*
+	*	Struct layouts
+	*	
+	*				  x    y
+	*	Point 		[100, 150]
+	*
+	*				  r    g   b   a   x1  y1  x2  y2
+	*	Line 		[ 0 ,  0 ,255,255,100,100,200,200]
+	*
+	*				  r    g   b   a   x1  y1  x2  y2  x3  y3 	0 or More points
+	*	Polygon 	[ 0 ,  0 ,255,255,100,100,200,200,150, 0 ,.............]
+	*
 	*/
 
 	var opCodes = {
@@ -1151,6 +1742,9 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		CLEAR: 	101,
 		PRINTST:102,
 		PRINTS: 103,
+		LOADIDX:104,
+		SETIDX: 105,
+		PGDARW: 106,
 		EXIT: 	999
 	};
 
@@ -1436,25 +2030,41 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					// Get line
 					sp--;
 					var lineAddress = dataStore[sp];
-					var line = constantPool[lineAddress];
-					var pt1 = line[0];
-					var pt2 = line[1];
-					var pt1x = pt1[0];
-					var pt1y = pt1[1];
-					var pt2x = pt2[0];
-					var pt2y = pt2[1];
-					var color = line[2];
-					var r = color[0];
-					var g = color[1];
-					var b = color[2];
-					var a = color[3];
+					var lineStruct = constantPool[lineAddress];
+					var r = lineStruct[0];
+					var g = lineStruct[1];
+					var b = lineStruct[2];
+					var a = lineStruct[3];
+					var pt1x = lineStruct[4];
+					var pt1y = lineStruct[5];
+					var pt2x = lineStruct[6];
+					var pt2y = lineStruct[7];
 					var theLine = new Float32Array([pt1x,pt1y,0,
 													pt2x,pt2y,0]);
 					var theColor = new Float32Array([r,g,b,a]);
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.LINES);
 					prog.draw(theLine, {}, {color: theColor});
-					if(debugMode) console.log("LNDRAW: " + line);
+					if(debugMode) console.log("LNDRAW: " + lineStruct);
+					break;
+				case opCodes.PGDARW:
+					var polygonAddress = codeStore[cp];
+					cp++;
+					var polygonStruct = constantPool[polygonAddress];
+					var r = polygonStruct[0];
+					var g = polygonStruct[1];
+					var b = polygonStruct[2];
+					var a = polygonStruct[3];
+					var theColor = Float32Array([r,g,b,a]);
+
+					var points = [];
+					var i;
+					for (i = 4; i < polygonStruct.length; i+=2) {
+						var pt = [polygonStruct[i],polygonStruct[i+1]];
+					}
+					var prog = manager.getProgram("square", "square");
+					prog.setDrawMode(Palette.Program.POLYGON);
+					prog.draw(points, {}, {color: theColor});
 					break;
 				case opCodes.RENDER:
 					needsUpdate = 1;
@@ -1477,9 +2087,28 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 				case opCodes.PRINTS: // Print top of stack
 					if(debugMode) console.log(dataStore);
 					break;
+				case opCodes.LOADIDX:
+					var constPoolindex = codeStore[cp];
+					cp++;
+					var arrayIndex = codeStore[cp];
+					cp++;
+					var arr = constantPool[constPoolindex];
+					var value = arr[arrayIndex];
+					dataStore[sp] = value;
+					sp++;
+					break;
+				case opCodes.SETIDX:
+					var constPoolindex = codeStore[cp];
+					cp++;
+					var arrayIndex = codeStore[cp];
+					cp++;
+					var arr = constantPool[constPoolindex];
+					sp--;
+					var value = dataStore[sp];
+					arr[arrayIndex] = value;
+					break;
 			}
-			//console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
-			//console.log(codeStore);
+			console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
 			if(debugMode) console.log(JSON.stringify(dataStore));
 			lc++;
 			if (/*lc > 50*/0) {console.log("INF LOOP");break};
@@ -1498,7 +2127,849 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		window.requestAnimationFrame(window.mvm.interpret);
 	}
 }
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/**
+* @namespace Palette
+*/
+var Palette = Palette || {};
+
+/* global Palette */
+/**
+* @classdesc The core part of the system - initialise this to begin using the shader manager.
+* @class Palette.Manager
+* @param {WebGLRenderingContext} gl - The context all shaders and programs will belong to and be compiled by.
+*/
+Palette.Manager = function(gl){
+	// if(!(gl instanceof WebGLRenderingContext)){
+	// 	throw new TypeError("Error: attempted to create Palette with illegal argument.");
+	// }
+
+	/**
+    * A reference to the defining WebGLRenderingContext.
+    * @name Palette.Manager#context
+	* @type WebGLRenderingContext
+    * @protected
+    * @readonly
+    */
+	this.context 		= gl;
+	
+	/**
+    * An object storing all processed Vertex Shaders.
+    * @name Palette.Manager#vertShaders
+	* @type Object
+    * @private
+    */
+	this.vertShaders 	= {};
+	/**
+    * An object storing all processed Fragment Shaders.
+    * @name Palette.Manager#fragShaders
+	* @type Object
+    * @private
+    */
+	this.fragShaders	= {};
+	/**
+    * An object storing all processed Programs.
+    * @name Palette.Manager#programs
+	* @type Object
+    * @private
+    */
+	this.programs		= {};
+
+	/**
+    * A {@link Palette.ShaderFactory} object utilised by the manager
+    * to generate valid shader objects from many sources for use.
+    * @name Palette.Manager#shaderFactory
+	* @type Palette.ShaderFactory
+    * @protected
+    * @readonly
+    */
+	this.shaderFactory	= new Palette.ShaderFactory(this);
+};
+
+Palette.Manager.prototype = {
+	/**
+	* Add a shader into the manager's storage for future access.
+	* @method Palette.Manager#addShader
+	* @public
+	* @param {string|Palette.Shader} shaderRef - URL, JSON or Palette.Shader.
+	*/
+	addShader: function(shaderRef){
+		this.shaderFactory.addShader(shaderRef);
+	},
+
+	/**
+	* Send a draw call to a given vs-fs pair.
+	* The work is delegated down to the program's own draw method.
+	* @method Palette.Manager#draw
+	* @public
+	* @param {string|Palette.Shader} vs - The desired Vertex Shader.
+	* @param {string|Palette.Shader} fs - The desired Fragment Shader.
+	* @param {Float32Array} verts - Vertex list to pass to the GPU.
+	* @param {object} [conf1] - A set of attributes to pass down to the fragment shader.
+	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
+	*/
+	draw: function(vs, fs, verts, conf1, conf2){
+		this.getProgram(vs, fs).draw(verts, conf1, conf2);
+	},
+
+	/**
+	* Request a program object from a known vs-fs pair.
+	* @method Palette.Manager#getProgram
+	* @public
+	* @param {string|Palette.Shader} vs - The desired Vertex Shader.
+	* @param {string|Palette.Shader} fs - The desired Fragment Shader.
+	* @return {Palette.Program} The {@link Palette.Program} either found or generated. If either shader was not found, NULL is returned.
+	*/
+	getProgram: function(vs, fs){
+		var vsName = this.getShaderName(vs);
+		var fsName = this.getShaderName(fs);
+		var vsObj;
+		var fsObj;
+
+		var output;
+
+		this.programs[vsName] = this.programs[vsName] || {};
+		this.programs[vsName][fsName] = this.programs[vsName][fsName] || {};
+
+		if(!(this.programs[vsName][fsName] instanceof Palette.Program)){
+			if(vs instanceof Palette.Shader){vsObj = vs;} else{vsObj = this.getShader(Palette.Shader.VS, vsName);}
+			if(fs instanceof Palette.Shader){fsObj = fs;} else{fsObj = this.getShader(Palette.Shader.FS, fsName);}
+			this.programs[vsName][fsName] = new Palette.Program(this.context, vsObj, fsObj);
+		}
+		output = this.programs[vsName][fsName];
+
+		return output;
+	},
+
+	/**
+	* Request a shader object from storage using its type and name.
+	* @method Palette.Manager#getShader
+	* @public
+	* @param {integer} type - Either Palette.Shader.VS or Palette.Shader.FS.
+	* @param {string} name - The shader's identifier.
+	* @return {Palette.Shader} The requested {@link Palette.Shader}. If a shader was not found, NULL is returned.
+	*/
+	getShader: function(type, name){
+		return (type === Palette.Shader.VS) ? this.vertShaders[name] : this.fragShaders[name];
+	},
+
+	/**
+	* Ensure that we have a shader's name, for lookup purposes in particular.
+	* @method Palette.Manager#getShaderName
+	* @public
+	* @param {string|Palette.Shader} input - The shader we need to sanity check the name of.
+	* @return {string} - The definite name of the shader.
+	*/
+	getShaderName: function(input){
+		var output;
+		if(input instanceof Palette.Shader){
+			output = input.name;
+		} else{
+			output = input;
+		}
+		return output;
+	}
+};
+
+Palette.Manager.prototype.constructor = Palette.Manager;
+
+/* global Palette */
+/**
+* @classdesc Abstraction of program references to allow easy manipulation.
+* @description The Program object, generated from linked pairs of vs-fs combinations.
+* @class Palette.Program
+* @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
+* @param {Palette.Shader} vs - The {@link Palette.Shader} acting as the vertex shader for this program.
+* @param {Palette.Shader} fs - The {@link Palette.Shader} acting as the fragment shader for this program.
+*/
+Palette.Program = function(gl, vs, fs){
+	/**
+	* The program's attached context.
+	* @name Palette.Program#context
+	* @type WebGLRenderingContext
+	* @protected
+	* @readonly
+	*/
+	this.context = gl;
+	
+	/**
+	* The program's attached vertex shader.
+	* @name Palette.Program#vs
+	* @type Palette.Shader
+	* @protected
+	* @readonly
+	*/
+	this.vs = vs;
+	
+	/**
+	* The program's attached fragment shader.
+	* @name Palette.Program#fs
+	* @type Palette.Shader
+	* @protected
+	* @readonly
+	*/
+	this.fs = fs;
+
+	/**
+	* The program as seen by WebGL.
+	* @name Palette.Program#program
+	* @type WebGLProgram
+	* @protected
+	* @readonly
+	*/
+	this.program = null;
+
+	/**
+	* Has the program attempted compilation yet?
+	* @name Palette.Program#compiled
+	* @type Boolean
+	* @private
+	* @readonly
+	*/
+	this.compiled = false;
+
+	/**
+	* Attribute Storage - temporary and set.
+	* @name Palette.Program#attrs
+	* @type Object
+	* @private
+	* @readonly
+	*/
+	this.attrs = {vs: {access:{},store:{},send:{}}
+					, fs: {access:{},store:{},send:{}}};
+
+	/**
+	* The Selected Draw Mode for the program.
+	* @name Palette.Program#drawMode
+	* @type Integer
+	* @private
+	* @readonly
+	*/
+	this.drawMode = Palette.Program.TRIANGLES;
+
+	this.linkProgram();
+	this.prepareAttrStores();
+};
+
+Palette.Program.prototype = {
+	/**
+	* Draw a set of vertices with this program, with optional configuration. Configurations passed here do not
+	* overwrite the cached object.
+	* This method is accessed when {@link Palette.Manager#draw} is called.
+	* @method Palette.Program#draw
+	* @public
+	* @param {Float32Array} verts - Vertex list to pass to the GPU.
+	* @param {object} [conf1] - A set of attributes to pass down to the fragment shader.
+	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
+	*/
+	draw: function(verts, conf1, conf2){
+		this.context.useProgram(this.program);
+		if(!conf1) conf1 = {};
+		var tempDrawMode = this.drawMode;
+
+		if(verts != null){
+		switch(this.drawMode){
+			case Palette.Program.POLYGON:
+				debugger;
+				var temp = earcut([verts], true);
+				var itemSize = this.attrs.vs.access.vertexBuffer.itemSize;
+				var temper = new Float32Array(temp.indices.length * itemSize);
+
+				var vertSize = verts[0].length;
+
+				for(var i=0; i<temp.indices.length; i++){
+					var vertIndex = temp.indices[i];
+
+					switch(vertSize){
+						case 3:
+							temper[itemSize*i+2] = temp.vertices[vertIndex*vertSize +2];
+							/*falls through*/
+						case 2:
+							temper[itemSize*i+1] = temp.vertices[vertIndex*vertSize +1];
+							/*falls through*/
+						case 1:
+							temper[itemSize*i] = temp.vertices[vertIndex*vertSize];
+							/*falls through*/
+					}
+				}
+				conf1.vertexBuffer = temper;
+				tempDrawMode = Palette.Program.TRIANGLES;
+				break;
+			default:
+				conf1.vertexBuffer = verts;
+				break;
+		}
+		}
+
+		this.generateSend(this.attrs.vs, conf1);
+		this.generateSend(this.attrs.fs, conf2);
+
+		this.passAttrstoProg();
+
+		this.context.drawArrays(tempDrawMode, 0
+			, this.attrs.vs.send.vertexBuffer.length/this.attrs.vs.access.vertexBuffer.itemSize);
+	},
+
+	/**
+	* Restore a program's object config for either shader or both.
+	* @method Palette.Program#restoreDefaultConfig
+	* @public
+	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE,
+	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
+	*/
+	restoreDefaultConfig: function(mode){
+		var attrPointer;
+		var shaderPointer;
+
+		for(var j=0; j<2; j++){
+			if(!j){if(!mode&Palette.Program.VS_MODE)continue; shaderPointer = this.vs; attrPointer = this.attrs.vs;}
+			else {if(!mode&Palette.Program.FS_MODE)continue; shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+
+			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
+				var attrData = shaderPointer.attrs[i];
+				var name = attrData[0];
+
+				if(attrData[1]=="buffer" || attrData[1]=="vertexAttrib"){
+					attrPointer.store[name] = null;
+				} else if(attrData[1]!="vertexAttrib"){
+					attrPointer.store[name] = attrData[2];
+				}
+			}
+		}
+	},
+
+	/**
+	* Set a program's object config for either shader or both with a given config object.
+	* Object properties not in the supplied object will not overwrite the program state.
+	* @method Palette.Program#setConfig
+	* @public
+	* @param {integer} mode - The identifier for which config object to set. Supports Palette.Program.VS_MODE,
+	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
+	* @param {object} conf - The config object to inject into the program state.
+	*/
+	setConfig: function(mode, conf){
+		var attrPointer;
+		var shaderPointer;
+
+		for(var j=0; j<2; j++){
+			if(!j){if(!mode&Palette.Program.VS_MODE)continue; shaderPointer = this.vs; attrPointer = this.attrs.vs;}
+			else {if(!mode&Palette.Program.FS_MODE)continue; shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+
+			for(var prop in attrPointer.access){
+				var attrDest = attrPointer.store[prop];
+
+				if(conf[prop]!= undefined)
+					attrDest = conf[prop];
+			}
+		}
+	},
+
+	/**
+	* Compile the set of shader attached to this program as a compilation unit.
+	* Can only be run once per Program object, i.e. per vs-fs pair.
+	* @method Palette.Program#linkProgram
+	* @private
+	*/
+	linkProgram: function(){
+		if (this.compiled) return false;
+		this.compiled = true;
+
+		this.program = this.context.createProgram();
+
+		this.context.attachShader(this.program, this.vs.shader);
+		this.context.attachShader(this.program, this.fs.shader);
+
+		this.context.linkProgram(this.program);
+
+		return true;
+	},
+
+	/**
+	* Fetches the default values for program attributes, and fetches setter methods
+	* for execution at run time. 
+	* @method Palette.Program#prepareAttrStores
+	* @private
+	*/
+	prepareAttrStores: function(){
+		this.context.useProgram(this.program);
+		var shaderPointer;
+		var attrPointer;
+
+		for(var j=0; j<2; j++){
+			if(!j){shaderPointer = this.vs; attrPointer = this.attrs.vs;}
+			else {shaderPointer = this.fs; attrPointer = this.attrs.fs;}
+
+			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
+				var attrData = shaderPointer.attrs[i];
+				var name = attrData[0];
+				attrPointer.access[name] = attrPointer.access[name] || {};
+				var attrAccessDest = attrPointer.access[name];
+
+				attrAccessDest.setFunction = Palette.Program.fetchSetter(this.context, attrData[1]);
+
+				if(attrData[1]=="vertexAttrib"){
+					attrAccessDest.pointer = this.context.getAttribLocation(this.program, attrData[0]);
+					this.context.enableVertexAttribArray(attrAccessDest.pointer);
+					attrAccessDest.bufferName = attrData[2];
+				}	else if(attrData[1]=="buffer"){
+					attrAccessDest.pointer = this.context.createBuffer();
+					attrAccessDest.itemSize = attrData[2];
+				}	else{
+					attrAccessDest.pointer = this.context.getUniformLocation(this.program, attrData[0]);
+				}
+
+				attrAccessDest.type = attrData[1];
+			}
+		}
+		this.restoreDefaultConfig(Palette.Program.BOTH_MODE);
+	},
+
+	/**
+	* Run through the setters for each attribute, passing the values in the send
+	* section of the store to the context.
+	* @method Palette.Program#passAttrsToProg
+	* @private
+	*/
+	passAttrstoProg: function(){
+		var attrPointer;
+
+		for(var j=0; j<2; j++){
+			if(!j){attrPointer = this.attrs.vs;}
+			else {attrPointer = this.attrs.fs;}
+
+			for(var prop in attrPointer.access){
+				var attrDest = attrPointer.send[prop];
+				var attrAccessDest = attrPointer.access[prop];
+
+				if(attrAccessDest.type.substr(0,3) == "mat"){
+					attrAccessDest.setFunction(attrAccessDest.pointer, this.context.FALSE, attrDest);
+				} else if(attrAccessDest.type == "vertexAttrib"){
+					var buffer = this.attrs.vs.access[attrAccessDest.bufferName];
+					attrAccessDest.setFunction(attrAccessDest, buffer);
+				} else if(attrAccessDest.type == "buffer"){
+					attrAccessDest.setFunction(attrAccessDest, attrDest);
+				} else{
+					attrAccessDest.setFunction(attrAccessDest.pointer, attrDest);
+				}
+			}
+		}
+	},
+
+	/**
+	* Set a program's draw mode.
+	* @method Palette.Program#setDrawMode
+	* @public
+	* @param {integer} mode - The gl code for drawing mode. Supports Palette.Program.POINTS, .LINES, .LINE_LOOP,
+	* .LINE_STRIP, .TRIANGLES, .TRIANGLE_STRIP, .TRIANGLE_FAN.
+	*/
+	setDrawMode: function(mode){
+		this.drawMode = mode;
+	},
+
+	/**
+	* Generate the "send" region of the vs and fs attribute stores from the necessary
+	* sub-stores.
+	* @method Palette.Program#generateSend
+	* @private
+	*/
+	generateSend: function(dest, conf){
+		var toSend;
+		for(name in dest.access){
+			if(conf[name]) toSend = conf[name];
+			else toSend = dest.store[name];
+			dest.send[name] = toSend;
+		}
+	}
+};
+/**
+* Returns the relevant setter function for each 
+* @method Palette.Program.fetchSetter
+* @private
+*/
+Palette.Program.fetchSetter = function(gl, type){
+	//LAZY
+	//I'LL DO THIS MORE ELEGANTLY ONE DAY.
+	var oneParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0]);
+		}
+	}
+	var twoParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0],array[1]);
+		}
+	}
+	var threeParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0],array[1],array[2]);
+		}
+	}
+	var fourParamFromArray = function(convertFunc){
+		return function(ptr, array){
+			convertFunc(ptr, array[0],array[1],array[2],array[3]);
+		}
+	}
+
+	switch(type){
+		case "float":
+			return oneParamFromArray(gl.uniform1f.bind(gl));
+		case "float[]":
+			return gl.uniform1fv.bind(gl);
+		case "int":
+			return oneParamFromArray(gl.uniform1i.bind(gl));
+		case "int[]":
+			return gl.uniform1iv.bind(gl);
+		case "vec2":
+			return twoParamFromArray(gl.uniform2f.bind(gl));
+		case "vec2[]":
+			return gl.uniform2fv.bind(gl);
+		case "ivec2":
+			return twoParamFromArray(gl.uniform2i.bind(gl));
+		case "ivec2[]":
+			return gl.uniform2iv.bind(gl);
+		case "vec3":
+			return threeParamFromArray(gl.uniform3f.bind(gl));
+		case "vec3[]":
+			return gl.uniform3fv.bind(gl);
+		case "ivec3":
+			return threeParamFromArray(gl.uniform3i.bind(gl));
+		case "ivec3[]":
+			return gl.uniform3iv.bind(gl);
+		case "vec4":
+			return fourParamFromArray(gl.uniform4f.bind(gl));
+		case "vec4[]":
+			return gl.uniform4fv.bind(gl);
+		case "ivec4":
+			return fourParamFromArray(gl.uniform4i.bind(gl));
+		case "ivec4[]":
+			return gl.uniform4iv.bind(gl);
+		case "mat2":
+			return gl.uniformMatrix2fv.bind(gl);
+		case "mat3":
+			return gl.uniformMatrix3fv.bind(gl);
+		case "mat4":
+			return gl.uniformMatrix4fv.bind(gl);
+		case "texture":
+			alert("You're on your own, kid.");
+			return null;
+		case "vertexAttrib":
+			var k = function(attrib, buffer){
+				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
+				gl.vertexAttribPointer(attrib.pointer, buffer.itemSize, gl.FLOAT, false, 0, 0);
+			}
+			return k.bind(gl);
+		case "buffer":
+			var k = function(buffer, bufferData){
+				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
+				gl.bufferData(gl.ARRAY_BUFFER, bufferData, gl.DYNAMIC_DRAW);
+			}
+			return k.bind(gl);
+		default:
+			alert("Not gonna lie - you really messed up. I can't pass "+type+" onto the shader.");
+			return null;
+	}
+};
+
+Palette.Program.NONE_MODE	= 0;
+Palette.Program.VS_MODE 	= 1;
+Palette.Program.FS_MODE 	= 2;
+Palette.Program.BOTH_MODE 	= 3;
+
+//WEBGL
+Palette.Program.POINTS			= 0;
+Palette.Program.LINES			= 1;
+Palette.Program.LINE_LOOP		= 2;
+Palette.Program.LINE_STRIP		= 3;
+Palette.Program.TRIANGLES		= 4;
+Palette.Program.TRIANGLE_STRIP	= 5;
+Palette.Program.TRIANGLE_FAN	= 6;
+//MINE
+Palette.Program.POLYGON			= 7;
+
+
+Palette.Program.prototype.constructor = Palette.Program;
+
+/* global Palette */
+/**
+* @classdesc Abstraction of shader references to allow easy manipulation.
+* @class Palette.Shader
+* @description Initialise and compile a valid Source Object into a Shader.
+* @param {WebGLRenderingContext} gl - The context the shader will belong to and be compiled by.
+* @param {string} name - The name the shader object will be referred to by.
+* @param {number} type - The class of the shader contained, either Palette.Shader.VS or Palette.Shader.FS.
+* @param {string} source - The source code to compile the shader from.
+* @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
+* @param {object} [attrs] - The array which contains attribute names and default values, as an array of 3-tuples.
+*/
+Palette.Shader = function(gl, name, type, source, attrs){
+	/**
+	* The shader's name.
+	* @name Palette.Shader#name
+	* @type String
+	* @protected
+	* @readonly
+	*/
+	this.name = name;
+
+	/**
+	* The type of shader, either Palette.Shader.VS or Palette.Shader.FS for objects.
+	* @name Palette.Shader#type
+	* @type Integer
+	* @protected
+	* @readonly
+	*/
+	this.type = type;
+
+	/**
+	* The shader's attached context.
+	* @name Palette.Shader#context
+	* @type WebGLRenderingContext
+	* @protected
+	* @readonly
+	*/
+	this.context = gl;
+
+	/**
+	* The shader's attribute array.
+	* @name Palette.Shader#attrs
+	* @type Array[]
+	* @protected
+	* @readonly
+	*/
+	this.attrs = attrs;
+
+	/**
+	* The reference to the compiled shader in the WebGLRenderingContext.
+	* @name Palette.Shader#shader
+	* @type WebGLShader
+	* @protected
+	* @readonly
+	*/
+	this.shader = null;
+
+	/**
+	* Has the shader attempted compilation yet?
+	* @name Palette.Shader#compiled
+	* @type Boolean
+	* @private
+	* @readonly
+	*/
+	this.compiled = false;
+
+	this.bakeShader(source);
+};
+
+Palette.Shader.prototype = {
+	/**
+	* Compile shader code from a source string. Once compiled, you cannot recompile.
+	* @method Palette.Shader#bakeShader
+	* @protected
+	* @param {string} source - The source code to compile and attach to this shader object.
+	* @return {boolean} True if successful, false if unsuccessful.
+	*/
+	bakeShader: function(source){
+		if (this.compiled){return null;}
+
+		this.compiled = true;
+
+		switch(this.type){
+			case Palette.Shader.VS:
+				this.shader = this.context.createShader(this.context.VERTEX_SHADER);
+				break;
+			case Palette.Shader.FS:
+				this.shader = this.context.createShader(this.context.FRAGMENT_SHADER);
+				break;
+			default:
+				return false;
+		}
+
+		this.context.shaderSource(this.shader, source);
+		this.context.compileShader(this.shader);
+		if (!this.context.getShaderParameter(this.shader, this.context.COMPILE_STATUS)) {
+			alert("An error occurred compiling the shaders: " + this.context.getShaderInfoLog(this.shader));
+			return false;
+		}
+
+		return true;
+	}
+};
+
+Palette.Shader.VS		= 0;
+Palette.Shader.FS		= 1;
+Palette.Shader.LIST		= 2;
+
+Palette.Shader.prototype.constructor = Palette.Shader;
+
+/* global Palette */
+/**
+* @classdesc
+* A Factory class designed to process objects, URLs, JSON and potentially other formats to generate
+* valid {@link Palette.Shader} objects.
+*
+* This is a deliberate choice, to abstract some functionality away from the central {@link Palette.Manager}
+* class.
+* @class Palette.ShaderFactory
+* @description
+* Create a new ShaderFactory object - this is done automatically by {@link Palette.Manager}.
+*
+* @param {Palette.Manager} manager - The manager to place 
+*/
+Palette.ShaderFactory = function(manager){
+	/**
+    * An object reference to the parent {@link Palette.Manager}.
+    * @name Palette.ShaderFactory#manager
+	* @type Palette.Manager
+    * @readonly
+    * @protected
+    */
+    this.that = this;
+	this.manager = manager;
+	this.downloadInProgress = false;
+};
+
+Palette.ShaderFactory.prototype = {
+	/**
+	* Begin the shader construction process.
+	* @method Palette.ShaderFactory#addShader
+	* @public
+	* @param {string|Palette.Shader|Object} shader - URL, JSON, Shader Source Object or {@link Palette.Shader}.
+	*/
+	addShader: function(shader){
+		var inShader;
+		var outShader;
+
+		switch(this.establishType(shader)){
+			case Palette.ShaderFactory.SOURCE_OBJECT:
+				inShader = shader;
+				/* falls through */
+			case Palette.ShaderFactory.JSON:
+				inShader = inShader || JSON.parse(shader);
+				outShader = this.createShaderObject(inShader);
+				break;
+
+			case Palette.ShaderFactory.SHADER_OBJECT:
+				outShader = shader;
+				break;
+
+			case Palette.ShaderFactory.URL:
+				this.downloadFromURL(shader);
+				break;
+			default:
+				throw new Error("Not a valid type of shader.");
+		}
+
+		//while(this.downloadInProgress){}
+
+		if(outShader){this.registerShader(outShader);}
+	},
+
+	/**
+	* Create a shader from a source object.
+	* @method Palette.ShaderFactory#createShaderObject
+	* @protected
+	* @param {object} sourceObject - Either a list of shaders or a single shader object is valid.
+	* @return {Palette.Shader|null} Returns a {@link Palette.Shader} if the Source Object was not a list. If it was a list, it adds all the children instead.
+	*/
+	createShaderObject: function(sourceObject){
+		switch(sourceObject.type){
+			case Palette.Shader.VS:
+			case Palette.Shader.FS:
+				return new Palette.Shader(this.manager.context, sourceObject.name, sourceObject.type, sourceObject.src, sourceObject.attrs);
+
+			case Palette.Shader.LIST:
+				for (var i = sourceObject.content.length - 1; i >= 0; i--) {
+					this.addShader(sourceObject.content[i]);
+				}
+				break;
+
+			default:
+				throw new Error("Tried to create an illegal class of shader.");
+		}
+	},
+
+	/**
+	* Download a file from the supplied URL, before adding it to the manager.
+	* @method Palette.ShaderFactory#downloadFromURL
+	* @protected
+	* @param {string} url - URL corresponding to a Shader Source Object JSON file.
+	*/
+	downloadFromURL: function(url){
+		var rdr = new XMLHttpRequest();
+		rdr.open("GET", url, true);
+		rdr.onload = function(){
+			console.log(that)
+			that.addShader(rdr.response);
+			that.downloadInProgress = false;
+		};
+		that.downloadInProgress = true;
+		rdr.send();
+	},
+
+	/**
+	* Determine the type of shader reference passed to the factory.
+	* @method Palette.ShaderFactory#establishType
+	* @protected
+	* @param {string|Palette.Shader} shader - URL, JSON or Palette.Shader.
+	* @return {number} Either Palette.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
+	*/
+	establishType: function(shader){
+		var type = -1;
+		if(shader instanceof Palette.Shader){
+			type = Palette.ShaderFactory.SHADER_OBJECT;
+		} else if((shader.type != undefined) && (shader.name != undefined) && (shader.content || shader.src)){
+			type = Palette.ShaderFactory.SOURCE_OBJECT;
+		} else if(this.isJSON(shader)){
+			type = Palette.ShaderFactory.JSON;
+		} else if(this.isString(shader)){
+			type = Palette.ShaderFactory.URL;
+		}
+		return type;
+	},
+
+	/**
+	* Determine if a string is valid JSON.
+	* @method Palette.ShaderFactory#isJSON
+	* @private
+	* @param {string} str - Suspected JSON string to check.
+	*/
+	isJSON: function(str){
+		try{
+			JSON.parse(str);
+			return true;
+		} catch (e){
+			return false;
+		}
+	},
+
+	isString: function(s){
+    	return typeof(s) === 'string' || s instanceof String;
+	},
+
+	/**
+	* Add a shader directly into the manager's storage for future access.
+	* @method Palette.ShaderFactory#registerShader
+	* @protected
+	* @param {Palette.Shader} shaderObject - Compiled shader object to store in the {@link Palette.Manager}.
+	*/
+	registerShader: function(shaderObject){
+		switch(shaderObject.type){
+			case Palette.Shader.VS:
+				this.manager.vertShaders[shaderObject.name] = this.manager.vertShaders[shaderObject.name] || shaderObject;
+				break;
+			case Palette.Shader.FS:
+				this.manager.fragShaders[shaderObject.name] = this.manager.fragShaders[shaderObject.name] || shaderObject;
+				break;
+			default:
+				throw new Error("Tried to register an illegal class of shader.");
+		}
+	}
+};
+
+Palette.ShaderFactory.SOURCE_OBJECT	= 0;
+Palette.ShaderFactory.JSON			= 1;
+Palette.ShaderFactory.URL				= 2;
+Palette.ShaderFactory.SHADER_OBJECT	= 3;
+
+Palette.ShaderFactory.prototype.constructor = Palette.ShaderFactory;
 'use strict';
 
 module.exports = earcut;
@@ -2192,861 +3663,6 @@ function Node(p) {
     this.index = null;
 }
 
-},{}],2:[function(require,module,exports){
-/**
-* @namespace Palette
-*/
-var Palette = Palette || {};
-
-Palette.earcut = require("earcut");
-
-},{"earcut":1}]},{},[2])
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vZGVfbW9kdWxlcy9icm93c2VyaWZ5L25vZGVfbW9kdWxlcy9icm93c2VyLXBhY2svX3ByZWx1ZGUuanMiLCJub2RlX21vZHVsZXMvZWFyY3V0L3NyYy9lYXJjdXQuanMiLCJzcmMvUGFsZXR0ZS9QYWxldHRlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FDQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQ3ByQkE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJmaWxlIjoiZ2VuZXJhdGVkLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXNDb250ZW50IjpbIihmdW5jdGlvbiBlKHQsbixyKXtmdW5jdGlvbiBzKG8sdSl7aWYoIW5bb10pe2lmKCF0W29dKXt2YXIgYT10eXBlb2YgcmVxdWlyZT09XCJmdW5jdGlvblwiJiZyZXF1aXJlO2lmKCF1JiZhKXJldHVybiBhKG8sITApO2lmKGkpcmV0dXJuIGkobywhMCk7dmFyIGY9bmV3IEVycm9yKFwiQ2Fubm90IGZpbmQgbW9kdWxlICdcIitvK1wiJ1wiKTt0aHJvdyBmLmNvZGU9XCJNT0RVTEVfTk9UX0ZPVU5EXCIsZn12YXIgbD1uW29dPXtleHBvcnRzOnt9fTt0W29dWzBdLmNhbGwobC5leHBvcnRzLGZ1bmN0aW9uKGUpe3ZhciBuPXRbb11bMV1bZV07cmV0dXJuIHMobj9uOmUpfSxsLGwuZXhwb3J0cyxlLHQsbixyKX1yZXR1cm4gbltvXS5leHBvcnRzfXZhciBpPXR5cGVvZiByZXF1aXJlPT1cImZ1bmN0aW9uXCImJnJlcXVpcmU7Zm9yKHZhciBvPTA7bzxyLmxlbmd0aDtvKyspcyhyW29dKTtyZXR1cm4gc30pIiwiJ3VzZSBzdHJpY3QnO1xuXG5tb2R1bGUuZXhwb3J0cyA9IGVhcmN1dDtcblxuZnVuY3Rpb24gZWFyY3V0KHBvaW50cywgcmV0dXJuSW5kaWNlcykge1xuXG4gICAgdmFyIG91dGVyTm9kZSA9IGZpbHRlclBvaW50cyhsaW5rZWRMaXN0KHBvaW50c1swXSwgdHJ1ZSkpLFxuICAgICAgICB0cmlhbmdsZXMgPSByZXR1cm5JbmRpY2VzID8ge3ZlcnRpY2VzOiBbXSwgaW5kaWNlczogW119IDogW107XG5cbiAgICBpZiAoIW91dGVyTm9kZSkgcmV0dXJuIHRyaWFuZ2xlcztcblxuICAgIHZhciBub2RlLCBtaW5YLCBtaW5ZLCBtYXhYLCBtYXhZLCB4LCB5LCBzaXplLCBpLFxuICAgICAgICB0aHJlc2hvbGQgPSA4MDtcblxuICAgIGZvciAoaSA9IDA7IHRocmVzaG9sZCA+PSAwICYmIGkgPCBwb2ludHMubGVuZ3RoOyBpKyspIHRocmVzaG9sZCAtPSBwb2ludHNbaV0ubGVuZ3RoO1xuXG4gICAgLy8gaWYgdGhlIHNoYXBlIGlzIG5vdCB0b28gc2ltcGxlLCB3ZSdsbCB1c2Ugei1vcmRlciBjdXJ2ZSBoYXNoIGxhdGVyOyBjYWxjdWxhdGUgcG9seWdvbiBiYm94XG4gICAgaWYgKHRocmVzaG9sZCA8IDApIHtcbiAgICAgICAgbm9kZSA9IG91dGVyTm9kZS5uZXh0O1xuICAgICAgICBtaW5YID0gbWF4WCA9IG5vZGUucFswXTtcbiAgICAgICAgbWluWSA9IG1heFkgPSBub2RlLnBbMV07XG4gICAgICAgIGRvIHtcbiAgICAgICAgICAgIHggPSBub2RlLnBbMF07XG4gICAgICAgICAgICB5ID0gbm9kZS5wWzFdO1xuICAgICAgICAgICAgaWYgKHggPCBtaW5YKSBtaW5YID0geDtcbiAgICAgICAgICAgIGlmICh5IDwgbWluWSkgbWluWSA9IHk7XG4gICAgICAgICAgICBpZiAoeCA+IG1heFgpIG1heFggPSB4O1xuICAgICAgICAgICAgaWYgKHkgPiBtYXhZKSBtYXhZID0geTtcbiAgICAgICAgICAgIG5vZGUgPSBub2RlLm5leHQ7XG4gICAgICAgIH0gd2hpbGUgKG5vZGUgIT09IG91dGVyTm9kZSk7XG5cbiAgICAgICAgLy8gbWluWCwgbWluWSBhbmQgc2l6ZSBhcmUgbGF0ZXIgdXNlZCB0byB0cmFuc2Zvcm0gY29vcmRzIGludG8gaW50ZWdlcnMgZm9yIHotb3JkZXIgY2FsY3VsYXRpb25cbiAgICAgICAgc2l6ZSA9IE1hdGgubWF4KG1heFggLSBtaW5YLCBtYXhZIC0gbWluWSk7XG4gICAgfVxuXG4gICAgaWYgKHBvaW50cy5sZW5ndGggPiAxKSBvdXRlck5vZGUgPSBlbGltaW5hdGVIb2xlcyhwb2ludHMsIG91dGVyTm9kZSk7XG5cbiAgICBlYXJjdXRMaW5rZWQob3V0ZXJOb2RlLCB0cmlhbmdsZXMsIG1pblgsIG1pblksIHNpemUpO1xuXG4gICAgcmV0dXJuIHRyaWFuZ2xlcztcbn1cblxuLy8gY3JlYXRlIGEgY2lyY3VsYXIgZG91Ymx5IGxpbmtlZCBsaXN0IGZyb20gcG9seWdvbiBwb2ludHMgaW4gdGhlIHNwZWNpZmllZCB3aW5kaW5nIG9yZGVyXG5mdW5jdGlvbiBsaW5rZWRMaXN0KHBvaW50cywgY2xvY2t3aXNlKSB7XG4gICAgdmFyIHN1bSA9IDAsXG4gICAgICAgIGxlbiA9IHBvaW50cy5sZW5ndGgsXG4gICAgICAgIGksIGosIHAxLCBwMiwgbGFzdDtcblxuICAgIC8vIGNhbGN1bGF0ZSBvcmlnaW5hbCB3aW5kaW5nIG9yZGVyIG9mIGEgcG9seWdvbiByaW5nXG4gICAgZm9yIChpID0gMCwgaiA9IGxlbiAtIDE7IGkgPCBsZW47IGogPSBpKyspIHtcbiAgICAgICAgcDEgPSBwb2ludHNbaV07XG4gICAgICAgIHAyID0gcG9pbnRzW2pdO1xuICAgICAgICBzdW0gKz0gKHAyWzBdIC0gcDFbMF0pICogKHAxWzFdICsgcDJbMV0pO1xuICAgIH1cblxuICAgIC8vIGxpbmsgcG9pbnRzIGludG8gY2lyY3VsYXIgZG91Ymx5LWxpbmtlZCBsaXN0IGluIHRoZSBzcGVjaWZpZWQgd2luZGluZyBvcmRlclxuICAgIGlmIChjbG9ja3dpc2UgPT09IChzdW0gPiAwKSkge1xuICAgICAgICBmb3IgKGkgPSAwOyBpIDwgbGVuOyBpKyspIGxhc3QgPSBpbnNlcnROb2RlKHBvaW50c1tpXSwgbGFzdCk7XG4gICAgfSBlbHNlIHtcbiAgICAgICAgZm9yIChpID0gbGVuIC0gMTsgaSA+PSAwOyBpLS0pIGxhc3QgPSBpbnNlcnROb2RlKHBvaW50c1tpXSwgbGFzdCk7XG4gICAgfVxuXG4gICAgcmV0dXJuIGxhc3Q7XG59XG5cbi8vIGVsaW1pbmF0ZSBjb2xpbmVhciBvciBkdXBsaWNhdGUgcG9pbnRzXG5mdW5jdGlvbiBmaWx0ZXJQb2ludHMoc3RhcnQsIGVuZCkge1xuICAgIGlmICghZW5kKSBlbmQgPSBzdGFydDtcblxuICAgIHZhciBub2RlID0gc3RhcnQsXG4gICAgICAgIGFnYWluO1xuICAgIGRvIHtcbiAgICAgICAgYWdhaW4gPSBmYWxzZTtcblxuICAgICAgICBpZiAoZXF1YWxzKG5vZGUucCwgbm9kZS5uZXh0LnApIHx8IG9yaWVudChub2RlLnByZXYucCwgbm9kZS5wLCBub2RlLm5leHQucCkgPT09IDApIHtcblxuICAgICAgICAgICAgLy8gcmVtb3ZlIG5vZGVcbiAgICAgICAgICAgIG5vZGUucHJldi5uZXh0ID0gbm9kZS5uZXh0O1xuICAgICAgICAgICAgbm9kZS5uZXh0LnByZXYgPSBub2RlLnByZXY7XG5cbiAgICAgICAgICAgIGlmIChub2RlLnByZXZaKSBub2RlLnByZXZaLm5leHRaID0gbm9kZS5uZXh0WjtcbiAgICAgICAgICAgIGlmIChub2RlLm5leHRaKSBub2RlLm5leHRaLnByZXZaID0gbm9kZS5wcmV2WjtcblxuICAgICAgICAgICAgbm9kZSA9IGVuZCA9IG5vZGUucHJldjtcblxuICAgICAgICAgICAgaWYgKG5vZGUgPT09IG5vZGUubmV4dCkgcmV0dXJuIG51bGw7XG4gICAgICAgICAgICBhZ2FpbiA9IHRydWU7XG5cbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgIG5vZGUgPSBub2RlLm5leHQ7XG4gICAgICAgIH1cbiAgICB9IHdoaWxlIChhZ2FpbiB8fCBub2RlICE9PSBlbmQpO1xuXG4gICAgcmV0dXJuIGVuZDtcbn1cblxuLy8gbWFpbiBlYXIgc2xpY2luZyBsb29wIHdoaWNoIHRyaWFuZ3VsYXRlcyBhIHBvbHlnb24gKGdpdmVuIGFzIGEgbGlua2VkIGxpc3QpXG5mdW5jdGlvbiBlYXJjdXRMaW5rZWQoZWFyLCB0cmlhbmdsZXMsIG1pblgsIG1pblksIHNpemUsIHBhc3MpIHtcbiAgICBpZiAoIWVhcikgcmV0dXJuO1xuXG4gICAgdmFyIGluZGV4ZWQgPSB0cmlhbmdsZXMudmVydGljZXMgIT09IHVuZGVmaW5lZDtcblxuICAgIC8vIGludGVybGluayBwb2x5Z29uIG5vZGVzIGluIHotb3JkZXJcbiAgICBpZiAoIXBhc3MgJiYgbWluWCAhPT0gdW5kZWZpbmVkKSBpbmRleEN1cnZlKGVhciwgbWluWCwgbWluWSwgc2l6ZSk7XG5cbiAgICB2YXIgc3RvcCA9IGVhcixcbiAgICAgICAgcHJldiwgbmV4dDtcblxuICAgIC8vIGl0ZXJhdGUgdGhyb3VnaCBlYXJzLCBzbGljaW5nIHRoZW0gb25lIGJ5IG9uZVxuICAgIHdoaWxlIChlYXIucHJldiAhPT0gZWFyLm5leHQpIHtcbiAgICAgICAgcHJldiA9IGVhci5wcmV2O1xuICAgICAgICBuZXh0ID0gZWFyLm5leHQ7XG5cbiAgICAgICAgaWYgKGlzRWFyKGVhciwgbWluWCwgbWluWSwgc2l6ZSkpIHtcbiAgICAgICAgICAgIC8vIGN1dCBvZmYgdGhlIHRyaWFuZ2xlXG4gICAgICAgICAgICBpZiAoaW5kZXhlZCkge1xuICAgICAgICAgICAgICAgIGFkZEluZGV4ZWRWZXJ0ZXgodHJpYW5nbGVzLCBwcmV2KTtcbiAgICAgICAgICAgICAgICBhZGRJbmRleGVkVmVydGV4KHRyaWFuZ2xlcywgZWFyKTtcbiAgICAgICAgICAgICAgICBhZGRJbmRleGVkVmVydGV4KHRyaWFuZ2xlcywgbmV4dCk7XG4gICAgICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgICAgIHRyaWFuZ2xlcy5wdXNoKHByZXYucCk7XG4gICAgICAgICAgICAgICAgdHJpYW5nbGVzLnB1c2goZWFyLnApO1xuICAgICAgICAgICAgICAgIHRyaWFuZ2xlcy5wdXNoKG5leHQucCk7XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIC8vIHJlbW92ZSBlYXIgbm9kZVxuICAgICAgICAgICAgbmV4dC5wcmV2ID0gcHJldjtcbiAgICAgICAgICAgIHByZXYubmV4dCA9IG5leHQ7XG5cbiAgICAgICAgICAgIGlmIChlYXIucHJldlopIGVhci5wcmV2Wi5uZXh0WiA9IGVhci5uZXh0WjtcbiAgICAgICAgICAgIGlmIChlYXIubmV4dFopIGVhci5uZXh0Wi5wcmV2WiA9IGVhci5wcmV2WjtcblxuICAgICAgICAgICAgLy8gc2tpcHBpbmcgdGhlIG5leHQgdmVydGljZSBsZWFkcyB0byBsZXNzIHNsaXZlciB0cmlhbmdsZXNcbiAgICAgICAgICAgIGVhciA9IG5leHQubmV4dDtcbiAgICAgICAgICAgIHN0b3AgPSBuZXh0Lm5leHQ7XG5cbiAgICAgICAgICAgIGNvbnRpbnVlO1xuICAgICAgICB9XG5cbiAgICAgICAgZWFyID0gbmV4dDtcblxuICAgICAgICAvLyBpZiB3ZSBsb29wZWQgdGhyb3VnaCB0aGUgd2hvbGUgcmVtYWluaW5nIHBvbHlnb24gYW5kIGNhbid0IGZpbmQgYW55IG1vcmUgZWFyc1xuICAgICAgICBpZiAoZWFyID09PSBzdG9wKSB7XG4gICAgICAgICAgICAvLyB0cnkgZmlsdGVyaW5nIHBvaW50cyBhbmQgc2xpY2luZyBhZ2FpblxuICAgICAgICAgICAgaWYgKCFwYXNzKSB7XG4gICAgICAgICAgICAgICAgZWFyY3V0TGlua2VkKGZpbHRlclBvaW50cyhlYXIpLCB0cmlhbmdsZXMsIG1pblgsIG1pblksIHNpemUsIDEpO1xuXG4gICAgICAgICAgICAvLyBpZiB0aGlzIGRpZG4ndCB3b3JrLCB0cnkgY3VyaW5nIGFsbCBzbWFsbCBzZWxmLWludGVyc2VjdGlvbnMgbG9jYWxseVxuICAgICAgICAgICAgfSBlbHNlIGlmIChwYXNzID09PSAxKSB7XG4gICAgICAgICAgICAgICAgZWFyID0gY3VyZUxvY2FsSW50ZXJzZWN0aW9ucyhlYXIsIHRyaWFuZ2xlcyk7XG4gICAgICAgICAgICAgICAgZWFyY3V0TGlua2VkKGVhciwgdHJpYW5nbGVzLCBtaW5YLCBtaW5ZLCBzaXplLCAyKTtcblxuICAgICAgICAgICAgLy8gYXMgYSBsYXN0IHJlc29ydCwgdHJ5IHNwbGl0dGluZyB0aGUgcmVtYWluaW5nIHBvbHlnb24gaW50byB0d29cbiAgICAgICAgICAgIH0gZWxzZSBpZiAocGFzcyA9PT0gMikge1xuICAgICAgICAgICAgICAgIHNwbGl0RWFyY3V0KGVhciwgdHJpYW5nbGVzLCBtaW5YLCBtaW5ZLCBzaXplKTtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgYnJlYWs7XG4gICAgICAgIH1cbiAgICB9XG59XG5cbmZ1bmN0aW9uIGFkZEluZGV4ZWRWZXJ0ZXgodHJpYW5nbGVzLCBub2RlKSB7XG4gICAgaWYgKG5vZGUuc291cmNlKSBub2RlID0gbm9kZS5zb3VyY2U7XG5cbiAgICB2YXIgaSA9IG5vZGUuaW5kZXg7XG4gICAgaWYgKGkgPT09IG51bGwpIHtcbiAgICAgICAgdmFyIGRpbSA9IG5vZGUucC5sZW5ndGg7XG4gICAgICAgIHZhciB2ZXJ0aWNlcyA9IHRyaWFuZ2xlcy52ZXJ0aWNlcztcbiAgICAgICAgbm9kZS5pbmRleCA9IGkgPSB2ZXJ0aWNlcy5sZW5ndGggLyBkaW07XG5cbiAgICAgICAgZm9yICh2YXIgZCA9IDA7IGQgPCBkaW07IGQrKykgdmVydGljZXMucHVzaChub2RlLnBbZF0pO1xuICAgIH1cbiAgICB0cmlhbmdsZXMuaW5kaWNlcy5wdXNoKGkpO1xufVxuXG4vLyBjaGVjayB3aGV0aGVyIGEgcG9seWdvbiBub2RlIGZvcm1zIGEgdmFsaWQgZWFyIHdpdGggYWRqYWNlbnQgbm9kZXNcbmZ1bmN0aW9uIGlzRWFyKGVhciwgbWluWCwgbWluWSwgc2l6ZSkge1xuXG4gICAgdmFyIGEgPSBlYXIucHJldi5wLFxuICAgICAgICBiID0gZWFyLnAsXG4gICAgICAgIGMgPSBlYXIubmV4dC5wLFxuXG4gICAgICAgIGF4ID0gYVswXSwgYnggPSBiWzBdLCBjeCA9IGNbMF0sXG4gICAgICAgIGF5ID0gYVsxXSwgYnkgPSBiWzFdLCBjeSA9IGNbMV0sXG5cbiAgICAgICAgYWJkID0gYXggKiBieSAtIGF5ICogYngsXG4gICAgICAgIGFjZCA9IGF4ICogY3kgLSBheSAqIGN4LFxuICAgICAgICBjYmQgPSBjeCAqIGJ5IC0gY3kgKiBieCxcbiAgICAgICAgQSA9IGFiZCAtIGFjZCAtIGNiZDtcblxuICAgIGlmIChBIDw9IDApIHJldHVybiBmYWxzZTsgLy8gcmVmbGV4LCBjYW4ndCBiZSBhbiBlYXJcblxuICAgIC8vIG5vdyBtYWtlIHN1cmUgd2UgZG9uJ3QgaGF2ZSBvdGhlciBwb2ludHMgaW5zaWRlIHRoZSBwb3RlbnRpYWwgZWFyO1xuICAgIC8vIHRoZSBjb2RlIGJlbG93IGlzIGEgYml0IHZlcmJvc2UgYW5kIHJlcGV0aXRpdmUgYnV0IHRoaXMgaXMgZG9uZSBmb3IgcGVyZm9ybWFuY2VcblxuICAgIHZhciBjYXkgPSBjeSAtIGF5LFxuICAgICAgICBhY3ggPSBheCAtIGN4LFxuICAgICAgICBhYnkgPSBheSAtIGJ5LFxuICAgICAgICBiYXggPSBieCAtIGF4LFxuICAgICAgICBwLCBweCwgcHksIHMsIHQsIGssIG5vZGU7XG5cbiAgICAvLyBpZiB3ZSB1c2Ugei1vcmRlciBjdXJ2ZSBoYXNoaW5nLCBpdGVyYXRlIHRocm91Z2ggdGhlIGN1cnZlXG4gICAgaWYgKG1pblggIT09IHVuZGVmaW5lZCkge1xuXG4gICAgICAgIC8vIHRyaWFuZ2xlIGJib3g7IG1pbiAmIG1heCBhcmUgY2FsY3VsYXRlZCBsaWtlIHRoaXMgZm9yIHNwZWVkXG4gICAgICAgIHZhciBtaW5UWCA9IGF4IDwgYnggPyAoYXggPCBjeCA/IGF4IDogY3gpIDogKGJ4IDwgY3ggPyBieCA6IGN4KSxcbiAgICAgICAgICAgIG1pblRZID0gYXkgPCBieSA/IChheSA8IGN5ID8gYXkgOiBjeSkgOiAoYnkgPCBjeSA/IGJ5IDogY3kpLFxuICAgICAgICAgICAgbWF4VFggPSBheCA+IGJ4ID8gKGF4ID4gY3ggPyBheCA6IGN4KSA6IChieCA+IGN4ID8gYnggOiBjeCksXG4gICAgICAgICAgICBtYXhUWSA9IGF5ID4gYnkgPyAoYXkgPiBjeSA/IGF5IDogY3kpIDogKGJ5ID4gY3kgPyBieSA6IGN5KSxcblxuICAgICAgICAgICAgLy8gei1vcmRlciByYW5nZSBmb3IgdGhlIGN1cnJlbnQgdHJpYW5nbGUgYmJveDtcbiAgICAgICAgICAgIG1pblogPSB6T3JkZXIobWluVFgsIG1pblRZLCBtaW5YLCBtaW5ZLCBzaXplKSxcbiAgICAgICAgICAgIG1heFogPSB6T3JkZXIobWF4VFgsIG1heFRZLCBtaW5YLCBtaW5ZLCBzaXplKTtcblxuICAgICAgICAvLyBmaXJzdCBsb29rIGZvciBwb2ludHMgaW5zaWRlIHRoZSB0cmlhbmdsZSBpbiBpbmNyZWFzaW5nIHotb3JkZXJcbiAgICAgICAgbm9kZSA9IGVhci5uZXh0WjtcblxuICAgICAgICB3aGlsZSAobm9kZSAmJiBub2RlLnogPD0gbWF4Wikge1xuICAgICAgICAgICAgcCA9IG5vZGUucDtcbiAgICAgICAgICAgIG5vZGUgPSBub2RlLm5leHRaO1xuICAgICAgICAgICAgaWYgKHAgPT09IGEgfHwgcCA9PT0gYykgY29udGludWU7XG5cbiAgICAgICAgICAgIHB4ID0gcFswXTtcbiAgICAgICAgICAgIHB5ID0gcFsxXTtcblxuICAgICAgICAgICAgcyA9IGNheSAqIHB4ICsgYWN4ICogcHkgLSBhY2Q7XG4gICAgICAgICAgICBpZiAocyA+PSAwKSB7XG4gICAgICAgICAgICAgICAgdCA9IGFieSAqIHB4ICsgYmF4ICogcHkgKyBhYmQ7XG4gICAgICAgICAgICAgICAgaWYgKHQgPj0gMCkge1xuICAgICAgICAgICAgICAgICAgICBrID0gQSAtIHMgLSB0O1xuICAgICAgICAgICAgICAgICAgICBpZiAoKGsgPj0gMCkgJiYgKChzICYmIHQpIHx8IChzICYmIGspIHx8ICh0ICYmIGspKSkgcmV0dXJuIGZhbHNlO1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuXG4gICAgICAgIC8vIHRoZW4gbG9vayBmb3IgcG9pbnRzIGluIGRlY3JlYXNpbmcgei1vcmRlclxuICAgICAgICBub2RlID0gZWFyLnByZXZaO1xuXG4gICAgICAgIHdoaWxlIChub2RlICYmIG5vZGUueiA+PSBtaW5aKSB7XG4gICAgICAgICAgICBwID0gbm9kZS5wO1xuICAgICAgICAgICAgbm9kZSA9IG5vZGUucHJldlo7XG4gICAgICAgICAgICBpZiAocCA9PT0gYSB8fCBwID09PSBjKSBjb250aW51ZTtcblxuICAgICAgICAgICAgcHggPSBwWzBdO1xuICAgICAgICAgICAgcHkgPSBwWzFdO1xuXG4gICAgICAgICAgICBzID0gY2F5ICogcHggKyBhY3ggKiBweSAtIGFjZDtcbiAgICAgICAgICAgIGlmIChzID49IDApIHtcbiAgICAgICAgICAgICAgICB0ID0gYWJ5ICogcHggKyBiYXggKiBweSArIGFiZDtcbiAgICAgICAgICAgICAgICBpZiAodCA+PSAwKSB7XG4gICAgICAgICAgICAgICAgICAgIGsgPSBBIC0gcyAtIHQ7XG4gICAgICAgICAgICAgICAgICAgIGlmICgoayA+PSAwKSAmJiAoKHMgJiYgdCkgfHwgKHMgJiYgaykgfHwgKHQgJiYgaykpKSByZXR1cm4gZmFsc2U7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgfVxuICAgICAgICB9XG5cbiAgICAvLyBpZiB3ZSBkb24ndCB1c2Ugei1vcmRlciBjdXJ2ZSBoYXNoLCBzaW1wbHkgaXRlcmF0ZSB0aHJvdWdoIGFsbCBvdGhlciBwb2ludHNcbiAgICB9IGVsc2Uge1xuICAgICAgICBub2RlID0gZWFyLm5leHQubmV4dDtcblxuICAgICAgICB3aGlsZSAobm9kZSAhPT0gZWFyLnByZXYpIHtcbiAgICAgICAgICAgIHAgPSBub2RlLnA7XG4gICAgICAgICAgICBub2RlID0gbm9kZS5uZXh0O1xuXG4gICAgICAgICAgICBweCA9IHBbMF07XG4gICAgICAgICAgICBweSA9IHBbMV07XG5cbiAgICAgICAgICAgIHMgPSBjYXkgKiBweCArIGFjeCAqIHB5IC0gYWNkO1xuICAgICAgICAgICAgaWYgKHMgPj0gMCkge1xuICAgICAgICAgICAgICAgIHQgPSBhYnkgKiBweCArIGJheCAqIHB5ICsgYWJkO1xuICAgICAgICAgICAgICAgIGlmICh0ID49IDApIHtcbiAgICAgICAgICAgICAgICAgICAgayA9IEEgLSBzIC0gdDtcbiAgICAgICAgICAgICAgICAgICAgaWYgKChrID49IDApICYmICgocyAmJiB0KSB8fCAocyAmJiBrKSB8fCAodCAmJiBrKSkpIHJldHVybiBmYWxzZTtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICB9XG5cbiAgICByZXR1cm4gdHJ1ZTtcbn1cblxuLy8gZ28gdGhyb3VnaCBhbGwgcG9seWdvbiBub2RlcyBhbmQgY3VyZSBzbWFsbCBsb2NhbCBzZWxmLWludGVyc2VjdGlvbnNcbmZ1bmN0aW9uIGN1cmVMb2NhbEludGVyc2VjdGlvbnMoc3RhcnQsIHRyaWFuZ2xlcykge1xuICAgIHZhciBpbmRleGVkID0gISF0cmlhbmdsZXMudmVydGljZXM7XG5cbiAgICB2YXIgbm9kZSA9IHN0YXJ0O1xuICAgIGRvIHtcbiAgICAgICAgdmFyIGEgPSBub2RlLnByZXYsXG4gICAgICAgICAgICBiID0gbm9kZS5uZXh0Lm5leHQ7XG5cbiAgICAgICAgLy8gYSBzZWxmLWludGVyc2VjdGlvbiB3aGVyZSBlZGdlICh2W2ktMV0sdltpXSkgaW50ZXJzZWN0cyAodltpKzFdLHZbaSsyXSlcbiAgICAgICAgaWYgKGEucCAhPT0gYi5wICYmIGludGVyc2VjdHMoYS5wLCBub2RlLnAsIG5vZGUubmV4dC5wLCBiLnApICYmIGxvY2FsbHlJbnNpZGUoYSwgYikgJiYgbG9jYWxseUluc2lkZShiLCBhKSkge1xuXG4gICAgICAgICAgICBpZiAoaW5kZXhlZCkge1xuICAgICAgICAgICAgICAgIGFkZEluZGV4ZWRWZXJ0ZXgodHJpYW5nbGVzLCBhKTtcbiAgICAgICAgICAgICAgICBhZGRJbmRleGVkVmVydGV4KHRyaWFuZ2xlcywgbm9kZSk7XG4gICAgICAgICAgICAgICAgYWRkSW5kZXhlZFZlcnRleCh0cmlhbmdsZXMsIGIpO1xuICAgICAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgICAgICB0cmlhbmdsZXMucHVzaChhLnApO1xuICAgICAgICAgICAgICAgIHRyaWFuZ2xlcy5wdXNoKG5vZGUucCk7XG4gICAgICAgICAgICAgICAgdHJpYW5nbGVzLnB1c2goYi5wKTtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgLy8gcmVtb3ZlIHR3byBub2RlcyBpbnZvbHZlZFxuICAgICAgICAgICAgYS5uZXh0ID0gYjtcbiAgICAgICAgICAgIGIucHJldiA9IGE7XG5cbiAgICAgICAgICAgIHZhciBheiA9IG5vZGUucHJldlosXG4gICAgICAgICAgICAgICAgYnogPSBub2RlLm5leHRaICYmIG5vZGUubmV4dFoubmV4dFo7XG5cbiAgICAgICAgICAgIGlmIChheikgYXoubmV4dFogPSBiejtcbiAgICAgICAgICAgIGlmIChieikgYnoucHJldlogPSBhejtcblxuICAgICAgICAgICAgbm9kZSA9IHN0YXJ0ID0gYjtcbiAgICAgICAgfVxuICAgICAgICBub2RlID0gbm9kZS5uZXh0O1xuICAgIH0gd2hpbGUgKG5vZGUgIT09IHN0YXJ0KTtcblxuICAgIHJldHVybiBub2RlO1xufVxuXG4vLyB0cnkgc3BsaXR0aW5nIHBvbHlnb24gaW50byB0d28gYW5kIHRyaWFuZ3VsYXRlIHRoZW0gaW5kZXBlbmRlbnRseVxuZnVuY3Rpb24gc3BsaXRFYXJjdXQoc3RhcnQsIHRyaWFuZ2xlcywgbWluWCwgbWluWSwgc2l6ZSkge1xuICAgIC8vIGxvb2sgZm9yIGEgdmFsaWQgZGlhZ29uYWwgdGhhdCBkaXZpZGVzIHRoZSBwb2x5Z29uIGludG8gdHdvXG4gICAgdmFyIGEgPSBzdGFydDtcbiAgICBkbyB7XG4gICAgICAgIHZhciBiID0gYS5uZXh0Lm5leHQ7XG4gICAgICAgIHdoaWxlIChiICE9PSBhLnByZXYpIHtcbiAgICAgICAgICAgIGlmIChhLnAgIT09IGIucCAmJiBpc1ZhbGlkRGlhZ29uYWwoYSwgYikpIHtcbiAgICAgICAgICAgICAgICAvLyBzcGxpdCB0aGUgcG9seWdvbiBpbiB0d28gYnkgdGhlIGRpYWdvbmFsXG4gICAgICAgICAgICAgICAgdmFyIGMgPSBzcGxpdFBvbHlnb24oYSwgYik7XG5cbiAgICAgICAgICAgICAgICAvLyBmaWx0ZXIgY29saW5lYXIgcG9pbnRzIGFyb3VuZCB0aGUgY3V0c1xuICAgICAgICAgICAgICAgIGEgPSBmaWx0ZXJQb2ludHMoYSwgYS5uZXh0KTtcbiAgICAgICAgICAgICAgICBjID0gZmlsdGVyUG9pbnRzKGMsIGMubmV4dCk7XG5cbiAgICAgICAgICAgICAgICAvLyBydW4gZWFyY3V0IG9uIGVhY2ggaGFsZlxuICAgICAgICAgICAgICAgIGVhcmN1dExpbmtlZChhLCB0cmlhbmdsZXMsIG1pblgsIG1pblksIHNpemUpO1xuICAgICAgICAgICAgICAgIGVhcmN1dExpbmtlZChjLCB0cmlhbmdsZXMsIG1pblgsIG1pblksIHNpemUpO1xuICAgICAgICAgICAgICAgIHJldHVybjtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIGIgPSBiLm5leHQ7XG4gICAgICAgIH1cbiAgICAgICAgYSA9IGEubmV4dDtcbiAgICB9IHdoaWxlIChhICE9PSBzdGFydCk7XG59XG5cbi8vIGxpbmsgZXZlcnkgaG9sZSBpbnRvIHRoZSBvdXRlciBsb29wLCBwcm9kdWNpbmcgYSBzaW5nbGUtcmluZyBwb2x5Z29uIHdpdGhvdXQgaG9sZXNcbmZ1bmN0aW9uIGVsaW1pbmF0ZUhvbGVzKHBvaW50cywgb3V0ZXJOb2RlKSB7XG4gICAgdmFyIGxlbiA9IHBvaW50cy5sZW5ndGg7XG5cbiAgICB2YXIgcXVldWUgPSBbXTtcbiAgICBmb3IgKHZhciBpID0gMTsgaSA8IGxlbjsgaSsrKSB7XG4gICAgICAgIHZhciBsaXN0ID0gZmlsdGVyUG9pbnRzKGxpbmtlZExpc3QocG9pbnRzW2ldLCBmYWxzZSkpO1xuICAgICAgICBpZiAobGlzdCkgcXVldWUucHVzaChnZXRMZWZ0bW9zdChsaXN0KSk7XG4gICAgfVxuICAgIHF1ZXVlLnNvcnQoY29tcGFyZVgpO1xuXG4gICAgLy8gcHJvY2VzcyBob2xlcyBmcm9tIGxlZnQgdG8gcmlnaHRcbiAgICBmb3IgKGkgPSAwOyBpIDwgcXVldWUubGVuZ3RoOyBpKyspIHtcbiAgICAgICAgZWxpbWluYXRlSG9sZShxdWV1ZVtpXSwgb3V0ZXJOb2RlKTtcbiAgICAgICAgb3V0ZXJOb2RlID0gZmlsdGVyUG9pbnRzKG91dGVyTm9kZSwgb3V0ZXJOb2RlLm5leHQpO1xuICAgIH1cblxuICAgIHJldHVybiBvdXRlck5vZGU7XG59XG5cbi8vIGZpbmQgYSBicmlkZ2UgYmV0d2VlbiB2ZXJ0aWNlcyB0aGF0IGNvbm5lY3RzIGhvbGUgd2l0aCBhbiBvdXRlciByaW5nIGFuZCBhbmQgbGluayBpdFxuZnVuY3Rpb24gZWxpbWluYXRlSG9sZShob2xlTm9kZSwgb3V0ZXJOb2RlKSB7XG4gICAgb3V0ZXJOb2RlID0gZmluZEhvbGVCcmlkZ2UoaG9sZU5vZGUsIG91dGVyTm9kZSk7XG4gICAgaWYgKG91dGVyTm9kZSkge1xuICAgICAgICB2YXIgYiA9IHNwbGl0UG9seWdvbihvdXRlck5vZGUsIGhvbGVOb2RlKTtcbiAgICAgICAgZmlsdGVyUG9pbnRzKGIsIGIubmV4dCk7XG4gICAgfVxufVxuXG4vLyBEYXZpZCBFYmVybHkncyBhbGdvcml0aG0gZm9yIGZpbmRpbmcgYSBicmlkZ2UgYmV0d2VlbiBob2xlIGFuZCBvdXRlciBwb2x5Z29uXG5mdW5jdGlvbiBmaW5kSG9sZUJyaWRnZShob2xlTm9kZSwgb3V0ZXJOb2RlKSB7XG4gICAgdmFyIG5vZGUgPSBvdXRlck5vZGUsXG4gICAgICAgIHAgPSBob2xlTm9kZS5wLFxuICAgICAgICBweCA9IHBbMF0sXG4gICAgICAgIHB5ID0gcFsxXSxcbiAgICAgICAgcU1heCA9IC1JbmZpbml0eSxcbiAgICAgICAgbU5vZGUsIGEsIGI7XG5cbiAgICAvLyBmaW5kIGEgc2VnbWVudCBpbnRlcnNlY3RlZCBieSBhIHJheSBmcm9tIHRoZSBob2xlJ3MgbGVmdG1vc3QgcG9pbnQgdG8gdGhlIGxlZnQ7XG4gICAgLy8gc2VnbWVudCdzIGVuZHBvaW50IHdpdGggbGVzc2VyIHggd2lsbCBiZSBwb3RlbnRpYWwgY29ubmVjdGlvbiBwb2ludFxuICAgIGRvIHtcbiAgICAgICAgYSA9IG5vZGUucDtcbiAgICAgICAgYiA9IG5vZGUubmV4dC5wO1xuXG4gICAgICAgIGlmIChweSA8PSBhWzFdICYmIHB5ID49IGJbMV0pIHtcbiAgICAgICAgICAgIHZhciBxeCA9IGFbMF0gKyAocHkgLSBhWzFdKSAqIChiWzBdIC0gYVswXSkgLyAoYlsxXSAtIGFbMV0pO1xuICAgICAgICAgICAgaWYgKHF4IDw9IHB4ICYmIHF4ID4gcU1heCkge1xuICAgICAgICAgICAgICAgIHFNYXggPSBxeDtcbiAgICAgICAgICAgICAgICBtTm9kZSA9IGFbMF0gPCBiWzBdID8gbm9kZSA6IG5vZGUubmV4dDtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgICBub2RlID0gbm9kZS5uZXh0O1xuICAgIH0gd2hpbGUgKG5vZGUgIT09IG91dGVyTm9kZSk7XG5cbiAgICBpZiAoIW1Ob2RlKSByZXR1cm4gbnVsbDtcblxuICAgIC8vIGxvb2sgZm9yIHBvaW50cyBzdHJpY3RseSBpbnNpZGUgdGhlIHRyaWFuZ2xlIG9mIGhvbGUgcG9pbnQsIHNlZ21lbnQgaW50ZXJzZWN0aW9uIGFuZCBlbmRwb2ludDtcbiAgICAvLyBpZiB0aGVyZSBhcmUgbm8gcG9pbnRzIGZvdW5kLCB3ZSBoYXZlIGEgdmFsaWQgY29ubmVjdGlvbjtcbiAgICAvLyBvdGhlcndpc2UgY2hvb3NlIHRoZSBwb2ludCBvZiB0aGUgbWluaW11bSBhbmdsZSB3aXRoIHRoZSByYXkgYXMgY29ubmVjdGlvbiBwb2ludFxuXG4gICAgdmFyIGJ4ID0gbU5vZGUucFswXSxcbiAgICAgICAgYnkgPSBtTm9kZS5wWzFdLFxuICAgICAgICBwYmQgPSBweCAqIGJ5IC0gcHkgKiBieCxcbiAgICAgICAgcGNkID0gcHggKiBweSAtIHB5ICogcU1heCxcbiAgICAgICAgY3B5ID0gcHkgLSBweSxcbiAgICAgICAgcGN4ID0gcHggLSBxTWF4LFxuICAgICAgICBwYnkgPSBweSAtIGJ5LFxuICAgICAgICBicHggPSBieCAtIHB4LFxuICAgICAgICBBID0gcGJkIC0gcGNkIC0gKHFNYXggKiBieSAtIHB5ICogYngpLFxuICAgICAgICBzaWduID0gQSA8PSAwID8gLTEgOiAxLFxuICAgICAgICBzdG9wID0gbU5vZGUsXG4gICAgICAgIHRhbk1pbiA9IEluZmluaXR5LFxuICAgICAgICBteCwgbXksIGFteCwgcywgdCwgdGFuO1xuXG4gICAgbm9kZSA9IG1Ob2RlLm5leHQ7XG5cbiAgICB3aGlsZSAobm9kZSAhPT0gc3RvcCkge1xuXG4gICAgICAgIG14ID0gbm9kZS5wWzBdO1xuICAgICAgICBteSA9IG5vZGUucFsxXTtcbiAgICAgICAgYW14ID0gcHggLSBteDtcblxuICAgICAgICBpZiAoYW14ID49IDAgJiYgbXggPj0gYngpIHtcbiAgICAgICAgICAgIHMgPSAoY3B5ICogbXggKyBwY3ggKiBteSAtIHBjZCkgKiBzaWduO1xuICAgICAgICAgICAgaWYgKHMgPj0gMCkge1xuICAgICAgICAgICAgICAgIHQgPSAocGJ5ICogbXggKyBicHggKiBteSArIHBiZCkgKiBzaWduO1xuXG4gICAgICAgICAgICAgICAgaWYgKHQgPj0gMCAmJiBBICogc2lnbiAtIHMgLSB0ID49IDApIHtcbiAgICAgICAgICAgICAgICAgICAgdGFuID0gTWF0aC5hYnMocHkgLSBteSkgLyBhbXg7IC8vIHRhbmdlbnRpYWxcbiAgICAgICAgICAgICAgICAgICAgaWYgKHRhbiA8IHRhbk1pbiAmJiBsb2NhbGx5SW5zaWRlKG5vZGUsIGhvbGVOb2RlKSkge1xuICAgICAgICAgICAgICAgICAgICAgICAgbU5vZGUgPSBub2RlO1xuICAgICAgICAgICAgICAgICAgICAgICAgdGFuTWluID0gdGFuO1xuICAgICAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgfVxuICAgICAgICB9XG5cbiAgICAgICAgbm9kZSA9IG5vZGUubmV4dDtcbiAgICB9XG5cbiAgICByZXR1cm4gbU5vZGU7XG59XG5cbi8vIGludGVybGluayBwb2x5Z29uIG5vZGVzIGluIHotb3JkZXJcbmZ1bmN0aW9uIGluZGV4Q3VydmUoc3RhcnQsIG1pblgsIG1pblksIHNpemUpIHtcbiAgICB2YXIgbm9kZSA9IHN0YXJ0O1xuXG4gICAgZG8ge1xuICAgICAgICBpZiAobm9kZS56ID09PSBudWxsKSBub2RlLnogPSB6T3JkZXIobm9kZS5wWzBdLCBub2RlLnBbMV0sIG1pblgsIG1pblksIHNpemUpO1xuICAgICAgICBub2RlLnByZXZaID0gbm9kZS5wcmV2O1xuICAgICAgICBub2RlLm5leHRaID0gbm9kZS5uZXh0O1xuICAgICAgICBub2RlID0gbm9kZS5uZXh0O1xuICAgIH0gd2hpbGUgKG5vZGUgIT09IHN0YXJ0KTtcblxuICAgIG5vZGUucHJldloubmV4dFogPSBudWxsO1xuICAgIG5vZGUucHJldlogPSBudWxsO1xuXG4gICAgc29ydExpbmtlZChub2RlKTtcbn1cblxuLy8gU2ltb24gVGF0aGFtJ3MgbGlua2VkIGxpc3QgbWVyZ2Ugc29ydCBhbGdvcml0aG1cbi8vIGh0dHA6Ly93d3cuY2hpYXJrLmdyZWVuZW5kLm9yZy51ay9+c2d0YXRoYW0vYWxnb3JpdGhtcy9saXN0c29ydC5odG1sXG5mdW5jdGlvbiBzb3J0TGlua2VkKGxpc3QpIHtcbiAgICB2YXIgaSwgcCwgcSwgZSwgdGFpbCwgbnVtTWVyZ2VzLCBwU2l6ZSwgcVNpemUsXG4gICAgICAgIGluU2l6ZSA9IDE7XG5cbiAgICB3aGlsZSAodHJ1ZSkge1xuICAgICAgICBwID0gbGlzdDtcbiAgICAgICAgbGlzdCA9IG51bGw7XG4gICAgICAgIHRhaWwgPSBudWxsO1xuICAgICAgICBudW1NZXJnZXMgPSAwO1xuXG4gICAgICAgIHdoaWxlIChwKSB7XG4gICAgICAgICAgICBudW1NZXJnZXMrKztcbiAgICAgICAgICAgIHEgPSBwO1xuICAgICAgICAgICAgcFNpemUgPSAwO1xuICAgICAgICAgICAgZm9yIChpID0gMDsgaSA8IGluU2l6ZTsgaSsrKSB7XG4gICAgICAgICAgICAgICAgcFNpemUrKztcbiAgICAgICAgICAgICAgICBxID0gcS5uZXh0WjtcbiAgICAgICAgICAgICAgICBpZiAoIXEpIGJyZWFrO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBxU2l6ZSA9IGluU2l6ZTtcblxuICAgICAgICAgICAgd2hpbGUgKHBTaXplID4gMCB8fCAocVNpemUgPiAwICYmIHEpKSB7XG5cbiAgICAgICAgICAgICAgICBpZiAocFNpemUgPT09IDApIHtcbiAgICAgICAgICAgICAgICAgICAgZSA9IHE7XG4gICAgICAgICAgICAgICAgICAgIHEgPSBxLm5leHRaO1xuICAgICAgICAgICAgICAgICAgICBxU2l6ZS0tO1xuICAgICAgICAgICAgICAgIH0gZWxzZSBpZiAocVNpemUgPT09IDAgfHwgIXEpIHtcbiAgICAgICAgICAgICAgICAgICAgZSA9IHA7XG4gICAgICAgICAgICAgICAgICAgIHAgPSBwLm5leHRaO1xuICAgICAgICAgICAgICAgICAgICBwU2l6ZS0tO1xuICAgICAgICAgICAgICAgIH0gZWxzZSBpZiAocC56IDw9IHEueikge1xuICAgICAgICAgICAgICAgICAgICBlID0gcDtcbiAgICAgICAgICAgICAgICAgICAgcCA9IHAubmV4dFo7XG4gICAgICAgICAgICAgICAgICAgIHBTaXplLS07XG4gICAgICAgICAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgICAgICAgICAgZSA9IHE7XG4gICAgICAgICAgICAgICAgICAgIHEgPSBxLm5leHRaO1xuICAgICAgICAgICAgICAgICAgICBxU2l6ZS0tO1xuICAgICAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgICAgIGlmICh0YWlsKSB0YWlsLm5leHRaID0gZTtcbiAgICAgICAgICAgICAgICBlbHNlIGxpc3QgPSBlO1xuXG4gICAgICAgICAgICAgICAgZS5wcmV2WiA9IHRhaWw7XG4gICAgICAgICAgICAgICAgdGFpbCA9IGU7XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIHAgPSBxO1xuICAgICAgICB9XG5cbiAgICAgICAgdGFpbC5uZXh0WiA9IG51bGw7XG5cbiAgICAgICAgaWYgKG51bU1lcmdlcyA8PSAxKSByZXR1cm4gbGlzdDtcblxuICAgICAgICBpblNpemUgKj0gMjtcbiAgICB9XG59XG5cbi8vIHotb3JkZXIgb2YgYSBwb2ludCBnaXZlbiBjb29yZHMgYW5kIHNpemUgb2YgdGhlIGRhdGEgYm91bmRpbmcgYm94XG5mdW5jdGlvbiB6T3JkZXIoeCwgeSwgbWluWCwgbWluWSwgc2l6ZSkge1xuICAgIC8vIGNvb3JkcyBhcmUgdHJhbnNmb3JtZWQgaW50byAoMC4uMTAwMCkgaW50ZWdlciByYW5nZVxuICAgIHggPSAxMDAwICogKHggLSBtaW5YKSAvIHNpemU7XG4gICAgeCA9ICh4IHwgKHggPDwgOCkpICYgMHgwMEZGMDBGRjtcbiAgICB4ID0gKHggfCAoeCA8PCA0KSkgJiAweDBGMEYwRjBGO1xuICAgIHggPSAoeCB8ICh4IDw8IDIpKSAmIDB4MzMzMzMzMzM7XG4gICAgeCA9ICh4IHwgKHggPDwgMSkpICYgMHg1NTU1NTU1NTtcblxuICAgIHkgPSAxMDAwICogKHkgLSBtaW5ZKSAvIHNpemU7XG4gICAgeSA9ICh5IHwgKHkgPDwgOCkpICYgMHgwMEZGMDBGRjtcbiAgICB5ID0gKHkgfCAoeSA8PCA0KSkgJiAweDBGMEYwRjBGO1xuICAgIHkgPSAoeSB8ICh5IDw8IDIpKSAmIDB4MzMzMzMzMzM7XG4gICAgeSA9ICh5IHwgKHkgPDwgMSkpICYgMHg1NTU1NTU1NTtcblxuICAgIHJldHVybiB4IHwgKHkgPDwgMSk7XG59XG5cbi8vIGZpbmQgdGhlIGxlZnRtb3N0IG5vZGUgb2YgYSBwb2x5Z29uIHJpbmdcbmZ1bmN0aW9uIGdldExlZnRtb3N0KHN0YXJ0KSB7XG4gICAgdmFyIG5vZGUgPSBzdGFydCxcbiAgICAgICAgbGVmdG1vc3QgPSBzdGFydDtcbiAgICBkbyB7XG4gICAgICAgIGlmIChub2RlLnBbMF0gPCBsZWZ0bW9zdC5wWzBdKSBsZWZ0bW9zdCA9IG5vZGU7XG4gICAgICAgIG5vZGUgPSBub2RlLm5leHQ7XG4gICAgfSB3aGlsZSAobm9kZSAhPT0gc3RhcnQpO1xuXG4gICAgcmV0dXJuIGxlZnRtb3N0O1xufVxuXG4vLyBjaGVjayBpZiBhIGRpYWdvbmFsIGJldHdlZW4gdHdvIHBvbHlnb24gbm9kZXMgaXMgdmFsaWQgKGxpZXMgaW4gcG9seWdvbiBpbnRlcmlvcilcbmZ1bmN0aW9uIGlzVmFsaWREaWFnb25hbChhLCBiKSB7XG4gICAgcmV0dXJuICFpbnRlcnNlY3RzUG9seWdvbihhLCBhLnAsIGIucCkgJiZcbiAgICAgICAgICAgbG9jYWxseUluc2lkZShhLCBiKSAmJiBsb2NhbGx5SW5zaWRlKGIsIGEpICYmXG4gICAgICAgICAgIG1pZGRsZUluc2lkZShhLCBhLnAsIGIucCk7XG59XG5cbi8vIHdpbmRpbmcgb3JkZXIgb2YgdHJpYW5nbGUgZm9ybWVkIGJ5IDMgZ2l2ZW4gcG9pbnRzXG5mdW5jdGlvbiBvcmllbnQocCwgcSwgcikge1xuICAgIHZhciBvID0gKHFbMV0gLSBwWzFdKSAqIChyWzBdIC0gcVswXSkgLSAocVswXSAtIHBbMF0pICogKHJbMV0gLSBxWzFdKTtcbiAgICByZXR1cm4gbyA+IDAgPyAxIDpcbiAgICAgICAgICAgbyA8IDAgPyAtMSA6IDA7XG59XG5cbi8vIGNoZWNrIGlmIHR3byBwb2ludHMgYXJlIGVxdWFsXG5mdW5jdGlvbiBlcXVhbHMocDEsIHAyKSB7XG4gICAgcmV0dXJuIHAxWzBdID09PSBwMlswXSAmJiBwMVsxXSA9PT0gcDJbMV07XG59XG5cbi8vIGNoZWNrIGlmIHR3byBzZWdtZW50cyBpbnRlcnNlY3RcbmZ1bmN0aW9uIGludGVyc2VjdHMocDEsIHExLCBwMiwgcTIpIHtcbiAgICByZXR1cm4gb3JpZW50KHAxLCBxMSwgcDIpICE9PSBvcmllbnQocDEsIHExLCBxMikgJiZcbiAgICAgICAgICAgb3JpZW50KHAyLCBxMiwgcDEpICE9PSBvcmllbnQocDIsIHEyLCBxMSk7XG59XG5cbi8vIGNoZWNrIGlmIGEgcG9seWdvbiBkaWFnb25hbCBpbnRlcnNlY3RzIGFueSBwb2x5Z29uIHNlZ21lbnRzXG5mdW5jdGlvbiBpbnRlcnNlY3RzUG9seWdvbihzdGFydCwgYSwgYikge1xuICAgIHZhciBub2RlID0gc3RhcnQ7XG4gICAgZG8ge1xuICAgICAgICB2YXIgcDEgPSBub2RlLnAsXG4gICAgICAgICAgICBwMiA9IG5vZGUubmV4dC5wO1xuXG4gICAgICAgIGlmIChwMSAhPT0gYSAmJiBwMiAhPT0gYSAmJiBwMSAhPT0gYiAmJiBwMiAhPT0gYiAmJiBpbnRlcnNlY3RzKHAxLCBwMiwgYSwgYikpIHJldHVybiB0cnVlO1xuXG4gICAgICAgIG5vZGUgPSBub2RlLm5leHQ7XG4gICAgfSB3aGlsZSAobm9kZSAhPT0gc3RhcnQpO1xuXG4gICAgcmV0dXJuIGZhbHNlO1xufVxuXG4vLyBjaGVjayBpZiBhIHBvbHlnb24gZGlhZ29uYWwgaXMgbG9jYWxseSBpbnNpZGUgdGhlIHBvbHlnb25cbmZ1bmN0aW9uIGxvY2FsbHlJbnNpZGUoYSwgYikge1xuICAgIHJldHVybiBvcmllbnQoYS5wcmV2LnAsIGEucCwgYS5uZXh0LnApID09PSAtMSA/XG4gICAgICAgIG9yaWVudChhLnAsIGIucCwgYS5uZXh0LnApICE9PSAtMSAmJiBvcmllbnQoYS5wLCBhLnByZXYucCwgYi5wKSAhPT0gLTEgOlxuICAgICAgICBvcmllbnQoYS5wLCBiLnAsIGEucHJldi5wKSA9PT0gLTEgfHwgb3JpZW50KGEucCwgYS5uZXh0LnAsIGIucCkgPT09IC0xO1xufVxuXG4vLyBjaGVjayBpZiB0aGUgbWlkZGxlIHBvaW50IG9mIGEgcG9seWdvbiBkaWFnb25hbCBpcyBpbnNpZGUgdGhlIHBvbHlnb25cbmZ1bmN0aW9uIG1pZGRsZUluc2lkZShzdGFydCwgYSwgYikge1xuICAgIHZhciBub2RlID0gc3RhcnQsXG4gICAgICAgIGluc2lkZSA9IGZhbHNlLFxuICAgICAgICBweCA9IChhWzBdICsgYlswXSkgLyAyLFxuICAgICAgICBweSA9IChhWzFdICsgYlsxXSkgLyAyO1xuICAgIGRvIHtcbiAgICAgICAgdmFyIHAxID0gbm9kZS5wLFxuICAgICAgICAgICAgcDIgPSBub2RlLm5leHQucDtcblxuICAgICAgICBpZiAoKChwMVsxXSA+IHB5KSAhPT0gKHAyWzFdID4gcHkpKSAmJlxuICAgICAgICAgICAgKHB4IDwgKHAyWzBdIC0gcDFbMF0pICogKHB5IC0gcDFbMV0pIC8gKHAyWzFdIC0gcDFbMV0pICsgcDFbMF0pKSBpbnNpZGUgPSAhaW5zaWRlO1xuXG4gICAgICAgIG5vZGUgPSBub2RlLm5leHQ7XG4gICAgfSB3aGlsZSAobm9kZSAhPT0gc3RhcnQpO1xuXG4gICAgcmV0dXJuIGluc2lkZTtcbn1cblxuZnVuY3Rpb24gY29tcGFyZVgoYSwgYikge1xuICAgIHJldHVybiBhLnBbMF0gLSBiLnBbMF07XG59XG5cbi8vIGxpbmsgdHdvIHBvbHlnb24gdmVydGljZXMgd2l0aCBhIGJyaWRnZTsgaWYgdGhlIHZlcnRpY2VzIGJlbG9uZyB0byB0aGUgc2FtZSByaW5nLCBpdCBzcGxpdHMgcG9seWdvbiBpbnRvIHR3bztcbi8vIGlmIG9uZSBiZWxvbmdzIHRvIHRoZSBvdXRlciByaW5nIGFuZCBhbm90aGVyIHRvIGEgaG9sZSwgaXQgbWVyZ2VzIGl0IGludG8gYSBzaW5nbGUgcmluZ1xuZnVuY3Rpb24gc3BsaXRQb2x5Z29uKGEsIGIpIHtcbiAgICB2YXIgYTIgPSBuZXcgTm9kZShhLnApLFxuICAgICAgICBiMiA9IG5ldyBOb2RlKGIucCksXG4gICAgICAgIGFuID0gYS5uZXh0LFxuICAgICAgICBicCA9IGIucHJldjtcblxuICAgIGEyLnNvdXJjZSA9IGE7XG4gICAgYjIuc291cmNlID0gYjtcblxuICAgIGEubmV4dCA9IGI7XG4gICAgYi5wcmV2ID0gYTtcblxuICAgIGEyLm5leHQgPSBhbjtcbiAgICBhbi5wcmV2ID0gYTI7XG5cbiAgICBiMi5uZXh0ID0gYTI7XG4gICAgYTIucHJldiA9IGIyO1xuXG4gICAgYnAubmV4dCA9IGIyO1xuICAgIGIyLnByZXYgPSBicDtcblxuICAgIHJldHVybiBiMjtcbn1cblxuLy8gY3JlYXRlIGEgbm9kZSBhbmQgb3B0aW9uYWxseSBsaW5rIGl0IHdpdGggcHJldmlvdXMgb25lIChpbiBhIGNpcmN1bGFyIGRvdWJseSBsaW5rZWQgbGlzdClcbmZ1bmN0aW9uIGluc2VydE5vZGUocG9pbnQsIGxhc3QpIHtcbiAgICB2YXIgbm9kZSA9IG5ldyBOb2RlKHBvaW50KTtcblxuICAgIGlmICghbGFzdCkge1xuICAgICAgICBub2RlLnByZXYgPSBub2RlO1xuICAgICAgICBub2RlLm5leHQgPSBub2RlO1xuXG4gICAgfSBlbHNlIHtcbiAgICAgICAgbm9kZS5uZXh0ID0gbGFzdC5uZXh0O1xuICAgICAgICBub2RlLnByZXYgPSBsYXN0O1xuICAgICAgICBsYXN0Lm5leHQucHJldiA9IG5vZGU7XG4gICAgICAgIGxhc3QubmV4dCA9IG5vZGU7XG4gICAgfVxuICAgIHJldHVybiBub2RlO1xufVxuXG5mdW5jdGlvbiBOb2RlKHApIHtcbiAgICAvLyB2ZXJ0ZXggY29vcmRpbmF0ZXNcbiAgICB0aGlzLnAgPSBwO1xuXG4gICAgLy8gcHJldmlvdXMgYW5kIG5leHQgdmVydGljZSBub2RlcyBpbiBhIHBvbHlnb24gcmluZ1xuICAgIHRoaXMucHJldiA9IG51bGw7XG4gICAgdGhpcy5uZXh0ID0gbnVsbDtcblxuICAgIC8vIHotb3JkZXIgY3VydmUgdmFsdWVcbiAgICB0aGlzLnogPSBudWxsO1xuXG4gICAgLy8gcHJldmlvdXMgYW5kIG5leHQgbm9kZXMgaW4gei1vcmRlclxuICAgIHRoaXMucHJldlogPSBudWxsO1xuICAgIHRoaXMubmV4dFogPSBudWxsO1xuXG4gICAgLy8gdXNlZCBmb3IgaW5kZXhlZCBvdXRwdXRcbiAgICB0aGlzLnNvdXJjZSA9IG51bGw7XG4gICAgdGhpcy5pbmRleCA9IG51bGw7XG59XG4iLCIvKipcbiogQG5hbWVzcGFjZSBQYWxldHRlXG4qL1xudmFyIFBhbGV0dGUgPSBQYWxldHRlIHx8IHt9O1xuXG5QYWxldHRlLmVhcmN1dCA9IHJlcXVpcmUoXCJlYXJjdXRcIik7XG4iXX0=
-
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/* global Palette */
-/**
-* @classdesc The core part of the system - initialise this to begin using the shader manager.
-* @class Palette.Manager
-* @param {WebGLRenderingContext} gl - The context all shaders and programs will belong to and be compiled by.
-*/
-Palette.Manager = function(gl){
-	// if(!(gl instanceof WebGLRenderingContext)){
-	// 	throw new TypeError("Error: attempted to create Palette with illegal argument.");
-	// }
-
-	/**
-    * A reference to the defining WebGLRenderingContext.
-    * @name Palette.Manager#context
-	* @type WebGLRenderingContext
-    * @protected
-    * @readonly
-    */
-	this.context 		= gl;
-	
-	/**
-    * An object storing all processed Vertex Shaders.
-    * @name Palette.Manager#vertShaders
-	* @type Object
-    * @private
-    */
-	this.vertShaders 	= {};
-	/**
-    * An object storing all processed Fragment Shaders.
-    * @name Palette.Manager#fragShaders
-	* @type Object
-    * @private
-    */
-	this.fragShaders	= {};
-	/**
-    * An object storing all processed Programs.
-    * @name Palette.Manager#programs
-	* @type Object
-    * @private
-    */
-	this.programs		= {};
-
-	/**
-    * A {@link Palette.ShaderFactory} object utilised by the manager
-    * to generate valid shader objects from many sources for use.
-    * @name Palette.Manager#shaderFactory
-	* @type Palette.ShaderFactory
-    * @protected
-    * @readonly
-    */
-	this.shaderFactory	= new Palette.ShaderFactory(this);
-};
-
-Palette.Manager.prototype = {
-	/**
-	* Add a shader into the manager's storage for future access.
-	* @method Palette.Manager#addShader
-	* @public
-	* @param {string|Palette.Shader} shaderRef - URL, JSON or Palette.Shader.
-	*/
-	addShader: function(shaderRef){
-		this.shaderFactory.addShader(shaderRef);
-	},
-
-	/**
-	* Send a draw call to a given vs-fs pair.
-	* The work is delegated down to the program's own draw method.
-	* @method Palette.Manager#draw
-	* @public
-	* @param {string|Palette.Shader} vs - The desired Vertex Shader.
-	* @param {string|Palette.Shader} fs - The desired Fragment Shader.
-	* @param {Float32Array} verts - Vertex list to pass to the GPU.
-	* @param {object} [conf1] - A set of attributes to pass down to the fragment shader.
-	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
-	*/
-	draw: function(vs, fs, verts, conf1, conf2){
-		this.getProgram(vs, fs).draw(verts, conf1, conf2);
-	},
-
-	/**
-	* Request a program object from a known vs-fs pair.
-	* @method Palette.Manager#getProgram
-	* @public
-	* @param {string|Palette.Shader} vs - The desired Vertex Shader.
-	* @param {string|Palette.Shader} fs - The desired Fragment Shader.
-	* @return {Palette.Program} The {@link Palette.Program} either found or generated. If either shader was not found, NULL is returned.
-	*/
-	getProgram: function(vs, fs){
-		var vsName = this.getShaderName(vs);
-		var fsName = this.getShaderName(fs);
-		var vsObj;
-		var fsObj;
-
-		var output;
-
-		this.programs[vsName] = this.programs[vsName] || {};
-		this.programs[vsName][fsName] = this.programs[vsName][fsName] || {};
-
-		if(!(this.programs[vsName][fsName] instanceof Palette.Program)){
-			if(vs instanceof Palette.Shader){vsObj = vs;} else{vsObj = this.getShader(Palette.Shader.VS, vsName);}
-			if(fs instanceof Palette.Shader){fsObj = fs;} else{fsObj = this.getShader(Palette.Shader.FS, fsName);}
-			this.programs[vsName][fsName] = new Palette.Program(this.context, vsObj, fsObj);
-		}
-		output = this.programs[vsName][fsName];
-
-		return output;
-	},
-
-	/**
-	* Request a shader object from storage using its type and name.
-	* @method Palette.Manager#getShader
-	* @public
-	* @param {integer} type - Either Palette.Shader.VS or Palette.Shader.FS.
-	* @param {string} name - The shader's identifier.
-	* @return {Palette.Shader} The requested {@link Palette.Shader}. If a shader was not found, NULL is returned.
-	*/
-	getShader: function(type, name){
-		return (type === Palette.Shader.VS) ? this.vertShaders[name] : this.fragShaders[name];
-	},
-
-	/**
-	* Ensure that we have a shader's name, for lookup purposes in particular.
-	* @method Palette.Manager#getShaderName
-	* @public
-	* @param {string|Palette.Shader} input - The shader we need to sanity check the name of.
-	* @return {string} - The definite name of the shader.
-	*/
-	getShaderName: function(input){
-		var output;
-		if(input instanceof Palette.Shader){
-			output = input.name;
-		} else{
-			output = input;
-		}
-		return output;
-	}
-};
-
-Palette.Manager.prototype.constructor = Palette.Manager;
-
-},{}]},{},[1])
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vZGVfbW9kdWxlcy9icm93c2VyaWZ5L25vZGVfbW9kdWxlcy9icm93c2VyLXBhY2svX3ByZWx1ZGUuanMiLCJzcmMvUGFsZXR0ZS9NYW5hZ2VyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FDQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsImZpbGUiOiJnZW5lcmF0ZWQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlc0NvbnRlbnQiOlsiKGZ1bmN0aW9uIGUodCxuLHIpe2Z1bmN0aW9uIHMobyx1KXtpZighbltvXSl7aWYoIXRbb10pe3ZhciBhPXR5cGVvZiByZXF1aXJlPT1cImZ1bmN0aW9uXCImJnJlcXVpcmU7aWYoIXUmJmEpcmV0dXJuIGEobywhMCk7aWYoaSlyZXR1cm4gaShvLCEwKTt2YXIgZj1uZXcgRXJyb3IoXCJDYW5ub3QgZmluZCBtb2R1bGUgJ1wiK28rXCInXCIpO3Rocm93IGYuY29kZT1cIk1PRFVMRV9OT1RfRk9VTkRcIixmfXZhciBsPW5bb109e2V4cG9ydHM6e319O3Rbb11bMF0uY2FsbChsLmV4cG9ydHMsZnVuY3Rpb24oZSl7dmFyIG49dFtvXVsxXVtlXTtyZXR1cm4gcyhuP246ZSl9LGwsbC5leHBvcnRzLGUsdCxuLHIpfXJldHVybiBuW29dLmV4cG9ydHN9dmFyIGk9dHlwZW9mIHJlcXVpcmU9PVwiZnVuY3Rpb25cIiYmcmVxdWlyZTtmb3IodmFyIG89MDtvPHIubGVuZ3RoO28rKylzKHJbb10pO3JldHVybiBzfSkiLCIvKiBnbG9iYWwgUGFsZXR0ZSAqL1xuLyoqXG4qIEBjbGFzc2Rlc2MgVGhlIGNvcmUgcGFydCBvZiB0aGUgc3lzdGVtIC0gaW5pdGlhbGlzZSB0aGlzIHRvIGJlZ2luIHVzaW5nIHRoZSBzaGFkZXIgbWFuYWdlci5cbiogQGNsYXNzIFBhbGV0dGUuTWFuYWdlclxuKiBAcGFyYW0ge1dlYkdMUmVuZGVyaW5nQ29udGV4dH0gZ2wgLSBUaGUgY29udGV4dCBhbGwgc2hhZGVycyBhbmQgcHJvZ3JhbXMgd2lsbCBiZWxvbmcgdG8gYW5kIGJlIGNvbXBpbGVkIGJ5LlxuKi9cblBhbGV0dGUuTWFuYWdlciA9IGZ1bmN0aW9uKGdsKXtcblx0Ly8gaWYoIShnbCBpbnN0YW5jZW9mIFdlYkdMUmVuZGVyaW5nQ29udGV4dCkpe1xuXHQvLyBcdHRocm93IG5ldyBUeXBlRXJyb3IoXCJFcnJvcjogYXR0ZW1wdGVkIHRvIGNyZWF0ZSBQYWxldHRlIHdpdGggaWxsZWdhbCBhcmd1bWVudC5cIik7XG5cdC8vIH1cblxuXHQvKipcbiAgICAqIEEgcmVmZXJlbmNlIHRvIHRoZSBkZWZpbmluZyBXZWJHTFJlbmRlcmluZ0NvbnRleHQuXG4gICAgKiBAbmFtZSBQYWxldHRlLk1hbmFnZXIjY29udGV4dFxuXHQqIEB0eXBlIFdlYkdMUmVuZGVyaW5nQ29udGV4dFxuICAgICogQHByb3RlY3RlZFxuICAgICogQHJlYWRvbmx5XG4gICAgKi9cblx0dGhpcy5jb250ZXh0IFx0XHQ9IGdsO1xuXHRcblx0LyoqXG4gICAgKiBBbiBvYmplY3Qgc3RvcmluZyBhbGwgcHJvY2Vzc2VkIFZlcnRleCBTaGFkZXJzLlxuICAgICogQG5hbWUgUGFsZXR0ZS5NYW5hZ2VyI3ZlcnRTaGFkZXJzXG5cdCogQHR5cGUgT2JqZWN0XG4gICAgKiBAcHJpdmF0ZVxuICAgICovXG5cdHRoaXMudmVydFNoYWRlcnMgXHQ9IHt9O1xuXHQvKipcbiAgICAqIEFuIG9iamVjdCBzdG9yaW5nIGFsbCBwcm9jZXNzZWQgRnJhZ21lbnQgU2hhZGVycy5cbiAgICAqIEBuYW1lIFBhbGV0dGUuTWFuYWdlciNmcmFnU2hhZGVyc1xuXHQqIEB0eXBlIE9iamVjdFxuICAgICogQHByaXZhdGVcbiAgICAqL1xuXHR0aGlzLmZyYWdTaGFkZXJzXHQ9IHt9O1xuXHQvKipcbiAgICAqIEFuIG9iamVjdCBzdG9yaW5nIGFsbCBwcm9jZXNzZWQgUHJvZ3JhbXMuXG4gICAgKiBAbmFtZSBQYWxldHRlLk1hbmFnZXIjcHJvZ3JhbXNcblx0KiBAdHlwZSBPYmplY3RcbiAgICAqIEBwcml2YXRlXG4gICAgKi9cblx0dGhpcy5wcm9ncmFtc1x0XHQ9IHt9O1xuXG5cdC8qKlxuICAgICogQSB7QGxpbmsgUGFsZXR0ZS5TaGFkZXJGYWN0b3J5fSBvYmplY3QgdXRpbGlzZWQgYnkgdGhlIG1hbmFnZXJcbiAgICAqIHRvIGdlbmVyYXRlIHZhbGlkIHNoYWRlciBvYmplY3RzIGZyb20gbWFueSBzb3VyY2VzIGZvciB1c2UuXG4gICAgKiBAbmFtZSBQYWxldHRlLk1hbmFnZXIjc2hhZGVyRmFjdG9yeVxuXHQqIEB0eXBlIFBhbGV0dGUuU2hhZGVyRmFjdG9yeVxuICAgICogQHByb3RlY3RlZFxuICAgICogQHJlYWRvbmx5XG4gICAgKi9cblx0dGhpcy5zaGFkZXJGYWN0b3J5XHQ9IG5ldyBQYWxldHRlLlNoYWRlckZhY3RvcnkodGhpcyk7XG59O1xuXG5QYWxldHRlLk1hbmFnZXIucHJvdG90eXBlID0ge1xuXHQvKipcblx0KiBBZGQgYSBzaGFkZXIgaW50byB0aGUgbWFuYWdlcidzIHN0b3JhZ2UgZm9yIGZ1dHVyZSBhY2Nlc3MuXG5cdCogQG1ldGhvZCBQYWxldHRlLk1hbmFnZXIjYWRkU2hhZGVyXG5cdCogQHB1YmxpY1xuXHQqIEBwYXJhbSB7c3RyaW5nfFBhbGV0dGUuU2hhZGVyfSBzaGFkZXJSZWYgLSBVUkwsIEpTT04gb3IgUGFsZXR0ZS5TaGFkZXIuXG5cdCovXG5cdGFkZFNoYWRlcjogZnVuY3Rpb24oc2hhZGVyUmVmKXtcblx0XHR0aGlzLnNoYWRlckZhY3RvcnkuYWRkU2hhZGVyKHNoYWRlclJlZik7XG5cdH0sXG5cblx0LyoqXG5cdCogU2VuZCBhIGRyYXcgY2FsbCB0byBhIGdpdmVuIHZzLWZzIHBhaXIuXG5cdCogVGhlIHdvcmsgaXMgZGVsZWdhdGVkIGRvd24gdG8gdGhlIHByb2dyYW0ncyBvd24gZHJhdyBtZXRob2QuXG5cdCogQG1ldGhvZCBQYWxldHRlLk1hbmFnZXIjZHJhd1xuXHQqIEBwdWJsaWNcblx0KiBAcGFyYW0ge3N0cmluZ3xQYWxldHRlLlNoYWRlcn0gdnMgLSBUaGUgZGVzaXJlZCBWZXJ0ZXggU2hhZGVyLlxuXHQqIEBwYXJhbSB7c3RyaW5nfFBhbGV0dGUuU2hhZGVyfSBmcyAtIFRoZSBkZXNpcmVkIEZyYWdtZW50IFNoYWRlci5cblx0KiBAcGFyYW0ge0Zsb2F0MzJBcnJheX0gdmVydHMgLSBWZXJ0ZXggbGlzdCB0byBwYXNzIHRvIHRoZSBHUFUuXG5cdCogQHBhcmFtIHtvYmplY3R9IFtjb25mMV0gLSBBIHNldCBvZiBhdHRyaWJ1dGVzIHRvIHBhc3MgZG93biB0byB0aGUgZnJhZ21lbnQgc2hhZGVyLlxuXHQqIEBwYXJhbSB7b2JqZWN0fSBbY29uZjJdIC0gQSBzZXQgb2YgYXR0cmlidXRlcyB0byBwYXNzIGRvd24gdG8gdGhlIHZlcnRleCBzaGFkZXIuXG5cdCovXG5cdGRyYXc6IGZ1bmN0aW9uKHZzLCBmcywgdmVydHMsIGNvbmYxLCBjb25mMil7XG5cdFx0dGhpcy5nZXRQcm9ncmFtKHZzLCBmcykuZHJhdyh2ZXJ0cywgY29uZjEsIGNvbmYyKTtcblx0fSxcblxuXHQvKipcblx0KiBSZXF1ZXN0IGEgcHJvZ3JhbSBvYmplY3QgZnJvbSBhIGtub3duIHZzLWZzIHBhaXIuXG5cdCogQG1ldGhvZCBQYWxldHRlLk1hbmFnZXIjZ2V0UHJvZ3JhbVxuXHQqIEBwdWJsaWNcblx0KiBAcGFyYW0ge3N0cmluZ3xQYWxldHRlLlNoYWRlcn0gdnMgLSBUaGUgZGVzaXJlZCBWZXJ0ZXggU2hhZGVyLlxuXHQqIEBwYXJhbSB7c3RyaW5nfFBhbGV0dGUuU2hhZGVyfSBmcyAtIFRoZSBkZXNpcmVkIEZyYWdtZW50IFNoYWRlci5cblx0KiBAcmV0dXJuIHtQYWxldHRlLlByb2dyYW19IFRoZSB7QGxpbmsgUGFsZXR0ZS5Qcm9ncmFtfSBlaXRoZXIgZm91bmQgb3IgZ2VuZXJhdGVkLiBJZiBlaXRoZXIgc2hhZGVyIHdhcyBub3QgZm91bmQsIE5VTEwgaXMgcmV0dXJuZWQuXG5cdCovXG5cdGdldFByb2dyYW06IGZ1bmN0aW9uKHZzLCBmcyl7XG5cdFx0dmFyIHZzTmFtZSA9IHRoaXMuZ2V0U2hhZGVyTmFtZSh2cyk7XG5cdFx0dmFyIGZzTmFtZSA9IHRoaXMuZ2V0U2hhZGVyTmFtZShmcyk7XG5cdFx0dmFyIHZzT2JqO1xuXHRcdHZhciBmc09iajtcblxuXHRcdHZhciBvdXRwdXQ7XG5cblx0XHR0aGlzLnByb2dyYW1zW3ZzTmFtZV0gPSB0aGlzLnByb2dyYW1zW3ZzTmFtZV0gfHwge307XG5cdFx0dGhpcy5wcm9ncmFtc1t2c05hbWVdW2ZzTmFtZV0gPSB0aGlzLnByb2dyYW1zW3ZzTmFtZV1bZnNOYW1lXSB8fCB7fTtcblxuXHRcdGlmKCEodGhpcy5wcm9ncmFtc1t2c05hbWVdW2ZzTmFtZV0gaW5zdGFuY2VvZiBQYWxldHRlLlByb2dyYW0pKXtcblx0XHRcdGlmKHZzIGluc3RhbmNlb2YgUGFsZXR0ZS5TaGFkZXIpe3ZzT2JqID0gdnM7fSBlbHNle3ZzT2JqID0gdGhpcy5nZXRTaGFkZXIoUGFsZXR0ZS5TaGFkZXIuVlMsIHZzTmFtZSk7fVxuXHRcdFx0aWYoZnMgaW5zdGFuY2VvZiBQYWxldHRlLlNoYWRlcil7ZnNPYmogPSBmczt9IGVsc2V7ZnNPYmogPSB0aGlzLmdldFNoYWRlcihQYWxldHRlLlNoYWRlci5GUywgZnNOYW1lKTt9XG5cdFx0XHR0aGlzLnByb2dyYW1zW3ZzTmFtZV1bZnNOYW1lXSA9IG5ldyBQYWxldHRlLlByb2dyYW0odGhpcy5jb250ZXh0LCB2c09iaiwgZnNPYmopO1xuXHRcdH1cblx0XHRvdXRwdXQgPSB0aGlzLnByb2dyYW1zW3ZzTmFtZV1bZnNOYW1lXTtcblxuXHRcdHJldHVybiBvdXRwdXQ7XG5cdH0sXG5cblx0LyoqXG5cdCogUmVxdWVzdCBhIHNoYWRlciBvYmplY3QgZnJvbSBzdG9yYWdlIHVzaW5nIGl0cyB0eXBlIGFuZCBuYW1lLlxuXHQqIEBtZXRob2QgUGFsZXR0ZS5NYW5hZ2VyI2dldFNoYWRlclxuXHQqIEBwdWJsaWNcblx0KiBAcGFyYW0ge2ludGVnZXJ9IHR5cGUgLSBFaXRoZXIgUGFsZXR0ZS5TaGFkZXIuVlMgb3IgUGFsZXR0ZS5TaGFkZXIuRlMuXG5cdCogQHBhcmFtIHtzdHJpbmd9IG5hbWUgLSBUaGUgc2hhZGVyJ3MgaWRlbnRpZmllci5cblx0KiBAcmV0dXJuIHtQYWxldHRlLlNoYWRlcn0gVGhlIHJlcXVlc3RlZCB7QGxpbmsgUGFsZXR0ZS5TaGFkZXJ9LiBJZiBhIHNoYWRlciB3YXMgbm90IGZvdW5kLCBOVUxMIGlzIHJldHVybmVkLlxuXHQqL1xuXHRnZXRTaGFkZXI6IGZ1bmN0aW9uKHR5cGUsIG5hbWUpe1xuXHRcdHJldHVybiAodHlwZSA9PT0gUGFsZXR0ZS5TaGFkZXIuVlMpID8gdGhpcy52ZXJ0U2hhZGVyc1tuYW1lXSA6IHRoaXMuZnJhZ1NoYWRlcnNbbmFtZV07XG5cdH0sXG5cblx0LyoqXG5cdCogRW5zdXJlIHRoYXQgd2UgaGF2ZSBhIHNoYWRlcidzIG5hbWUsIGZvciBsb29rdXAgcHVycG9zZXMgaW4gcGFydGljdWxhci5cblx0KiBAbWV0aG9kIFBhbGV0dGUuTWFuYWdlciNnZXRTaGFkZXJOYW1lXG5cdCogQHB1YmxpY1xuXHQqIEBwYXJhbSB7c3RyaW5nfFBhbGV0dGUuU2hhZGVyfSBpbnB1dCAtIFRoZSBzaGFkZXIgd2UgbmVlZCB0byBzYW5pdHkgY2hlY2sgdGhlIG5hbWUgb2YuXG5cdCogQHJldHVybiB7c3RyaW5nfSAtIFRoZSBkZWZpbml0ZSBuYW1lIG9mIHRoZSBzaGFkZXIuXG5cdCovXG5cdGdldFNoYWRlck5hbWU6IGZ1bmN0aW9uKGlucHV0KXtcblx0XHR2YXIgb3V0cHV0O1xuXHRcdGlmKGlucHV0IGluc3RhbmNlb2YgUGFsZXR0ZS5TaGFkZXIpe1xuXHRcdFx0b3V0cHV0ID0gaW5wdXQubmFtZTtcblx0XHR9IGVsc2V7XG5cdFx0XHRvdXRwdXQgPSBpbnB1dDtcblx0XHR9XG5cdFx0cmV0dXJuIG91dHB1dDtcblx0fVxufTtcblxuUGFsZXR0ZS5NYW5hZ2VyLnByb3RvdHlwZS5jb25zdHJ1Y3RvciA9IFBhbGV0dGUuTWFuYWdlcjtcbiJdfQ==
-
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/* global Palette */
-/**
-* @classdesc Abstraction of program references to allow easy manipulation.
-* @description The Program object, generated from linked pairs of vs-fs combinations.
-* @class Palette.Program
-* @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
-* @param {Palette.Shader} vs - The {@link Palette.Shader} acting as the vertex shader for this program.
-* @param {Palette.Shader} fs - The {@link Palette.Shader} acting as the fragment shader for this program.
-*/
-Palette.Program = function(gl, vs, fs){
-	/**
-	* The program's attached context.
-	* @name Palette.Program#context
-	* @type WebGLRenderingContext
-	* @protected
-	* @readonly
-	*/
-	this.context = gl;
-	
-	/**
-	* The program's attached vertex shader.
-	* @name Palette.Program#vs
-	* @type Palette.Shader
-	* @protected
-	* @readonly
-	*/
-	this.vs = vs;
-	
-	/**
-	* The program's attached fragment shader.
-	* @name Palette.Program#fs
-	* @type Palette.Shader
-	* @protected
-	* @readonly
-	*/
-	this.fs = fs;
-
-	/**
-	* The program as seen by WebGL.
-	* @name Palette.Program#program
-	* @type WebGLProgram
-	* @protected
-	* @readonly
-	*/
-	this.program = null;
-
-	/**
-	* Has the program attempted compilation yet?
-	* @name Palette.Program#compiled
-	* @type Boolean
-	* @private
-	* @readonly
-	*/
-	this.compiled = false;
-
-	/**
-	* Attribute Storage - temporary and set.
-	* @name Palette.Program#attrs
-	* @type Object
-	* @private
-	* @readonly
-	*/
-	this.attrs = {vs: {access:{},store:{},send:{}}
-					, fs: {access:{},store:{},send:{}}};
-
-	/**
-	* The Selected Draw Mode for the program.
-	* @name Palette.Program#drawMode
-	* @type Integer
-	* @private
-	* @readonly
-	*/
-	this.drawMode = Palette.Program.TRIANGLES;
-
-	this.linkProgram();
-	this.prepareAttrStores();
-};
-
-Palette.Program.prototype = {
-	/**
-	* Draw a set of vertices with this program, with optional configuration. Configurations passed here do not
-	* overwrite the cached object.
-	* This method is accessed when {@link Palette.Manager#draw} is called.
-	* @method Palette.Program#draw
-	* @public
-	* @param {Float32Array} verts - Vertex list to pass to the GPU.
-	* @param {object} [conf1] - A set of attributes to pass down to the fragment shader.
-	* @param {object} [conf2] - A set of attributes to pass down to the vertex shader.
-	*/
-	draw: function(verts, conf1, conf2){
-		this.context.useProgram(this.program);
-		if(!conf1) conf1 = {};
-		if(verts != null){
-		switch(this.drawMode){
-			case Palette.Program.POLYGON:
-				var temp = Palette.earcut(verts, true);
-				var temper = new Float32Array(temp[1].length * this.attrs.vs.access.vertexBuffer.itemSize);
-				for(var i=0; i<temp[1].length; i++){
-					switch(temp[0][0].length){
-						case 3:
-							temper[i+2] = temp[0] [temp[1][i]] [i+2];
-							/**falls through*/
-						case 2:
-							temper[i+1] = temp[0] [temp[1][i]] [i+1];
-							/**falls through*/
-						case 1:
-							temper[i] = temp[0] [temp[1][i]] [i];
-							/**falls through*/
-					}
-				}
-				conf1.vertexBuffer = temp;
-				break;
-			default:
-				conf1.vertexBuffer = verts;
-				break;
-		}
-		}
-
-		this.generateSend(this.attrs.vs, conf1);
-		this.generateSend(this.attrs.fs, conf2);
-
-		this.passAttrstoProg();
-
-		this.context.drawArrays(this.drawMode, 0
-			, this.attrs.vs.send.vertexBuffer.length/this.attrs.vs.access.vertexBuffer.itemSize);
-	},
-
-	/**
-	* Restore a program's object config for either shader or both.
-	* @method Palette.Program#restoreDefaultConfig
-	* @public
-	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE,
-	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
-	*/
-	restoreDefaultConfig: function(mode){
-		var attrPointer;
-		var shaderPointer;
-
-		for(var j=0; j<2; j++){
-			if(!j){if(!mode&Palette.Program.VS_MODE)continue; shaderPointer = this.vs; attrPointer = this.attrs.vs;}
-			else {if(!mode&Palette.Program.FS_MODE)continue; shaderPointer = this.fs; attrPointer = this.attrs.fs;}
-
-			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
-				var attrData = shaderPointer.attrs[i];
-				var name = attrData[0];
-
-				if(attrData[1]=="buffer" || attrData[1]=="vertexAttrib"){
-					attrPointer.store[name] = null;
-				} else if(attrData[1]!="vertexAttrib"){
-					attrPointer.store[name] = attrData[2];
-				}
-			}
-		}
-	},
-
-	/**
-	* Set a program's object config for either shader or both with a given config object.
-	* Object properties not in the supplied object will not overwrite the program state.
-	* @method Palette.Program#setConfig
-	* @public
-	* @param {integer} mode - The identifier for which config object to set. Supports Palette.Program.VS_MODE,
-	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
-	* @param {object} conf - The config object to inject into the program state.
-	*/
-	setConfig: function(mode, conf){
-		var attrPointer;
-		var shaderPointer;
-
-		for(var j=0; j<2; j++){
-			if(!j){if(!mode&Palette.Program.VS_MODE)continue; shaderPointer = this.vs; attrPointer = this.attrs.vs;}
-			else {if(!mode&Palette.Program.FS_MODE)continue; shaderPointer = this.fs; attrPointer = this.attrs.fs;}
-
-			for(var prop in attrPointer.access){
-				var attrDest = attrPointer.store[prop];
-
-				if(conf[prop]!= undefined)
-					attrDest = conf[prop];
-			}
-		}
-	},
-
-	/**
-	* Compile the set of shader attached to this program as a compilation unit.
-	* Can only be run once per Program object, i.e. per vs-fs pair.
-	* @method Palette.Program#linkProgram
-	* @private
-	*/
-	linkProgram: function(){
-		if (this.compiled) return false;
-		this.compiled = true;
-
-		this.program = this.context.createProgram();
-
-		this.context.attachShader(this.program, this.vs.shader);
-		this.context.attachShader(this.program, this.fs.shader);
-
-		this.context.linkProgram(this.program);
-
-		return true;
-	},
-
-	/**
-	* Fetches the default values for program attributes, and fetches setter methods
-	* for execution at run time. 
-	* @method Palette.Program#prepareAttrStores
-	* @private
-	*/
-	prepareAttrStores: function(){
-		this.context.useProgram(this.program);
-		var shaderPointer;
-		var attrPointer;
-
-		for(var j=0; j<2; j++){
-			if(!j){shaderPointer = this.vs; attrPointer = this.attrs.vs;}
-			else {shaderPointer = this.fs; attrPointer = this.attrs.fs;}
-
-			for (var i = shaderPointer.attrs.length - 1; i >= 0; i--) {
-				var attrData = shaderPointer.attrs[i];
-				var name = attrData[0];
-				attrPointer.access[name] = attrPointer.access[name] || {};
-				var attrAccessDest = attrPointer.access[name];
-
-				attrAccessDest.setFunction = Palette.Program.fetchSetter(this.context, attrData[1]);
-
-				if(attrData[1]=="vertexAttrib"){
-					attrAccessDest.pointer = this.context.getAttribLocation(this.program, attrData[0]);
-					this.context.enableVertexAttribArray(attrAccessDest.pointer);
-					attrAccessDest.bufferName = attrData[2];
-				}	else if(attrData[1]=="buffer"){
-					attrAccessDest.pointer = this.context.createBuffer();
-					attrAccessDest.itemSize = attrData[2];
-				}	else{
-					attrAccessDest.pointer = this.context.getUniformLocation(this.program, attrData[0]);
-				}
-
-				attrAccessDest.type = attrData[1];
-			}
-		}
-		this.restoreDefaultConfig(Palette.Program.BOTH_MODE);
-	},
-
-	/**
-	* Run through the setters for each attribute, passing the values in the send
-	* section of the store to the context.
-	* @method Palette.Program#passAttrsToProg
-	* @private
-	*/
-	passAttrstoProg: function(){
-		var attrPointer;
-
-		for(var j=0; j<2; j++){
-			if(!j){attrPointer = this.attrs.vs;}
-			else {attrPointer = this.attrs.fs;}
-
-			for(var prop in attrPointer.access){
-				var attrDest = attrPointer.send[prop];
-				var attrAccessDest = attrPointer.access[prop];
-
-				if(attrAccessDest.type.substr(0,3) == "mat"){
-					attrAccessDest.setFunction(attrAccessDest.pointer, this.context.FALSE, attrDest);
-				} else if(attrAccessDest.type == "vertexAttrib"){
-					var buffer = this.attrs.vs.access[attrAccessDest.bufferName];
-					attrAccessDest.setFunction(attrAccessDest, buffer);
-				} else if(attrAccessDest.type == "buffer"){
-					attrAccessDest.setFunction(attrAccessDest, attrDest);
-				} else{
-					attrAccessDest.setFunction(attrAccessDest.pointer, attrDest);
-				}
-			}
-		}
-	},
-
-	/**
-	* Set a program's draw mode.
-	* @method Palette.Program#setDrawMode
-	* @public
-	* @param {integer} mode - The gl code for drawing mode. Supports Palette.Program.POINTS, .LINES, .LINE_LOOP,
-	* .LINE_STRIP, .TRIANGLES, .TRIANGLE_STRIP, .TRIANGLE_FAN.
-	*/
-	setDrawMode: function(mode){
-		this.drawMode = mode;
-	},
-
-	/**
-	* Generate the "send" region of the vs and fs attribute stores from the necessary
-	* sub-stores.
-	* @method Palette.Program#generateSend
-	* @private
-	*/
-	generateSend: function(dest, conf){
-		var toSend;
-		for(name in dest.access){
-			if(conf[name]) toSend = conf[name];
-			else toSend = dest.store[name];
-			dest.send[name] = toSend;
-		}
-	}
-};
-/**
-* Returns the relevant setter function for each 
-* @method Palette.Program.fetchSetter
-* @private
-*/
-Palette.Program.fetchSetter = function(gl, type){
-	//LAZY
-	//I'LL DO THIS MORE ELEGANTLY ONE DAY.
-	var oneParamFromArray = function(convertFunc){
-		return function(ptr, array){
-			convertFunc(ptr, array[0]);
-		}
-	}
-	var twoParamFromArray = function(convertFunc){
-		return function(ptr, array){
-			convertFunc(ptr, array[0],array[1]);
-		}
-	}
-	var threeParamFromArray = function(convertFunc){
-		return function(ptr, array){
-			convertFunc(ptr, array[0],array[1],array[2]);
-		}
-	}
-	var fourParamFromArray = function(convertFunc){
-		return function(ptr, array){
-			convertFunc(ptr, array[0],array[1],array[2],array[3]);
-		}
-	}
-
-	switch(type){
-		case "float":
-			return oneParamFromArray(gl.uniform1f.bind(gl));
-		case "float[]":
-			return gl.uniform1fv.bind(gl);
-		case "int":
-			return oneParamFromArray(gl.uniform1i.bind(gl));
-		case "int[]":
-			return gl.uniform1iv.bind(gl);
-		case "vec2":
-			return twoParamFromArray(gl.uniform2f.bind(gl));
-		case "vec2[]":
-			return gl.uniform2fv.bind(gl);
-		case "ivec2":
-			return twoParamFromArray(gl.uniform2i.bind(gl));
-		case "ivec2[]":
-			return gl.uniform2iv.bind(gl);
-		case "vec3":
-			return threeParamFromArray(gl.uniform3f.bind(gl));
-		case "vec3[]":
-			return gl.uniform3fv.bind(gl);
-		case "ivec3":
-			return threeParamFromArray(gl.uniform3i.bind(gl));
-		case "ivec3[]":
-			return gl.uniform3iv.bind(gl);
-		case "vec4":
-			return fourParamFromArray(gl.uniform4f.bind(gl));
-		case "vec4[]":
-			return gl.uniform4fv.bind(gl);
-		case "ivec4":
-			return fourParamFromArray(gl.uniform4i.bind(gl));
-		case "ivec4[]":
-			return gl.uniform4iv.bind(gl);
-		case "mat2":
-			return gl.uniformMatrix2fv.bind(gl);
-		case "mat3":
-			return gl.uniformMatrix3fv.bind(gl);
-		case "mat4":
-			return gl.uniformMatrix4fv.bind(gl);
-		case "texture":
-			alert("You're on your own, kid.");
-			return null;
-		case "vertexAttrib":
-			var k = function(attrib, buffer){
-				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
-				gl.vertexAttribPointer(attrib.pointer, buffer.itemSize, gl.FLOAT, false, 0, 0);
-			}
-			return k.bind(gl);
-		case "buffer":
-			var k = function(buffer, bufferData){
-				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
-				gl.bufferData(gl.ARRAY_BUFFER, bufferData, gl.DYNAMIC_DRAW);
-			}
-			return k.bind(gl);
-		default:
-			alert("Not gonna lie - you really messed up. I can't pass "+type+" onto the shader.");
-			return null;
-	}
-};
-
-Palette.Program.NONE_MODE	= 0;
-Palette.Program.VS_MODE 	= 1;
-Palette.Program.FS_MODE 	= 2;
-Palette.Program.BOTH_MODE 	= 3;
-
-//WEBGL
-Palette.Program.POINTS			= 0;
-Palette.Program.LINES			= 1;
-Palette.Program.LINE_LOOP		= 2;
-Palette.Program.LINE_STRIP		= 3;
-Palette.Program.TRIANGLES		= 4;
-Palette.Program.TRIANGLE_STRIP	= 5;
-Palette.Program.TRIANGLE_FAN	= 6;
-//MINE
-Palette.Program.POLYGON			= 7;
-
-
-Palette.Program.prototype.constructor = Palette.Program;
-
-},{}]},{},[1])
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vZGVfbW9kdWxlcy9icm93c2VyaWZ5L25vZGVfbW9kdWxlcy9icm93c2VyLXBhY2svX3ByZWx1ZGUuanMiLCJzcmMvUGFsZXR0ZS9Qcm9ncmFtLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FDQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJmaWxlIjoiZ2VuZXJhdGVkLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXNDb250ZW50IjpbIihmdW5jdGlvbiBlKHQsbixyKXtmdW5jdGlvbiBzKG8sdSl7aWYoIW5bb10pe2lmKCF0W29dKXt2YXIgYT10eXBlb2YgcmVxdWlyZT09XCJmdW5jdGlvblwiJiZyZXF1aXJlO2lmKCF1JiZhKXJldHVybiBhKG8sITApO2lmKGkpcmV0dXJuIGkobywhMCk7dmFyIGY9bmV3IEVycm9yKFwiQ2Fubm90IGZpbmQgbW9kdWxlICdcIitvK1wiJ1wiKTt0aHJvdyBmLmNvZGU9XCJNT0RVTEVfTk9UX0ZPVU5EXCIsZn12YXIgbD1uW29dPXtleHBvcnRzOnt9fTt0W29dWzBdLmNhbGwobC5leHBvcnRzLGZ1bmN0aW9uKGUpe3ZhciBuPXRbb11bMV1bZV07cmV0dXJuIHMobj9uOmUpfSxsLGwuZXhwb3J0cyxlLHQsbixyKX1yZXR1cm4gbltvXS5leHBvcnRzfXZhciBpPXR5cGVvZiByZXF1aXJlPT1cImZ1bmN0aW9uXCImJnJlcXVpcmU7Zm9yKHZhciBvPTA7bzxyLmxlbmd0aDtvKyspcyhyW29dKTtyZXR1cm4gc30pIiwiLyogZ2xvYmFsIFBhbGV0dGUgKi9cclxuLyoqXHJcbiogQGNsYXNzZGVzYyBBYnN0cmFjdGlvbiBvZiBwcm9ncmFtIHJlZmVyZW5jZXMgdG8gYWxsb3cgZWFzeSBtYW5pcHVsYXRpb24uXHJcbiogQGRlc2NyaXB0aW9uIFRoZSBQcm9ncmFtIG9iamVjdCwgZ2VuZXJhdGVkIGZyb20gbGlua2VkIHBhaXJzIG9mIHZzLWZzIGNvbWJpbmF0aW9ucy5cclxuKiBAY2xhc3MgUGFsZXR0ZS5Qcm9ncmFtXHJcbiogQHBhcmFtIHtXZWJHTFJlbmRlcmluZ0NvbnRleHR9IGdsIC0gVGhlIGNvbnRleHQgdGhlIHNoYWRlcnMgb2YgdGhpcyBwcm9ncmFtIHdpbGwgYmVsb25nIHRvIGFuZCBiZSBjb21waWxlZCBieS5cclxuKiBAcGFyYW0ge1BhbGV0dGUuU2hhZGVyfSB2cyAtIFRoZSB7QGxpbmsgUGFsZXR0ZS5TaGFkZXJ9IGFjdGluZyBhcyB0aGUgdmVydGV4IHNoYWRlciBmb3IgdGhpcyBwcm9ncmFtLlxyXG4qIEBwYXJhbSB7UGFsZXR0ZS5TaGFkZXJ9IGZzIC0gVGhlIHtAbGluayBQYWxldHRlLlNoYWRlcn0gYWN0aW5nIGFzIHRoZSBmcmFnbWVudCBzaGFkZXIgZm9yIHRoaXMgcHJvZ3JhbS5cclxuKi9cclxuUGFsZXR0ZS5Qcm9ncmFtID0gZnVuY3Rpb24oZ2wsIHZzLCBmcyl7XHJcblx0LyoqXHJcblx0KiBUaGUgcHJvZ3JhbSdzIGF0dGFjaGVkIGNvbnRleHQuXHJcblx0KiBAbmFtZSBQYWxldHRlLlByb2dyYW0jY29udGV4dFxyXG5cdCogQHR5cGUgV2ViR0xSZW5kZXJpbmdDb250ZXh0XHJcblx0KiBAcHJvdGVjdGVkXHJcblx0KiBAcmVhZG9ubHlcclxuXHQqL1xyXG5cdHRoaXMuY29udGV4dCA9IGdsO1xyXG5cdFxyXG5cdC8qKlxyXG5cdCogVGhlIHByb2dyYW0ncyBhdHRhY2hlZCB2ZXJ0ZXggc2hhZGVyLlxyXG5cdCogQG5hbWUgUGFsZXR0ZS5Qcm9ncmFtI3ZzXHJcblx0KiBAdHlwZSBQYWxldHRlLlNoYWRlclxyXG5cdCogQHByb3RlY3RlZFxyXG5cdCogQHJlYWRvbmx5XHJcblx0Ki9cclxuXHR0aGlzLnZzID0gdnM7XHJcblx0XHJcblx0LyoqXHJcblx0KiBUaGUgcHJvZ3JhbSdzIGF0dGFjaGVkIGZyYWdtZW50IHNoYWRlci5cclxuXHQqIEBuYW1lIFBhbGV0dGUuUHJvZ3JhbSNmc1xyXG5cdCogQHR5cGUgUGFsZXR0ZS5TaGFkZXJcclxuXHQqIEBwcm90ZWN0ZWRcclxuXHQqIEByZWFkb25seVxyXG5cdCovXHJcblx0dGhpcy5mcyA9IGZzO1xyXG5cclxuXHQvKipcclxuXHQqIFRoZSBwcm9ncmFtIGFzIHNlZW4gYnkgV2ViR0wuXHJcblx0KiBAbmFtZSBQYWxldHRlLlByb2dyYW0jcHJvZ3JhbVxyXG5cdCogQHR5cGUgV2ViR0xQcm9ncmFtXHJcblx0KiBAcHJvdGVjdGVkXHJcblx0KiBAcmVhZG9ubHlcclxuXHQqL1xyXG5cdHRoaXMucHJvZ3JhbSA9IG51bGw7XHJcblxyXG5cdC8qKlxyXG5cdCogSGFzIHRoZSBwcm9ncmFtIGF0dGVtcHRlZCBjb21waWxhdGlvbiB5ZXQ/XHJcblx0KiBAbmFtZSBQYWxldHRlLlByb2dyYW0jY29tcGlsZWRcclxuXHQqIEB0eXBlIEJvb2xlYW5cclxuXHQqIEBwcml2YXRlXHJcblx0KiBAcmVhZG9ubHlcclxuXHQqL1xyXG5cdHRoaXMuY29tcGlsZWQgPSBmYWxzZTtcclxuXHJcblx0LyoqXHJcblx0KiBBdHRyaWJ1dGUgU3RvcmFnZSAtIHRlbXBvcmFyeSBhbmQgc2V0LlxyXG5cdCogQG5hbWUgUGFsZXR0ZS5Qcm9ncmFtI2F0dHJzXHJcblx0KiBAdHlwZSBPYmplY3RcclxuXHQqIEBwcml2YXRlXHJcblx0KiBAcmVhZG9ubHlcclxuXHQqL1xyXG5cdHRoaXMuYXR0cnMgPSB7dnM6IHthY2Nlc3M6e30sc3RvcmU6e30sc2VuZDp7fX1cclxuXHRcdFx0XHRcdCwgZnM6IHthY2Nlc3M6e30sc3RvcmU6e30sc2VuZDp7fX19O1xyXG5cclxuXHQvKipcclxuXHQqIFRoZSBTZWxlY3RlZCBEcmF3IE1vZGUgZm9yIHRoZSBwcm9ncmFtLlxyXG5cdCogQG5hbWUgUGFsZXR0ZS5Qcm9ncmFtI2RyYXdNb2RlXHJcblx0KiBAdHlwZSBJbnRlZ2VyXHJcblx0KiBAcHJpdmF0ZVxyXG5cdCogQHJlYWRvbmx5XHJcblx0Ki9cclxuXHR0aGlzLmRyYXdNb2RlID0gUGFsZXR0ZS5Qcm9ncmFtLlRSSUFOR0xFUztcclxuXHJcblx0dGhpcy5saW5rUHJvZ3JhbSgpO1xyXG5cdHRoaXMucHJlcGFyZUF0dHJTdG9yZXMoKTtcclxufTtcclxuXHJcblBhbGV0dGUuUHJvZ3JhbS5wcm90b3R5cGUgPSB7XHJcblx0LyoqXHJcblx0KiBEcmF3IGEgc2V0IG9mIHZlcnRpY2VzIHdpdGggdGhpcyBwcm9ncmFtLCB3aXRoIG9wdGlvbmFsIGNvbmZpZ3VyYXRpb24uIENvbmZpZ3VyYXRpb25zIHBhc3NlZCBoZXJlIGRvIG5vdFxyXG5cdCogb3ZlcndyaXRlIHRoZSBjYWNoZWQgb2JqZWN0LlxyXG5cdCogVGhpcyBtZXRob2QgaXMgYWNjZXNzZWQgd2hlbiB7QGxpbmsgUGFsZXR0ZS5NYW5hZ2VyI2RyYXd9IGlzIGNhbGxlZC5cclxuXHQqIEBtZXRob2QgUGFsZXR0ZS5Qcm9ncmFtI2RyYXdcclxuXHQqIEBwdWJsaWNcclxuXHQqIEBwYXJhbSB7RmxvYXQzMkFycmF5fSB2ZXJ0cyAtIFZlcnRleCBsaXN0IHRvIHBhc3MgdG8gdGhlIEdQVS5cclxuXHQqIEBwYXJhbSB7b2JqZWN0fSBbY29uZjFdIC0gQSBzZXQgb2YgYXR0cmlidXRlcyB0byBwYXNzIGRvd24gdG8gdGhlIGZyYWdtZW50IHNoYWRlci5cclxuXHQqIEBwYXJhbSB7b2JqZWN0fSBbY29uZjJdIC0gQSBzZXQgb2YgYXR0cmlidXRlcyB0byBwYXNzIGRvd24gdG8gdGhlIHZlcnRleCBzaGFkZXIuXHJcblx0Ki9cclxuXHRkcmF3OiBmdW5jdGlvbih2ZXJ0cywgY29uZjEsIGNvbmYyKXtcclxuXHRcdHRoaXMuY29udGV4dC51c2VQcm9ncmFtKHRoaXMucHJvZ3JhbSk7XHJcblx0XHRpZighY29uZjEpIGNvbmYxID0ge307XHJcblx0XHRpZih2ZXJ0cyAhPSBudWxsKXtcclxuXHRcdHN3aXRjaCh0aGlzLmRyYXdNb2RlKXtcclxuXHRcdFx0Y2FzZSBQYWxldHRlLlByb2dyYW0uUE9MWUdPTjpcclxuXHRcdFx0XHR2YXIgdGVtcCA9IFBhbGV0dGUuZWFyY3V0KHZlcnRzLCB0cnVlKTtcclxuXHRcdFx0XHR2YXIgdGVtcGVyID0gbmV3IEZsb2F0MzJBcnJheSh0ZW1wWzFdLmxlbmd0aCAqIHRoaXMuYXR0cnMudnMuYWNjZXNzLnZlcnRleEJ1ZmZlci5pdGVtU2l6ZSk7XHJcblx0XHRcdFx0Zm9yKHZhciBpPTA7IGk8dGVtcFsxXS5sZW5ndGg7IGkrKyl7XHJcblx0XHRcdFx0XHRzd2l0Y2godGVtcFswXVswXS5sZW5ndGgpe1xyXG5cdFx0XHRcdFx0XHRjYXNlIDM6XHJcblx0XHRcdFx0XHRcdFx0dGVtcGVyW2krMl0gPSB0ZW1wWzBdIFt0ZW1wWzFdW2ldXSBbaSsyXTtcclxuXHRcdFx0XHRcdFx0XHQvKipmYWxscyB0aHJvdWdoKi9cclxuXHRcdFx0XHRcdFx0Y2FzZSAyOlxyXG5cdFx0XHRcdFx0XHRcdHRlbXBlcltpKzFdID0gdGVtcFswXSBbdGVtcFsxXVtpXV0gW2krMV07XHJcblx0XHRcdFx0XHRcdFx0LyoqZmFsbHMgdGhyb3VnaCovXHJcblx0XHRcdFx0XHRcdGNhc2UgMTpcclxuXHRcdFx0XHRcdFx0XHR0ZW1wZXJbaV0gPSB0ZW1wWzBdIFt0ZW1wWzFdW2ldXSBbaV07XHJcblx0XHRcdFx0XHRcdFx0LyoqZmFsbHMgdGhyb3VnaCovXHJcblx0XHRcdFx0XHR9XHJcblx0XHRcdFx0fVxyXG5cdFx0XHRcdGNvbmYxLnZlcnRleEJ1ZmZlciA9IHRlbXA7XHJcblx0XHRcdFx0YnJlYWs7XHJcblx0XHRcdGRlZmF1bHQ6XHJcblx0XHRcdFx0Y29uZjEudmVydGV4QnVmZmVyID0gdmVydHM7XHJcblx0XHRcdFx0YnJlYWs7XHJcblx0XHR9XHJcblx0XHR9XHJcblxyXG5cdFx0dGhpcy5nZW5lcmF0ZVNlbmQodGhpcy5hdHRycy52cywgY29uZjEpO1xyXG5cdFx0dGhpcy5nZW5lcmF0ZVNlbmQodGhpcy5hdHRycy5mcywgY29uZjIpO1xyXG5cclxuXHRcdHRoaXMucGFzc0F0dHJzdG9Qcm9nKCk7XHJcblxyXG5cdFx0dGhpcy5jb250ZXh0LmRyYXdBcnJheXModGhpcy5kcmF3TW9kZSwgMFxyXG5cdFx0XHQsIHRoaXMuYXR0cnMudnMuc2VuZC52ZXJ0ZXhCdWZmZXIubGVuZ3RoL3RoaXMuYXR0cnMudnMuYWNjZXNzLnZlcnRleEJ1ZmZlci5pdGVtU2l6ZSk7XHJcblx0fSxcclxuXHJcblx0LyoqXHJcblx0KiBSZXN0b3JlIGEgcHJvZ3JhbSdzIG9iamVjdCBjb25maWcgZm9yIGVpdGhlciBzaGFkZXIgb3IgYm90aC5cclxuXHQqIEBtZXRob2QgUGFsZXR0ZS5Qcm9ncmFtI3Jlc3RvcmVEZWZhdWx0Q29uZmlnXHJcblx0KiBAcHVibGljXHJcblx0KiBAcGFyYW0ge2ludGVnZXJ9IG1vZGUgLSBUaGUgaWRlbnRpZmllciBmb3Igd2hpY2ggY29uZmlnIG9iamVjdCB0byByZXZlcnQuIFN1cHBvcnRzIFBhbGV0dGUuUHJvZ3JhbS5WU19NT0RFLFxyXG5cdCogUGFsZXR0ZS5Qcm9ncmFtLkZTX01PREUsIFBhbGV0dGUuUHJvZ3JhbS5CT1RIX01PREUuXHJcblx0Ki9cclxuXHRyZXN0b3JlRGVmYXVsdENvbmZpZzogZnVuY3Rpb24obW9kZSl7XHJcblx0XHR2YXIgYXR0clBvaW50ZXI7XHJcblx0XHR2YXIgc2hhZGVyUG9pbnRlcjtcclxuXHJcblx0XHRmb3IodmFyIGo9MDsgajwyOyBqKyspe1xyXG5cdFx0XHRpZighail7aWYoIW1vZGUmUGFsZXR0ZS5Qcm9ncmFtLlZTX01PREUpY29udGludWU7IHNoYWRlclBvaW50ZXIgPSB0aGlzLnZzOyBhdHRyUG9pbnRlciA9IHRoaXMuYXR0cnMudnM7fVxyXG5cdFx0XHRlbHNlIHtpZighbW9kZSZQYWxldHRlLlByb2dyYW0uRlNfTU9ERSljb250aW51ZTsgc2hhZGVyUG9pbnRlciA9IHRoaXMuZnM7IGF0dHJQb2ludGVyID0gdGhpcy5hdHRycy5mczt9XHJcblxyXG5cdFx0XHRmb3IgKHZhciBpID0gc2hhZGVyUG9pbnRlci5hdHRycy5sZW5ndGggLSAxOyBpID49IDA7IGktLSkge1xyXG5cdFx0XHRcdHZhciBhdHRyRGF0YSA9IHNoYWRlclBvaW50ZXIuYXR0cnNbaV07XHJcblx0XHRcdFx0dmFyIG5hbWUgPSBhdHRyRGF0YVswXTtcclxuXHJcblx0XHRcdFx0aWYoYXR0ckRhdGFbMV09PVwiYnVmZmVyXCIgfHwgYXR0ckRhdGFbMV09PVwidmVydGV4QXR0cmliXCIpe1xyXG5cdFx0XHRcdFx0YXR0clBvaW50ZXIuc3RvcmVbbmFtZV0gPSBudWxsO1xyXG5cdFx0XHRcdH0gZWxzZSBpZihhdHRyRGF0YVsxXSE9XCJ2ZXJ0ZXhBdHRyaWJcIil7XHJcblx0XHRcdFx0XHRhdHRyUG9pbnRlci5zdG9yZVtuYW1lXSA9IGF0dHJEYXRhWzJdO1xyXG5cdFx0XHRcdH1cclxuXHRcdFx0fVxyXG5cdFx0fVxyXG5cdH0sXHJcblxyXG5cdC8qKlxyXG5cdCogU2V0IGEgcHJvZ3JhbSdzIG9iamVjdCBjb25maWcgZm9yIGVpdGhlciBzaGFkZXIgb3IgYm90aCB3aXRoIGEgZ2l2ZW4gY29uZmlnIG9iamVjdC5cclxuXHQqIE9iamVjdCBwcm9wZXJ0aWVzIG5vdCBpbiB0aGUgc3VwcGxpZWQgb2JqZWN0IHdpbGwgbm90IG92ZXJ3cml0ZSB0aGUgcHJvZ3JhbSBzdGF0ZS5cclxuXHQqIEBtZXRob2QgUGFsZXR0ZS5Qcm9ncmFtI3NldENvbmZpZ1xyXG5cdCogQHB1YmxpY1xyXG5cdCogQHBhcmFtIHtpbnRlZ2VyfSBtb2RlIC0gVGhlIGlkZW50aWZpZXIgZm9yIHdoaWNoIGNvbmZpZyBvYmplY3QgdG8gc2V0LiBTdXBwb3J0cyBQYWxldHRlLlByb2dyYW0uVlNfTU9ERSxcclxuXHQqIFBhbGV0dGUuUHJvZ3JhbS5GU19NT0RFLCBQYWxldHRlLlByb2dyYW0uQk9USF9NT0RFLlxyXG5cdCogQHBhcmFtIHtvYmplY3R9IGNvbmYgLSBUaGUgY29uZmlnIG9iamVjdCB0byBpbmplY3QgaW50byB0aGUgcHJvZ3JhbSBzdGF0ZS5cclxuXHQqL1xyXG5cdHNldENvbmZpZzogZnVuY3Rpb24obW9kZSwgY29uZil7XHJcblx0XHR2YXIgYXR0clBvaW50ZXI7XHJcblx0XHR2YXIgc2hhZGVyUG9pbnRlcjtcclxuXHJcblx0XHRmb3IodmFyIGo9MDsgajwyOyBqKyspe1xyXG5cdFx0XHRpZighail7aWYoIW1vZGUmUGFsZXR0ZS5Qcm9ncmFtLlZTX01PREUpY29udGludWU7IHNoYWRlclBvaW50ZXIgPSB0aGlzLnZzOyBhdHRyUG9pbnRlciA9IHRoaXMuYXR0cnMudnM7fVxyXG5cdFx0XHRlbHNlIHtpZighbW9kZSZQYWxldHRlLlByb2dyYW0uRlNfTU9ERSljb250aW51ZTsgc2hhZGVyUG9pbnRlciA9IHRoaXMuZnM7IGF0dHJQb2ludGVyID0gdGhpcy5hdHRycy5mczt9XHJcblxyXG5cdFx0XHRmb3IodmFyIHByb3AgaW4gYXR0clBvaW50ZXIuYWNjZXNzKXtcclxuXHRcdFx0XHR2YXIgYXR0ckRlc3QgPSBhdHRyUG9pbnRlci5zdG9yZVtwcm9wXTtcclxuXHJcblx0XHRcdFx0aWYoY29uZltwcm9wXSE9IHVuZGVmaW5lZClcclxuXHRcdFx0XHRcdGF0dHJEZXN0ID0gY29uZltwcm9wXTtcclxuXHRcdFx0fVxyXG5cdFx0fVxyXG5cdH0sXHJcblxyXG5cdC8qKlxyXG5cdCogQ29tcGlsZSB0aGUgc2V0IG9mIHNoYWRlciBhdHRhY2hlZCB0byB0aGlzIHByb2dyYW0gYXMgYSBjb21waWxhdGlvbiB1bml0LlxyXG5cdCogQ2FuIG9ubHkgYmUgcnVuIG9uY2UgcGVyIFByb2dyYW0gb2JqZWN0LCBpLmUuIHBlciB2cy1mcyBwYWlyLlxyXG5cdCogQG1ldGhvZCBQYWxldHRlLlByb2dyYW0jbGlua1Byb2dyYW1cclxuXHQqIEBwcml2YXRlXHJcblx0Ki9cclxuXHRsaW5rUHJvZ3JhbTogZnVuY3Rpb24oKXtcclxuXHRcdGlmICh0aGlzLmNvbXBpbGVkKSByZXR1cm4gZmFsc2U7XHJcblx0XHR0aGlzLmNvbXBpbGVkID0gdHJ1ZTtcclxuXHJcblx0XHR0aGlzLnByb2dyYW0gPSB0aGlzLmNvbnRleHQuY3JlYXRlUHJvZ3JhbSgpO1xyXG5cclxuXHRcdHRoaXMuY29udGV4dC5hdHRhY2hTaGFkZXIodGhpcy5wcm9ncmFtLCB0aGlzLnZzLnNoYWRlcik7XHJcblx0XHR0aGlzLmNvbnRleHQuYXR0YWNoU2hhZGVyKHRoaXMucHJvZ3JhbSwgdGhpcy5mcy5zaGFkZXIpO1xyXG5cclxuXHRcdHRoaXMuY29udGV4dC5saW5rUHJvZ3JhbSh0aGlzLnByb2dyYW0pO1xyXG5cclxuXHRcdHJldHVybiB0cnVlO1xyXG5cdH0sXHJcblxyXG5cdC8qKlxyXG5cdCogRmV0Y2hlcyB0aGUgZGVmYXVsdCB2YWx1ZXMgZm9yIHByb2dyYW0gYXR0cmlidXRlcywgYW5kIGZldGNoZXMgc2V0dGVyIG1ldGhvZHNcclxuXHQqIGZvciBleGVjdXRpb24gYXQgcnVuIHRpbWUuIFxyXG5cdCogQG1ldGhvZCBQYWxldHRlLlByb2dyYW0jcHJlcGFyZUF0dHJTdG9yZXNcclxuXHQqIEBwcml2YXRlXHJcblx0Ki9cclxuXHRwcmVwYXJlQXR0clN0b3JlczogZnVuY3Rpb24oKXtcclxuXHRcdHRoaXMuY29udGV4dC51c2VQcm9ncmFtKHRoaXMucHJvZ3JhbSk7XHJcblx0XHR2YXIgc2hhZGVyUG9pbnRlcjtcclxuXHRcdHZhciBhdHRyUG9pbnRlcjtcclxuXHJcblx0XHRmb3IodmFyIGo9MDsgajwyOyBqKyspe1xyXG5cdFx0XHRpZighail7c2hhZGVyUG9pbnRlciA9IHRoaXMudnM7IGF0dHJQb2ludGVyID0gdGhpcy5hdHRycy52czt9XHJcblx0XHRcdGVsc2Uge3NoYWRlclBvaW50ZXIgPSB0aGlzLmZzOyBhdHRyUG9pbnRlciA9IHRoaXMuYXR0cnMuZnM7fVxyXG5cclxuXHRcdFx0Zm9yICh2YXIgaSA9IHNoYWRlclBvaW50ZXIuYXR0cnMubGVuZ3RoIC0gMTsgaSA+PSAwOyBpLS0pIHtcclxuXHRcdFx0XHR2YXIgYXR0ckRhdGEgPSBzaGFkZXJQb2ludGVyLmF0dHJzW2ldO1xyXG5cdFx0XHRcdHZhciBuYW1lID0gYXR0ckRhdGFbMF07XHJcblx0XHRcdFx0YXR0clBvaW50ZXIuYWNjZXNzW25hbWVdID0gYXR0clBvaW50ZXIuYWNjZXNzW25hbWVdIHx8IHt9O1xyXG5cdFx0XHRcdHZhciBhdHRyQWNjZXNzRGVzdCA9IGF0dHJQb2ludGVyLmFjY2Vzc1tuYW1lXTtcclxuXHJcblx0XHRcdFx0YXR0ckFjY2Vzc0Rlc3Quc2V0RnVuY3Rpb24gPSBQYWxldHRlLlByb2dyYW0uZmV0Y2hTZXR0ZXIodGhpcy5jb250ZXh0LCBhdHRyRGF0YVsxXSk7XHJcblxyXG5cdFx0XHRcdGlmKGF0dHJEYXRhWzFdPT1cInZlcnRleEF0dHJpYlwiKXtcclxuXHRcdFx0XHRcdGF0dHJBY2Nlc3NEZXN0LnBvaW50ZXIgPSB0aGlzLmNvbnRleHQuZ2V0QXR0cmliTG9jYXRpb24odGhpcy5wcm9ncmFtLCBhdHRyRGF0YVswXSk7XHJcblx0XHRcdFx0XHR0aGlzLmNvbnRleHQuZW5hYmxlVmVydGV4QXR0cmliQXJyYXkoYXR0ckFjY2Vzc0Rlc3QucG9pbnRlcik7XHJcblx0XHRcdFx0XHRhdHRyQWNjZXNzRGVzdC5idWZmZXJOYW1lID0gYXR0ckRhdGFbMl07XHJcblx0XHRcdFx0fVx0ZWxzZSBpZihhdHRyRGF0YVsxXT09XCJidWZmZXJcIil7XHJcblx0XHRcdFx0XHRhdHRyQWNjZXNzRGVzdC5wb2ludGVyID0gdGhpcy5jb250ZXh0LmNyZWF0ZUJ1ZmZlcigpO1xyXG5cdFx0XHRcdFx0YXR0ckFjY2Vzc0Rlc3QuaXRlbVNpemUgPSBhdHRyRGF0YVsyXTtcclxuXHRcdFx0XHR9XHRlbHNle1xyXG5cdFx0XHRcdFx0YXR0ckFjY2Vzc0Rlc3QucG9pbnRlciA9IHRoaXMuY29udGV4dC5nZXRVbmlmb3JtTG9jYXRpb24odGhpcy5wcm9ncmFtLCBhdHRyRGF0YVswXSk7XHJcblx0XHRcdFx0fVxyXG5cclxuXHRcdFx0XHRhdHRyQWNjZXNzRGVzdC50eXBlID0gYXR0ckRhdGFbMV07XHJcblx0XHRcdH1cclxuXHRcdH1cclxuXHRcdHRoaXMucmVzdG9yZURlZmF1bHRDb25maWcoUGFsZXR0ZS5Qcm9ncmFtLkJPVEhfTU9ERSk7XHJcblx0fSxcclxuXHJcblx0LyoqXHJcblx0KiBSdW4gdGhyb3VnaCB0aGUgc2V0dGVycyBmb3IgZWFjaCBhdHRyaWJ1dGUsIHBhc3NpbmcgdGhlIHZhbHVlcyBpbiB0aGUgc2VuZFxyXG5cdCogc2VjdGlvbiBvZiB0aGUgc3RvcmUgdG8gdGhlIGNvbnRleHQuXHJcblx0KiBAbWV0aG9kIFBhbGV0dGUuUHJvZ3JhbSNwYXNzQXR0cnNUb1Byb2dcclxuXHQqIEBwcml2YXRlXHJcblx0Ki9cclxuXHRwYXNzQXR0cnN0b1Byb2c6IGZ1bmN0aW9uKCl7XHJcblx0XHR2YXIgYXR0clBvaW50ZXI7XHJcblxyXG5cdFx0Zm9yKHZhciBqPTA7IGo8MjsgaisrKXtcclxuXHRcdFx0aWYoIWope2F0dHJQb2ludGVyID0gdGhpcy5hdHRycy52czt9XHJcblx0XHRcdGVsc2Uge2F0dHJQb2ludGVyID0gdGhpcy5hdHRycy5mczt9XHJcblxyXG5cdFx0XHRmb3IodmFyIHByb3AgaW4gYXR0clBvaW50ZXIuYWNjZXNzKXtcclxuXHRcdFx0XHR2YXIgYXR0ckRlc3QgPSBhdHRyUG9pbnRlci5zZW5kW3Byb3BdO1xyXG5cdFx0XHRcdHZhciBhdHRyQWNjZXNzRGVzdCA9IGF0dHJQb2ludGVyLmFjY2Vzc1twcm9wXTtcclxuXHJcblx0XHRcdFx0aWYoYXR0ckFjY2Vzc0Rlc3QudHlwZS5zdWJzdHIoMCwzKSA9PSBcIm1hdFwiKXtcclxuXHRcdFx0XHRcdGF0dHJBY2Nlc3NEZXN0LnNldEZ1bmN0aW9uKGF0dHJBY2Nlc3NEZXN0LnBvaW50ZXIsIHRoaXMuY29udGV4dC5GQUxTRSwgYXR0ckRlc3QpO1xyXG5cdFx0XHRcdH0gZWxzZSBpZihhdHRyQWNjZXNzRGVzdC50eXBlID09IFwidmVydGV4QXR0cmliXCIpe1xyXG5cdFx0XHRcdFx0dmFyIGJ1ZmZlciA9IHRoaXMuYXR0cnMudnMuYWNjZXNzW2F0dHJBY2Nlc3NEZXN0LmJ1ZmZlck5hbWVdO1xyXG5cdFx0XHRcdFx0YXR0ckFjY2Vzc0Rlc3Quc2V0RnVuY3Rpb24oYXR0ckFjY2Vzc0Rlc3QsIGJ1ZmZlcik7XHJcblx0XHRcdFx0fSBlbHNlIGlmKGF0dHJBY2Nlc3NEZXN0LnR5cGUgPT0gXCJidWZmZXJcIil7XHJcblx0XHRcdFx0XHRhdHRyQWNjZXNzRGVzdC5zZXRGdW5jdGlvbihhdHRyQWNjZXNzRGVzdCwgYXR0ckRlc3QpO1xyXG5cdFx0XHRcdH0gZWxzZXtcclxuXHRcdFx0XHRcdGF0dHJBY2Nlc3NEZXN0LnNldEZ1bmN0aW9uKGF0dHJBY2Nlc3NEZXN0LnBvaW50ZXIsIGF0dHJEZXN0KTtcclxuXHRcdFx0XHR9XHJcblx0XHRcdH1cclxuXHRcdH1cclxuXHR9LFxyXG5cclxuXHQvKipcclxuXHQqIFNldCBhIHByb2dyYW0ncyBkcmF3IG1vZGUuXHJcblx0KiBAbWV0aG9kIFBhbGV0dGUuUHJvZ3JhbSNzZXREcmF3TW9kZVxyXG5cdCogQHB1YmxpY1xyXG5cdCogQHBhcmFtIHtpbnRlZ2VyfSBtb2RlIC0gVGhlIGdsIGNvZGUgZm9yIGRyYXdpbmcgbW9kZS4gU3VwcG9ydHMgUGFsZXR0ZS5Qcm9ncmFtLlBPSU5UUywgLkxJTkVTLCAuTElORV9MT09QLFxyXG5cdCogLkxJTkVfU1RSSVAsIC5UUklBTkdMRVMsIC5UUklBTkdMRV9TVFJJUCwgLlRSSUFOR0xFX0ZBTi5cclxuXHQqL1xyXG5cdHNldERyYXdNb2RlOiBmdW5jdGlvbihtb2RlKXtcclxuXHRcdHRoaXMuZHJhd01vZGUgPSBtb2RlO1xyXG5cdH0sXHJcblxyXG5cdC8qKlxyXG5cdCogR2VuZXJhdGUgdGhlIFwic2VuZFwiIHJlZ2lvbiBvZiB0aGUgdnMgYW5kIGZzIGF0dHJpYnV0ZSBzdG9yZXMgZnJvbSB0aGUgbmVjZXNzYXJ5XHJcblx0KiBzdWItc3RvcmVzLlxyXG5cdCogQG1ldGhvZCBQYWxldHRlLlByb2dyYW0jZ2VuZXJhdGVTZW5kXHJcblx0KiBAcHJpdmF0ZVxyXG5cdCovXHJcblx0Z2VuZXJhdGVTZW5kOiBmdW5jdGlvbihkZXN0LCBjb25mKXtcclxuXHRcdHZhciB0b1NlbmQ7XHJcblx0XHRmb3IobmFtZSBpbiBkZXN0LmFjY2Vzcyl7XHJcblx0XHRcdGlmKGNvbmZbbmFtZV0pIHRvU2VuZCA9IGNvbmZbbmFtZV07XHJcblx0XHRcdGVsc2UgdG9TZW5kID0gZGVzdC5zdG9yZVtuYW1lXTtcclxuXHRcdFx0ZGVzdC5zZW5kW25hbWVdID0gdG9TZW5kO1xyXG5cdFx0fVxyXG5cdH1cclxufTtcclxuLyoqXHJcbiogUmV0dXJucyB0aGUgcmVsZXZhbnQgc2V0dGVyIGZ1bmN0aW9uIGZvciBlYWNoIFxyXG4qIEBtZXRob2QgUGFsZXR0ZS5Qcm9ncmFtLmZldGNoU2V0dGVyXHJcbiogQHByaXZhdGVcclxuKi9cclxuUGFsZXR0ZS5Qcm9ncmFtLmZldGNoU2V0dGVyID0gZnVuY3Rpb24oZ2wsIHR5cGUpe1xyXG5cdC8vTEFaWVxyXG5cdC8vSSdMTCBETyBUSElTIE1PUkUgRUxFR0FOVExZIE9ORSBEQVkuXHJcblx0dmFyIG9uZVBhcmFtRnJvbUFycmF5ID0gZnVuY3Rpb24oY29udmVydEZ1bmMpe1xyXG5cdFx0cmV0dXJuIGZ1bmN0aW9uKHB0ciwgYXJyYXkpe1xyXG5cdFx0XHRjb252ZXJ0RnVuYyhwdHIsIGFycmF5WzBdKTtcclxuXHRcdH1cclxuXHR9XHJcblx0dmFyIHR3b1BhcmFtRnJvbUFycmF5ID0gZnVuY3Rpb24oY29udmVydEZ1bmMpe1xyXG5cdFx0cmV0dXJuIGZ1bmN0aW9uKHB0ciwgYXJyYXkpe1xyXG5cdFx0XHRjb252ZXJ0RnVuYyhwdHIsIGFycmF5WzBdLGFycmF5WzFdKTtcclxuXHRcdH1cclxuXHR9XHJcblx0dmFyIHRocmVlUGFyYW1Gcm9tQXJyYXkgPSBmdW5jdGlvbihjb252ZXJ0RnVuYyl7XHJcblx0XHRyZXR1cm4gZnVuY3Rpb24ocHRyLCBhcnJheSl7XHJcblx0XHRcdGNvbnZlcnRGdW5jKHB0ciwgYXJyYXlbMF0sYXJyYXlbMV0sYXJyYXlbMl0pO1xyXG5cdFx0fVxyXG5cdH1cclxuXHR2YXIgZm91clBhcmFtRnJvbUFycmF5ID0gZnVuY3Rpb24oY29udmVydEZ1bmMpe1xyXG5cdFx0cmV0dXJuIGZ1bmN0aW9uKHB0ciwgYXJyYXkpe1xyXG5cdFx0XHRjb252ZXJ0RnVuYyhwdHIsIGFycmF5WzBdLGFycmF5WzFdLGFycmF5WzJdLGFycmF5WzNdKTtcclxuXHRcdH1cclxuXHR9XHJcblxyXG5cdHN3aXRjaCh0eXBlKXtcclxuXHRcdGNhc2UgXCJmbG9hdFwiOlxyXG5cdFx0XHRyZXR1cm4gb25lUGFyYW1Gcm9tQXJyYXkoZ2wudW5pZm9ybTFmLmJpbmQoZ2wpKTtcclxuXHRcdGNhc2UgXCJmbG9hdFtdXCI6XHJcblx0XHRcdHJldHVybiBnbC51bmlmb3JtMWZ2LmJpbmQoZ2wpO1xyXG5cdFx0Y2FzZSBcImludFwiOlxyXG5cdFx0XHRyZXR1cm4gb25lUGFyYW1Gcm9tQXJyYXkoZ2wudW5pZm9ybTFpLmJpbmQoZ2wpKTtcclxuXHRcdGNhc2UgXCJpbnRbXVwiOlxyXG5cdFx0XHRyZXR1cm4gZ2wudW5pZm9ybTFpdi5iaW5kKGdsKTtcclxuXHRcdGNhc2UgXCJ2ZWMyXCI6XHJcblx0XHRcdHJldHVybiB0d29QYXJhbUZyb21BcnJheShnbC51bmlmb3JtMmYuYmluZChnbCkpO1xyXG5cdFx0Y2FzZSBcInZlYzJbXVwiOlxyXG5cdFx0XHRyZXR1cm4gZ2wudW5pZm9ybTJmdi5iaW5kKGdsKTtcclxuXHRcdGNhc2UgXCJpdmVjMlwiOlxyXG5cdFx0XHRyZXR1cm4gdHdvUGFyYW1Gcm9tQXJyYXkoZ2wudW5pZm9ybTJpLmJpbmQoZ2wpKTtcclxuXHRcdGNhc2UgXCJpdmVjMltdXCI6XHJcblx0XHRcdHJldHVybiBnbC51bmlmb3JtMml2LmJpbmQoZ2wpO1xyXG5cdFx0Y2FzZSBcInZlYzNcIjpcclxuXHRcdFx0cmV0dXJuIHRocmVlUGFyYW1Gcm9tQXJyYXkoZ2wudW5pZm9ybTNmLmJpbmQoZ2wpKTtcclxuXHRcdGNhc2UgXCJ2ZWMzW11cIjpcclxuXHRcdFx0cmV0dXJuIGdsLnVuaWZvcm0zZnYuYmluZChnbCk7XHJcblx0XHRjYXNlIFwiaXZlYzNcIjpcclxuXHRcdFx0cmV0dXJuIHRocmVlUGFyYW1Gcm9tQXJyYXkoZ2wudW5pZm9ybTNpLmJpbmQoZ2wpKTtcclxuXHRcdGNhc2UgXCJpdmVjM1tdXCI6XHJcblx0XHRcdHJldHVybiBnbC51bmlmb3JtM2l2LmJpbmQoZ2wpO1xyXG5cdFx0Y2FzZSBcInZlYzRcIjpcclxuXHRcdFx0cmV0dXJuIGZvdXJQYXJhbUZyb21BcnJheShnbC51bmlmb3JtNGYuYmluZChnbCkpO1xyXG5cdFx0Y2FzZSBcInZlYzRbXVwiOlxyXG5cdFx0XHRyZXR1cm4gZ2wudW5pZm9ybTRmdi5iaW5kKGdsKTtcclxuXHRcdGNhc2UgXCJpdmVjNFwiOlxyXG5cdFx0XHRyZXR1cm4gZm91clBhcmFtRnJvbUFycmF5KGdsLnVuaWZvcm00aS5iaW5kKGdsKSk7XHJcblx0XHRjYXNlIFwiaXZlYzRbXVwiOlxyXG5cdFx0XHRyZXR1cm4gZ2wudW5pZm9ybTRpdi5iaW5kKGdsKTtcclxuXHRcdGNhc2UgXCJtYXQyXCI6XHJcblx0XHRcdHJldHVybiBnbC51bmlmb3JtTWF0cml4MmZ2LmJpbmQoZ2wpO1xyXG5cdFx0Y2FzZSBcIm1hdDNcIjpcclxuXHRcdFx0cmV0dXJuIGdsLnVuaWZvcm1NYXRyaXgzZnYuYmluZChnbCk7XHJcblx0XHRjYXNlIFwibWF0NFwiOlxyXG5cdFx0XHRyZXR1cm4gZ2wudW5pZm9ybU1hdHJpeDRmdi5iaW5kKGdsKTtcclxuXHRcdGNhc2UgXCJ0ZXh0dXJlXCI6XHJcblx0XHRcdGFsZXJ0KFwiWW91J3JlIG9uIHlvdXIgb3duLCBraWQuXCIpO1xyXG5cdFx0XHRyZXR1cm4gbnVsbDtcclxuXHRcdGNhc2UgXCJ2ZXJ0ZXhBdHRyaWJcIjpcclxuXHRcdFx0dmFyIGsgPSBmdW5jdGlvbihhdHRyaWIsIGJ1ZmZlcil7XHJcblx0XHRcdFx0Z2wuYmluZEJ1ZmZlcihnbC5BUlJBWV9CVUZGRVIsIGJ1ZmZlci5wb2ludGVyKTtcclxuXHRcdFx0XHRnbC52ZXJ0ZXhBdHRyaWJQb2ludGVyKGF0dHJpYi5wb2ludGVyLCBidWZmZXIuaXRlbVNpemUsIGdsLkZMT0FULCBmYWxzZSwgMCwgMCk7XHJcblx0XHRcdH1cclxuXHRcdFx0cmV0dXJuIGsuYmluZChnbCk7XHJcblx0XHRjYXNlIFwiYnVmZmVyXCI6XHJcblx0XHRcdHZhciBrID0gZnVuY3Rpb24oYnVmZmVyLCBidWZmZXJEYXRhKXtcclxuXHRcdFx0XHRnbC5iaW5kQnVmZmVyKGdsLkFSUkFZX0JVRkZFUiwgYnVmZmVyLnBvaW50ZXIpO1xyXG5cdFx0XHRcdGdsLmJ1ZmZlckRhdGEoZ2wuQVJSQVlfQlVGRkVSLCBidWZmZXJEYXRhLCBnbC5EWU5BTUlDX0RSQVcpO1xyXG5cdFx0XHR9XHJcblx0XHRcdHJldHVybiBrLmJpbmQoZ2wpO1xyXG5cdFx0ZGVmYXVsdDpcclxuXHRcdFx0YWxlcnQoXCJOb3QgZ29ubmEgbGllIC0geW91IHJlYWxseSBtZXNzZWQgdXAuIEkgY2FuJ3QgcGFzcyBcIit0eXBlK1wiIG9udG8gdGhlIHNoYWRlci5cIik7XHJcblx0XHRcdHJldHVybiBudWxsO1xyXG5cdH1cclxufTtcclxuXHJcblBhbGV0dGUuUHJvZ3JhbS5OT05FX01PREVcdD0gMDtcclxuUGFsZXR0ZS5Qcm9ncmFtLlZTX01PREUgXHQ9IDE7XHJcblBhbGV0dGUuUHJvZ3JhbS5GU19NT0RFIFx0PSAyO1xyXG5QYWxldHRlLlByb2dyYW0uQk9USF9NT0RFIFx0PSAzO1xyXG5cclxuLy9XRUJHTFxyXG5QYWxldHRlLlByb2dyYW0uUE9JTlRTXHRcdFx0PSAwO1xyXG5QYWxldHRlLlByb2dyYW0uTElORVNcdFx0XHQ9IDE7XHJcblBhbGV0dGUuUHJvZ3JhbS5MSU5FX0xPT1BcdFx0PSAyO1xyXG5QYWxldHRlLlByb2dyYW0uTElORV9TVFJJUFx0XHQ9IDM7XHJcblBhbGV0dGUuUHJvZ3JhbS5UUklBTkdMRVNcdFx0PSA0O1xyXG5QYWxldHRlLlByb2dyYW0uVFJJQU5HTEVfU1RSSVBcdD0gNTtcclxuUGFsZXR0ZS5Qcm9ncmFtLlRSSUFOR0xFX0ZBTlx0PSA2O1xyXG4vL01JTkVcclxuUGFsZXR0ZS5Qcm9ncmFtLlBPTFlHT05cdFx0XHQ9IDc7XHJcblxyXG5cclxuUGFsZXR0ZS5Qcm9ncmFtLnByb3RvdHlwZS5jb25zdHJ1Y3RvciA9IFBhbGV0dGUuUHJvZ3JhbTtcclxuIl19
-
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/* global Palette */
-/**
-* @classdesc Abstraction of shader references to allow easy manipulation.
-* @class Palette.Shader
-* @description Initialise and compile a valid Source Object into a Shader.
-* @param {WebGLRenderingContext} gl - The context the shader will belong to and be compiled by.
-* @param {string} name - The name the shader object will be referred to by.
-* @param {number} type - The class of the shader contained, either Palette.Shader.VS or Palette.Shader.FS.
-* @param {string} source - The source code to compile the shader from.
-* @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
-* @param {object} [attrs] - The array which contains attribute names and default values, as an array of 3-tuples.
-*/
-Palette.Shader = function(gl, name, type, source, attrs){
-	/**
-	* The shader's name.
-	* @name Palette.Shader#name
-	* @type String
-	* @protected
-	* @readonly
-	*/
-	this.name = name;
-
-	/**
-	* The type of shader, either Palette.Shader.VS or Palette.Shader.FS for objects.
-	* @name Palette.Shader#type
-	* @type Integer
-	* @protected
-	* @readonly
-	*/
-	this.type = type;
-
-	/**
-	* The shader's attached context.
-	* @name Palette.Shader#context
-	* @type WebGLRenderingContext
-	* @protected
-	* @readonly
-	*/
-	this.context = gl;
-
-	/**
-	* The shader's attribute array.
-	* @name Palette.Shader#attrs
-	* @type Array[]
-	* @protected
-	* @readonly
-	*/
-	this.attrs = attrs;
-
-	/**
-	* The reference to the compiled shader in the WebGLRenderingContext.
-	* @name Palette.Shader#shader
-	* @type WebGLShader
-	* @protected
-	* @readonly
-	*/
-	this.shader = null;
-
-	/**
-	* Has the shader attempted compilation yet?
-	* @name Palette.Shader#compiled
-	* @type Boolean
-	* @private
-	* @readonly
-	*/
-	this.compiled = false;
-
-	this.bakeShader(source);
-};
-
-Palette.Shader.prototype = {
-	/**
-	* Compile shader code from a source string. Once compiled, you cannot recompile.
-	* @method Palette.Shader#bakeShader
-	* @protected
-	* @param {string} source - The source code to compile and attach to this shader object.
-	* @return {boolean} True if successful, false if unsuccessful.
-	*/
-	bakeShader: function(source){
-		if (this.compiled){return null;}
-
-		this.compiled = true;
-
-		switch(this.type){
-			case Palette.Shader.VS:
-				this.shader = this.context.createShader(this.context.VERTEX_SHADER);
-				break;
-			case Palette.Shader.FS:
-				this.shader = this.context.createShader(this.context.FRAGMENT_SHADER);
-				break;
-			default:
-				return false;
-		}
-
-		this.context.shaderSource(this.shader, source);
-		this.context.compileShader(this.shader);
-		if (!this.context.getShaderParameter(this.shader, this.context.COMPILE_STATUS)) {
-			alert("An error occurred compiling the shaders: " + this.context.getShaderInfoLog(this.shader));
-			return false;
-		}
-
-		return true;
-	}
-};
-
-Palette.Shader.VS		= 0;
-Palette.Shader.FS		= 1;
-Palette.Shader.LIST		= 2;
-
-Palette.Shader.prototype.constructor = Palette.Shader;
-
-},{}]},{},[1])
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vZGVfbW9kdWxlcy9icm93c2VyaWZ5L25vZGVfbW9kdWxlcy9icm93c2VyLXBhY2svX3ByZWx1ZGUuanMiLCJzcmMvUGFsZXR0ZS9TaGFkZXIuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7QUNBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJmaWxlIjoiZ2VuZXJhdGVkLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXNDb250ZW50IjpbIihmdW5jdGlvbiBlKHQsbixyKXtmdW5jdGlvbiBzKG8sdSl7aWYoIW5bb10pe2lmKCF0W29dKXt2YXIgYT10eXBlb2YgcmVxdWlyZT09XCJmdW5jdGlvblwiJiZyZXF1aXJlO2lmKCF1JiZhKXJldHVybiBhKG8sITApO2lmKGkpcmV0dXJuIGkobywhMCk7dmFyIGY9bmV3IEVycm9yKFwiQ2Fubm90IGZpbmQgbW9kdWxlICdcIitvK1wiJ1wiKTt0aHJvdyBmLmNvZGU9XCJNT0RVTEVfTk9UX0ZPVU5EXCIsZn12YXIgbD1uW29dPXtleHBvcnRzOnt9fTt0W29dWzBdLmNhbGwobC5leHBvcnRzLGZ1bmN0aW9uKGUpe3ZhciBuPXRbb11bMV1bZV07cmV0dXJuIHMobj9uOmUpfSxsLGwuZXhwb3J0cyxlLHQsbixyKX1yZXR1cm4gbltvXS5leHBvcnRzfXZhciBpPXR5cGVvZiByZXF1aXJlPT1cImZ1bmN0aW9uXCImJnJlcXVpcmU7Zm9yKHZhciBvPTA7bzxyLmxlbmd0aDtvKyspcyhyW29dKTtyZXR1cm4gc30pIiwiLyogZ2xvYmFsIFBhbGV0dGUgKi9cbi8qKlxuKiBAY2xhc3NkZXNjIEFic3RyYWN0aW9uIG9mIHNoYWRlciByZWZlcmVuY2VzIHRvIGFsbG93IGVhc3kgbWFuaXB1bGF0aW9uLlxuKiBAY2xhc3MgUGFsZXR0ZS5TaGFkZXJcbiogQGRlc2NyaXB0aW9uIEluaXRpYWxpc2UgYW5kIGNvbXBpbGUgYSB2YWxpZCBTb3VyY2UgT2JqZWN0IGludG8gYSBTaGFkZXIuXG4qIEBwYXJhbSB7V2ViR0xSZW5kZXJpbmdDb250ZXh0fSBnbCAtIFRoZSBjb250ZXh0IHRoZSBzaGFkZXIgd2lsbCBiZWxvbmcgdG8gYW5kIGJlIGNvbXBpbGVkIGJ5LlxuKiBAcGFyYW0ge3N0cmluZ30gbmFtZSAtIFRoZSBuYW1lIHRoZSBzaGFkZXIgb2JqZWN0IHdpbGwgYmUgcmVmZXJyZWQgdG8gYnkuXG4qIEBwYXJhbSB7bnVtYmVyfSB0eXBlIC0gVGhlIGNsYXNzIG9mIHRoZSBzaGFkZXIgY29udGFpbmVkLCBlaXRoZXIgUGFsZXR0ZS5TaGFkZXIuVlMgb3IgUGFsZXR0ZS5TaGFkZXIuRlMuXG4qIEBwYXJhbSB7c3RyaW5nfSBzb3VyY2UgLSBUaGUgc291cmNlIGNvZGUgdG8gY29tcGlsZSB0aGUgc2hhZGVyIGZyb20uXG4qIEBwYXJhbSB7V2ViR0xSZW5kZXJpbmdDb250ZXh0fSBnbCAtIFRoZSBjb250ZXh0IHRoZSBzaGFkZXJzIG9mIHRoaXMgcHJvZ3JhbSB3aWxsIGJlbG9uZyB0byBhbmQgYmUgY29tcGlsZWQgYnkuXG4qIEBwYXJhbSB7b2JqZWN0fSBbYXR0cnNdIC0gVGhlIGFycmF5IHdoaWNoIGNvbnRhaW5zIGF0dHJpYnV0ZSBuYW1lcyBhbmQgZGVmYXVsdCB2YWx1ZXMsIGFzIGFuIGFycmF5IG9mIDMtdHVwbGVzLlxuKi9cblBhbGV0dGUuU2hhZGVyID0gZnVuY3Rpb24oZ2wsIG5hbWUsIHR5cGUsIHNvdXJjZSwgYXR0cnMpe1xuXHQvKipcblx0KiBUaGUgc2hhZGVyJ3MgbmFtZS5cblx0KiBAbmFtZSBQYWxldHRlLlNoYWRlciNuYW1lXG5cdCogQHR5cGUgU3RyaW5nXG5cdCogQHByb3RlY3RlZFxuXHQqIEByZWFkb25seVxuXHQqL1xuXHR0aGlzLm5hbWUgPSBuYW1lO1xuXG5cdC8qKlxuXHQqIFRoZSB0eXBlIG9mIHNoYWRlciwgZWl0aGVyIFBhbGV0dGUuU2hhZGVyLlZTIG9yIFBhbGV0dGUuU2hhZGVyLkZTIGZvciBvYmplY3RzLlxuXHQqIEBuYW1lIFBhbGV0dGUuU2hhZGVyI3R5cGVcblx0KiBAdHlwZSBJbnRlZ2VyXG5cdCogQHByb3RlY3RlZFxuXHQqIEByZWFkb25seVxuXHQqL1xuXHR0aGlzLnR5cGUgPSB0eXBlO1xuXG5cdC8qKlxuXHQqIFRoZSBzaGFkZXIncyBhdHRhY2hlZCBjb250ZXh0LlxuXHQqIEBuYW1lIFBhbGV0dGUuU2hhZGVyI2NvbnRleHRcblx0KiBAdHlwZSBXZWJHTFJlbmRlcmluZ0NvbnRleHRcblx0KiBAcHJvdGVjdGVkXG5cdCogQHJlYWRvbmx5XG5cdCovXG5cdHRoaXMuY29udGV4dCA9IGdsO1xuXG5cdC8qKlxuXHQqIFRoZSBzaGFkZXIncyBhdHRyaWJ1dGUgYXJyYXkuXG5cdCogQG5hbWUgUGFsZXR0ZS5TaGFkZXIjYXR0cnNcblx0KiBAdHlwZSBBcnJheVtdXG5cdCogQHByb3RlY3RlZFxuXHQqIEByZWFkb25seVxuXHQqL1xuXHR0aGlzLmF0dHJzID0gYXR0cnM7XG5cblx0LyoqXG5cdCogVGhlIHJlZmVyZW5jZSB0byB0aGUgY29tcGlsZWQgc2hhZGVyIGluIHRoZSBXZWJHTFJlbmRlcmluZ0NvbnRleHQuXG5cdCogQG5hbWUgUGFsZXR0ZS5TaGFkZXIjc2hhZGVyXG5cdCogQHR5cGUgV2ViR0xTaGFkZXJcblx0KiBAcHJvdGVjdGVkXG5cdCogQHJlYWRvbmx5XG5cdCovXG5cdHRoaXMuc2hhZGVyID0gbnVsbDtcblxuXHQvKipcblx0KiBIYXMgdGhlIHNoYWRlciBhdHRlbXB0ZWQgY29tcGlsYXRpb24geWV0P1xuXHQqIEBuYW1lIFBhbGV0dGUuU2hhZGVyI2NvbXBpbGVkXG5cdCogQHR5cGUgQm9vbGVhblxuXHQqIEBwcml2YXRlXG5cdCogQHJlYWRvbmx5XG5cdCovXG5cdHRoaXMuY29tcGlsZWQgPSBmYWxzZTtcblxuXHR0aGlzLmJha2VTaGFkZXIoc291cmNlKTtcbn07XG5cblBhbGV0dGUuU2hhZGVyLnByb3RvdHlwZSA9IHtcblx0LyoqXG5cdCogQ29tcGlsZSBzaGFkZXIgY29kZSBmcm9tIGEgc291cmNlIHN0cmluZy4gT25jZSBjb21waWxlZCwgeW91IGNhbm5vdCByZWNvbXBpbGUuXG5cdCogQG1ldGhvZCBQYWxldHRlLlNoYWRlciNiYWtlU2hhZGVyXG5cdCogQHByb3RlY3RlZFxuXHQqIEBwYXJhbSB7c3RyaW5nfSBzb3VyY2UgLSBUaGUgc291cmNlIGNvZGUgdG8gY29tcGlsZSBhbmQgYXR0YWNoIHRvIHRoaXMgc2hhZGVyIG9iamVjdC5cblx0KiBAcmV0dXJuIHtib29sZWFufSBUcnVlIGlmIHN1Y2Nlc3NmdWwsIGZhbHNlIGlmIHVuc3VjY2Vzc2Z1bC5cblx0Ki9cblx0YmFrZVNoYWRlcjogZnVuY3Rpb24oc291cmNlKXtcblx0XHRpZiAodGhpcy5jb21waWxlZCl7cmV0dXJuIG51bGw7fVxuXG5cdFx0dGhpcy5jb21waWxlZCA9IHRydWU7XG5cblx0XHRzd2l0Y2godGhpcy50eXBlKXtcblx0XHRcdGNhc2UgUGFsZXR0ZS5TaGFkZXIuVlM6XG5cdFx0XHRcdHRoaXMuc2hhZGVyID0gdGhpcy5jb250ZXh0LmNyZWF0ZVNoYWRlcih0aGlzLmNvbnRleHQuVkVSVEVYX1NIQURFUik7XG5cdFx0XHRcdGJyZWFrO1xuXHRcdFx0Y2FzZSBQYWxldHRlLlNoYWRlci5GUzpcblx0XHRcdFx0dGhpcy5zaGFkZXIgPSB0aGlzLmNvbnRleHQuY3JlYXRlU2hhZGVyKHRoaXMuY29udGV4dC5GUkFHTUVOVF9TSEFERVIpO1xuXHRcdFx0XHRicmVhaztcblx0XHRcdGRlZmF1bHQ6XG5cdFx0XHRcdHJldHVybiBmYWxzZTtcblx0XHR9XG5cblx0XHR0aGlzLmNvbnRleHQuc2hhZGVyU291cmNlKHRoaXMuc2hhZGVyLCBzb3VyY2UpO1xuXHRcdHRoaXMuY29udGV4dC5jb21waWxlU2hhZGVyKHRoaXMuc2hhZGVyKTtcblx0XHRpZiAoIXRoaXMuY29udGV4dC5nZXRTaGFkZXJQYXJhbWV0ZXIodGhpcy5zaGFkZXIsIHRoaXMuY29udGV4dC5DT01QSUxFX1NUQVRVUykpIHtcblx0XHRcdGFsZXJ0KFwiQW4gZXJyb3Igb2NjdXJyZWQgY29tcGlsaW5nIHRoZSBzaGFkZXJzOiBcIiArIHRoaXMuY29udGV4dC5nZXRTaGFkZXJJbmZvTG9nKHRoaXMuc2hhZGVyKSk7XG5cdFx0XHRyZXR1cm4gZmFsc2U7XG5cdFx0fVxuXG5cdFx0cmV0dXJuIHRydWU7XG5cdH1cbn07XG5cblBhbGV0dGUuU2hhZGVyLlZTXHRcdD0gMDtcblBhbGV0dGUuU2hhZGVyLkZTXHRcdD0gMTtcblBhbGV0dGUuU2hhZGVyLkxJU1RcdFx0PSAyO1xuXG5QYWxldHRlLlNoYWRlci5wcm90b3R5cGUuY29uc3RydWN0b3IgPSBQYWxldHRlLlNoYWRlcjtcbiJdfQ==
-
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/* global Palette */
-/**
-* @classdesc
-* A Factory class designed to process objects, URLs, JSON and potentially other formats to generate
-* valid {@link Palette.Shader} objects.
-*
-* This is a deliberate choice, to abstract some functionality away from the central {@link Palette.Manager}
-* class.
-* @class Palette.ShaderFactory
-* @description
-* Create a new ShaderFactory object - this is done automatically by {@link Palette.Manager}.
-*
-* @param {Palette.Manager} manager - The manager to place 
-*/
-Palette.ShaderFactory = function(manager){
-	/**
-    * An object reference to the parent {@link Palette.Manager}.
-    * @name Palette.ShaderFactory#manager
-	* @type Palette.Manager
-    * @readonly
-    * @protected
-    */
-    that = this;
-	this.manager = manager;
-	this.downloadInProgress = false;
-};
-
-Palette.ShaderFactory.prototype = {
-	/**
-	* Begin the shader construction process.
-	* @method Palette.ShaderFactory#addShader
-	* @public
-	* @param {string|Palette.Shader|Object} shader - URL, JSON, Shader Source Object or {@link Palette.Shader}.
-	*/
-	addShader: function(shader){
-		var inShader;
-		var outShader;
-
-		switch(this.establishType(shader)){
-			case Palette.ShaderFactory.SOURCE_OBJECT:
-				inShader = shader;
-				/* falls through */
-			case Palette.ShaderFactory.JSON:
-				inShader = inShader || JSON.parse(shader);
-				outShader = this.createShaderObject(inShader);
-				break;
-
-			case Palette.ShaderFactory.SHADER_OBJECT:
-				outShader = shader;
-				break;
-
-			case Palette.ShaderFactory.URL:
-				this.downloadFromURL(shader);
-				break;
-			default:
-				throw new Error("Not a valid type of shader.");
-		}
-
-		//while(this.downloadInProgress){}
-
-		if(outShader){this.registerShader(outShader);}
-	},
-
-	/**
-	* Create a shader from a source object.
-	* @method Palette.ShaderFactory#createShaderObject
-	* @protected
-	* @param {object} sourceObject - Either a list of shaders or a single shader object is valid.
-	* @return {Palette.Shader|null} Returns a {@link Palette.Shader} if the Source Object was not a list. If it was a list, it adds all the children instead.
-	*/
-	createShaderObject: function(sourceObject){
-		switch(sourceObject.type){
-			case Palette.Shader.VS:
-			case Palette.Shader.FS:
-				return new Palette.Shader(this.manager.context, sourceObject.name, sourceObject.type, sourceObject.src, sourceObject.attrs);
-
-			case Palette.Shader.LIST:
-				for (var i = sourceObject.content.length - 1; i >= 0; i--) {
-					this.addShader(sourceObject.content[i]);
-				}
-				break;
-
-			default:
-				throw new Error("Tried to create an illegal class of shader.");
-		}
-	},
-
-	/**
-	* Download a file from the supplied URL, before adding it to the manager.
-	* @method Palette.ShaderFactory#downloadFromURL
-	* @protected
-	* @param {string} url - URL corresponding to a Shader Source Object JSON file.
-	*/
-	downloadFromURL: function(url){
-		var rdr = new XMLHttpRequest();
-		rdr.open("GET", url, true);
-		rdr.onload = function(){
-			console.log(that)
-			that.addShader(rdr.response);
-			that.downloadInProgress = false;
-		};
-		that.downloadInProgress = true;
-		rdr.send();
-	},
-
-	/**
-	* Determine the type of shader reference passed to the factory.
-	* @method Palette.ShaderFactory#establishType
-	* @protected
-	* @param {string|Palette.Shader} shader - URL, JSON or Palette.Shader.
-	* @return {number} Either Palette.ShaderFactory.SOURCE_OBJECT, .JSON, .URL or .SHADER_OBJECT.
-	*/
-	establishType: function(shader){
-		var type = -1;
-		if(shader instanceof Palette.Shader){
-			type = Palette.ShaderFactory.SHADER_OBJECT;
-		} else if((shader.type != undefined) && (shader.name != undefined) && (shader.content || shader.src)){
-			type = Palette.ShaderFactory.SOURCE_OBJECT;
-		} else if(this.isJSON(shader)){
-			type = Palette.ShaderFactory.JSON;
-		} else if(this.isString(shader)){
-			type = Palette.ShaderFactory.URL;
-		}
-		return type;
-	},
-
-	/**
-	* Determine if a string is valid JSON.
-	* @method Palette.ShaderFactory#isJSON
-	* @private
-	* @param {string} str - Suspected JSON string to check.
-	*/
-	isJSON: function(str){
-		try{
-			JSON.parse(str);
-			return true;
-		} catch (e){
-			return false;
-		}
-	},
-
-	isString: function(s){
-    	return typeof(s) === 'string' || s instanceof String;
-	},
-
-	/**
-	* Add a shader directly into the manager's storage for future access.
-	* @method Palette.ShaderFactory#registerShader
-	* @protected
-	* @param {Palette.Shader} shaderObject - Compiled shader object to store in the {@link Palette.Manager}.
-	*/
-	registerShader: function(shaderObject){
-		switch(shaderObject.type){
-			case Palette.Shader.VS:
-				this.manager.vertShaders[shaderObject.name] = this.manager.vertShaders[shaderObject.name] || shaderObject;
-				break;
-			case Palette.Shader.FS:
-				this.manager.fragShaders[shaderObject.name] = this.manager.fragShaders[shaderObject.name] || shaderObject;
-				break;
-			default:
-				throw new Error("Tried to register an illegal class of shader.");
-		}
-	}
-};
-
-Palette.ShaderFactory.SOURCE_OBJECT	= 0;
-Palette.ShaderFactory.JSON			= 1;
-Palette.ShaderFactory.URL				= 2;
-Palette.ShaderFactory.SHADER_OBJECT	= 3;
-
-Palette.ShaderFactory.prototype.constructor = Palette.ShaderFactory;
-},{}]},{},[1])
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vZGVfbW9kdWxlcy9icm93c2VyaWZ5L25vZGVfbW9kdWxlcy9icm93c2VyLXBhY2svX3ByZWx1ZGUuanMiLCJzcmMvUGFsZXR0ZS9TaGFkZXJGYWN0b3J5LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FDQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwiZmlsZSI6ImdlbmVyYXRlZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyIoZnVuY3Rpb24gZSh0LG4scil7ZnVuY3Rpb24gcyhvLHUpe2lmKCFuW29dKXtpZighdFtvXSl7dmFyIGE9dHlwZW9mIHJlcXVpcmU9PVwiZnVuY3Rpb25cIiYmcmVxdWlyZTtpZighdSYmYSlyZXR1cm4gYShvLCEwKTtpZihpKXJldHVybiBpKG8sITApO3ZhciBmPW5ldyBFcnJvcihcIkNhbm5vdCBmaW5kIG1vZHVsZSAnXCIrbytcIidcIik7dGhyb3cgZi5jb2RlPVwiTU9EVUxFX05PVF9GT1VORFwiLGZ9dmFyIGw9bltvXT17ZXhwb3J0czp7fX07dFtvXVswXS5jYWxsKGwuZXhwb3J0cyxmdW5jdGlvbihlKXt2YXIgbj10W29dWzFdW2VdO3JldHVybiBzKG4/bjplKX0sbCxsLmV4cG9ydHMsZSx0LG4scil9cmV0dXJuIG5bb10uZXhwb3J0c312YXIgaT10eXBlb2YgcmVxdWlyZT09XCJmdW5jdGlvblwiJiZyZXF1aXJlO2Zvcih2YXIgbz0wO288ci5sZW5ndGg7bysrKXMocltvXSk7cmV0dXJuIHN9KSIsIi8qIGdsb2JhbCBQYWxldHRlICovXG4vKipcbiogQGNsYXNzZGVzY1xuKiBBIEZhY3RvcnkgY2xhc3MgZGVzaWduZWQgdG8gcHJvY2VzcyBvYmplY3RzLCBVUkxzLCBKU09OIGFuZCBwb3RlbnRpYWxseSBvdGhlciBmb3JtYXRzIHRvIGdlbmVyYXRlXG4qIHZhbGlkIHtAbGluayBQYWxldHRlLlNoYWRlcn0gb2JqZWN0cy5cbipcbiogVGhpcyBpcyBhIGRlbGliZXJhdGUgY2hvaWNlLCB0byBhYnN0cmFjdCBzb21lIGZ1bmN0aW9uYWxpdHkgYXdheSBmcm9tIHRoZSBjZW50cmFsIHtAbGluayBQYWxldHRlLk1hbmFnZXJ9XG4qIGNsYXNzLlxuKiBAY2xhc3MgUGFsZXR0ZS5TaGFkZXJGYWN0b3J5XG4qIEBkZXNjcmlwdGlvblxuKiBDcmVhdGUgYSBuZXcgU2hhZGVyRmFjdG9yeSBvYmplY3QgLSB0aGlzIGlzIGRvbmUgYXV0b21hdGljYWxseSBieSB7QGxpbmsgUGFsZXR0ZS5NYW5hZ2VyfS5cbipcbiogQHBhcmFtIHtQYWxldHRlLk1hbmFnZXJ9IG1hbmFnZXIgLSBUaGUgbWFuYWdlciB0byBwbGFjZSBcbiovXG5QYWxldHRlLlNoYWRlckZhY3RvcnkgPSBmdW5jdGlvbihtYW5hZ2VyKXtcblx0LyoqXG4gICAgKiBBbiBvYmplY3QgcmVmZXJlbmNlIHRvIHRoZSBwYXJlbnQge0BsaW5rIFBhbGV0dGUuTWFuYWdlcn0uXG4gICAgKiBAbmFtZSBQYWxldHRlLlNoYWRlckZhY3RvcnkjbWFuYWdlclxuXHQqIEB0eXBlIFBhbGV0dGUuTWFuYWdlclxuICAgICogQHJlYWRvbmx5XG4gICAgKiBAcHJvdGVjdGVkXG4gICAgKi9cbiAgICB0aGF0ID0gdGhpcztcblx0dGhpcy5tYW5hZ2VyID0gbWFuYWdlcjtcblx0dGhpcy5kb3dubG9hZEluUHJvZ3Jlc3MgPSBmYWxzZTtcbn07XG5cblBhbGV0dGUuU2hhZGVyRmFjdG9yeS5wcm90b3R5cGUgPSB7XG5cdC8qKlxuXHQqIEJlZ2luIHRoZSBzaGFkZXIgY29uc3RydWN0aW9uIHByb2Nlc3MuXG5cdCogQG1ldGhvZCBQYWxldHRlLlNoYWRlckZhY3RvcnkjYWRkU2hhZGVyXG5cdCogQHB1YmxpY1xuXHQqIEBwYXJhbSB7c3RyaW5nfFBhbGV0dGUuU2hhZGVyfE9iamVjdH0gc2hhZGVyIC0gVVJMLCBKU09OLCBTaGFkZXIgU291cmNlIE9iamVjdCBvciB7QGxpbmsgUGFsZXR0ZS5TaGFkZXJ9LlxuXHQqL1xuXHRhZGRTaGFkZXI6IGZ1bmN0aW9uKHNoYWRlcil7XG5cdFx0dmFyIGluU2hhZGVyO1xuXHRcdHZhciBvdXRTaGFkZXI7XG5cblx0XHRzd2l0Y2godGhpcy5lc3RhYmxpc2hUeXBlKHNoYWRlcikpe1xuXHRcdFx0Y2FzZSBQYWxldHRlLlNoYWRlckZhY3RvcnkuU09VUkNFX09CSkVDVDpcblx0XHRcdFx0aW5TaGFkZXIgPSBzaGFkZXI7XG5cdFx0XHRcdC8qIGZhbGxzIHRocm91Z2ggKi9cblx0XHRcdGNhc2UgUGFsZXR0ZS5TaGFkZXJGYWN0b3J5LkpTT046XG5cdFx0XHRcdGluU2hhZGVyID0gaW5TaGFkZXIgfHwgSlNPTi5wYXJzZShzaGFkZXIpO1xuXHRcdFx0XHRvdXRTaGFkZXIgPSB0aGlzLmNyZWF0ZVNoYWRlck9iamVjdChpblNoYWRlcik7XG5cdFx0XHRcdGJyZWFrO1xuXG5cdFx0XHRjYXNlIFBhbGV0dGUuU2hhZGVyRmFjdG9yeS5TSEFERVJfT0JKRUNUOlxuXHRcdFx0XHRvdXRTaGFkZXIgPSBzaGFkZXI7XG5cdFx0XHRcdGJyZWFrO1xuXG5cdFx0XHRjYXNlIFBhbGV0dGUuU2hhZGVyRmFjdG9yeS5VUkw6XG5cdFx0XHRcdHRoaXMuZG93bmxvYWRGcm9tVVJMKHNoYWRlcik7XG5cdFx0XHRcdGJyZWFrO1xuXHRcdFx0ZGVmYXVsdDpcblx0XHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiTm90IGEgdmFsaWQgdHlwZSBvZiBzaGFkZXIuXCIpO1xuXHRcdH1cblxuXHRcdC8vd2hpbGUodGhpcy5kb3dubG9hZEluUHJvZ3Jlc3Mpe31cblxuXHRcdGlmKG91dFNoYWRlcil7dGhpcy5yZWdpc3RlclNoYWRlcihvdXRTaGFkZXIpO31cblx0fSxcblxuXHQvKipcblx0KiBDcmVhdGUgYSBzaGFkZXIgZnJvbSBhIHNvdXJjZSBvYmplY3QuXG5cdCogQG1ldGhvZCBQYWxldHRlLlNoYWRlckZhY3RvcnkjY3JlYXRlU2hhZGVyT2JqZWN0XG5cdCogQHByb3RlY3RlZFxuXHQqIEBwYXJhbSB7b2JqZWN0fSBzb3VyY2VPYmplY3QgLSBFaXRoZXIgYSBsaXN0IG9mIHNoYWRlcnMgb3IgYSBzaW5nbGUgc2hhZGVyIG9iamVjdCBpcyB2YWxpZC5cblx0KiBAcmV0dXJuIHtQYWxldHRlLlNoYWRlcnxudWxsfSBSZXR1cm5zIGEge0BsaW5rIFBhbGV0dGUuU2hhZGVyfSBpZiB0aGUgU291cmNlIE9iamVjdCB3YXMgbm90IGEgbGlzdC4gSWYgaXQgd2FzIGEgbGlzdCwgaXQgYWRkcyBhbGwgdGhlIGNoaWxkcmVuIGluc3RlYWQuXG5cdCovXG5cdGNyZWF0ZVNoYWRlck9iamVjdDogZnVuY3Rpb24oc291cmNlT2JqZWN0KXtcblx0XHRzd2l0Y2goc291cmNlT2JqZWN0LnR5cGUpe1xuXHRcdFx0Y2FzZSBQYWxldHRlLlNoYWRlci5WUzpcblx0XHRcdGNhc2UgUGFsZXR0ZS5TaGFkZXIuRlM6XG5cdFx0XHRcdHJldHVybiBuZXcgUGFsZXR0ZS5TaGFkZXIodGhpcy5tYW5hZ2VyLmNvbnRleHQsIHNvdXJjZU9iamVjdC5uYW1lLCBzb3VyY2VPYmplY3QudHlwZSwgc291cmNlT2JqZWN0LnNyYywgc291cmNlT2JqZWN0LmF0dHJzKTtcblxuXHRcdFx0Y2FzZSBQYWxldHRlLlNoYWRlci5MSVNUOlxuXHRcdFx0XHRmb3IgKHZhciBpID0gc291cmNlT2JqZWN0LmNvbnRlbnQubGVuZ3RoIC0gMTsgaSA+PSAwOyBpLS0pIHtcblx0XHRcdFx0XHR0aGlzLmFkZFNoYWRlcihzb3VyY2VPYmplY3QuY29udGVudFtpXSk7XG5cdFx0XHRcdH1cblx0XHRcdFx0YnJlYWs7XG5cblx0XHRcdGRlZmF1bHQ6XG5cdFx0XHRcdHRocm93IG5ldyBFcnJvcihcIlRyaWVkIHRvIGNyZWF0ZSBhbiBpbGxlZ2FsIGNsYXNzIG9mIHNoYWRlci5cIik7XG5cdFx0fVxuXHR9LFxuXG5cdC8qKlxuXHQqIERvd25sb2FkIGEgZmlsZSBmcm9tIHRoZSBzdXBwbGllZCBVUkwsIGJlZm9yZSBhZGRpbmcgaXQgdG8gdGhlIG1hbmFnZXIuXG5cdCogQG1ldGhvZCBQYWxldHRlLlNoYWRlckZhY3RvcnkjZG93bmxvYWRGcm9tVVJMXG5cdCogQHByb3RlY3RlZFxuXHQqIEBwYXJhbSB7c3RyaW5nfSB1cmwgLSBVUkwgY29ycmVzcG9uZGluZyB0byBhIFNoYWRlciBTb3VyY2UgT2JqZWN0IEpTT04gZmlsZS5cblx0Ki9cblx0ZG93bmxvYWRGcm9tVVJMOiBmdW5jdGlvbih1cmwpe1xuXHRcdHZhciByZHIgPSBuZXcgWE1MSHR0cFJlcXVlc3QoKTtcblx0XHRyZHIub3BlbihcIkdFVFwiLCB1cmwsIHRydWUpO1xuXHRcdHJkci5vbmxvYWQgPSBmdW5jdGlvbigpe1xuXHRcdFx0Y29uc29sZS5sb2codGhhdClcblx0XHRcdHRoYXQuYWRkU2hhZGVyKHJkci5yZXNwb25zZSk7XG5cdFx0XHR0aGF0LmRvd25sb2FkSW5Qcm9ncmVzcyA9IGZhbHNlO1xuXHRcdH07XG5cdFx0dGhhdC5kb3dubG9hZEluUHJvZ3Jlc3MgPSB0cnVlO1xuXHRcdHJkci5zZW5kKCk7XG5cdH0sXG5cblx0LyoqXG5cdCogRGV0ZXJtaW5lIHRoZSB0eXBlIG9mIHNoYWRlciByZWZlcmVuY2UgcGFzc2VkIHRvIHRoZSBmYWN0b3J5LlxuXHQqIEBtZXRob2QgUGFsZXR0ZS5TaGFkZXJGYWN0b3J5I2VzdGFibGlzaFR5cGVcblx0KiBAcHJvdGVjdGVkXG5cdCogQHBhcmFtIHtzdHJpbmd8UGFsZXR0ZS5TaGFkZXJ9IHNoYWRlciAtIFVSTCwgSlNPTiBvciBQYWxldHRlLlNoYWRlci5cblx0KiBAcmV0dXJuIHtudW1iZXJ9IEVpdGhlciBQYWxldHRlLlNoYWRlckZhY3RvcnkuU09VUkNFX09CSkVDVCwgLkpTT04sIC5VUkwgb3IgLlNIQURFUl9PQkpFQ1QuXG5cdCovXG5cdGVzdGFibGlzaFR5cGU6IGZ1bmN0aW9uKHNoYWRlcil7XG5cdFx0dmFyIHR5cGUgPSAtMTtcblx0XHRpZihzaGFkZXIgaW5zdGFuY2VvZiBQYWxldHRlLlNoYWRlcil7XG5cdFx0XHR0eXBlID0gUGFsZXR0ZS5TaGFkZXJGYWN0b3J5LlNIQURFUl9PQkpFQ1Q7XG5cdFx0fSBlbHNlIGlmKChzaGFkZXIudHlwZSAhPSB1bmRlZmluZWQpICYmIChzaGFkZXIubmFtZSAhPSB1bmRlZmluZWQpICYmIChzaGFkZXIuY29udGVudCB8fCBzaGFkZXIuc3JjKSl7XG5cdFx0XHR0eXBlID0gUGFsZXR0ZS5TaGFkZXJGYWN0b3J5LlNPVVJDRV9PQkpFQ1Q7XG5cdFx0fSBlbHNlIGlmKHRoaXMuaXNKU09OKHNoYWRlcikpe1xuXHRcdFx0dHlwZSA9IFBhbGV0dGUuU2hhZGVyRmFjdG9yeS5KU09OO1xuXHRcdH0gZWxzZSBpZih0aGlzLmlzU3RyaW5nKHNoYWRlcikpe1xuXHRcdFx0dHlwZSA9IFBhbGV0dGUuU2hhZGVyRmFjdG9yeS5VUkw7XG5cdFx0fVxuXHRcdHJldHVybiB0eXBlO1xuXHR9LFxuXG5cdC8qKlxuXHQqIERldGVybWluZSBpZiBhIHN0cmluZyBpcyB2YWxpZCBKU09OLlxuXHQqIEBtZXRob2QgUGFsZXR0ZS5TaGFkZXJGYWN0b3J5I2lzSlNPTlxuXHQqIEBwcml2YXRlXG5cdCogQHBhcmFtIHtzdHJpbmd9IHN0ciAtIFN1c3BlY3RlZCBKU09OIHN0cmluZyB0byBjaGVjay5cblx0Ki9cblx0aXNKU09OOiBmdW5jdGlvbihzdHIpe1xuXHRcdHRyeXtcblx0XHRcdEpTT04ucGFyc2Uoc3RyKTtcblx0XHRcdHJldHVybiB0cnVlO1xuXHRcdH0gY2F0Y2ggKGUpe1xuXHRcdFx0cmV0dXJuIGZhbHNlO1xuXHRcdH1cblx0fSxcblxuXHRpc1N0cmluZzogZnVuY3Rpb24ocyl7XG4gICAgXHRyZXR1cm4gdHlwZW9mKHMpID09PSAnc3RyaW5nJyB8fCBzIGluc3RhbmNlb2YgU3RyaW5nO1xuXHR9LFxuXG5cdC8qKlxuXHQqIEFkZCBhIHNoYWRlciBkaXJlY3RseSBpbnRvIHRoZSBtYW5hZ2VyJ3Mgc3RvcmFnZSBmb3IgZnV0dXJlIGFjY2Vzcy5cblx0KiBAbWV0aG9kIFBhbGV0dGUuU2hhZGVyRmFjdG9yeSNyZWdpc3RlclNoYWRlclxuXHQqIEBwcm90ZWN0ZWRcblx0KiBAcGFyYW0ge1BhbGV0dGUuU2hhZGVyfSBzaGFkZXJPYmplY3QgLSBDb21waWxlZCBzaGFkZXIgb2JqZWN0IHRvIHN0b3JlIGluIHRoZSB7QGxpbmsgUGFsZXR0ZS5NYW5hZ2VyfS5cblx0Ki9cblx0cmVnaXN0ZXJTaGFkZXI6IGZ1bmN0aW9uKHNoYWRlck9iamVjdCl7XG5cdFx0c3dpdGNoKHNoYWRlck9iamVjdC50eXBlKXtcblx0XHRcdGNhc2UgUGFsZXR0ZS5TaGFkZXIuVlM6XG5cdFx0XHRcdHRoaXMubWFuYWdlci52ZXJ0U2hhZGVyc1tzaGFkZXJPYmplY3QubmFtZV0gPSB0aGlzLm1hbmFnZXIudmVydFNoYWRlcnNbc2hhZGVyT2JqZWN0Lm5hbWVdIHx8IHNoYWRlck9iamVjdDtcblx0XHRcdFx0YnJlYWs7XG5cdFx0XHRjYXNlIFBhbGV0dGUuU2hhZGVyLkZTOlxuXHRcdFx0XHR0aGlzLm1hbmFnZXIuZnJhZ1NoYWRlcnNbc2hhZGVyT2JqZWN0Lm5hbWVdID0gdGhpcy5tYW5hZ2VyLmZyYWdTaGFkZXJzW3NoYWRlck9iamVjdC5uYW1lXSB8fCBzaGFkZXJPYmplY3Q7XG5cdFx0XHRcdGJyZWFrO1xuXHRcdFx0ZGVmYXVsdDpcblx0XHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiVHJpZWQgdG8gcmVnaXN0ZXIgYW4gaWxsZWdhbCBjbGFzcyBvZiBzaGFkZXIuXCIpO1xuXHRcdH1cblx0fVxufTtcblxuUGFsZXR0ZS5TaGFkZXJGYWN0b3J5LlNPVVJDRV9PQkpFQ1RcdD0gMDtcblBhbGV0dGUuU2hhZGVyRmFjdG9yeS5KU09OXHRcdFx0PSAxO1xuUGFsZXR0ZS5TaGFkZXJGYWN0b3J5LlVSTFx0XHRcdFx0PSAyO1xuUGFsZXR0ZS5TaGFkZXJGYWN0b3J5LlNIQURFUl9PQkpFQ1RcdD0gMztcblxuUGFsZXR0ZS5TaGFkZXJGYWN0b3J5LnByb3RvdHlwZS5jb25zdHJ1Y3RvciA9IFBhbGV0dGUuU2hhZGVyRmFjdG9yeTsiXX0=
-
 /**
  * @namespace Sketch
  */
@@ -3060,599 +3676,25 @@ var Sketch = function(canvas){
 	this.constantPool = [];
 
 	//Modules.
-	this.parser = null;
+	this.parser = sketchParse;
 	this.codeGen = null;
 	this.shaderManager = new Palette.Manager(context);
-	this.vm = new MVM(this.context, this.shadermanager, this.codStore, this.constantPool, false);
+	this.vm = new MVM(this.context, this.shadermanager, this.codeStore, this.constantPool, false);
 }
 
 Sketch.prototype = {
 	addShader: function(){
-
+		//Adds a shader
 	},
 
 	compile: function(text){
-
+		//Compiles the program text, execution begins
 	}
 };
 
 
 Sketch.createSketch = function(inCanvas){
 	out = new Sketch(inCanvas);
-	out.addShader("shaders/simpleSquaeShader.json");
+	out.addShader("shaders/simpleSquareShader.json");
 	return out;
 }
-/* Recursive Descent Tree Walker
- * 
- * 		Embedded Heterogeneous Tree Walker pattern
- * 
- */
-
-// case statement corresponds with each of the structures in the BNF.
-//  (this could just as easily be implemented as a big if/else block)
-var walk = function (obj) {
-
-	switch(obj.type){
-		case "function":
-			walkFunction(obj.arguments);
-			break;
-		case "variable-decl-assign":
-			walkVaraibleDeclAssign(obj.arguments);
-			break;
-		case "variable-decl":
-			walkVariableDecl(obj.arguments);
-			break;
-		case "addition":
-			walkIf(obj.arguments);
-			break;
-		case "ifelse":
-			walkIfElse(obj.arguments);
-			break;
-		case "while":
-			walkWhile(obj.arguments);
-			break;
-		case "do_while":
-			walkDoWhile(obj.arguments);
-			break;
-		case "for":
-			walkFor(obj.arguments);
-			break; 
-		case "addition":
-			walkAddition(obj.arguments);
-			break;
-		case "minus":
-			walkMinus(obj.arguments);
-			break;
-		case "multiplication":
-			walkMultiplication(obj.arguments);
-			break;
-		case "division":
-			walkDivision(obj.arguments);
-			break
-		case "modulo":
-			walkModulo(obj.arguments);
-			break;
-		case "add_assign":
-			walkAddAssign(obj.arguments);
-			break;
-		case "sub_assign":
-			walkSubAssign(obj.arguments);
-			break;
-		case "multi_assign":
-			walkMultiAssign(obj.arguments);
-			break;
-		case "div_assign":
-			walkDivAssign(obj.arguments);
-			break;
-		case "mod_assign":
-			walkModAssign(obj.arguments);
-			break;
-		case "increment":
-			walkIncrement(obj.arguments);
-			break;
-		case "decrement":
-			walkDecrement(obj.arguments);
-			break;
-		case "and":
-			walkAnd(obj.arguments);
-			break;
-		case "or":
-			walkOr(obj.arguments);
-			break;
-		case "bit-XOR":
-			walkBitXOR(obj.arguments);
-			break;
-		case "bit-AND":
-			walkBitAND(obj.arguments);
-			break;
-		case "bit-OR":
-			walkBitOR(obj.arguments);
-			break;
-		case "bit-right-shift":
-			walkBitRightShift(obj.arguments);
-			break;
-		case "bit-left-shift":
-			walkBitLeftShift(obj.arguments);
-			break;
-		case "zero-fill-right-shift":
-			walkZeroFillRightShift(obj.arguments);
-			break;
-		case "equality":
-			walkEquality(obj.arguments);
-			break
-		case "less-than":
-			walkLessThan(obj.arguments);
-			break;
-		case "larger-than":
-			walkLargerThan(obj.arguments);
-			break;
-		case "not-equal":
-			walkNotEqual(obj.arguments);
-			break;
-		case "less-than-or-equal":
-			walkLessThanOrEqual(obj.arguments);
-			break;
-		case "greater-than-or-equal":
-			walkGreaterThanOrEqual(obj.arguments);
-			break;
-		case "assign":
-			walkAssign(obj.arguments);
-			break;
-		}
-}
-
-/* Walkers for all different types of node
-
-/* 
- * for example in 
- * 	 Function Foo(int x) -> int{
- * 		int y = x + 1;
- * 		return y;
- * 	 }
- * declarator = "Foo"
- * declarationList = ["int", "x"]
- * returnType = "int"
- *  functionBody would consist of a decl list and a statement list for what is contained in the body
- */
-function walkFunction(arguments){
-	var declarator = arguments[0];			// name of function
-	var declarationList = arguments[1];		// list of parameters
-	var returnType = arguments[2];			// return type of function
-	var functionBody = arguments[3];		// optional decl/statement_lists
-	
-	// add function name/return type to symbol table
-	// walk list of parameters (which implies adding them to symbol table also)
-	// walk body
-}
-
-/* for example in int x = 1
- * type = int
- * declarator = x
- * exp = 1
- */
-function walkVaraibleDeclAssign(arguments){
-	var type = arguments[0];
-	var declarator = arguments[1];
-	var exp = arguments[2];
-	
-	// walkVariableDecl ([type, declarator])
-	// walkAssign ([type, arguments]) ?
-}
-
-/* for example in int x;
- * type = int
- * declarator = x
- */
-function walkVariableDecl(arguments){
-	var type = arguments[0];
-	var declarator = arguments[1];		// name of variable
-	
-	// add varable type/declarator to symbol table
-}
-
-/* for example in if(x ?= 1){*do some code"}
- * expression would be a equality check node for x and 1
- * statements would be a statement list with some code
- */
-function walkIf(arguments){
-	var expression = arguments[0];
-	var statements = arguments[1];
-	
-	// evaluate expression?
-	// walk statements if true
-}
-
-/* for example in if(x ?= 1){...} else{...}
- * exp would be a equality check node for x and 1
- * statementswould be a statement list with the code from the if statement body
- * elseStatements would a statement list with the code from the else body 
- */
-function walkIfElse(arguments){
-	var exp = arguments[0];
-	var statements = arguments[1];
-	var elseStatements= arguments[2];
-	
-	// walkIf ([expression, statements])
-	// walkStatements () // TODO: find equivalent of walkStatments
-}
-
-/* for example in while(b ?= true){...}
- * exp would be an equality check node for b and true
- * body would be a statement list with the code from the while loop body
- */
-function walkWhile(arguments){
-	var exp = arguments[0];
-	var body = arguments[1];
-	
-	// evaluate exp to see whether we should walk body
-}
-
-/* for example Do{...}while(b = true)
- * exp would be an equality check node for b and true
- * body would be a statement list with the code from the do while loop body
- */
-function walkDoWhile(arguments){
-	var exp = arguments[0];
-	var body = arguments[1];
-	
-	// walk body
-	// evaluate exp to see whether we should walk body again
-}
-
-/* for example in For(int i = 0; i ?< 5; i++){...}
- * decl would be a VaraibleDeclAssign node for int i = 0
- * condition would be a equality check node between variable i and 5
- * update would be an increment node for i
- * body would be a statement list with the code from the for loop body
- */
-function walkFor(arguments){
-	var decl = arguments[0];
-	var condition = arguments[1];
-	var update = arguments[2];
-	var body = arguments[3];
-	
-	// walk declaration, add stuff to symbol table		// TODO check with Kris, seems like this necessitates a new variable be declared every time, meaning we can't use others.
-	// evaluate condition to see if we should walk body
-	// walk body
-	// walk update clause and return to beginning.
-}
-
-// TODO: mathematical operation type checking? overloading?
-
-/* assigns variables to both sides of statement
- * for example in x + y
- * left = x
- * right = y
- */
-function walkAddition(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// if int, opcodes to push left and right to stack
-	// if float, opcodes to push left and right to constant pool
-	// other types, not sure what to do here. operator overloading?
-	// after things pushed to their appropriate places, send opcodes for addition.
-}
-
-/* assigns variables to both sides of statement
- * for example in x - y
- * left = x
- * right = y
- */
-function walkMinus(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-		// if int, opcodes to push left and right to stack
-	// if float, opcodes to push left and right to constant pool
-	// other types, not sure what to do here. operator overloading?
-	// after things pushed to their appropriate places, send opcodes for subtraction.
-}
-
-/* assigns variables to both sides of statement
- * for example in x * y
- * left = x
- * right = y
- */
-function walkMultiplication(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// if int, opcodes to push left and right to stack
-	// if float, opcodes to push left and right to constant pool
-	// other types, not sure what to do here. operator overloading?
-	// after things pushed to their appropriate places, send opcodes for multiplition.
-}
-
-/* assigns variables to both sides of statement
- * for example in x / y
- * left = x
- * right = y
- */
-function walkDivision(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// if int, opcodes to push left and right to stack
-	// if float, opcodes to push left and right to constant pool
-	// other types, not sure what to do here. operator overloading?
-	// after things pushed to their appropriate places, send opcodes for division.
-}
-
-/* assigns variables to both sides of statement
- * for example in x % y
- * left = x
- * right = y
- */
-function walkModulo(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// if int, opcodes to push left and right to stack
-	// if float, opcodes to push left and right to constant pool
-	// other types, not sure what to do here. operator overloading?
-// after things pushed to their appropriate places, send opcodes for modulo arithetic.
-}
-
-/* assigns variables to both sides of statement
-/for example in x += y
- * left = x
- * right = y
- */
-function walkAddAssign(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// operation x += y expands to x = x + y
-	// this means we need to add x and y, then assign result to x
-	// so, walkAssign(x, walkAdd(x,y))
-}
-
-/* assigns variables to both sides of statement
- * for example in x -= y
- * left = x
- * right = y
- */
-function walkSubAssign(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// operation x -= y expands to x = x - y
-	// this means we need to subtract y from x, then assign the result to x
-	// so, walkAssign(x, walkSubtract(x,y))
-}
-
-/* assigns variables to both sides of statement
- * for example in x * = y
- * left = x
- * right = y
- */
-function walkMultiAssign(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// operation x *= expands to x = x * y
-	// this means we need to multiply x by y, then assign to x
-	// so, walkAssign(x, walkMultiply(x,y))
-}
-
-/* assigns variables to both sides of statement
- * for example in x /= y
- * left = x
- * right = y
- */
-function walkDivAssign(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// operation x /= yexpands to x = x / y
-	// this means we need to divide x by y, then assign to x
-	// so, walkAssign(x, walkDivide(x,y))
-}
-
-/* assigns variables to both sides of statement
- * for example in x %= y
- * left = x
- * right = y
- */
-function walkModAssign(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// operation x %= y expands to x = x % y
-	// this means we need to get x % y, then assign to x
-	// so, walkAssign(x, walkModulo(x+y))
-}
-
-/* assigns variables to both sides of statement
- * for example in x++
- * name = x
- */
-function walkIncrement(arguments){
-	var name = arguments[0];
-	
-	// x++ expands to x = x + 1
-	// so, walkAssign(walkAdd(x,1))
-}
-
-//----------TODO: check which is the better syntax: function ...(...) or var ... = function (...)------------------------------------------------------------------------
-
-/* assigns variables to both sides of statement
- * for example in x--
- * name = x
- */
-var walkDecrement = function(arguments){
-	var name = arguments[0];
-	
-	// x-- expands to x = x - 1
-	// so, walkAssign(walkSubtract(x,1))
-	// or, walkAssign(walkAdd(x,-1))
-}
-
-/* assigns variables to both sides of statement
- * for example in x && 2
- * left = x
- * right = 2
- */
-var walkAnd = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// TODO: make evaluate function
-	// check both evaluate to true.
-	// Evaluate(left)
-	// Evaluate(right)
-}
-
-/* assigns variables to both sides of statement
- * for example in x || 2
- * left = x
- * right = 2
- */
-var walkOr = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// check if either evaluates to true.
-	// Evaluate(left)
-	// Evaluate(right)
-}
-
-/* assigns variables to both sides of statement
- * for example in x = 2
- * left = x
- * right = 2
- */
-var walkAssign = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-	
-	// find left in symbol table/scope tree, warn about undeclared if not there.
-	// evaluate (walk) right.
-	
-}
-
-	// TODO check with Darren about bitwise operator opcodes.
-
-/* assigns variables to both sides of statement
- * for example in x & 2
- * left = x
- * right = 2
- */
-var walkBitAND = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x >>> 2
- * left = x
- * right = 2
- */
-var walkZeroFillRightShift = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x | 2
- * left = x
- * right = 2
- */
-var walkBitOR = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x >> 2
- * left = x
- * right = 2
- */
-var walkBitRightShift = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x << 2
- * left = x
- * right = 2
- */
-var walkBitLeftShift = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x ^ 2
- * left = x
- * right = 2
- */
-var walkbitXOR = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-// TODO: evaluation function for boolean logic
-
-/* assigns variables to both sides of statement
- * for example in != 2
- * left = x
- * right = 2
- */
-var walkNotEqual = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x <= 2
- * left = x
- * right = 2
- */
-var walkLessThanOrEqual = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x < 2
- * left = x
- * right = 2
- */
-var walkLessThan = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x > 2
- * left = x
- * right = 2
- */
-var walkLargerThan = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x >= 2
- * left = x
- * right = 2
- */
-var walkGreaterThanOrEqual = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-
-/* assigns variables to both sides of statement
- * for example in x ?= 2
- * left = x
- * right = 2
- */
-var walkEquality = function(arguments){
-	var left = arguments[0];
-	var right = arguments[1];
-}
-

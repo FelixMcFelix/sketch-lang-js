@@ -1,8 +1,8 @@
 var configs = {
-		srcDir: "src/",
-		destDir: "build/",
-		interDir: "mid-build/",
-		docsDir: "docs/"
+		srcDir: "./src/",
+		destDir: "./build/",
+		interDir: "./mid-build/",
+		docsDir: "./docs/"
 	},
 	browserify = require("browserify"),
 	gulp = require("gulp"),
@@ -42,9 +42,9 @@ gulp.task("build:parser", function(){
 });
 
 gulp.task("build:Palette", function(){
-	return gulp.src([configs.srcDir+"Palette/Palette.js",configs.srcDir+"Palette/*.js"])
-			.pipe(browserified)
+	return gulp.src([configs.srcDir+"Palette/Palette.js",configs.srcDir+"Palette/*.js","./node_modules/earcut/src/earcut.js"])
 			.pipe(concat("Palette.js"))
+			//.pipe(browserified)
 			.pipe(gulp.dest(configs.interDir));
 			//.pipe(rename({suffix: ".min"}))
 			//.pipe(uglify())

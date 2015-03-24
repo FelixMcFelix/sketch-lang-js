@@ -20,7 +20,7 @@ Palette.ShaderFactory = function(manager){
     * @readonly
     * @protected
     */
-    that = this;
+    this.that = this;
 	this.manager = manager;
 	this.downloadInProgress = false;
 };
