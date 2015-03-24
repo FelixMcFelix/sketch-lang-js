@@ -8,23 +8,27 @@
 \contentsline {section}{\numberline {2.1}Getting Started}{6}{section.2.1}
 \contentsline {section}{\numberline {2.2}Variables and Arithmetic operators}{7}{section.2.2}
 \contentsline {section}{\numberline {2.3}If statement and comparitive operators}{9}{section.2.3}
-\contentsline {section}{\numberline {2.4}Modifying operators}{10}{section.2.4}
-\contentsline {section}{\numberline {2.5}Functions}{10}{section.2.5}
-\contentsline {section}{\numberline {2.6}draw()}{10}{section.2.6}
-\contentsline {chapter}{\numberline {3}Language Reference Manual}{11}{chapter.3}
-\contentsline {chapter}{\numberline {4}Project Plan}{12}{chapter.4}
-\contentsline {chapter}{\numberline {5}Language Evolution}{13}{chapter.5}
-\contentsline {chapter}{\numberline {6}Compiler Architecture}{14}{chapter.6}
-\contentsline {section}{\numberline {6.1}Overview}{14}{section.6.1}
-\contentsline {section}{\numberline {6.2}Lexer and Parser}{15}{section.6.2}
-\contentsline {section}{\numberline {6.3}Code Generator}{15}{section.6.3}
-\contentsline {section}{\numberline {6.4}Shader Manager}{15}{section.6.4}
-\contentsline {section}{\numberline {6.5}Abstract Machine}{15}{section.6.5}
-\contentsline {section}{\numberline {6.6}Module Facade}{15}{section.6.6}
-\contentsline {chapter}{\numberline {7}Development Environment}{16}{chapter.7}
-\contentsline {chapter}{\numberline {8}Test Plan and test suites}{17}{chapter.8}
-\contentsline {chapter}{\numberline {9}Conclusion}{18}{chapter.9}
-\contentsline {section}{\numberline {9.1}Contributions}{18}{section.9.1}
-\contentsline {subsection}{\numberline {9.1.1}Report}{18}{subsection.9.1.1}
-\contentsline {subsection}{\numberline {9.1.2}Program}{18}{subsection.9.1.2}
-\contentsline {chapter}{\numberline {10}Appendix A}{19}{chapter.10}
+\contentsline {section}{\numberline {2.4}Modifying Operators}{10}{section.2.4}
+\contentsline {section}{\numberline {2.5}Functions and Scope}{10}{section.2.5}
+\contentsline {chapter}{\numberline {3}Language Reference Manual}{12}{chapter.3}
+\contentsline {chapter}{\numberline {4}Project Plan}{13}{chapter.4}
+\contentsline {chapter}{\numberline {5}Language Evolution}{14}{chapter.5}
+\contentsline {chapter}{\numberline {6}Compiler Architecture}{15}{chapter.6}
+\contentsline {section}{\numberline {6.1}Overview}{15}{section.6.1}
+\contentsline {section}{\numberline {6.2}Lexer and Parser}{16}{section.6.2}
+\contentsline {section}{\numberline {6.3}Code Generator}{16}{section.6.3}
+\contentsline {section}{\numberline {6.4}Shader Manager}{16}{section.6.4}
+\contentsline {subsection}{\numberline {6.4.1}Introduction}{16}{subsection.6.4.1}
+\contentsline {subsection}{\numberline {6.4.2}Definitions}{16}{subsection.6.4.2}
+\contentsline {subsection}{\numberline {6.4.3}Requirements}{16}{subsection.6.4.3}
+\contentsline {subsection}{\numberline {6.4.4}Usage}{17}{subsection.6.4.4}
+\contentsline {subsection}{\numberline {6.4.5}Features}{18}{subsection.6.4.5}
+\contentsline {section}{\numberline {6.5}Abstract Machine}{18}{section.6.5}
+\contentsline {section}{\numberline {6.6}Module Facade}{18}{section.6.6}
+\contentsline {chapter}{\numberline {7}Development Environment}{19}{chapter.7}
+\contentsline {chapter}{\numberline {8}Test Plan and test suites}{20}{chapter.8}
+\contentsline {chapter}{\numberline {9}Conclusion}{21}{chapter.9}
+\contentsline {section}{\numberline {9.1}Contributions}{21}{section.9.1}
+\contentsline {subsection}{\numberline {9.1.1}Report}{21}{subsection.9.1.1}
+\contentsline {subsection}{\numberline {9.1.2}Program}{21}{subsection.9.1.2}
+\contentsline {chapter}{\numberline {10}Appendix A}{22}{chapter.10}

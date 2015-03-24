@@ -8,23 +8,27 @@
 \BOOKMARK [1][-]{section.2.1}{Getting Started}{chapter.2}% 8
 \BOOKMARK [1][-]{section.2.2}{Variables and Arithmetic operators}{chapter.2}% 9
 \BOOKMARK [1][-]{section.2.3}{If statement and comparitive operators}{chapter.2}% 10
-\BOOKMARK [1][-]{section.2.4}{Modifying operators}{chapter.2}% 11
-\BOOKMARK [1][-]{section.2.5}{Functions}{chapter.2}% 12
-\BOOKMARK [1][-]{section.2.6}{draw\(\)}{chapter.2}% 13
-\BOOKMARK [0][-]{chapter.3}{Language Reference Manual}{}% 14
-\BOOKMARK [0][-]{chapter.4}{Project Plan}{}% 15
-\BOOKMARK [0][-]{chapter.5}{Language Evolution}{}% 16
-\BOOKMARK [0][-]{chapter.6}{Compiler Architecture}{}% 17
-\BOOKMARK [1][-]{section.6.1}{Overview}{chapter.6}% 18
-\BOOKMARK [1][-]{section.6.2}{Lexer and Parser}{chapter.6}% 19
-\BOOKMARK [1][-]{section.6.3}{Code Generator}{chapter.6}% 20
-\BOOKMARK [1][-]{section.6.4}{Shader Manager}{chapter.6}% 21
-\BOOKMARK [1][-]{section.6.5}{Abstract Machine}{chapter.6}% 22
-\BOOKMARK [1][-]{section.6.6}{Module Facade}{chapter.6}% 23
-\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 24
-\BOOKMARK [0][-]{chapter.8}{Test Plan and test suites}{}% 25
-\BOOKMARK [0][-]{chapter.9}{Conclusion}{}% 26
-\BOOKMARK [1][-]{section.9.1}{Contributions}{chapter.9}% 27
-\BOOKMARK [2][-]{subsection.9.1.1}{Report}{section.9.1}% 28
-\BOOKMARK [2][-]{subsection.9.1.2}{Program}{section.9.1}% 29
-\BOOKMARK [0][-]{chapter.10}{Appendix A}{}% 30
+\BOOKMARK [1][-]{section.2.4}{Modifying Operators}{chapter.2}% 11
+\BOOKMARK [1][-]{section.2.5}{Functions and Scope}{chapter.2}% 12
+\BOOKMARK [0][-]{chapter.3}{Language Reference Manual}{}% 13
+\BOOKMARK [0][-]{chapter.4}{Project Plan}{}% 14
+\BOOKMARK [0][-]{chapter.5}{Language Evolution}{}% 15
+\BOOKMARK [0][-]{chapter.6}{Compiler Architecture}{}% 16
+\BOOKMARK [1][-]{section.6.1}{Overview}{chapter.6}% 17
+\BOOKMARK [1][-]{section.6.2}{Lexer and Parser}{chapter.6}% 18
+\BOOKMARK [1][-]{section.6.3}{Code Generator}{chapter.6}% 19
+\BOOKMARK [1][-]{section.6.4}{Shader Manager}{chapter.6}% 20
+\BOOKMARK [2][-]{subsection.6.4.1}{Introduction}{section.6.4}% 21
+\BOOKMARK [2][-]{subsection.6.4.2}{Definitions}{section.6.4}% 22
+\BOOKMARK [2][-]{subsection.6.4.3}{Requirements}{section.6.4}% 23
+\BOOKMARK [2][-]{subsection.6.4.4}{Usage}{section.6.4}% 24
+\BOOKMARK [2][-]{subsection.6.4.5}{Features}{section.6.4}% 25
+\BOOKMARK [1][-]{section.6.5}{Abstract Machine}{chapter.6}% 26
+\BOOKMARK [1][-]{section.6.6}{Module Facade}{chapter.6}% 27
+\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 28
+\BOOKMARK [0][-]{chapter.8}{Test Plan and test suites}{}% 29
+\BOOKMARK [0][-]{chapter.9}{Conclusion}{}% 30
+\BOOKMARK [1][-]{section.9.1}{Contributions}{chapter.9}% 31
+\BOOKMARK [2][-]{subsection.9.1.1}{Report}{section.9.1}% 32
+\BOOKMARK [2][-]{subsection.9.1.2}{Program}{section.9.1}% 33
+\BOOKMARK [0][-]{chapter.10}{Appendix A}{}% 34

@@ -31,11 +31,11 @@ The abstract goes here
 
 \section{Project Outline}
 
-For our project we chose to do project number 3924; design and implement your own programming language. This project involves designing a programming language, by creating a BNF, system diagram, and the syntax and semantics of the language, among others and then implementing it, using a parser, compiler, and abstract machine.
+For our project we chose project number 3924; design and implement your own programming language. This project involves designing a programming language, by creating a BNF, system diagram, and the syntax and semantics of the language, among others and then implementing it, using a parser, compiler, and abstract machine.
 
 \section{Motivation}
 
-Our Motivation behind the choosing of this particular project is that, especially in the past few years, computing has come to the forefront of teaching. Many parents now want their children to learn how to code to some degree., with computing science now being a much more prevalent subject in primary and secondary schools. Now in our third year of university, we have all taken part in a fair amount of coding, however, none of us have ever attempted to write our own language to code in. This project seemed challenging, but achievable, and very rewarding – not to mention interesting.
+Our Motivation behind the choosing of this particular project is that, especially in the past few years, computing has come to the forefront of teaching. Many parents now want their children to learn how to code to some degree, with computing science now being a much more prevalent subject in primary and secondary schools. Now in our third year of university, we have all taken part in a fair amount of coding, however, none of us have ever attempted to write our own language to code in. This project seemed challenging, but achievable, and very rewarding – not to mention interesting.
 
 \section{Aim}
 
@@ -43,7 +43,7 @@ The aim for this project is to create a graphical programming language that is s
 
 \section{WebGL Background}
 
-Web Graphics Library (WebGL) is a JavaScript API, that makes use of the <canvas> element available in HTML to render interactive 2d/3d graphics. It is a branch of the Open Graphics Library Embedded Systems 2.0 (OpenGL ES 2.0), and is supported by most modern browsers, like Google Chrome and Mozilla Firefox, with no necessary plugin (as it makes use of <canvas>). A WebGL program consists of control code written in JavaScript, and function code (shader code) that is executed by a computers GPU. 
+Web Graphics Library (WebGL) is a JavaScript API, that makes use of the <canvas> element available in HTML to render interactive 2d/3d graphics. It is a branch of the Open Graphics Library Embedded Systems 2.0 (OpenGL ES 2.0), and is supported by most modern browsers, like Google Chrome and Mozilla Firefox, with no necessary plugin (as it makes use of <canvas>). A WebGL program consists of control code written in JavaScript, and function code (shader code) that is executed by a computer's GPU. 
 
 \section{Outline of report}
 
@@ -73,83 +73,92 @@ This chapter comprises of a brief introduction of how to use our language.
 \section{Getting Started}
 \label{start}
 In every language, the first program to write is always 'hello world' - where you would print the words "hello world". However, as this language is mainly a graphical language, the equivalent would be 'hello square', and the aim is to draw a square. In Sketch, the program required to draw a square is:\\
-\begin{verbatim}
-    #EXAMPLE 1.1
-    init(){
-        Polygon square = ({0,0} + {5,0}) * 4}
-        draw(square)}
+\lstset{%
+      basicstyle=\ttfamily\footnotesize\bfseries,
+      xleftmargin=.1\textwidth, xrightmargin=.1\textwidth,
+      captionpos=b,
+      tabsize=4
     }
-\end{verbatim}
-To compile any Sketch program, insert the code into the browser page for our project and click execute. The result of the program will then be shown on the canvas.
+\begin{lstlisting}[caption={Hello Square},label={lst:tutorial-hello}]
+    function init(){
+        Polygon square = ({0,0} + {5,0}) * 4};
+        draw square;
+    }
+\end{lstlisting}
+To compile any Sketch program, insert the code into the browser page for our project and click "Render". The result of the program will then be shown on the canvas.
 \\ [12pt]
-Any Sketch program you write will have to consist of at least one function, and variables. These functions and variables can be named anything you like. You can call other functions to help carry out the task, only ones that you have written, as there are no libraries provided as such. 
+Any Sketch program you write will have to consist of at least one function, and variables. These functions and variables can be named anything you like. You can call other functions to help carry out the task, only ones that you have written, as there are no libraries provided in the current version of the language. 
 \\ [12pt]
-In Sketch, implicit semi-colons exist at the end of every line. This means that, you dont have to end each line wih a semi-colon, and whether you do or not will not have an effect on the compilation of the program. 
+In Sketch, implicit semi-colons exist at the end of every line. This means that, you don't have to end each line with a semi-colon, and whether you do or not will not have an effect on the compilation of the program. 
 \\ [12pt]
-The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the cnavas. This will be talked about in detail later.
+The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the canvas. This will be discussed in detail later.
 \\ [12pt]
 One way in which you can pass data between functions is by including variables in the calling statement as arguments. However, you can only do this if the function that is being called is expecting the same number and type of variables. An example is:
-\begin{verbatim}
-    #EXAMPLE 1.2
-    init(){
+\begin{lstlisting}[caption={Function Parameters},label={lst:tutorial-parameters}]
+    function init(){
         int n = 2;
-        Function takesParams(int n){
+        function takesParams(int n){
             print(n);
         }
         takesParams(n);
     }
-\end{verbatim}
-Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If there was another argument included, for example \textit{takesParams(n, 7)}, or the wrong types, then it would not compile. This will be talked about in more detail in \ref{func}. As you can see in example 1.1, the code inside of a function is enclosed by curly braces {   }.The draw function is what you will call to draw any shapes that you have constructed to the canvas. It will take one parameter, either the point,line or polygon that you have constructed. This is a predefined function by the language, so you don't have to write it, but you cannot name any of your functions \textit{draw()}. 
+\end{lstlisting}
+Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If there was another argument included, for example \textit{takesParams(n, 7)}, or the wrong types, then it would not compile. This will be talked about in more detail in Chapter \ref{func}. As you can see in Listing \ref{lst:tutorial-hello}, the code inside of a function is enclosed by curly braces \{\}. The draw keyword is used to draw any shapes that you have constructed to the canvas. It will take one parameter, either the point,line or polygon that you have constructed. This is a predefined keyword in the language, so you don't have to write it, but you cannot name any of your functions \textit{draw()} as a result. 
 
 \section{Variables and Arithmetic operators}
 \label{vars}
 This next section will use a more complicated program than before, introducing more features, such as comments, loops, and expand on previously touched on features, such as variables.
-\begin{verbatim}
-    #EXAMPLE 1.3
-    #This Program will draw 3 different shapes - triangle, square and pentagon.
-    init(){
-        int sides;
-        sides = 5;
-        int counter = 3;
-        Point pt1 = {3,1}
-        pt2 = {1,3}
-        Line l1 = (pt1 + pt2);
-        #this will loop for the number of sides
-        while(counter <= sides){
-            clear;
-            Polygon shape =	11 * counter;
-            draw(shape);
-            counter++;
-        }
+\begin{lstlisting}[caption={Comments and Point Addition},label={lst:tutorial-comment}]
+#This Program will draw 3 different shapes - triangle, square and pentagon.
+//Both of these lines are ignored by the compiler.
+
+function init(){
+	int sides;
+	sides = 5;
+    int counter = 3;
+    
+    Point pt1 = {3,1}
+    pt2 = {1,3}
+    
+    Line l1 = (pt1 + pt2);
+    
+    #this will loop for the number of sides
+    while(counter <= sides){
+        clear;
+        Polygon shape =	11 * counter;
+        draw shape ;
+        counter++;
     }
-\end{verbatim}
-The initial lines indicate how to show comments in your code in Sketch. Using a hashsign will be ignored by the compiler, and show that the current line is a comment. These can be used to explain how your programs works, and make it easier to read and understand, for you or other users. The 'clear' function in this example is a reserved keyword, and is used to clear the canvas. A reserved keyword is a word that cannot be used otherwise, for variable names, of function calls.
+}
+\end{lstlisting}
+The initial lines indicate how to show comments in your code in Sketch. Using a hashsign (\#) or a double slash (//) will cause the compiler to ignore all characters until the next newline, and show that the current line is a comment. These can be used to explain how your programs works, and make it easier to read and understand, for you or other users. The 'clear' function in this example is a reserved keyword, and is used to clear the canvas. A reserved keyword is a word that cannot be used otherwise, for variable names, of function calls - 'draw' is one such example we have shown.
 \\ [12pt]
-As you can see in example 1.3, there are two ways of declaring variables, explicitly and implicitly. Each variable declaration must include the variable name, which is an alphanumeric string that always begins with a letter. To explicitly define your variable, each variable name must be preceeded by the intended type. For example, the variables 'sides' and 'counter' in example 1.3 are declared explicitly. Explicit declaration allows for the ability to not initialise the variable immediately. Implicit declaration is when the type is not defined by the user, but instead taken from the context. The type is inferred from the initialization of the variable afterwards. For example, 'pt2' in example 1.3 is implicitly defined, and from the context, the compiler will recognise that it is of type Point. However, with implicit types, you must immediately initialise the variable so its type can be inferred.
+As you can see in Listing \ref{lst:tutorial-comment}, there are two ways of declaring variables, explicitly and implicitly. Each variable declaration must include the variable name, which is an alphanumeric string that always begins with a letter. To explicitly define your variable, each variable name must be preceeded by the intended type. For example, the variables 'sides' and 'counter' in Listing \ref{lst:tutorial-comment} are declared explicitly. Explicit declaration allows for the ability to not initialise the variable immediately. Implicit declaration is when the type is not defined by the user, but instead taken from the context. The type is inferred from the initialization of the variable afterwards. For example, 'pt2' in Listing \ref{lst:tutorial-comment} is implicitly defined, and from the context, the compiler will recognise that it is of type Point. However, with implicit types, you must immediately initialise the variable so its type can be inferred.
 \\ [12pt]
-The while loop in Sketch is of standard format and standard functionality. This means that the condition contained in the parentheses is tested, and if it returns true, then the body of the loop, and whatever statement(s) it may contain, is executed. Then the original condition is retested. if true, it again executes the body. This continues until the condition is false, at which point, the body of the loop is not executed, and the next command outside the loop is executed and the program continues. A while loop has the format: 
-\begin{verbatim}
-    while(condition){#insert body here} 
-\end{verbatim}
-Sketch has three main types for drawing shapes lines and so forth. These are Point, Line and Polygon. Lets start with Point; Point is the basis of all possible shapes. Points make the vertices on which the shapes will be drawn about. A point is defined in the following format {xCo-ordinate, yCo-ordinate}. An example of both implicit and explicit declaration is shown in example 1.3 with 'pt1' and 'pt2'. These points can be added together to create a Line. Lines are a collection of two points joined together. The format for defining a line, shown by 'l1' in example 1.3, is Line = (Point1 + Point2). Lines can be extended from the centre point by multiplying it. For example, multiplying a line by 4 will make it 4 times the size. Finally, variables of type Polygon are a collection of lines, displayed as a closed circuit. Polygons can be defined by either adding multiple lines together, but the must all join, or by defining one line, and multiplying it by the number of sides you would like. This would create a shape of the stated number of lines, closed off, with the origin being the first co-ordinate of the line. The format of this would be either Polygon = (Line2 + Line2 ... + LineN) or Polygon = Line * N. In these examples, N is the number of sides desired.
+The while loop in Sketch is of standard format and standard functionality. This means that the condition contained in the parentheses is tested, and if it returns true, then the body of the loop, and whatever statements it may contain, are executed. Then the original condition is retested. if true, it again executes the body. This continues until the condition is false, at which point, the body of the loop is not executed, and the next command outside the loop is executed and the program continues. A while loop has the format: 
+\begin{lstlisting}[caption={The "While" Loop},label={lst:tutorial-while},xleftmargin=.35\textwidth,xrightmargin=.5\textwidth,]
+while(condition){
+	#insert body here
+} 
+\end{lstlisting}
+Sketch has three main types for drawing shapes, lines and so forth. These are Point, Line and Polygon. Lets start with Point; Point is the basis of all possible shapes. Points make the vertices on which the shapes will be drawn about. A point is defined in the following format \{$x$ Coordinate, $y$ Coordinate\}. An example of both implicit and explicit declaration is shown in Listing \ref{lst:tutorial-comment} with 'pt1' and 'pt2'. These points can be added together to create a Line. Lines are a collection of two points joined together. The format for defining a line, shown by 'l1' in Listing \ref{lst:tutorial-comment}, is Line = (Point1 + Point2). Lines can be extended from the centre point by multiplying it by a number. For example, multiplying a line by 4 will make it 4 times the size. Finally, variables of type Polygon are a collection of lines, displayed as a closed circuit. Polygons can be defined by either adding multiple lines together, but they must all join, or by defining one line, and multiplying it by the number of sides you would like. This would create a shape of the stated number of lines, closed off, with the origin being the first co-ordinate of the line. The format of this would be either Polygon = (Line2 + Line2 ... + LineN) or Polygon = Line * N. In these examples, N is the number of sides desired.
 \\ [12pt]
 The line 'counter++' increments the counter, using the modifying operator '++'. We will explain modifying operators later in this tutorial.
 \\ [12pt]
-Sketch also has one more type of loop - a for loop. The for loop has a completely different structure to the while loop, but has, more or less, the same functionality. The choice between these two types is based on the context, which one would make more sense, for example, incrementations should be used in for loops, while boolean variables should be the control in while loops. The following is the while loop from example 1.3 but as a for loop:
-
-\begin{verbatim}
-    for(num counter = 3; counter < 5; counter ++) {
+Sketch also has one more type of loop - the "for" loop. The for loop has a completely different structure to the while loop, but has, more or less, the same functionality. The choice between these two types is based on the context, which one would make more sense, for example, incrementations should be used in for loops, while boolean variables should be the control in while loops. The following is the while loop from Listing \ref{lst:tutorial-comment}, changed to a for loop:
+\clearpage
+\begin{lstlisting}[caption={The "For" Loop},label={lst:tutorial-for},xleftmargin=.1\textwidth,xrightmargin=.1\textwidth,]
+    for(int counter = 3; counter < 5; counter ++) {
         ...
     }
-\end{verbatim}
+\end{lstlisting}
 
-The for loop statement has three parts. Firstly, the control variable is initialised (it also does not need to be declared beforehand), then the statement that will be checked after every execute of the body, and finally, the incrementation of the control variable. The general functionality is the same as the while loop
+The for loop statement has three parts. Firstly, the control variable is initialised (it also does not need to be declared beforehand), then the statement that will be checked after every execute of the body, and finally, the incrementation of the control variable. The general functionality is the same as the while loop.
 \section{If statement and comparitive operators}
 \label{comp}
 This section will cover how to perform comparing statements in Sketch. The following is an if statement which compares to check if a varaible is equal to something else:
-\begin{verbatim}
-    init(){
-        #example 1.4
+\begin{lstlisting}[caption={If-Else Conditionals},label={lst:tutorial-ifelse}]
+    function init(){
         int n = 5;
         if(n ?= 5){
             print(n);
@@ -161,23 +170,22 @@ This section will cover how to perform comparing statements in Sketch. The follo
             print("greater than 5");
         }
     }
-\end{verbatim}
+\end{lstlisting}
 If statements are a way of executing a series of commands, but only if a particular statement returns true. To compare to elements, a comparitive operator is needed. In Sketch, there exists a series of six comparative operators:
 \begin{itemize}
-\item[\textbf{?=}] will return true if left hand side is equal to right hand side
-\item[\textbf{?\textgreater}] will return true if left hand side is greater than right hand side
-\item[\textbf{?\textless}] will return true if left hand side is less than right hand side
-\item[\textbf{!=}] will return true if left hand side does not equal right hand side
-\item[\textbf{!\textgreater}] will return true if left hand side is not greater than right hand side (ie is less than or equal to)
-\item[\textbf{!\textless}] will return true if left hand side is not less than right hand side (ie is greater than or equal to)
+\item \textbf{?=} will return true if left hand side is equal to right hand side.
+\item \textbf{?\textgreater} will return true if left hand side is greater than right hand side.
+\item \textbf{?\textless} will return true if left hand side is less than right hand side.
+\item \textbf{!=} will return true if left hand side does not equal right hand side.
+\item \textbf{!\textgreater} will return true if left hand side is not greater than right hand side (ie is less than or equal to).
+\item \textbf{!\textless} will return true if left hand side is not less than right hand side (ie is greater than or equal to).
 \end{itemize}
 An exclamation mark can be inserted in front of the check statement in the if, to receive the inverse of what it returns.
 
-\section{Modifying operators}
+\section{Modifying Operators}
 This section will cover how you can make use of sketch's modifying operators. The following example will outline them:
-\begin{verbatim}
-    #example 1.5
-    init(){
+\begin{lstlisting}[caption={Modifying Operators in Action}, label={lst:tutorial-modify}]
+    function init(){
         int n = 1; #line 1
         n += 2; #line 2
         n *= 2; #line 3
@@ -188,16 +196,15 @@ This section will cover how you can make use of sketch's modifying operators. Th
         n--; #line 8
         n = (n + 3) * 5; #line 9
     }
-\end{verbatim}
-Example 1.5 outlines many modifying operators in Sketch. To explain each one, we will walk through the program itself. As previously mentioned, the first line will declare n to be of type int, with a value of 1. The next line will change the value of n by adding one to it. The general syntax would be \textit{*variable to be changed* += *how many to change it by*}. The next three lines follow the same syntax and semantics, with the exception that, line 3 would multiply the variable by the second value and assign it, line 4 would divide it by the second value and assign it, and line 5 would subtract by the second value and assign it, and finally line 6 would change the variable to equal the value of it modulo the second variable. This means that it would change it to the remainder after being divided by that number. So, after line 2, n would be equal to 3, after line 3, n would equal 6, after line 4, n would equal 3, after line 5 n would equal 1 and after line 6, n would still equal 1, as the remainder of 1 / 2 is still 1. These operators are functionally a shorter way of writing \textit{n = n + *value*;}, but obviously changed respective to the context (division, multiplication, subtraction and modulo).
+\end{lstlisting}
+Listing \ref{lst:tutorial-modify} outlines many modifying operators in Sketch. To explain each one, we will walk through the program itself. As previously mentioned, the first line will declare n to be of type int, with a value of 1. The next line will change the value of n by adding one to it. The general syntax would be \textit{*variable to be changed* += *how many to change it by*}. The next three lines follow the same syntax and semantics, with the exception that, line 3 would multiply the variable by the second value and assign it, line 4 would divide it by the second value and assign it, and line 5 would subtract by the second value and assign it, and finally line 6 would change the variable to equal the value of it modulo the second variable. This means that it would change it to the remainder after being divided by that number. So, after line 2, n would be equal to 3, after line 3, n would equal 6, after line 4, n would equal 3, after line 5 n would equal 1 and after line 6, n would still equal 1, as the remainder of 1 / 2 is still 1. These operators are functionally a shorter way of writing \textit{n = n + *value*;}, but obviously changed respective to the context (division, multiplication, subtraction and modulo).
 \\ [12pt]
 Line 6 is different. This operator will increment the variable by only 1. In the context of this program, n will now equal 2. The following line following the same structure, but instead subtracts one, meaning n is back to equal 1. These can be useful in loops for example, to increment or decrement your controlling variable as necessary. The final line outlines how parenthesis work in regards to performing mathematic actions. The flow it would take, is to first, add  to n, making it equal 4, and then multiply by 5, hence n equals 20. The brackets would specify what task has to be carried out first, as if they were not here on this occasion, by the laws of maths, 3 would be multiplied by 5 and then added to n, giving a different outcome. All of these modifying operators, except on line 9, are functionally just shorthand, but can be very useful and time saving while writing a program.
-\section{Functions and scope}
+\section{Functions and Scope}
 \label{func}
 In Sketch, functions, as mentioned before, taken certain types and number of parameters dependant on what you specify, it can range from 0 to n. Furthermore, these functions can be called whatever you decide, and can either have a return type or not, dependant on your needs. Example 1.6 will show these in action:
-\begin{verbatim}
-#example 1.6
-init(){
+\begin{lstlisting}[caption={Functions and Scope}, label={lst:tutorial-functions}]
+function init(){
     int x = 1;
     int i = 5;
     function foo(int n) -> int{
@@ -210,8 +217,8 @@ init(){
     i = foo(int i);
     foo2(int x);
 }
-\end{verbatim}
-In example 1.6, you can see different properties of defining and calling a function. If a function is not returning anything, then you can see that the void is implicit. Furthermore, if a function has a return type, then you can assign a variable to equal its returned value, if it is of the same type. In regards to scope, functions have local scope, meaning that they would alter outside variables, or variables in other functions. This means that, as shown here, you can call variables the same name in two different functions, and there will be no crossover or confusion of values or any conflicts. 
+\end{lstlisting}
+In Listing \ref{lst:tutorial-functions}, you can see different properties of defining and calling a function. If a function is not returning anything, then you can see that the void is implicit. Furthermore, if a function has a return type, then you can assign a variable to equal its returned value, if it is of the same type. In regards to scope, functions have local scope, meaning that they would alter outside variables, or variables in other functions. This means that, as shown here, you can call variables the same name in two different functions, and there will be no crossover or confusion of values or any conflicts. 
 
 
 %==============================================================================
@@ -258,17 +265,98 @@ Individual and detailed discussion of each system is provided below. The module'
 \section{Shader Manager}
 \label{arch-shad}
 
-In designing our system, it was established that regardless of the chosen compilation and execution pathway all of our library's \textit{shaders} would have to be intelligently managed; both during runtime and for storage purposes inside the module itself.
+\subsection{Introduction}
+\label{arch-shad-intro}
+In designing our system, it was established that regardless of the chosen compilation and execution pathway all of our library's shaders would have to be intelligently managed; both during runtime and for storage purposes inside the module itself. While an extensive system like Palette may seem too broad in scope for Sketch's module in its current form, at the language's inception we wanted custom shapes and shaders to be a defining feature of our platform. As such, Palette allows us to one day realise our initial ambitious vision of Sketch due to the level of extensibility and portability it provides.
 
-Shaders are the graphics card level program units used in the conversion from vertex arrays into two-dimensional projections in the screen space, and in the selection of pixel colours to populate the screen space from that projection. In WebGL, in older versions of OpenGL and in its subsets such as GLES, shaders must always come in pairs: a \textit{vertex shader} and \textit{fragment shader} comprise each \textit{shader program}. This may then be accessed, modified and called through the WebGL API.
+\subsection{Definitions}
+\label{arch-shad-def}
+\textit{Shaders} are the graphics card level program units used in the conversion from vertex arrays into two-dimensional projections in the screen space, and in the selection of pixel colours to populate the screen space from that projection. In WebGL, in older versions of OpenGL and in its subsets such as GLES, shaders must always come in pairs: a \textit{vertex shader} and \textit{fragment shader} comprise each \textit{shader program}. This may then be accessed, modified and called through the \textit{WebGL API}.
 
+\subsection{Requirements}
+\label{arch-shad-req}
 The unique needs of our module created an interesting set of design requirements for the subsystem - mandating a somewhat in-depth understanding of the WebGL API to manipulate the canvas as required. Upon examination, the shader manager's requirements were found to be:
 \begin{itemize}
-\item \textbf{Extensibility} --- The language would need to support future extension with various shapes, shaders and other such additions beyond its standard library - most shader programs require writing tailored code in, say, an object's .draw() method.
+\item \textbf{Extensibility} --- Sketch needed to support future extension with various shapes, shaders and other such additions beyond its standard library - most shader programs require writing specially tailored code in an object's .draw() method. A method of allowing
+\item \textbf{Portability} --- Such tailored draw code cannot be imported without putting users at significant security risk by requiring them to execute arbitrary code. Some way to infer the attribute update process from the shader itself is a necessity.
 \item \textbf{Ease of Use} --- Definition of new shader files should be intuitive and an easy process, provided the user has valid shader code. The linking and compilation of shaders and shader programs must be handled internally, and completely sequestered from external control to centralise most of the API manipulation.
 \item \textbf{Configurable} --- Shader programs should have variable control methods exposed as an external interface, to provide a simple means of control over the intricacies of the WebGL API.
 \item \textbf{Simplicity} --- Interactions with the module should be designed with brevity in mind - being able to execute variable update and draw functions as a single method call makes WebGL usage simpler in the other subsystem implementations.
 \end{itemize}
+
+\subsection{Usage}
+\label{arch-shad-use}
+
+While JSDoc automatically generates the API documentation for Palette, construction of Shader JSON files is not yet documented. As these are an essential part of Sketch's operation, and shader source code will not suffice on its own, a light explanation is provided.
+
+Shader JSON objects may fall into three types:
+\begin{enumerate}
+\item \textbf{Vertex Shaders} --- Objects following the form of Listing \ref{lst:vtx-shad-example}, with type set to 0 and at least two attributes: a \textit{buffer} named "vertexBuffer" with default value set to the number of components per vertex, and a \textit{vertexAttrib} with a name matching an attribute within the shader and default value set to "vertexBuffer". Further attributes are defined in the same format as fragment shaders.
+\item \textbf{Fragment Shaders} --- Objects defined similarly to Listing \ref{lst:frag-shad-example}, with type set to 1 and no restriction on what attributes must be predefined.
+\item \textbf{Shader Lists} --- Objects following the structure of Listing \ref{lst:list-shad-example}, with type set to 2 and the content tag corresponding to an array of further shader objects of any type.
+\end{enumerate}
+All integer and vector types are supported, along with their array equivalents. These are denoted as int, int[], float, float[] with vectors taking the form ivec$n$, ivec$n$[], vec$n$ and vec$n$[] for $ n \in [2,4] $. Float matrices may be defined by mat$n$, for $n$ within the same domain.
+\begin{center}
+\lstset{%
+      basicstyle=\ttfamily\footnotesize\bfseries,
+      frame=single,
+      xleftmargin=.1\textwidth, xrightmargin=.1\textwidth,
+      captionpos=b,
+      tabsize=4
+    }
+\begin{lstlisting}[caption={Vertex Shader JSON Structure},label={lst:vtx-shad-example}]
+{
+	"type": 0,
+	"name": "squareVtx",
+	"src": "#version 100; attribute vec3 aVertexAttrib;//...",
+	"attrs": [
+		["aVertexAttrib",
+		"vertexAttrib",
+		"vertexBuffer"],
+		
+		["vertexBuffer",
+		"buffer",
+		3]
+	]
+}
+\end{lstlisting}
+\clearpage
+\begin{lstlisting}[caption={Fragment Shader JSON Structure},label={lst:frag-shad-example}]
+{
+	"type": 1,
+	"name": "squareFrag",
+	"src": "//source",
+	"attrs": [
+		["name",
+		"type",
+		"default"]
+	]
+}
+\end{lstlisting}
+\begin{lstlisting}[caption={Shader List JSON Structure},label={lst:list-shad-example}]
+{
+	"type": 2,
+	"content": [
+		{
+			"type": 0
+			"name": "...",
+			"src": "..."
+			"attrs": [...]
+		},
+		{
+			"type": 1
+			"name": "...",
+			"src": "..."
+			"attrs": [...]
+		}
+	]
+}
+\end{lstlisting}
+\end{center}
+
+\subsection{Features}
+\label{arch-shad-features}
+
 
 %------------------------------------------------------------------------------
 \section{Abstract Machine}

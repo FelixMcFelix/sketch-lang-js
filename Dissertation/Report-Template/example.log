@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.27)  23 MAR 2015 22:12
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.27)  24 MAR 2015 20:51
 entering extended mode
 **example.tex
 
@@ -280,7 +280,7 @@ t")
 t")
 \@outlinefile=\write3
 \c@lstlisting=\count114
- <images/CompSci_mono.pdf, id=123, 340.27126pt x 49.18375pt>
+ <images/CompSci_mono.pdf, id=139, 340.27126pt x 49.18375pt>
 File: images/CompSci_mono.pdf Graphic file (type pdf)
 
 <use images/CompSci_mono.pdf>
@@ -344,23 +344,39 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
  [5]
 Chapter 2.
 
-Underfull \hbox (badness 10000) in paragraph at lines 75--76
+Underfull \hbox (badness 10000) in paragraph at lines 75--82
 
  []
 
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 76.
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 82.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 82.
 ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [6
+)
+LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 82.
+LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 87.
+ [6
 
 ]
-Overfull \hbox (86.75938pt too wide) in paragraph at lines 125--125
-[]    \OT1/pcr/m/n/10.95 #This Program will draw 3 different shapes - triangle,
- square and pentagon.[] 
+Overfull \hbox (59.19339pt too wide) in paragraph at lines 112--113
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[7] [8]
-LaTeX Font Info:    Try loading font information for OML+ptm on input line 168.
+[7]
+Overfull \hbox (26.96307pt too wide) in paragraph at lines 140--141
+[][][][][][][] 
+ []
+
+
+Overfull \hbox (48.5633pt too wide) in paragraph at lines 141--142
+[][][][][][][][][][] 
+ []
+
+[8]
+LaTeX Font Info:    Try loading font information for OML+ptm on input line 177.
 
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\omlptm.fd"
 File: omlptm.fd 
@@ -368,82 +384,87 @@ File: omlptm.fd
 
 LaTeX Font Warning: Font shape `OML/ptm/bx/n' undefined
 (Font)              using `OML/ptm/m/it' instead
-(Font)              for symbol `textgreater' on input line 168.
+(Font)              for symbol `textgreater' on input line 177.
 
 LaTeX Font Info:    Font shape `OML/ptm/m/it' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 168.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 177.
 LaTeX Font Info:    Font shape `OML/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 169.
-[9] [10]
-Chapter 3.
-[11
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 178.
+[9
 
-]
-Chapter 4.
+] [10] [11]
+Chapter 3.
 [12
 
 ]
-Chapter 5.
+Chapter 4.
 [13
 
 ]
-Chapter 6.
+Chapter 5.
 [14
 
-] [15]
+]
+Chapter 6.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 268.
+[15
+
+] [16] [17] [18
+
+]
 Chapter 7.
-[16
+[19
 
 ]
 Chapter 8.
-[17
+[20
 
 ]
 Chapter 9.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 266.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 269.
-[18
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 389.
+[21
 
 ]
 Chapter 10.
 No file example.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 288.
-[19
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 408.
+[22
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 288.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 408.
 
 ("F:\My Dropbox\Public\laughing-ironman\Dissertation\Report-Template\example.au
 x")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 288.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 288.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 408.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 408.
 Package rerunfilecheck Info: File `example.out' has not changed.
-(rerunfilecheck)             Checksum: 8208A847857666E76A90307995CDE7E2;1800.
+(rerunfilecheck)             Checksum: 43C1B89220E8842B00743552068DCEFA;2077.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 288.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 408.
  ) 
 Here is how much of TeX's memory you used:
- 6439 strings out of 493921
- 94943 string characters out of 3150492
- 178818 words of memory out of 3000000
- 9615 multiletter control sequences out of 15000+200000
- 26604 words of font info for 52 fonts, out of 3000000 for 9000
+ 6608 strings out of 493921
+ 97517 string characters out of 3150492
+ 190663 words of memory out of 3000000
+ 9647 multiletter control sequences out of 15000+200000
+ 27759 words of font info for 56 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,7n,32p,1289b,372s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,7n,32p,1377b,1682s stack positions out of 5000i,500n,10000p,200000b,50000s
 {K:/LaTeX/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<K:/LaTeX/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/cm/cmmi10.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/public/
-amsfonts/cm/cmsy10.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb>
-<K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><K:/LaTeX/MiKTeX 2.9/font
-s/type1/urw/times/utmbi8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmr8a
-.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on example.pdf (21 pages, 151119 bytes).
+amsfonts/cm/cmr10.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><K:/LaTeX/MiKTeX 
+2.9/fonts/type1/urw/times/utmb8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times
+/utmbi8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><K:/LaTeX/Mi
+KTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on example.pdf (24 pages, 196500 bytes).
 PDF statistics:
- 298 PDF objects out of 1000 (max. 8388607)
- 57 named destinations out of 1000 (max. 500000)
- 246 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 503 PDF objects out of 1000 (max. 8388607)
+ 193 named destinations out of 1000 (max. 500000)
+ 278 words of extra memory for PDF output out of 10000 (max. 10000000)
 
