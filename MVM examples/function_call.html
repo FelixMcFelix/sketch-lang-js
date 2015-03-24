@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../src/MVM/MVM.js"></script>	
+</head>
+<body></body>
+
+<script type="text/javascript">
+	
+	var codes = 		[19,	3,	0,
+						 4,		5,
+						 4,		4,
+						 19,	12,	2,
+						 103,
+						 999,
+						 3,		0,
+						 3,		1,
+						 5,
+						 20,	1];
+	/*var codes = 		[19,	3,	0,
+						 4,		1,
+						 4,		2,
+						 5];*/
+	/*var codes = 		[19,	,
+						 4,		1];*/
+	window.mvm = new MVM(0,0,codes,0,1);
+	mvm.interpret(1,codes);
+</script>
+
+</body>
+</html>
