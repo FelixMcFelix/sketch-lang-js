@@ -47,8 +47,20 @@
             -moz-box-shadow: 0px 3px 13px -1px rgba(0,0,0,0.75);
             box-shadow: 0px 3px 13px -1px rgba(0,0,0,0.75);
         }
+        .title{
+            transition: color 0.25s ease 0s;
+            color: #b9b6b0;
+            display: inline-block;
+        }
+        .title:hover{
+            color: #ece9e3;
+        }
         .flair{
             color: #06b6ef;
+            display: inline-block;
+        }
+        .flair:hover{
+            color: #4bd3ff;
             display: inline-block;
         }
         .link{
@@ -144,7 +156,7 @@
 </head>
 <body>
 <div class="topbar">
-    <b>Sketch<div class="flair">.</div></b>
+    <div class="title"><b>Sketch<div class="flair">.</div></b></div>
     <div class="link-space"><div class="link">Download</div><div class="link">API</div><div class="link">Tutorial</div></div>
 </div>
 <div id="display">
