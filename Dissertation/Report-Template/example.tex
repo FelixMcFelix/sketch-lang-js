@@ -75,9 +75,9 @@ This chapter comprises of a brief introduction of how to use our language.
 In every language, the first program to write is always 'hello world' - where you would print the words "hello world". However, as this language is mainly a graphical language, the equivalent would be 'hello square', and the aim is to draw a square. In Sketch, the program required to draw a square is:\\
 \begin{verbatim}
     #EXAMPLE 1.1
-    draw(){
+    init(){
         Polygon square = ({0,0} + {5,0}) * 4}
-        #draw(square)}
+        draw(square)}
     }
 \end{verbatim}
 To compile any Sketch program, insert the code into the browser page for our project and click execute. The result of the program will then be shown on the canvas.
@@ -86,20 +86,20 @@ Any Sketch program you write will have to consist of at least one function, and 
 \\ [12pt]
 In Sketch, implicit semi-colons exist at the end of every line. This means that, you dont have to end each line wih a semi-colon, and whether you do or not will not have an effect on the compilation of the program. 
 \\ [12pt]
-The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the cnavas. This will be talked about in detail later.\textbf{possibly a load a shite}
+The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the cnavas. This will be talked about in detail later.
 \\ [12pt]
 One way in which you can pass data between functions is by including variables in the calling statement as arguments. However, you can only do this if the function that is being called is expecting the same number and type of variables. An example is:
 \begin{verbatim}
     #EXAMPLE 1.2
     init(){
         int n = 2;
-        takesParams(int n){
+        Function takesParams(int n){
             print(n);
         }
         takesParams(n);
     }
 \end{verbatim}
-Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If there was another argument included, for example \textit{takesParams(n, 7)}, or the wrong types, then it would not compile. This will be talked about in more detail in 1.7. As you can see in example 1.1, the code inside of a function is enclosed by curly braces {   }. The statement draw takes in one argument - either a Line, Point or Polygon, and draws it to the canvas.
+Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If there was another argument included, for example \textit{takesParams(n, 7)}, or the wrong types, then it would not compile. This will be talked about in more detail in \ref{func}. As you can see in example 1.1, the code inside of a function is enclosed by curly braces {   }.The draw function is what you will call to draw any shapes that you have constructed to the canvas. It will take one parameter, either the point,line or polygon that you have constructed. This is a predefined function by the language, so you don't have to write it, but you cannot name any of your functions \textit{draw()}. 
 
 \section{Variables and Arithmetic operators}
 \label{vars}
@@ -107,7 +107,7 @@ This next section will use a more complicated program than before, introducing m
 \begin{verbatim}
     #EXAMPLE 1.3
     #This Program will draw 3 different shapes - triangle, square and pentagon.
-    draw(){
+    init(){
         int sides;
         sides = 5;
         int counter = 3;
@@ -118,7 +118,7 @@ This next section will use a more complicated program than before, introducing m
         while(counter <= sides){
             clear;
             Polygon shape =	11 * counter;
-            #draw(shape);
+            draw(shape);
             counter++;
         }
     }
@@ -164,22 +164,54 @@ This section will cover how to perform comparing statements in Sketch. The follo
 \end{verbatim}
 If statements are a way of executing a series of commands, but only if a particular statement returns true. To compare to elements, a comparitive operator is needed. In Sketch, there exists a series of six comparative operators:
 \begin{itemize}
-\item[\textbf{?=}] will return true if left hand side is equal to right hand side \textbf{Y U NO ALIGN WITH UDDERS}
+\item[\textbf{?=}] will return true if left hand side is equal to right hand side
 \item[\textbf{?\textgreater}] will return true if left hand side is greater than right hand side
 \item[\textbf{?\textless}] will return true if left hand side is less than right hand side
-\item[\textbf{!=}] will return true if left hand side does not equal right hand side \textbf{Y U NO ANY BETTA}
+\item[\textbf{!=}] will return true if left hand side does not equal right hand side
 \item[\textbf{!\textgreater}] will return true if left hand side is not greater than right hand side (ie is less than or equal to)
 \item[\textbf{!\textless}] will return true if left hand side is not less than right hand side (ie is greater than or equal to)
 \end{itemize}
 An exclamation mark can be inserted in front of the check statement in the if, to receive the inverse of what it returns.
 
 \section{Modifying operators}
-
-\section{Functions}
-
-\section{draw()}
-++ and arithmetic operators
-
+This section will cover how you can make use of sketch's modifying operators. The following example will outline them:
+\begin{verbatim}
+    #example 1.5
+    init(){
+        int n = 1; #line 1
+        n += 2; #line 2
+        n *= 2; #line 3
+        n /= 2; #line 4
+        n -= 2; #line 5
+        n %= 2; #line 6
+        n++; #line 7
+        n--; #line 8
+        n = (n + 3) * 5; #line 9
+    }
+\end{verbatim}
+Example 1.5 outlines many modifying operators in Sketch. To explain each one, we will walk through the program itself. As previously mentioned, the first line will declare n to be of type int, with a value of 1. The next line will change the value of n by adding one to it. The general syntax would be \textit{*variable to be changed* += *how many to change it by*}. The next three lines follow the same syntax and semantics, with the exception that, line 3 would multiply the variable by the second value and assign it, line 4 would divide it by the second value and assign it, and line 5 would subtract by the second value and assign it, and finally line 6 would change the variable to equal the value of it modulo the second variable. This means that it would change it to the remainder after being divided by that number. So, after line 2, n would be equal to 3, after line 3, n would equal 6, after line 4, n would equal 3, after line 5 n would equal 1 and after line 6, n would still equal 1, as the remainder of 1 / 2 is still 1. These operators are functionally a shorter way of writing \textit{n = n + *value*;}, but obviously changed respective to the context (division, multiplication, subtraction and modulo).
+\\ [12pt]
+Line 6 is different. This operator will increment the variable by only 1. In the context of this program, n will now equal 2. The following line following the same structure, but instead subtracts one, meaning n is back to equal 1. These can be useful in loops for example, to increment or decrement your controlling variable as necessary. The final line outlines how parenthesis work in regards to performing mathematic actions. The flow it would take, is to first, add  to n, making it equal 4, and then multiply by 5, hence n equals 20. The brackets would specify what task has to be carried out first, as if they were not here on this occasion, by the laws of maths, 3 would be multiplied by 5 and then added to n, giving a different outcome. All of these modifying operators, except on line 9, are functionally just shorthand, but can be very useful and time saving while writing a program.
+\section{Functions and scope}
+\label{func}
+In Sketch, functions, as mentioned before, taken certain types and number of parameters dependant on what you specify, it can range from 0 to n. Furthermore, these functions can be called whatever you decide, and can either have a return type or not, dependant on your needs. Example 1.6 will show these in action:
+\begin{verbatim}
+#example 1.6
+init(){
+    int x = 1;
+    int i = 5;
+    function foo(int n) -> int{
+        n++;
+        return n;
+    }
+    function foo2(int n){
+        n++;
+    }
+    i = foo(int i);
+    foo2(int x);
+}
+\end{verbatim}
+In example 1.6, you can see different properties of defining and calling a function. If a function is not returning anything, then you can see that the void is implicit. Furthermore, if a function has a return type, then you can assign a variable to equal its returned value, if it is of the same type. In regards to scope, functions have local scope, meaning that they would alter outside variables, or variables in other functions. This means that, as shown here, you can call variables the same name in two different functions, and there will be no crossover or confusion of values or any conflicts. 
 
 
 %==============================================================================
