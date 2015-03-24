@@ -2,6 +2,9 @@
 
 A web-based module for rendering graphics written in an experimental language.
 
+## Demo Video
+Located at https://youtu.be/AgHy5J5WHLM.
+
 ## Compiling
 
 In the base directory, type:
