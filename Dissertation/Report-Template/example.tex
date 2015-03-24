@@ -256,6 +256,25 @@ Individual and detailed discussion of each system is provided below. The module'
 %------------------------------------------------------------------------------
 \section{Lexer and Parser}
 \label{arch-lex}
+\subsection{Introduction}
+The lexer and the parser are both part of the syntactic analysis of the compiler. During this stage, a source program is parsed in order to determine if it is well-formed, and to determine its phrase structure , in accordance with the syntax of our programming language. If the source program complies with the syntax and grammar of Sketch, an abstract syntax tree(AST) will be return from the parser. An AST is a way to represent a source program’s phrase structure. 
+
+\subsection{Initial steps}
+At the beginning of implementing parser and lexer for our grammar, an appropriate parser generator for JavaScript had to be found. We found three possible parser generators, each of which would helped us with desired result. ANTLR, JISON and PEG.js were consider as possible parser generators.
+
+ANTLR uses LL(*) parsing and it can generate lexers,parsers, tree parsers and lexer-parsers. Parsers produce by it are able to automatically generate an AST, which was necessary for our design. However, the most recent release of the software (ANTLR 4), does not support JavaScript as a target source, even though that previous released does. 
+
+JISON and PEG.js do not encounter the same program - they successfully support JavaScript as a target and both could have been appropriate choice for our parser. PEG.js is based on parsing expression grammar formalism, which is more powerful that traditional LL(k) and LR(k) parsers. On the other hand, Jison can recognize languages described by LALR(1) grammars and provides additional features(i.e the ability to define operator associations and precendence). Because of this additional features, JISON was our choice for parser generator. 
+
+
+\setcounter{secnumdepth}{3}
+\subsection{Design}
+JISON provided us with the opportunity to specify both tokenizing rules and language grammar in the same file. This turn out to be very helpful in latter stages when the communication between the parser and code generator had to happen. The whole design process is comprised of three stages: lexical analysis, specification of the grammar and specification of the abstract syntax tree in JSON format. 
+
+\subsubsection{Lexer}
+\subsubsection{Grammar}
+\subsubsection { Abstract Syntax Tree (AST)}
+
 
 %------------------------------------------------------------------------------
 \section{Code Generator}
