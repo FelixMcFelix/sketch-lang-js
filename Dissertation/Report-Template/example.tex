@@ -507,7 +507,9 @@ We had originally considered allowing programmers to add shader object JSON from
 
 Although our JSON system of "[name, type, default]" worked well for numeric and matrix attributes, we were originally at a loss for how buffers and vertex attributes should be handled. By forcing programmers to supply a buffer object with a known name as well as a vertex attribute specific to their shader code, we managed to bypass this problem with regards to the vertex buffer. We found that using the default value to store the name of the referenced buffer was an eloquent solution - keeping each array to size 3. As far as buffers were concerned, we then realised that we could perform the same substitution to store the itemSize of a buffer. There are many other possible configuration options which had to be cast aside (stride, offset, etc.) to allow this simplicity, however.
 
-Midway through the development of the abstract machine, we realised that we needed a means to convert from planar polygons (like those that Sketch works with) into triangle sets to render any geometry to the screen. While researching polygon triangulation algorithms we came across \textit{earcut} (https://github.com/mapbox/earcut), a JavaScript library which provides the features and speed that our platform would need to make use of. By patching in an extra draw mode to Palette on top of the standard WebGL modes, the simplicity of execution at the abstract machine level was maintained. 
+Midway through the development of the abstract machine, we realised that we needed a means to convert from planar polygons (like those that Sketch works with) into triangle sets to render any geometry to the screen. While researching polygon triangulation algorithms we came across \textit{earcut} (https://github.com/mapbox/earcut), a JavaScript library which provides the features and speed that our platform would need to make use of. By patching in an extra draw mode to Palette on top of the standard WebGL modes, the simplicity of execution at the abstract machine level was maintained.
+
+While discussion of the implementation details themselves would be appropriate in a dedicated paper, they must unfortunately be omitted as they are outside of this report's scope.
 
 \subsection{Usage}
 \label{arch-shad-use}
@@ -598,12 +600,18 @@ manager.draw("vsName", "fsName", [/*DATA*/],
 \end{lstlisting}
 
 The full API documentation is available under docs/index.html within our repository (and the deliverables folder supplied) under the namespace "Palette".
-\subsection{Features}
-\label{arch-shad-features}
 
-\subsection{Future Changes}
+\subsection{Future Changes and Evaluation}
 \label{arch-shad-future}
+While Palette provides a sizeable kernel of features, there is still much room to improve the module - not only to supply all of the functionality we'd originally planned, but also to enable its use in external projects of all scopes.
+\begin{itemize}
+\item \textbf{Texture Support} --- an absolute necessity to enable images and texturing within Sketch, and for almost all conceivable WebGL projects. Textures require vast amounts of configuration - the issue is figuring out how to represent this information in JSON format, and subsequently handling that data. Makeshift texturing could be achieved by passing an image over a buffer at present, but I believe this is far slower than using the intended API calls. 
+\item \textbf{Optimisation} --- at present, Palette makes many redundant calls to the WebGL API. While these do not affect a project on the scale of Sketch, for larger scale rendering tasks this could begin to become a problem. This should be possible to mitigate by making use of tools such as WebGL Inspector, learning from their output, and writing optimisations from its findings.
+\item \textbf{Shader Loading from URL} --- the current implementation forces users to externally load shader JSON files themselves - likely through XML HTTP Requests. Making startup simpler would be a great aid to future users.
+\item \textbf{Draw Mode Extensibility} --- while this is possible at the current moment, it requires direct modification of Palette's source due to the current internal architecture. Development of a plugin system may be a worthwhile investment in the future to prevent users from modifying the code themselves to add their required functionality.
+\end{itemize}
 
+Overall, implementing Palette has been an extremely rewarding experience both for the nuance involved in writing such a subsystem and for the value it has provided to the development of other Sketch subcomponents. Team members who have had to use it had a small adjustment time, but appeared to be suitably impressed with the simplicity it provided them.
 %------------------------------------------------------------------------------
 \section{Module Facade}
 \label{arch-module}
@@ -722,7 +730,7 @@ Being able to produce this page in less than two days, we realised that we had d
 \item \emph{Kristiyan Dimitrov:} Chapter \ref{arch-lex}
 \item \emph{Gerard Docherty:} Chapter 
 \item \emph{Darren Findlay:} Chapter 
-\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{ide}
+\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{arch-module}, \ref{dev}, \ref{ide}
 \end{itemize}
 \textit{\textbf{Editing:}}
 \begin{itemize}
