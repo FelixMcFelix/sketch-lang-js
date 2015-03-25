@@ -483,9 +483,43 @@ The now defunct 0x10co.de was another key influence in this regard - it also fol
 \label{ide-impl}
 On further research, it was noted that 0x10co.de and ShaderToy shared a common library - CodeMirror. CodeMirror is a JavaScript library designed to allow embedding fully formattable text entry boxes into web pages, with support for syntax highlighting, theme selection, various plugins and more. After researching it briefly, we were certain we'd found the right tool for the job.
 
+Creating a new syntax colouration template was at first a difficult task - in essence, it was identical to building a parser for Sketch. Luckily, CodeMirror provides a simple module definition plugin, which reduces the task down to the construction of a finite state machine with the help of regular expressions. The task was far easier to tackle this way, and although it lacks the fine-grained control of writing a custom parser the results are very convincingly. The state machine is as follows:
+\begin{lstlisting}[caption={Syntax Highlighting State Machine},label={lst:ide-fsm},language=JavaScript]
+CodeMirror.defineSimpleMode("mlang",{
+    start:[
+        {regex: /"(?:[^\\]|\\.)*?"/, token: "string"},
+		{regex: /(function)(\s+)([a-z$][\w$]*)/,
+			token: ["keyword", null, "variable-2"]},
+		{regex: /#.*/, token: "comment"},
+		{regex: /\/\/.*/, token:"comment"},
+		{regex: /true|false/, token: "atom"},
+		{regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i,
+			token: "number"},
+		{regex: /\/(?:[^\\]|\\.)*?\//, token: "variable"},
+		{regex: /\b(?:function|return|if|for|while|else|do
+				|this|draw|clear|width|height)\b/, token: "keyword"},
+		{regex: /\b(?:int|float|bool|string|Line|Point|Polygon|void
+				|color|vec2|vec3|vec4|Circle)\b/, token: "keyword"},
+		{regex: /\b(?:vector\([234]\))\b/, token: "keyword"},
+		{regex: /[-+\/*=<>!]+/, token: "operator"},
+		{regex: /[a-z$][\w$]*/, token: "variable"},
+		{regex: /([a-z$][\w$]*)(?=(\s*)\()/, token:"keyword"}
+    ],
+    comment:[
+
+    ],
+    meta: {
+        dontIndentStates: ["comment"],
+        lineComment: "//"
+    }
+});
+\end{lstlisting}
+
+The page itself (Figure \ref{fig:ide-full}) is a very simple arrangement of div blocks, a canvas, and a textarea which is in turn replaced by CodeMirror in combination with page-wide CSS designed to match the CodeMirror theme which matched our design specification. [[REWORD ME]]
+
 \begin{figure}[!h]
 \centering
-\includegraphics[angle=270, width=0.8\textwidth]{images/sketch-ide}
+\includegraphics[width=0.8\textwidth]{images/sketch-ide}
 \caption{An image of the Sketch online IDE.}
 \label{fig:ide-full}
 \end{figure}

@@ -16,22 +16,25 @@
 \BOOKMARK [0][-]{chapter.6}{Compiler Architecture}{}% 16
 \BOOKMARK [1][-]{section.6.1}{Overview}{chapter.6}% 17
 \BOOKMARK [1][-]{section.6.2}{Lexer and Parser}{chapter.6}% 18
-\BOOKMARK [1][-]{section.6.3}{Code Generator}{chapter.6}% 19
-\BOOKMARK [1][-]{section.6.4}{Shader Manager}{chapter.6}% 20
-\BOOKMARK [2][-]{subsection.6.4.1}{Introduction}{section.6.4}% 21
-\BOOKMARK [2][-]{subsection.6.4.2}{Definitions}{section.6.4}% 22
-\BOOKMARK [2][-]{subsection.6.4.3}{Requirements}{section.6.4}% 23
-\BOOKMARK [2][-]{subsection.6.4.4}{Usage}{section.6.4}% 24
-\BOOKMARK [2][-]{subsection.6.4.5}{Features}{section.6.4}% 25
-\BOOKMARK [1][-]{section.6.5}{Abstract Machine}{chapter.6}% 26
-\BOOKMARK [1][-]{section.6.6}{Module Facade}{chapter.6}% 27
-\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 28
-\BOOKMARK [0][-]{chapter.8}{Online IDE}{}% 29
-\BOOKMARK [1][-]{section.8.1}{Design Process}{chapter.8}% 30
-\BOOKMARK [1][-]{section.8.2}{Implementation}{chapter.8}% 31
-\BOOKMARK [0][-]{chapter.9}{Test Plan and test suites}{}% 32
-\BOOKMARK [0][-]{chapter.10}{Conclusion}{}% 33
-\BOOKMARK [1][-]{section.10.1}{Contributions}{chapter.10}% 34
-\BOOKMARK [2][-]{subsection.10.1.1}{Report}{section.10.1}% 35
-\BOOKMARK [2][-]{subsection.10.1.2}{Program}{section.10.1}% 36
-\BOOKMARK [0][-]{chapter.11}{Appendix A}{}% 37
+\BOOKMARK [2][-]{subsection.6.2.1}{Introduction}{section.6.2}% 19
+\BOOKMARK [2][-]{subsection.6.2.2}{Initial steps}{section.6.2}% 20
+\BOOKMARK [2][-]{subsection.6.2.3}{Design}{section.6.2}% 21
+\BOOKMARK [1][-]{section.6.3}{Code Generator}{chapter.6}% 22
+\BOOKMARK [1][-]{section.6.4}{Abstract Machine}{chapter.6}% 23
+\BOOKMARK [1][-]{section.6.5}{Shader Manager}{chapter.6}% 24
+\BOOKMARK [2][-]{subsection.6.5.1}{Introduction}{section.6.5}% 25
+\BOOKMARK [2][-]{subsection.6.5.2}{Definitions}{section.6.5}% 26
+\BOOKMARK [2][-]{subsection.6.5.3}{Requirements}{section.6.5}% 27
+\BOOKMARK [2][-]{subsection.6.5.4}{Usage}{section.6.5}% 28
+\BOOKMARK [2][-]{subsection.6.5.5}{Features}{section.6.5}% 29
+\BOOKMARK [1][-]{section.6.6}{Module Facade}{chapter.6}% 30
+\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 31
+\BOOKMARK [0][-]{chapter.8}{Online IDE}{}% 32
+\BOOKMARK [1][-]{section.8.1}{Design Process}{chapter.8}% 33
+\BOOKMARK [1][-]{section.8.2}{Implementation}{chapter.8}% 34
+\BOOKMARK [0][-]{chapter.9}{Test Plan and test suites}{}% 35
+\BOOKMARK [0][-]{chapter.10}{Conclusion}{}% 36
+\BOOKMARK [1][-]{section.10.1}{Contributions}{chapter.10}% 37
+\BOOKMARK [2][-]{subsection.10.1.1}{Report}{section.10.1}% 38
+\BOOKMARK [2][-]{subsection.10.1.2}{Program}{section.10.1}% 39
+\BOOKMARK [0][-]{appendix.A}{Appendix A: Source Listing}{}% 40

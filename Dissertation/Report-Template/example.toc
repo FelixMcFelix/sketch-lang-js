@@ -16,22 +16,28 @@
 \contentsline {chapter}{\numberline {6}Compiler Architecture}{15}{chapter.6}
 \contentsline {section}{\numberline {6.1}Overview}{15}{section.6.1}
 \contentsline {section}{\numberline {6.2}Lexer and Parser}{16}{section.6.2}
-\contentsline {section}{\numberline {6.3}Code Generator}{16}{section.6.3}
-\contentsline {section}{\numberline {6.4}Shader Manager}{16}{section.6.4}
-\contentsline {subsection}{\numberline {6.4.1}Introduction}{16}{subsection.6.4.1}
-\contentsline {subsection}{\numberline {6.4.2}Definitions}{16}{subsection.6.4.2}
-\contentsline {subsection}{\numberline {6.4.3}Requirements}{16}{subsection.6.4.3}
-\contentsline {subsection}{\numberline {6.4.4}Usage}{17}{subsection.6.4.4}
-\contentsline {subsection}{\numberline {6.4.5}Features}{19}{subsection.6.4.5}
-\contentsline {section}{\numberline {6.5}Abstract Machine}{19}{section.6.5}
-\contentsline {section}{\numberline {6.6}Module Facade}{19}{section.6.6}
-\contentsline {chapter}{\numberline {7}Development Environment}{20}{chapter.7}
-\contentsline {chapter}{\numberline {8}Online IDE}{21}{chapter.8}
-\contentsline {section}{\numberline {8.1}Design Process}{21}{section.8.1}
-\contentsline {section}{\numberline {8.2}Implementation}{22}{section.8.2}
-\contentsline {chapter}{\numberline {9}Test Plan and test suites}{24}{chapter.9}
-\contentsline {chapter}{\numberline {10}Conclusion}{25}{chapter.10}
-\contentsline {section}{\numberline {10.1}Contributions}{25}{section.10.1}
-\contentsline {subsection}{\numberline {10.1.1}Report}{25}{subsection.10.1.1}
-\contentsline {subsection}{\numberline {10.1.2}Program}{25}{subsection.10.1.2}
-\contentsline {chapter}{\numberline {11}Appendix A}{26}{chapter.11}
+\contentsline {subsection}{\numberline {6.2.1}Introduction}{16}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}Initial steps}{16}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}Design}{16}{subsection.6.2.3}
+\contentsline {subsubsection}{\numberline {6.2.3.1}Lexer}{17}{subsubsection.6.2.3.1}
+\contentsline {subsubsection}{\numberline {6.2.3.2}Grammar}{17}{subsubsection.6.2.3.2}
+\contentsline {subsubsection}{\numberline {6.2.3.3} Abstract Syntax Tree (AST)}{17}{subsubsection.6.2.3.3}
+\contentsline {section}{\numberline {6.3}Code Generator}{17}{section.6.3}
+\contentsline {section}{\numberline {6.4}Abstract Machine}{17}{section.6.4}
+\contentsline {section}{\numberline {6.5}Shader Manager}{17}{section.6.5}
+\contentsline {subsection}{\numberline {6.5.1}Introduction}{17}{subsection.6.5.1}
+\contentsline {subsection}{\numberline {6.5.2}Definitions}{17}{subsection.6.5.2}
+\contentsline {subsection}{\numberline {6.5.3}Requirements}{17}{subsection.6.5.3}
+\contentsline {subsection}{\numberline {6.5.4}Usage}{18}{subsection.6.5.4}
+\contentsline {subsection}{\numberline {6.5.5}Features}{21}{subsection.6.5.5}
+\contentsline {section}{\numberline {6.6}Module Facade}{21}{section.6.6}
+\contentsline {chapter}{\numberline {7}Development Environment}{22}{chapter.7}
+\contentsline {chapter}{\numberline {8}Online IDE}{23}{chapter.8}
+\contentsline {section}{\numberline {8.1}Design Process}{23}{section.8.1}
+\contentsline {section}{\numberline {8.2}Implementation}{24}{section.8.2}
+\contentsline {chapter}{\numberline {9}Test Plan and test suites}{26}{chapter.9}
+\contentsline {chapter}{\numberline {10}Conclusion}{27}{chapter.10}
+\contentsline {section}{\numberline {10.1}Contributions}{27}{section.10.1}
+\contentsline {subsection}{\numberline {10.1.1}Report}{27}{subsection.10.1.1}
+\contentsline {subsection}{\numberline {10.1.2}Program}{27}{subsection.10.1.2}
+\contentsline {chapter}{\numberline {A}Appendix A: Source Listing}{28}{appendix.A}
