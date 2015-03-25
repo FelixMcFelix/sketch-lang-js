@@ -30,17 +30,16 @@
 \contentsline {subsection}{\numberline {6.5.3}Requirements}{20}{subsection.6.5.3}
 \contentsline {subsection}{\numberline {6.5.4}Design Process and Issues}{20}{subsection.6.5.4}
 \contentsline {subsection}{\numberline {6.5.5}Usage}{21}{subsection.6.5.5}
-\contentsline {subsection}{\numberline {6.5.6}Features}{23}{subsection.6.5.6}
-\contentsline {subsection}{\numberline {6.5.7}Future Changes}{23}{subsection.6.5.7}
-\contentsline {section}{\numberline {6.6}Module Facade}{23}{section.6.6}
-\contentsline {chapter}{\numberline {7}Development Environment}{24}{chapter.7}
-\contentsline {chapter}{\numberline {8}Online IDE}{25}{chapter.8}
-\contentsline {section}{\numberline {8.1}Design Process}{25}{section.8.1}
-\contentsline {section}{\numberline {8.2}Implementation}{26}{section.8.2}
-\contentsline {section}{\numberline {8.3}Evaluation}{27}{section.8.3}
-\contentsline {chapter}{\numberline {9}Test Plan and test suites}{28}{chapter.9}
-\contentsline {chapter}{\numberline {10}Conclusion}{29}{chapter.10}
-\contentsline {section}{\numberline {10.1}Contributions}{29}{section.10.1}
-\contentsline {subsection}{\numberline {10.1.1}Report}{29}{subsection.10.1.1}
-\contentsline {subsection}{\numberline {10.1.2}Program}{29}{subsection.10.1.2}
-\contentsline {chapter}{\numberline {A}Appendix A: Source Listing}{30}{appendix.A}
+\contentsline {subsection}{\numberline {6.5.6}Future Changes and Evaluation}{23}{subsection.6.5.6}
+\contentsline {section}{\numberline {6.6}Module Facade}{24}{section.6.6}
+\contentsline {chapter}{\numberline {7}Development Environment}{25}{chapter.7}
+\contentsline {chapter}{\numberline {8}Online IDE}{26}{chapter.8}
+\contentsline {section}{\numberline {8.1}Design Process}{26}{section.8.1}
+\contentsline {section}{\numberline {8.2}Implementation}{27}{section.8.2}
+\contentsline {section}{\numberline {8.3}Evaluation}{28}{section.8.3}
+\contentsline {chapter}{\numberline {9}Test Plan and test suites}{29}{chapter.9}
+\contentsline {chapter}{\numberline {10}Conclusion}{30}{chapter.10}
+\contentsline {section}{\numberline {10.1}Contributions}{30}{section.10.1}
+\contentsline {subsection}{\numberline {10.1.1}Report}{30}{subsection.10.1.1}
+\contentsline {subsection}{\numberline {10.1.2}Program}{30}{subsection.10.1.2}
+\contentsline {chapter}{\numberline {A}Appendix A: Source Listing}{31}{appendix.A}
