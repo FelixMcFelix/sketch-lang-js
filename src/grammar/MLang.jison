@@ -1,13 +1,13 @@
 
-/* description: Parses end executes mathematical expressions. */
+/*Parser for Sketch graphics programming language*/
 
 /* lexical grammar */
 %lex
 %%
 
-\s+                  /* skip whitespace */
-"//".*                      /* ignore comment */
-"#".*                      /* ignore comment */
+\s+                                    /* skip whitespace */
+"//".*                                 /* ignore comment */
+"#".*                                  /* ignore comment */
 
 "bool"                                 return 'BOOL';
 "break"                                return 'BREAK';
@@ -31,9 +31,9 @@
 "true"                                 return 'TRUE';
 "void"                                 return 'VOID';
 "while"                                return 'WHILE';
-"vector(2)"                            return 'VECTOR_2';
-"vector(3)"                            return 'VECTOR_3';
-"vector(4)"                            return 'VECTOR_4';
+"vec2"                                 return 'VEC2';
+"vec3"                                 return 'VEC3';
+"vec4"                                 return 'VEC4';
 
 
 "{"                        return 'OPEN_BRACE';
@@ -100,7 +100,6 @@
 %left '^'
 %right '!'
 %right '%'
-%left UMINUS
 %nonassoc IF_WITHOUT_ELSE
 %nonassoc ELSE
 
@@ -558,9 +557,9 @@ type
    |FLOAT 
    |BOOL
    |POINT 
-   |VECTOR_2
-   |VECTOR_3
-   |VECTOR_4
+   |VEC2
+   |VEC3
+   |VEC4
    |LINE
    |POLYGON
 ;
