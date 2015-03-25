@@ -20,22 +20,24 @@
 \BOOKMARK [2][-]{subsection.6.2.2}{Initial steps}{section.6.2}% 20
 \BOOKMARK [2][-]{subsection.6.2.3}{Design}{section.6.2}% 21
 \BOOKMARK [1][-]{section.6.3}{Code Generator}{chapter.6}% 22
-\BOOKMARK [1][-]{section.6.4}{Abstract Machine}{chapter.6}% 23
-\BOOKMARK [1][-]{section.6.5}{Shader Manager}{chapter.6}% 24
-\BOOKMARK [2][-]{subsection.6.5.1}{Introduction}{section.6.5}% 25
-\BOOKMARK [2][-]{subsection.6.5.2}{Definitions}{section.6.5}% 26
-\BOOKMARK [2][-]{subsection.6.5.3}{Requirements}{section.6.5}% 27
-\BOOKMARK [2][-]{subsection.6.5.4}{Usage}{section.6.5}% 28
-\BOOKMARK [2][-]{subsection.6.5.5}{Features}{section.6.5}% 29
-\BOOKMARK [1][-]{section.6.6}{Module Facade}{chapter.6}% 30
-\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 31
-\BOOKMARK [0][-]{chapter.8}{Online IDE}{}% 32
-\BOOKMARK [1][-]{section.8.1}{Design Process}{chapter.8}% 33
-\BOOKMARK [1][-]{section.8.2}{Implementation}{chapter.8}% 34
-\BOOKMARK [1][-]{section.8.3}{Evaluation}{chapter.8}% 35
-\BOOKMARK [0][-]{chapter.9}{Test Plan and test suites}{}% 36
-\BOOKMARK [0][-]{chapter.10}{Conclusion}{}% 37
-\BOOKMARK [1][-]{section.10.1}{Contributions}{chapter.10}% 38
-\BOOKMARK [2][-]{subsection.10.1.1}{Report}{section.10.1}% 39
-\BOOKMARK [2][-]{subsection.10.1.2}{Program}{section.10.1}% 40
-\BOOKMARK [0][-]{appendix.A}{Appendix A: Source Listing}{}% 41
+\BOOKMARK [1][-]{section.6.4}{Virtual Machine}{chapter.6}% 23
+\BOOKMARK [2][-]{subsection.6.4.1}{Introduction}{section.6.4}% 24
+\BOOKMARK [2][-]{subsection.6.4.2}{Structure of the Sketch Virtual Machine}{section.6.4}% 25
+\BOOKMARK [1][-]{section.6.5}{Shader Manager}{chapter.6}% 26
+\BOOKMARK [2][-]{subsection.6.5.1}{Introduction}{section.6.5}% 27
+\BOOKMARK [2][-]{subsection.6.5.2}{Definitions}{section.6.5}% 28
+\BOOKMARK [2][-]{subsection.6.5.3}{Requirements}{section.6.5}% 29
+\BOOKMARK [2][-]{subsection.6.5.4}{Usage}{section.6.5}% 30
+\BOOKMARK [2][-]{subsection.6.5.5}{Features}{section.6.5}% 31
+\BOOKMARK [1][-]{section.6.6}{Module Facade}{chapter.6}% 32
+\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 33
+\BOOKMARK [0][-]{chapter.8}{Online IDE}{}% 34
+\BOOKMARK [1][-]{section.8.1}{Design Process}{chapter.8}% 35
+\BOOKMARK [1][-]{section.8.2}{Implementation}{chapter.8}% 36
+\BOOKMARK [1][-]{section.8.3}{Evaluation}{chapter.8}% 37
+\BOOKMARK [0][-]{chapter.9}{Test Plan and test suites}{}% 38
+\BOOKMARK [0][-]{chapter.10}{Conclusion}{}% 39
+\BOOKMARK [1][-]{section.10.1}{Contributions}{chapter.10}% 40
+\BOOKMARK [2][-]{subsection.10.1.1}{Report}{section.10.1}% 41
+\BOOKMARK [2][-]{subsection.10.1.2}{Program}{section.10.1}% 42
+\BOOKMARK [0][-]{appendix.A}{Appendix A: Source Listing}{}% 43

@@ -424,9 +424,44 @@ If one of the grammar rules is violated, no AST will be generated and error will
 \label{arch-gen}
 
 %------------------------------------------------------------------------------
-\section{Abstract Machine}
+\section{Virtual Machine}
 \label{arch-abs}
 
+\subsection{Introduction}
+The Sketch Virtual Machine is an abstract computing machine. It bridges the gap from the Sketch programming language to javascript and the WebGL API and provides an intermediate language stage for compilation. The instruction set provided by the Sketch Virtual Machine is tailored specifically to implement the operations of the Sketch programming language.
+
+As Sketch is a programming language for drawing graphics on webpages, the Sketch Virtual Machine must be able to run in a browser environment. As Javascript is supported by most modern browsers and is the implementation language for WebGL, it was decided that the Sketch Virtual Machine would be implemented using javascript. This makes Sketch a very portable programming language as it can be run on any machine that can run a browser with Javascript support.
+
+Talk a bit about the Sketch Virtual Machine knowing nothing of the sketch programming language, or how some instructions are tightly coupled with the sketch language.
+Talk a bit about how the Sketch Virtual Machine is tightly coupled with the shader management system for drawing.
+
+\subsection{Structure of the Sketch Virtual Machine}
+
+\subsubsection{Data Types}
+The Sketch Virtual Machine operates on two kinds of types: Primitive types and reference types. These types can be operated upon, stored as variables, passed as arguments into functions and returned by functions. 
+
+The Sketch Virtual Machine assumes type checking is done at the compilation stage and does no type checking at runtime. Instead, the Sketch Virtual Machine determines its operand types from the instructions. For example, IADD (Integer add), FADD (Float add) and PTADD (Point add) infer that their operands are integer types, float types and point reference types respectively. 
+
+\subsubsection{Primitive types}
+The Sketch Virtual Machine supports a three primitive types: \textit{Integer}, \textit{Float} and \textit{Boolean}.
+\begin{itemize}
+	\item \textit{Integer:} Represents 53-bit signed integer values. Has a default value of 0. 
+	\item \textit{Float:} Represents 64-bit signed integer values. Has a default value of 0.
+	\item \textit{Boolean:} Represents the logical values true and false. Has a default value of false.
+\end{itemize}
+All primitive data types in the defined by the Sketch Virtual Machine are stored in 64-bits. This is due to javascript using a single 64-bit type: Number, to represent all numeric values. Boolean values are actually Integer types. Zero represents false and any non-zero value represents true.
+
+\subsubsection{Reference Types}
+Structs in the sketch programming language are represented as arrays. Each struct member is mapped to an index of the array. These arrays exist in the Constant Pool data structure produced by the compiler. Instructions that operate on structs, such as PTADD, have operands that are addresses into the Constant Pool. These address are Integer values.
+
+\subsubsection{Run-time Data Areas}
+The Sketch Virtual Machine has four special purpose Registers: Program Counter, Code Limit, Stack Pointer and Frame pointer.
+\begin{itemize}
+	\item\textit{Program Counter:} The program counter holds the address of the next instruction to be executed in the code store.
+	\item\textit{Code Limit:} The code limit holds the address in the code store that comes immediately after the last instruction.
+	\item\textit{Stack Pointer} The Stack pointer holds the address of the location immediately above the topmost element on the stack.
+	\item\textit{Frame Pointer} The Frame Pointer holds the address of the first element in the topmost frame on the stack.
+\end{itemize}
 %------------------------------------------------------------------------------
 \section{Shader Manager}
 \label{arch-shad}

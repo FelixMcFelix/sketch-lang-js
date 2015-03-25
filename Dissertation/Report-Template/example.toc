@@ -23,22 +23,28 @@
 \contentsline {subsubsection}{\numberline {6.2.3.2}Grammar}{17}{subsubsection.6.2.3.2}
 \contentsline {subsubsection}{\numberline {6.2.3.3} Abstract Syntax Tree (AST)}{18}{subsubsection.6.2.3.3}
 \contentsline {section}{\numberline {6.3}Code Generator}{18}{section.6.3}
-\contentsline {section}{\numberline {6.4}Abstract Machine}{18}{section.6.4}
-\contentsline {section}{\numberline {6.5}Shader Manager}{18}{section.6.5}
-\contentsline {subsection}{\numberline {6.5.1}Introduction}{18}{subsection.6.5.1}
-\contentsline {subsection}{\numberline {6.5.2}Definitions}{19}{subsection.6.5.2}
-\contentsline {subsection}{\numberline {6.5.3}Requirements}{19}{subsection.6.5.3}
-\contentsline {subsection}{\numberline {6.5.4}Usage}{19}{subsection.6.5.4}
-\contentsline {subsection}{\numberline {6.5.5}Features}{22}{subsection.6.5.5}
-\contentsline {section}{\numberline {6.6}Module Facade}{22}{section.6.6}
-\contentsline {chapter}{\numberline {7}Development Environment}{23}{chapter.7}
-\contentsline {chapter}{\numberline {8}Online IDE}{24}{chapter.8}
-\contentsline {section}{\numberline {8.1}Design Process}{24}{section.8.1}
-\contentsline {section}{\numberline {8.2}Implementation}{25}{section.8.2}
-\contentsline {section}{\numberline {8.3}Evaluation}{26}{section.8.3}
-\contentsline {chapter}{\numberline {9}Test Plan and test suites}{28}{chapter.9}
-\contentsline {chapter}{\numberline {10}Conclusion}{29}{chapter.10}
-\contentsline {section}{\numberline {10.1}Contributions}{29}{section.10.1}
-\contentsline {subsection}{\numberline {10.1.1}Report}{29}{subsection.10.1.1}
-\contentsline {subsection}{\numberline {10.1.2}Program}{29}{subsection.10.1.2}
-\contentsline {chapter}{\numberline {A}Appendix A: Source Listing}{30}{appendix.A}
+\contentsline {section}{\numberline {6.4}Virtual Machine}{18}{section.6.4}
+\contentsline {subsection}{\numberline {6.4.1}Introduction}{18}{subsection.6.4.1}
+\contentsline {subsection}{\numberline {6.4.2}Structure of the Sketch Virtual Machine}{19}{subsection.6.4.2}
+\contentsline {subsubsection}{\numberline {6.4.2.1}Data Types}{19}{subsubsection.6.4.2.1}
+\contentsline {subsubsection}{\numberline {6.4.2.2}Primitive types}{19}{subsubsection.6.4.2.2}
+\contentsline {subsubsection}{\numberline {6.4.2.3}Reference Types}{19}{subsubsection.6.4.2.3}
+\contentsline {subsubsection}{\numberline {6.4.2.4}Run-time Data Areas}{19}{subsubsection.6.4.2.4}
+\contentsline {section}{\numberline {6.5}Shader Manager}{20}{section.6.5}
+\contentsline {subsection}{\numberline {6.5.1}Introduction}{20}{subsection.6.5.1}
+\contentsline {subsection}{\numberline {6.5.2}Definitions}{20}{subsection.6.5.2}
+\contentsline {subsection}{\numberline {6.5.3}Requirements}{20}{subsection.6.5.3}
+\contentsline {subsection}{\numberline {6.5.4}Usage}{21}{subsection.6.5.4}
+\contentsline {subsection}{\numberline {6.5.5}Features}{24}{subsection.6.5.5}
+\contentsline {section}{\numberline {6.6}Module Facade}{24}{section.6.6}
+\contentsline {chapter}{\numberline {7}Development Environment}{25}{chapter.7}
+\contentsline {chapter}{\numberline {8}Online IDE}{26}{chapter.8}
+\contentsline {section}{\numberline {8.1}Design Process}{26}{section.8.1}
+\contentsline {section}{\numberline {8.2}Implementation}{27}{section.8.2}
+\contentsline {section}{\numberline {8.3}Evaluation}{28}{section.8.3}
+\contentsline {chapter}{\numberline {9}Test Plan and test suites}{30}{chapter.9}
+\contentsline {chapter}{\numberline {10}Conclusion}{31}{chapter.10}
+\contentsline {section}{\numberline {10.1}Contributions}{31}{section.10.1}
+\contentsline {subsection}{\numberline {10.1.1}Report}{31}{subsection.10.1.1}
+\contentsline {subsection}{\numberline {10.1.2}Program}{31}{subsection.10.1.2}
+\contentsline {chapter}{\numberline {A}Appendix A: Source Listing}{32}{appendix.A}
