@@ -35,9 +35,10 @@
 \contentsline {chapter}{\numberline {8}Online IDE}{24}{chapter.8}
 \contentsline {section}{\numberline {8.1}Design Process}{24}{section.8.1}
 \contentsline {section}{\numberline {8.2}Implementation}{25}{section.8.2}
-\contentsline {chapter}{\numberline {9}Test Plan and test suites}{27}{chapter.9}
-\contentsline {chapter}{\numberline {10}Conclusion}{28}{chapter.10}
-\contentsline {section}{\numberline {10.1}Contributions}{28}{section.10.1}
-\contentsline {subsection}{\numberline {10.1.1}Report}{28}{subsection.10.1.1}
-\contentsline {subsection}{\numberline {10.1.2}Program}{28}{subsection.10.1.2}
-\contentsline {chapter}{\numberline {A}Appendix A: Source Listing}{29}{appendix.A}
+\contentsline {section}{\numberline {8.3}Evaluation}{26}{section.8.3}
+\contentsline {chapter}{\numberline {9}Test Plan and test suites}{28}{chapter.9}
+\contentsline {chapter}{\numberline {10}Conclusion}{29}{chapter.10}
+\contentsline {section}{\numberline {10.1}Contributions}{29}{section.10.1}
+\contentsline {subsection}{\numberline {10.1.1}Report}{29}{subsection.10.1.1}
+\contentsline {subsection}{\numberline {10.1.2}Program}{29}{subsection.10.1.2}
+\contentsline {chapter}{\numberline {A}Appendix A: Source Listing}{30}{appendix.A}

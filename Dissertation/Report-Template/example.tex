@@ -7,6 +7,8 @@
 
 \documentclass{l3proj}
 \usepackage{listings}
+\usepackage{subcaption}
+\usepackage{wrapfig}
 % More listing stuff.
 %\usepackage{bera}% optional: just to have a nice mono-spaced font
 \usepackage{listings}
@@ -558,17 +560,37 @@ As part of our overall project plan, we decided that an environment for users to
 \label{ide-design}
 Our team had not originally considered the production of a development environment for our language, until the topic had been raised by our supervisor in the language development stages. Up until that point we had merely assumed that users would produce programs on a desktop computer in their text editor of choice, before linking the code up to the module on a web-page via the JavaScript API. However, mobile devices were left with no means to write their own Sketch programs - this left out a potential user base that we were specifically trying to target by electing to use WebGL.
 
-We began to look at existent online IDEs for various languages to serve as design inspiration for our own. Chief among these was ShaderToy, an online community built around sharing and discussing complex fragment shaders. ShaderToy's design makes the code and the visual output the primary focus for users, with both sections taking up equal screen space at opposite ends of the screen. While many elements of its design are bland, we found the structure of the page to be a perfect fit for graphics dependent languages where the canvas takes centre stage. We even found that the bland colour scheme of the site likely helped the key visual elements - the canvas and the code - to stand out to users by reducing visual clutter and noise elsewhere.\\
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{images/shadertoy-ide}
+\caption{An image of ShaderToy's design layout.}
+\label{fig:ide-shadertoy}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{images/0x10code}
+\caption{An image of 0x10co.de's design layout.}
+\label{fig:ide-0x10code}
+\end{subfigure}
+\caption{Other online examples.}
+\label{fig-ide-other}
+\end{figure}
 
-[[INSERT PIC OF SHADERTOY HERE]]
+We began to look at existent online IDEs for various languages to serve as design inspiration for our own. Chief among these was ShaderToy (Figure \ref{fig:ide-shadertoy}), an online community built around sharing and discussing complex fragment shaders. ShaderToy's design makes the code and the visual output the primary focus for users, with both sections taking up relatively equal screen space at opposite ends of the screen. It's noted that the code segment takes up slightly more screen space - this is likely due to the far larger size of GLSL fragment shader code. While many elements of its design are bland, we found the structure of the page to be a perfect fit for graphics dependent languages where the canvas takes centre stage. We even found that the bland colour scheme of the site likely helped the key visual elements - the canvas and the code - to stand out to users by reducing visual clutter and noise elsewhere.\\
 
-The now defunct 0x10co.de was another key influence in this regard - it also followed a minimalistic design scheme, yet placed code at the forefront rather than the graphical output. We decided upon minimalism as our go-to style after the investigation to give the page and language presentation the purity we desired, and chose to go for a 50-50 split as ShaderToy had. The key decision to deviate from the light pages in our two exemplars was made in light of modern trends within text editors such as Sublime Text - developers were regularly finding darker environments to be more aesthetically pleasing and less likely to cause eye-strain. As such, we decided to go for a darker web design; not only for these reasons, but also to enhance the appearance of the canvas by creating a stronger contrast.
+The now defunct 0x10co.de (Figure \ref{fig:ide-0x10code}), an online community based around the fictional DCPU-16, was another key influence in this regard - it also followed a minimalistic design scheme, placing code and graphical output at the forefront. We decided upon minimalism as our go-to style after our investigation to give the page and language presentation the purity we desired, and chose to go for a 50-50 split as our programs are intended to be relatively small. The key decision to deviate from the light pages in our two exemplars was made in light of modern trends within text editors such as Sublime Text - developers were regularly finding darker environments to be more aesthetically pleasing and less likely to cause eye-strain. As such, we decided to go for a darker web design; not only for these reasons, but also to enhance the appearance of the canvas by creating a stronger contrast.
 
 \section{Implementation}
 \label{ide-impl}
+\begin{wrapfigure}{r}{0.4\textwidth}
+  \centering
+  \includegraphics[width=0.38\textwidth]{images/sketch-syntax}
+  \caption{Sketch's syntax colouring, provided by CodeMirror.}
+  \label{fig:ide-syntax}
+\end{wrapfigure}
 On further research, it was noted that 0x10co.de and ShaderToy shared a common library - CodeMirror. CodeMirror is a JavaScript library designed to allow embedding fully formattable text entry boxes into web pages, with support for syntax highlighting, theme selection, various plugins and more. After researching it briefly, we were certain we'd found the right tool for the job.
 
-Creating a new syntax colouration template was at first a difficult task - in essence, it was identical to building a parser for Sketch. Luckily, CodeMirror provides a simple module definition plugin, which reduces the task down to the construction of a finite state machine with the help of regular expressions. The task was far easier to tackle this way, and although it lacks the fine-grained control of writing a custom parser the results are very convincingly. The state machine is as follows:
+Creating a new syntax colouration template was at first a difficult task - in essence, it was identical to building a parser for Sketch. Luckily, CodeMirror provides a simple module definition plugin, which reduces the task down to the construction of a finite state machine with the help of regular expressions. The task was far easier to tackle this way, and although it lacks the fine-grained control of writing a custom parser the results are very convincing. An image showing this colouring in action is reproduced for Figure \ref{fig:ide-syntax}. The state machine is as follows:
 \begin{lstlisting}[caption={Syntax Highlighting State Machine},label={lst:ide-fsm},language=JavaScript]
 CodeMirror.defineSimpleMode("mlang",{
     start:[
@@ -600,14 +622,17 @@ CodeMirror.defineSimpleMode("mlang",{
 });
 \end{lstlisting}
 
-The page itself (Figure \ref{fig:ide-full}) is a very simple arrangement of div blocks, a canvas, and a textarea which is in turn replaced by CodeMirror in combination with page-wide CSS designed to match the CodeMirror theme which matched our design specification. [[REWORD ME]]
+The page itself (Figure \ref{fig:ide-full}) is a very simple arrangement of blocks, a canvas, and a text area which is in turn replaced by CodeMirror. This is then styled by page-wide CSS designed to match our chosen CodeMirror theme - creating the subdued look we were going for.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.8\textwidth]{images/sketch-ide}
+\includegraphics[width=\textwidth]{images/sketch-ide}
 \caption{An image of the Sketch online IDE.}
 \label{fig:ide-full}
 \end{figure}
+\section{Evaluation}
+\label{ide-eval}
+Being able to produce this page in less than two days, we realised that we had definitely made the correct choice in our library research. The page itself has much room to improve, however - there are vast amounts of unused whitespace, currently links to our documentation are non-functional and the page feels very barren, overall. We believe that the value that this aspect of our project provides is far greater than the time cost involved in creating it, thanks to the simple set-up process and the past experience of team members with HTML and CSS as well as its own intrinsic value.
 %==============================================================================
 \chapter{Test Plan and test suites}
 \label{test}
@@ -626,10 +651,20 @@ The page itself (Figure \ref{fig:ide-full}) is a very simple arrangement of div 
 
 \textit{\textbf{Writing:}}
 \begin{itemize}
-\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}
-\item \emph{Kristiyan Dimitrov: } Chapter \ref{arch-lex}
+\item \emph{David Creigh:} Chapter
+\item \emph{Kristiyan Dimitrov:} Chapter \ref{arch-lex}
+\item \emph{Gerard Docherty:} Chapter 
+\item \emph{Darren Findlay:} Chapter 
+\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{ide}
 \end{itemize}
 \textit{\textbf{Editing:}}
+\begin{itemize}
+\item \emph{David Creigh:} Chapter 
+\item \emph{Kristiyan Dimitrov:} Chapter 
+\item \emph{Gerard Docherty:} Chapter 
+\item \emph{Darren Findlay:} Chapter 
+\item \emph{Kyle Simpson:} Chapter 
+\end{itemize}
 %------------------------------------------------------------------------------
 \subsection{Program}
 \label{cont-prog}
