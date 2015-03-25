@@ -22,13 +22,16 @@
 \contentsline {subsection}{\numberline {6.4.2}Definitions}{16}{subsection.6.4.2}
 \contentsline {subsection}{\numberline {6.4.3}Requirements}{16}{subsection.6.4.3}
 \contentsline {subsection}{\numberline {6.4.4}Usage}{17}{subsection.6.4.4}
-\contentsline {subsection}{\numberline {6.4.5}Features}{18}{subsection.6.4.5}
-\contentsline {section}{\numberline {6.5}Abstract Machine}{18}{section.6.5}
-\contentsline {section}{\numberline {6.6}Module Facade}{18}{section.6.6}
-\contentsline {chapter}{\numberline {7}Development Environment}{19}{chapter.7}
-\contentsline {chapter}{\numberline {8}Test Plan and test suites}{20}{chapter.8}
-\contentsline {chapter}{\numberline {9}Conclusion}{21}{chapter.9}
-\contentsline {section}{\numberline {9.1}Contributions}{21}{section.9.1}
-\contentsline {subsection}{\numberline {9.1.1}Report}{21}{subsection.9.1.1}
-\contentsline {subsection}{\numberline {9.1.2}Program}{21}{subsection.9.1.2}
-\contentsline {chapter}{\numberline {10}Appendix A}{22}{chapter.10}
+\contentsline {subsection}{\numberline {6.4.5}Features}{19}{subsection.6.4.5}
+\contentsline {section}{\numberline {6.5}Abstract Machine}{19}{section.6.5}
+\contentsline {section}{\numberline {6.6}Module Facade}{19}{section.6.6}
+\contentsline {chapter}{\numberline {7}Development Environment}{20}{chapter.7}
+\contentsline {chapter}{\numberline {8}Online IDE}{21}{chapter.8}
+\contentsline {section}{\numberline {8.1}Design Process}{21}{section.8.1}
+\contentsline {section}{\numberline {8.2}Implementation}{22}{section.8.2}
+\contentsline {chapter}{\numberline {9}Test Plan and test suites}{24}{chapter.9}
+\contentsline {chapter}{\numberline {10}Conclusion}{25}{chapter.10}
+\contentsline {section}{\numberline {10.1}Contributions}{25}{section.10.1}
+\contentsline {subsection}{\numberline {10.1.1}Report}{25}{subsection.10.1.1}
+\contentsline {subsection}{\numberline {10.1.2}Program}{25}{subsection.10.1.2}
+\contentsline {chapter}{\numberline {11}Appendix A}{26}{chapter.11}

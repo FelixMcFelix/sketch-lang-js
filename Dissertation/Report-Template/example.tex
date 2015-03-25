@@ -7,7 +7,63 @@
 
 \documentclass{l3proj}
 \usepackage{listings}
+% More listing stuff.
+%\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  sensitive=true
+}
+\lstdefinelanguage{json}{
+    %basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+% Done
 \usepackage{hyperref}
+\usepackage{amsfonts}
 \setlength\parindent{24pt}
 \begin{document}
 \title{Design and implement your own programming language}
@@ -277,11 +333,11 @@ In designing our system, it was established that regardless of the chosen compil
 \label{arch-shad-req}
 The unique needs of our module created an interesting set of design requirements for the subsystem - mandating a somewhat in-depth understanding of the WebGL API to manipulate the canvas as required. Upon examination, the shader manager's requirements were found to be:
 \begin{itemize}
-\item \textbf{Extensibility} --- Sketch needed to support future extension with various shapes, shaders and other such additions beyond its standard library - most shader programs require writing specially tailored code in an object's .draw() method. A method of allowing
+\item \textbf{Extensibility} --- Sketch needed to support future extension with various shapes, shaders and other such additions beyond its standard library - most shader programs require writing specially tailored code in an object's .draw() method. Similarly, modifications to shader code often require changes at the software level if the attributes or buffers must be changed - this coupling must be minimised or eliminated.
 \item \textbf{Portability} --- Such tailored draw code cannot be imported without putting users at significant security risk by requiring them to execute arbitrary code. Some way to infer the attribute update process from the shader itself is a necessity.
 \item \textbf{Ease of Use} --- Definition of new shader files should be intuitive and an easy process, provided the user has valid shader code. The linking and compilation of shaders and shader programs must be handled internally, and completely sequestered from external control to centralise most of the API manipulation.
-\item \textbf{Configurable} --- Shader programs should have variable control methods exposed as an external interface, to provide a simple means of control over the intricacies of the WebGL API.
-\item \textbf{Simplicity} --- Interactions with the module should be designed with brevity in mind - being able to execute variable update and draw functions as a single method call makes WebGL usage simpler in the other subsystem implementations.
+\item \textbf{Configurability} --- Shader programs should have variable control methods exposed as an external interface, to provide a simple means of control over the intricacies of the WebGL API. For instance, programmers must be able to change the draw mode on a moment's notice, or even extract the shader program pointer if they require direct access to WebGL.
+\item \textbf{Simplicity} --- Interactions with the module should be designed with brevity in mind - being able to execute variable update and draw functions as a single method call makes WebGL usage simpler in the other subsystem implementations - lowering the barrier of entry. WebGL is plagued by esoteric function names, 
 \end{itemize}
 
 \subsection{Usage}
@@ -295,14 +351,15 @@ Shader JSON objects may fall into three types:
 \item \textbf{Fragment Shaders} --- Objects defined similarly to Listing \ref{lst:frag-shad-example}, with type set to 1 and no restriction on what attributes must be predefined.
 \item \textbf{Shader Lists} --- Objects following the structure of Listing \ref{lst:list-shad-example}, with type set to 2 and the content tag corresponding to an array of further shader objects of any type.
 \end{enumerate}
-All integer and vector types are supported, along with their array equivalents. These are denoted as int, int[], float, float[] with vectors taking the form ivec$n$, ivec$n$[], vec$n$ and vec$n$[] for $ n \in [2,4] $. Float matrices may be defined by mat$n$, for $n$ within the same domain.
+All integer and vector types are supported, along with their array equivalents. These are denoted as \textit{int}, \textit{int[]}, \textit{float}, \textit{float[]} with vectors taking the form \textit{ivec$n$}, \textit{ivec$n$[]}, \textit{vec$n$} and \textit{vec$n$[]} for $ n \in [2,4]\cap\mathbb{N}$. Float matrices may be defined by \textit{mat$n$}, for $n$ within the same domain.
 \begin{center}
 \lstset{%
       basicstyle=\ttfamily\footnotesize\bfseries,
       frame=single,
       xleftmargin=.1\textwidth, xrightmargin=.1\textwidth,
       captionpos=b,
-      tabsize=4
+      tabsize=4,
+      language=json
     }
 \begin{lstlisting}[caption={Vertex Shader JSON Structure},label={lst:vtx-shad-example}]
 {
@@ -338,22 +395,41 @@ All integer and vector types are supported, along with their array equivalents. 
 	"type": 2,
 	"content": [
 		{
-			"type": 0
+			"type": 0,
 			"name": "...",
-			"src": "..."
+			"src": "...",
 			"attrs": [...]
 		},
 		{
-			"type": 1
+			"type": 1,
 			"name": "...",
-			"src": "..."
+			"src": "...",
 			"attrs": [...]
 		}
 	]
 }
 \end{lstlisting}
 \end{center}
+Initialisation of Palette as part of a JavaScript program is a very simple process. Once the module has been included in the execution space through either loading by the browser over HTTP or concatenation as part of a build script, the API is accessible. An example integration is as follows:
+\begin{lstlisting}[caption={Palette Usage Example},label={lst:palette-example},language=JavaScript]
+//Given a <canvas> element with id "myCanvas".
+//The shader text has been imported either by XMLHttpRequest
+//Or has been embedded as a string literal into variable 'text'
 
+//Retrieve elements from DOM, and the context from the canvas.
+var canvas = document.getElementById("myCanvas");
+var glctx = canvas.getContext("webgl");
+
+//Create and set up Palette.
+var manager = new Palette.Manager(glctx);
+manager.addShader(text);
+
+//Now we're ready to draw!
+manager.draw("vsName", "fsName", [/*DATA*/],
+			{/*vsConfig*/}, {/*fsConfig*/});
+\end{lstlisting}
+
+The full API documentation is available under docs/index.html within our repository (and the deliverables folder supplied) under the namespace "Palette".
 \subsection{Features}
 \label{arch-shad-features}
 
@@ -370,6 +446,31 @@ All integer and vector types are supported, along with their array equivalents. 
 \chapter{Development Environment}
 \label{dev}
 
+%==============================================================================
+\chapter{Online IDE}
+\label{ide}
+As part of our overall project plan, we decided that an environment for users to play around with Sketch was an essential deliverable for us to provide - both for our own testing purposes and to offer an interactive sandbox that could show off our project's capabilities.
+
+\section{Design Process}
+\label{ide-design}
+Our team had not originally considered the production of a development environment for our language, until the topic had been raised by our supervisor in the language development stages. Up until that point we had merely assumed that users would produce programs on a desktop computer in their text editor of choice, before linking the code up to the module on a web-page via the JavaScript API. However, mobile devices were left with no means to write their own Sketch programs - this left out a potential user base that we were specifically trying to target by electing to use WebGL.
+
+We began to look at existent online IDEs for various languages to serve as design inspiration for our own. Chief among these was ShaderToy, an online community built around sharing and discussing complex fragment shaders. ShaderToy's design makes the code and the visual output the primary focus for users, with both sections taking up equal screen space at opposite ends of the screen. While many elements of its design are bland, we found the structure of the page to be a perfect fit for graphics dependent languages where the canvas takes centre stage. We even found that the bland colour scheme of the site likely helped the key visual elements - the canvas and the code - to stand out to users by reducing visual clutter and noise elsewhere.\\
+
+[[INSERT PIC OF SHADERTOY HERE]]
+
+The now defunct 0x10co.de was another key influence in this regard - it also followed a minimalistic design scheme, yet placed code at the forefront rather than the graphical output. We decided upon minimalism as our go-to style after the investigation to give the page and language presentation the purity we desired, and chose to go for a 50-50 split as ShaderToy had. The key decision to deviate from the light pages in our two exemplars was made in light of modern trends within text editors such as Sublime Text - developers were regularly finding darker environments to be more aesthetically pleasing and less likely to cause eye-strain. As such, we decided to go for a darker web design; not only for these reasons, but also to enhance the appearance of the canvas by creating a stronger contrast.
+
+\section{Implementation}
+\label{ide-impl}
+On further research, it was noted that 0x10co.de and ShaderToy shared a common library - CodeMirror. CodeMirror is a JavaScript library designed to allow embedding fully formattable text entry boxes into web pages, with support for syntax highlighting, theme selection, various plugins and more. After researching it briefly, we were certain we'd found the right tool for the job.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[angle=270, width=0.8\textwidth]{images/sketch-ide}
+\caption{An image of the Sketch online IDE.}
+\label{fig:ide-full}
+\end{figure}
 %==============================================================================
 \chapter{Test Plan and test suites}
 \label{test}
