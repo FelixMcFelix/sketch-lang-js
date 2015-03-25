@@ -139,7 +139,7 @@ In every language, the first program to write is always 'hello world' - where yo
     }
 \begin{lstlisting}[caption={Hello Square},label={lst:tutorial-hello}]
     function init(){
-        Polygon square = ({0,0} + {5,0}) * 4};
+        Polygon square = ({0,0} + {5,0}) * 4;
         draw square;
     }
 \end{lstlisting}
@@ -330,10 +330,95 @@ JISON and PEG.js do not encounter the same program - they successfully support J
 JISON provided us with the opportunity to specify both tokenizing rules and language grammar in the same file. This turn out to be very helpful in latter stages when the communication between the parser and code generator had to happen. The whole design process is comprised of three stages: lexical analysis, specification of the grammar and specification of the abstract syntax tree in JSON format. 
 
 \subsubsection{Lexer}
+Lexer is a program or function that performs lexical analysis (the process of converting a sequence of characters into a sequence of tokens).
+A token consist of a token name and attribute value. The token name represents a kind of lexical unit(i.e. keyword,identifier) and later the token names are processed by the parser. 
+
+For each keyword of  our language, a token was specified in the grammar file. Each of the operators and punctuations symbols have a specified token as well. There are tokens for the identifiers, numbers and strings as well. This way, all the possible tokens for Sketch were covered in the grammar file. In Listing \ref{lst:token-example}, an example for each of them is presented. 
+\begin{center}
+\lstset{
+    basicstyle=\small\ttfamily,
+    frame=lrtb,
+  }
+  
+
+  
+  \begin{lstlisting}[caption={Tokens of Sketch },label={lst:token-example}]
+  %lex
+  %% 
+  ...
+  "if"                      return 'IF';
+  "Line"                    return 'LINE';
+  ...
+  "{"                       return 'OPEN_BRACE';
+  ...
+  "+"                       return 'PLUS';
+  ... 
+  [0-9]+("."[0-9]*)?        return 'NUMBER';
+  [a-zA-Z_]+[a-zA-Z0-9_]*   return 'IDENTIFIER';
+  /lex
+  \end{lstlisting}
+\end{center}
+
 \subsubsection{Grammar}
+Next stage in the implementation for this part of the compiler was to specify the grammar rules for our graphic programming language. All the rules specified in the initial BNF were translated in a format that the parser generator can accept. 
+
+As a result, in the case when a given rule of the grammar can be used, that rule had to be rewritten again  but this time using the recursion feature of JISON. JISON supports 2 types of recursion - left and right, but our grammar uses left recursion, since it more reliable and it can parse a sequence of any number of elements with bounded stack space.
+
+
+Another feature of JISON became very useful in the elimination of shift-reduce conflicts - the ability to specify precedence. Initially our grammar was full of shift-reduce conflict because of the \textit{"dangling else"}  in \textit{"condtion\_statment"} (Listing \ref{lst:shift-example}). By using precedence, our grammar become less ambiguous and errors are less likely to occur. 
+
+\begin{center}
+\lstset{
+    basicstyle=\small\ttfamily,
+    frame=lrtb,
+  }
+  
+
+  
+  \begin{lstlisting}[caption={condtion\_statments in Sketch after removal of Shift-Reduce conflict },label={lst:shift-example}]
+condition_statements
+: IF OPEN_PARENS exp CLOSE_PARENS statement
+									 %prec IF_WITHOUT_ELSE
+    ...
+| IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement
+    ...
+;
+  
+  \end{lstlisting}
+\end{center}
+
 \subsubsection { Abstract Syntax Tree (AST)}
+If a source program in Sketch uses the correct syntax and grammar rules, after parsing an Abstract Syntax Tree would be generated and passed to the code generator. Our parser produces a tree represented as an object in JSON format. As a result, the JISON file had to be changed and for each grammar rule the corresponding JSON object was added. In Listing  \ref{lst:ast-example}, the output for \textbf{"Hello Square"} program is show.
+If one of the grammar rules is violated, no AST will be generated and error will be thrown - this feature is provided for us by the parser generator.
 
+\lstset{%
+      basicstyle=\ttfamily\footnotesize\bfseries,
+      frame=single,
+      xleftmargin=.1\textwidth, xrightmargin=.1\textwidth,
+      captionpos=b,
+      tabsize=4,
+      language=json
+    }
+\begin{lstlisting}[caption={Sample AST produced by the parser },label={lst:ast-example}]
+{
+ "type":"function",
+  "arguments":
+      ["init","","void",
+         [{"type":"variable-decl-assign",
+            "arguments":
+             [["Polygon","square"],
+                 {"type":"multiplication",
+                   "arguments":
+                     [{"type":"addition",
+                        "arguments":[["0","0"],["5","0"]]}, "4"
+                     ]
+                  }]},
+             ["draw","square"]
+             ]
+            ]
+}
 
+\end{lstlisting}
 %------------------------------------------------------------------------------
 \section{Code Generator}
 \label{arch-gen}
@@ -567,7 +652,7 @@ Being able to produce this page in less than two days, we realised that we had d
 \textit{\textbf{Writing:}}
 \begin{itemize}
 \item \emph{David Creigh:} Chapter
-\item \emph{Kristiyan Dimitrov:} Chapter 
+\item \emph{Kristiyan Dimitrov:} Chapter \ref{arch-lex}
 \item \emph{Gerard Docherty:} Chapter 
 \item \emph{Darren Findlay:} Chapter 
 \item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{ide}

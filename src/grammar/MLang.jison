@@ -14,14 +14,13 @@
 "clear"                                return 'CLEAR'; 
 "continue"                             return 'CONTINUE';
 "do"                                   return 'DO';
-
 "else"                                 return 'ELSE';
 "false"                                return 'FALSE';
 "float"                                return 'FLOAT';
 "for"                                  return 'FOR';
 "function"                             return 'FUNCTION'
 "if"                                   return 'IF';
-"Line"                             return 'LINE';
+"Line"                                 return 'LINE';
 "int"                                  return 'INT';
 "not"                                  return 'NOT';
 "null"                                 return 'NULL';
@@ -83,9 +82,10 @@
 ">>"                       return 'OP_RIGHT_SHIFT';
 <<EOF>>                    return 'EOF';
 
-\"[^"]+\"                 yytext = yytext.slice(1,-1); return 'STRINGT'
-[0-9]+("."[0-9]*)?        return 'DIGIT';
-"."[0-9]+                 return 'DIGIT';
+
+\"[^"]+\"                 yytext = yytext.slice(1,-1); return 'STRINGA' 
+[0-9]+("."[0-9]*)?        return 'NUMBER';
+"."[0-9]+                 return 'NUMBER';
 [a-zA-Z_]+[a-zA-Z0-9_]*   return 'IDENTIFIER';
 
 
@@ -513,10 +513,10 @@ exp
 
 prim_expr
     : IDENTIFIER 
-    |  DIGIT 
+    |  NUMBER 
     | TRUE 
     | FALSE
-    | STRINGT
+    | STRINGA
     | NOT prim_expr
            {$$ = [$1,$2];}
     | OPEN_PARENS exp CLOSE_PARENS

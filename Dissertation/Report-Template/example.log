@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.27)  25 MAR 2015 14:00
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.27)  25 MAR 2015 14:03
 entering extended mode
 **example.tex
 
@@ -475,8 +475,18 @@ Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
 [15
 
-] [16] [17]
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 390.
+] [16]
+Overfull \hbox (2.19281pt too wide) in paragraph at lines 381--382
+[][][][][][][][] 
+ []
+
+
+Overfull \hbox (2.19281pt too wide) in paragraph at lines 383--384
+[][][][][][][][][][][][][][][][][][] 
+ []
+
+[17]
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 403.
 
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
 File: omspcr.fd 
@@ -484,138 +494,114 @@ File: omspcr.fd
 
 LaTeX Font Warning: Font shape `OMS/pcr/bx/n' undefined
 (Font)              using `OMS/pcr/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 390.
+(Font)              for symbol `textbraceleft' on input line 403.
 
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 390.
-[18]
-LaTeX Font Info:    Font shape `OMS/pcr/bx/n' in size <9> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 403.
- [19] [20
+LaTeX Font Info:    Font shape `OMS/pcr/bx/n' in size <9> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 407.
+[18] [19] [20] [21
 
-] [21]
+] [22]
 Chapter 7.
-[22
+[23
 
 ]
 Chapter 8.
-<images/shadertoy-ide.png, id=487, 1435.61343pt x 829.59938pt>
+<images/shadertoy-ide.png, id=536, 1435.61343pt x 829.59938pt>
 File: images/shadertoy-ide.png Graphic file (type png)
 
 <use images/shadertoy-ide.png>
-Package pdftex.def Info: images/shadertoy-ide.png used on input line 481.
+Package pdftex.def Info: images/shadertoy-ide.png used on input line 566.
 (pdftex.def)             Requested size: 194.52017pt x 112.39616pt.
 
-<images/0x10code.png, id=488, 448.074pt x 247.8861pt>
+<images/0x10code.png, id=537, 448.074pt x 247.8861pt>
 File: images/0x10code.png Graphic file (type png)
 
 <use images/0x10code.png>
-Package pdftex.def Info: images/0x10code.png used on input line 486.
+Package pdftex.def Info: images/0x10code.png used on input line 571.
 (pdftex.def)             Requested size: 194.52017pt x 107.61397pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 494--495
+Underfull \hbox (badness 10000) in paragraph at lines 579--580
 
  []
 
-[23
+[24
 
  <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images/sha
 dertoy-ide.png> <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Temp
 late/images/0x10code.png>]
-<images/sketch-syntax.png, id=498, 197.98969pt x 155.83218pt>
+<images/sketch-syntax.png, id=546, 197.98969pt x 155.83218pt>
 File: images/sketch-syntax.png Graphic file (type png)
 
 <use images/sketch-syntax.png>
-Package pdftex.def Info: images/sketch-syntax.png used on input line 502.
+Package pdftex.def Info: images/sketch-syntax.png used on input line 587.
 (pdftex.def)             Requested size: 164.2647pt x 129.29074pt.
 
-Underfull \hbox (badness 2012) in paragraph at lines 506--507
+Underfull \hbox (badness 2012) in paragraph at lines 591--592
 \OT1/ptm/m/n/10.95 Shader-Toy shared a com-mon li-brary - CodeMir-ror.
  []
 
-
-Overfull \hbox (26.79306pt too wide) in paragraph at lines 518--519
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][][][][][][] 
- []
-
-[24 <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images/
+[25 <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images/
 sketch-syntax.png>]
-Overfull \hbox (26.79306pt too wide) in paragraph at lines 522--523
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][] 
- []
-
-
-Overfull \hbox (15.99295pt too wide) in paragraph at lines 523--524
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][] 
- []
-
-
-Overfull \hbox (21.393pt too wide) in paragraph at lines 524--525
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][] 
- []
-
-<images/sketch-ide.png, id=517, 1425.07407pt x 694.84593pt>
+<images/sketch-ide.png, id=564, 1425.07407pt x 694.84593pt>
 File: images/sketch-ide.png Graphic file (type png)
 
 <use images/sketch-ide.png>
-Package pdftex.def Info: images/sketch-ide.png used on input line 544.
+Package pdftex.def Info: images/sketch-ide.png used on input line 629.
 (pdftex.def)             Requested size: 432.26999pt x 210.76672pt.
- [25 <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images
-/sketch-ide.png>]
+ [26 <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images
+/sketch-ide.png>] [27]
 Chapter 9.
-[26
+[28
 
 ]
 Chapter 10.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 567.
-[27
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 652.
+[29
 
 ]
 Appendix A.
 No file example.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 597.
-[28
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 682.
+[30
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 597.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 682.
 
 ("F:\My Dropbox\Public\laughing-ironman\Dissertation\Report-Template\example.au
 x")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 597.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 597.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 682.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 682.
 Package rerunfilecheck Info: File `example.out' has not changed.
 (rerunfilecheck)             Checksum: 0802C9FAC84242C3F397D9F7A82AFF3E;2525.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 597.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 682.
  ) 
 Here is how much of TeX's memory you used:
- 8470 strings out of 493921
- 126508 string characters out of 3150492
- 257016 words of memory out of 3000000
- 11404 multiletter control sequences out of 15000+200000
- 33725 words of font info for 73 fonts, out of 3000000 for 9000
+ 8516 strings out of 493921
+ 127205 string characters out of 3150492
+ 296225 words of memory out of 3000000
+ 11407 multiletter control sequences out of 15000+200000
+ 34240 words of font info for 75 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 42i,8n,42p,1377b,1839s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,8n,42p,1377b,1797s stack positions out of 5000i,500n,10000p,200000b,50000s
 {K:/LaTeX/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<K:/LaTeX/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/cm/cmmi10.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/public/
 amsfonts/cm/cmr10.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy1
 0.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy9.pfb><K:/LaTeX/M
 iKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><K:/LaTeX/MiKTeX 2.9/f
-onts/type1/urw/courier/ucrb8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/ut
-mb8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><K:/LaTeX/MiKTe
-X 2.9/fonts/type1/urw/times/utmr8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/tim
-es/utmri8a.pfb>
-Output written on example.pdf (30 pages, 1573342 bytes).
+onts/type1/urw/courier/ucrb8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/courier/
+ucrr8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><K:/LaTeX/MiKT
+eX 2.9/fonts/type1/urw/times/utmbi8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/t
+imes/utmr8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on example.pdf (32 pages, 1601105 bytes).
 PDF statistics:
- 646 PDF objects out of 1000 (max. 8388607)
- 257 named destinations out of 1000 (max. 500000)
+ 711 PDF objects out of 1000 (max. 8388607)
+ 299 named destinations out of 1000 (max. 500000)
  354 words of extra memory for PDF output out of 10000 (max. 10000000)
 
