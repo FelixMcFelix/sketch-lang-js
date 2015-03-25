@@ -14,11 +14,15 @@ var Sketch = function(canvas){
 	this.parser = sketchParse;
 	this.codeGen = null;
 	this.shaderManager = new Palette.Manager(context);
-	this.vm = new MVM(this.context, this.shadermanager, this.codeStore, this.constantPool, false);
+	this.vm = new MVM(this.context, this.shaderManager, this.codeStore, this.constantPool, false);
 }
 
 Sketch.prototype = {
-	addShader: function(){
+	addShader: function(text){
+		//Adds a shader
+	},
+
+	addShaderURL: function(url){
 		//Adds a shader
 	},
 

@@ -28,15 +28,21 @@
 \BOOKMARK [2][-]{subsection.6.5.4}{Design Process and Issues}{section.6.5}% 28
 \BOOKMARK [2][-]{subsection.6.5.5}{Usage}{section.6.5}% 29
 \BOOKMARK [2][-]{subsection.6.5.6}{Future Changes and Evaluation}{section.6.5}% 30
-\BOOKMARK [1][-]{section.6.6}{Module Facade}{chapter.6}% 31
-\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 32
-\BOOKMARK [0][-]{chapter.8}{Online IDE}{}% 33
-\BOOKMARK [1][-]{section.8.1}{Design Process}{chapter.8}% 34
-\BOOKMARK [1][-]{section.8.2}{Implementation}{chapter.8}% 35
-\BOOKMARK [1][-]{section.8.3}{Evaluation}{chapter.8}% 36
-\BOOKMARK [0][-]{chapter.9}{Test Plan and test suites}{}% 37
-\BOOKMARK [0][-]{chapter.10}{Conclusion}{}% 38
-\BOOKMARK [1][-]{section.10.1}{Contributions}{chapter.10}% 39
-\BOOKMARK [2][-]{subsection.10.1.1}{Report}{section.10.1}% 40
-\BOOKMARK [2][-]{subsection.10.1.2}{Program}{section.10.1}% 41
-\BOOKMARK [0][-]{appendix.A}{Appendix A: Source Listing}{}% 42
+\BOOKMARK [1][-]{section.6.6}{Module Fa\347ade}{chapter.6}% 31
+\BOOKMARK [2][-]{subsection.6.6.1}{Introduction}{section.6.6}% 32
+\BOOKMARK [2][-]{subsection.6.6.2}{Implementation Process}{section.6.6}% 33
+\BOOKMARK [0][-]{chapter.7}{Development Environment}{}% 34
+\BOOKMARK [1][-]{section.7.1}{Source Management and Revision Control}{chapter.7}% 35
+\BOOKMARK [1][-]{section.7.2}{Development Tools}{chapter.7}% 36
+\BOOKMARK [1][-]{section.7.3}{Build Management}{chapter.7}% 37
+\BOOKMARK [1][-]{section.7.4}{Continuous Integration and Quality Metrics}{chapter.7}% 38
+\BOOKMARK [0][-]{chapter.8}{Online IDE}{}% 39
+\BOOKMARK [1][-]{section.8.1}{Design Process}{chapter.8}% 40
+\BOOKMARK [1][-]{section.8.2}{Implementation}{chapter.8}% 41
+\BOOKMARK [1][-]{section.8.3}{Evaluation}{chapter.8}% 42
+\BOOKMARK [0][-]{chapter.9}{Test Plan and test suites}{}% 43
+\BOOKMARK [0][-]{chapter.10}{Conclusion}{}% 44
+\BOOKMARK [1][-]{section.10.1}{Contributions}{chapter.10}% 45
+\BOOKMARK [2][-]{subsection.10.1.1}{Report}{section.10.1}% 46
+\BOOKMARK [2][-]{subsection.10.1.2}{Program}{section.10.1}% 47
+\BOOKMARK [0][-]{appendix.A}{Appendix A: Source Listing}{}% 48

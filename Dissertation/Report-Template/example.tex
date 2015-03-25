@@ -444,7 +444,7 @@ In designing our system, we established that regardless of the chosen compilatio
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\textwidth]{images/Palette-UML}
-\caption{A class diagram of Palette.}
+\caption{A UML class diagram of Palette.}
 \label{fig:palette-uml}
 \end{figure}
 
@@ -578,13 +578,48 @@ While Palette provides a sizeable kernel of features, there is still much room t
 
 Overall, implementing Palette has been an extremely rewarding experience both for the nuance involved in writing such a subsystem and for the value it has provided to the development of other Sketch subcomponents. Team members who have had to use it had a small adjustment time, but appeared to be suitably impressed with the simplicity it provided them.
 %------------------------------------------------------------------------------
-\section{Module Facade}
+\section{Module Fa\c{c}ade}
 \label{arch-module}
+\subsection{Introduction}
+\label{arch-module-intro}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{images/Facade-UML}
+\caption{A UML class diagram of Sketch's module.}
+\label{fig:module-uml}
+\end{figure}
 
+A fa\c{c}ade as shown in Figure \ref{fig:module-uml} was a necessity if we wished to provide users with the simple set-up we had envisaged. Although this component introduces no novel concepts, programming it still required the input of all team members to ensure that data would be properly handled between components.
+\subsection{Implementation Process}
+\label{arch-module-impl}
+The implementation of the module provides very little functionality of its own, and merely abstracts the calls it receives to its registered components. From the beginning, we established that users would only desire to create an instance of the module, to add shaders to the system and to compile and execute Sketch source files they had written.
+
+The only interactions which require functional code are adding shaders from URL, which delegates to the addShader method regardless, and program compilation. Program compilation follows the same execution order outlined in Chapter \ref{arch-over}, and executes the virtual machine as its final command. Aside from this, it must mediate between the components' output formats and the input arguments of the next step. For instance, the parser outputs the JSON string format of an object, which is functionally useless if we wish to traverse the tree in this form. This required communication between all team members who had developed components, to understand the data transformations required.
 %==============================================================================
 \chapter{Development Environment}
 \label{dev}
+For a project of this scale, distributed management of our development environment from the beginning was an absolute necessity. To keep source code management, building and recovery a simple process our system integrator devised a relatively robust system for the team to develop within.
+\section{Source Management and Revision Control}
+\label{dev-scm}
+At the beginning of this year, most of our team were inexperienced with regards to proper source control systems - their operation differences, their configuration and their usage. Luckily, this meant that none of us would have to unlearn any SCM operation habits (as such platforms are notoriously different), and reduced the selection of a revision control system to one of availability and popularity. Our choices were narrowed down to two systems - \textit{SVN} and \textit{Git}.
 
+From here, we decided that Git would be the ideal choice for our project's needs as it provides simple branch management, ease of access thanks to the rise of GitHub and an effective GUI client. Although some of Git's concepts were lost upon the team at first, we've since grown to be relatively adept at its operation. We've found it to be a great source of our effectiveness by enabling distributed collaboration for very little effort.
+
+\section{Development Tools}
+\label{dev-tools}
+As our project is JavaScript based, there have been no provisions for an IDE or editor of choice - each team member used whatever they felt most comfortable with. Among our team Sublime Text was a popular choice as a pure text editor, with WebStorm occasionally being used by those who preferred a full IDE. All testing and code operation was performed within the browser as required by JavaScript.
+
+\section{Build Management}
+\label{dev-build}
+The project uses Gulp (http://gulpjs.com/) for its build management solution. Gulp is a stream-based build system based around the automation of tasks - providing functionality such as concatenation, minification and documentation generation. Gulp is similar to Apache Ant and Maven, but eschews their configuration-driven approach in favour of a code-driven approach. We found this to be ideal, as it allowed the team to spend time working on their components with the build generation doing a lot of the menial tasks.
+
+One particular strength was the litany of plugins available for Gulp - we found that we could automate our documentation production, library downloading and even the generation of our parser from its Jison file. Generation of these tasks was easy for the system integrator, and so the addition of new build tasks never added significant workload (unlike our past experiences with Ant and Ivy). Gulp is also the key to allowing us to provide a single JavaScript file for import by users, simplifying end-user implementation cost for Sketch greatly.
+
+\section{Continuous Integration and Quality Metrics}
+\label{dev-ci}
+By choosing GitHub as our source control location, we allowed ourselves access to many continuous integration and code quality metric services - several of which are dedicated to providing free usage to open source projects. We decided to pursue Travis-CI (https://travis-ci.org/) as our CI framework of choice for several reasons. The primary consideration was the free cost for open source projects, a very important element in our decision process, followed by its built-in support for node.js based projects - ensuring that we'd be able to run Gulp builds without any hassle. We also anticipated adding a formal testing harness to the project, for which Travis would email the project administrator in case of failing builds, but found that this would be too much trouble and opted to stay with our collection of Sketch language test files.
+
+Selection of a quality metrics service went through a similar thought process, leading us to CodeClimate (https://codeclimate.com/). We added this to our project as it had zero set-up cost (in both time and money) and provides a fantastic visualisation of code quality throughout the repository. While it often was passed over by the team, some members made great use of it by being able to quickly track down overly complex code, duplications and messiness in source files and fix code smells before they led to greater mistakes down the line.
 %==============================================================================
 \chapter{Online IDE}
 \label{ide}
@@ -703,7 +738,7 @@ Being able to produce this page in less than two days, we realised that we had d
 \item \emph{Kristiyan Dimitrov:} Chapter 
 \item \emph{Gerard Docherty:} Chapter 
 \item \emph{Darren Findlay:} Chapter 
-\item \emph{Kyle Simpson:} Chapter 
+\item \emph{Kyle Simpson:} Chapter \ref{tut}
 \end{itemize}
 %------------------------------------------------------------------------------
 \subsection{Program}
