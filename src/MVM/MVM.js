@@ -54,8 +54,8 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		ISUB: 	6,
 		IMUL: 	7,
 		IDIV: 	8,
-		FADD: 	9,		//	Floating point arithmatic ops take
-		FSUB: 	10,		//	address into the constant pool.
+		FADD: 	9,
+		FSUB: 	10,
 		FMUL: 	11,
 		FDIV: 	12,
 		NCMPEQ: 13,
