@@ -35,6 +35,7 @@
 \contentsline {chapter}{\numberline {8}Online IDE}{23}{chapter.8}
 \contentsline {section}{\numberline {8.1}Design Process}{23}{section.8.1}
 \contentsline {section}{\numberline {8.2}Implementation}{24}{section.8.2}
+\contentsline {section}{\numberline {8.3}Evaluation}{25}{section.8.3}
 \contentsline {chapter}{\numberline {9}Test Plan and test suites}{26}{chapter.9}
 \contentsline {chapter}{\numberline {10}Conclusion}{27}{chapter.10}
 \contentsline {section}{\numberline {10.1}Contributions}{27}{section.10.1}

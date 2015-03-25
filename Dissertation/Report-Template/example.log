@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.27)  25 MAR 2015 03:40
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.10.27)  25 MAR 2015 14:00
 entering extended mode
 **example.tex
 
@@ -217,6 +217,38 @@ File: listings.cfg 2013/08/26 1.5b listings configuration
 ))
 Package: listings 2013/08/26 1.5b (Carsten Heinz)
 
+("K:\LaTeX\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
+Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
+
+("K:\LaTeX\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+("K:\LaTeX\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen113
+\captionmargin@=\dimen114
+\captionwidth=\dimen115
+\caption@tempdima=\dimen116
+\caption@indent=\dimen117
+\caption@parindent=\dimen118
+\caption@hangindent=\dimen119
+)
+\c@ContinuedFloat=\count107
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+)
+\c@subfigure=\count108
+\c@subtable=\count109
+)
+("K:\LaTeX\MiKTeX 2.9\tex\latex\wrapfig\wrapfig.sty"
+\wrapoverhang=\dimen120
+\WF@size=\dimen121
+\c@WF@wrappedlines=\count110
+\WF@box=\box28
+\WF@everypar=\toks16
+Package: wrapfig 2003/01/31  v 3.6
+)
 ("K:\LaTeX\MiKTeX 2.9\tex\latex\xcolor\xcolor.sty"
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
@@ -236,7 +268,7 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 )
 ("K:\LaTeX\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\@emptytoks=\toks16
+\@emptytoks=\toks17
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
@@ -244,69 +276,72 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 )
 ("F:\My Dropbox\Public\laughing-ironman\Dissertation\Report-Template\example.au
 x")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 68.
-LaTeX Font Info:    ... okay on input line 68.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 68.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 70.
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 ("K:\LaTeX\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count107
-\scratchdimen=\dimen113
-\scratchbox=\box28
-\nofMPsegments=\count108
-\nofMParguments=\count109
-\everyMPshowfont=\toks17
-\MPscratchCnt=\count110
-\MPscratchDim=\dimen114
-\MPnumerator=\count111
-\makeMPintoPDFobject=\count112
-\everyMPtoPDFconversion=\toks18
+\scratchcounter=\count111
+\scratchdimen=\dimen122
+\scratchbox=\box29
+\nofMPsegments=\count112
+\nofMParguments=\count113
+\everyMPshowfont=\toks18
+\MPscratchCnt=\count114
+\MPscratchDim=\dimen123
+\MPnumerator=\count115
+\makeMPintoPDFobject=\count116
+\everyMPtoPDFconversion=\toks19
 )
-\AtBeginShipoutBox=\box29
-Package hyperref Info: Link coloring ON on input line 68.
+\AtBeginShipoutBox=\box30
+Package hyperref Info: Link coloring ON on input line 70.
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 ("K:\LaTeX\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count113
+\c@section@level=\count117
 )
-LaTeX Info: Redefining \ref on input line 68.
-LaTeX Info: Redefining \pageref on input line 68.
-LaTeX Info: Redefining \nameref on input line 68.
+LaTeX Info: Redefining \ref on input line 70.
+LaTeX Info: Redefining \pageref on input line 70.
+LaTeX Info: Redefining \nameref on input line 70.
 
 ("F:\My Dropbox\Public\laughing-ironman\Dissertation\Report-Template\example.ou
 t")
 ("F:\My Dropbox\Public\laughing-ironman\Dissertation\Report-Template\example.ou
 t")
 \@outlinefile=\write3
-\c@lstlisting=\count114
- <images/CompSci_mono.pdf, id=163, 340.27126pt x 49.18375pt>
+\c@lstlisting=\count118
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: wrapfig package is loaded.
+Package caption Info: End \AtBeginDocument code.
+ <images/CompSci_mono.pdf, id=167, 340.27126pt x 49.18375pt>
 File: images/CompSci_mono.pdf Graphic file (type pdf)
 
 <use images/CompSci_mono.pdf>
-Package pdftex.def Info: images/CompSci_mono.pdf used on input line 76.
+Package pdftex.def Info: images/CompSci_mono.pdf used on input line 78.
 (pdftex.def)             Requested size: 300.43684pt x 9.35004pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 76.
+LaTeX Font Info:    Try loading font information for U+msa on input line 78.
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 76.
+LaTeX Font Info:    Try loading font information for U+msb on input line 78.
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
@@ -314,23 +349,23 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <F:/My Dropbox/Public/laug
 hing-ironman/Dissertation/Report-Template/images/CompSci_mono.pdf>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 77.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.81 \end{abstract}
+l.83 \end{abstract}
                     [1]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 82.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 84.
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.83 \tableofcontents
+l.85 \tableofcontents
                       [1]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 83.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 85.
 
 ("F:\My Dropbox\Public\laughing-ironman\Dissertation\Report-Template\example.to
 c" [2
@@ -340,7 +375,7 @@ c" [2
  [3]
 Chapter 1.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20.74> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 85.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 87.
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no “ in font ptmr7t!
@@ -350,50 +385,60 @@ Missing character: There is no “ in font ptmr7t!
 [4
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 108.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 110.
 
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\omsptm.fd"
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 108.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 110.
  [5]
 Chapter 2.
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--138
+Underfull \hbox (badness 10000) in paragraph at lines 133--140
 
  []
 
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 138.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 138.
+nput line 140.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 140.
 
 ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 138.
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 140.
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 143.
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 145.
  [6
 
 ]
-Overfull \hbox (59.19339pt too wide) in paragraph at lines 168--169
+Overfull \hbox (59.19339pt too wide) in paragraph at lines 170--171
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [7]
-Overfull \hbox (26.96307pt too wide) in paragraph at lines 196--197
+Overfull \hbox (26.96307pt too wide) in paragraph at lines 198--199
 [][][][][][][] 
  []
 
 
-Overfull \hbox (48.5633pt too wide) in paragraph at lines 197--198
+Overfull \hbox (48.5633pt too wide) in paragraph at lines 199--200
 [][][][][][][][][][] 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--201
+[]\OT1/ptm/m/n/10.95 Listing 2.4:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--201
+|\OT1/ptm/m/n/10.95 The "While"
+ []
+
 [8]
-LaTeX Font Info:    Try loading font information for OML+ptm on input line 233.
+LaTeX Font Info:    Try loading font information for OML+ptm on input line 235.
 
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\omlptm.fd"
 File: omlptm.fd 
@@ -401,12 +446,12 @@ File: omlptm.fd
 
 LaTeX Font Warning: Font shape `OML/ptm/bx/n' undefined
 (Font)              using `OML/ptm/m/it' instead
-(Font)              for symbol `textgreater' on input line 233.
+(Font)              for symbol `textgreater' on input line 235.
 
 LaTeX Font Info:    Font shape `OML/ptm/m/it' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 233.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 235.
 LaTeX Font Info:    Font shape `OML/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 234.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 236.
 [9
 
 ] [10] [11]
@@ -424,14 +469,14 @@ Chapter 5.
 ]
 Chapter 6.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 315.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 317.
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
 [15
 
 ] [16] [17]
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 388.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 390.
 
  ("K:\LaTeX\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
 File: omspcr.fd 
@@ -439,13 +484,13 @@ File: omspcr.fd
 
 LaTeX Font Warning: Font shape `OMS/pcr/bx/n' undefined
 (Font)              using `OMS/pcr/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 388.
+(Font)              for symbol `textbraceleft' on input line 390.
 
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 388.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 390.
 [18]
 LaTeX Font Info:    Font shape `OMS/pcr/bx/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 401.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 403.
  [19] [20
 
 ] [21]
@@ -454,93 +499,111 @@ Chapter 7.
 
 ]
 Chapter 8.
+<images/shadertoy-ide.png, id=487, 1435.61343pt x 829.59938pt>
+File: images/shadertoy-ide.png Graphic file (type png)
 
-Underfull \hbox (badness 10000) in paragraph at lines 476--477
+<use images/shadertoy-ide.png>
+Package pdftex.def Info: images/shadertoy-ide.png used on input line 481.
+(pdftex.def)             Requested size: 194.52017pt x 112.39616pt.
+
+<images/0x10code.png, id=488, 448.074pt x 247.8861pt>
+File: images/0x10code.png Graphic file (type png)
+
+<use images/0x10code.png>
+Package pdftex.def Info: images/0x10code.png used on input line 486.
+(pdftex.def)             Requested size: 194.52017pt x 107.61397pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 494--495
 
  []
 
 [23
 
-]
-Overfull \hbox (0.97368pt too wide) in paragraph at lines 484--485
-\OT1/ptm/m/n/10.95 On fur-ther re-search, it was noted that 0x10co.de and Shade
-r-Toy shared a com-mon li-brary - CodeMir-
+ <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images/sha
+dertoy-ide.png> <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Temp
+late/images/0x10code.png>]
+<images/sketch-syntax.png, id=498, 197.98969pt x 155.83218pt>
+File: images/sketch-syntax.png Graphic file (type png)
+
+<use images/sketch-syntax.png>
+Package pdftex.def Info: images/sketch-syntax.png used on input line 502.
+(pdftex.def)             Requested size: 164.2647pt x 129.29074pt.
+
+Underfull \hbox (badness 2012) in paragraph at lines 506--507
+\OT1/ptm/m/n/10.95 Shader-Toy shared a com-mon li-brary - CodeMir-ror.
  []
 
 
-Overfull \hbox (26.79306pt too wide) in paragraph at lines 496--497
+Overfull \hbox (26.79306pt too wide) in paragraph at lines 518--519
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][] 
  []
 
-
-Overfull \hbox (26.79306pt too wide) in paragraph at lines 500--501
+[24 <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images/
+sketch-syntax.png>]
+Overfull \hbox (26.79306pt too wide) in paragraph at lines 522--523
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][] 
  []
 
 
-Overfull \hbox (15.99295pt too wide) in paragraph at lines 501--502
+Overfull \hbox (15.99295pt too wide) in paragraph at lines 523--524
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][] 
  []
 
 
-Overfull \hbox (21.393pt too wide) in paragraph at lines 502--503
+Overfull \hbox (21.393pt too wide) in paragraph at lines 524--525
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][] 
  []
 
-<images/sketch-ide.png, id=488, 1425.07407pt x 694.84593pt>
+<images/sketch-ide.png, id=517, 1425.07407pt x 694.84593pt>
 File: images/sketch-ide.png Graphic file (type png)
 
 <use images/sketch-ide.png>
-Package pdftex.def Info: images/sketch-ide.png used on input line 522.
-(pdftex.def)             Requested size: 345.8173pt x 168.61125pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[24] [25 <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/im
-ages/sketch-ide.png>]
+Package pdftex.def Info: images/sketch-ide.png used on input line 544.
+(pdftex.def)             Requested size: 432.26999pt x 210.76672pt.
+ [25 <F:/My Dropbox/Public/laughing-ironman/Dissertation/Report-Template/images
+/sketch-ide.png>]
 Chapter 9.
 [26
 
 ]
 Chapter 10.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 542.
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 567.
 [27
 
 ]
 Appendix A.
 No file example.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 561.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 597.
 [28
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 561.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 597.
 
 ("F:\My Dropbox\Public\laughing-ironman\Dissertation\Report-Template\example.au
 x")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 561.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 561.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 597.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 597.
 Package rerunfilecheck Info: File `example.out' has not changed.
-(rerunfilecheck)             Checksum: 744F079E2ADC4CAD37BD2C22C48A47E8;2467.
+(rerunfilecheck)             Checksum: 0802C9FAC84242C3F397D9F7A82AFF3E;2525.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 561.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 597.
  ) 
 Here is how much of TeX's memory you used:
- 7325 strings out of 493921
- 105967 string characters out of 3150492
- 235121 words of memory out of 3000000
- 10279 multiletter control sequences out of 15000+200000
- 32140 words of font info for 71 fonts, out of 3000000 for 9000
+ 8470 strings out of 493921
+ 126508 string characters out of 3150492
+ 257016 words of memory out of 3000000
+ 11404 multiletter control sequences out of 15000+200000
+ 33725 words of font info for 73 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,7n,42p,1377b,1851s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,8n,42p,1377b,1839s stack positions out of 5000i,500n,10000p,200000b,50000s
 {K:/LaTeX/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<K:/LaTeX/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/cm/cmmi10.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/public/
 amsfonts/cm/cmr10.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy1
@@ -550,9 +613,9 @@ onts/type1/urw/courier/ucrb8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/ut
 mb8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><K:/LaTeX/MiKTe
 X 2.9/fonts/type1/urw/times/utmr8a.pfb><K:/LaTeX/MiKTeX 2.9/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on example.pdf (30 pages, 263612 bytes).
+Output written on example.pdf (30 pages, 1573342 bytes).
 PDF statistics:
- 631 PDF objects out of 1000 (max. 8388607)
- 254 named destinations out of 1000 (max. 500000)
- 331 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 646 PDF objects out of 1000 (max. 8388607)
+ 257 named destinations out of 1000 (max. 500000)
+ 354 words of extra memory for PDF output out of 10000 (max. 10000000)
 
