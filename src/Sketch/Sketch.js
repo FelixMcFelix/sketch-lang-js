@@ -6,7 +6,7 @@ var Sketch = Sketch || {};
 /**
  * Creates an instance of the Sketch module with standard configuration.
  * @method Sketch.createSketch
- * @param inCanvas
+ * @param {HTMLCanvasElement} inCanvas
  * @returns {Sketch.Driver}
  * @public
  */
