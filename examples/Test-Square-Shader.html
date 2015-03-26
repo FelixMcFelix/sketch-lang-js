@@ -20,23 +20,33 @@
 //				var squareVtx = new Float32Array([Math.random()*2 -1, Math.random()*2 -1, 0,
 //                                                Math.random()*2 -1, Math.random()*2 -1, 0]);
 
-				var manager = new Palette.Manager(glctx);
-                manager.addShader(text);
-                var prog = manager.getProgram("square", 'square');
+
 
 //                var squareVtx = [[-0.5,0.5],[-0.5,-0.5],[0.0,-1.0],[0.5,-0.5],[0.5,0.5],[1.0,1.0]];
-                var squareVtx = [[200,150],[200,450],[400,600],[600,450],[600,150],[800,0]];
-//                var squareVtx = new Float32Array([0,0,0, 800,600,0, 600,200,0, 0,0,0]);
+//                var squareVtx = [[200,150],[200,450],[400,600],[600,450],[600,150],[800,0]];
+
+
+
 
 //                var squareVtx = new Float32Array([0,0,0,
 //                                800,600,0]);
                 //console.log(earcut([squareVtx], true));
 
-                prog.setDrawMode(Palette.Program.POLYGON);
-//                prog.setDrawMode(Palette.Program.LINES);
+//                prog.setDrawMode(Palette.Program.POLYGON);
+
 //                prog.setDrawMode(Palette.Program.TRIANGLES);
 
-                prog.setConfig(Palette.Program.VS_MODE, {width: [canvas.width], height: [canvas.height]});
+                var manager = new Palette.Manager(glctx);
+                manager.addShader(text);
+                var prog = manager.getProgram("square", 'square');
+                prog.setDrawMode(Palette.Program.LINES);
+                
+                var pt1x = 0, pt1y= 0, pt2x = 800, pt2y=600;
+                var squareVtx = new Float32Array([pt1x,pt1y,0, pt2x,pt2y,0]);
+                var canWidth = glctx.canvas.width;
+                var canHeight = glctx.canvas.height;
+
+                //prog.setConfig(Palette.Program.VS_MODE, {width: [canWidth], height: [canHeight]});
 
                 glctx.clearColor(0.0,0.0,0.0,1.0);
                 glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
@@ -44,7 +54,7 @@
                     
 //                    squareVtx.set([Math.random()*2 -1, Math.random()*2 -1, 0,
 //                                                Math.random()*2 -1, Math.random()*2 -1, 0]);
-					prog.draw(squareVtx, {width: [canvas.width], height: [canvas.height]}, {color: [Math.random(), Math.random(), Math.random(), 1.0]});
+					prog.draw(squareVtx, {width: [canWidth], height: [canHeight]}, {color: [Math.random(), Math.random(), Math.random(), 1.0]});
 					window.requestAnimationFrame(raf);
 				}
 

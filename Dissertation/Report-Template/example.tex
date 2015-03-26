@@ -97,7 +97,7 @@ Our Motivation behind the choosing of this particular project is that, especiall
 
 \section{Aim}
 
-The aim for this project is to create a graphical programming language that is simple to use and read, and can be picked up by nearly any novice user, but is also powerful, and can be used to create drawings. Our idea for a simple language came from Processing, a graphical language created by Casey Reas, and the basis for the language is going to be WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, for example using {} for functions and loops and keeping the familiar structure of the for and while loops, and making sure our language follows them, while finding what we believe to be confusing or annoying common features of programming languages, like the double equals for the comparison of two objects, and replace them with what we find suitable and more 
+The aim for this project is to create a graphical programming language that is simple to use and read, and can be picked up by nearly any novice user, but is also powerful, and can be used to create drawings. Our idea for a simple language came from Processing, a graphical language created by Casey Reas and Benjamin Fry, and the basis for the language is going to be WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, for example using {} for functions and loops and keeping the familiar structure of the for and while loops, and making sure our language follows them, while finding what we believe to be confusing or annoying common features of programming languages, like the double equals for the comparison of two objects, and replace them with what we find suitable and more 
 
 \section{WebGL Background}
 
@@ -107,21 +107,21 @@ Web Graphics Library (WebGL) is a JavaScript API, that makes use of the \textles
 
 The remaining sections of this report will cover the following topics:
 \begin{itemize}
-	\item Language Tutorial :- This will comprise of a brief introduction to our programming language, which we have named \textbf{Sketch}
-	\item Language Reference Manual :- This will contain the grammar, and describe the language
-	\item Project Plan :- This will cover a timeline and basic structure of our project, and what we aimed to acheive from it. \textbf{I think so anyway}
-	\item Language Evolution :- This will describe the decisions we made for the language syntax and domain, and why we made them.
-	\item Compiler Architecture :- This section will cover the 5 different sections of the compiler:
+	\item \textbf{Language Tutorial} --- a brief introduction to our programming language, which we have named \textbf{Sketch}.
+	\item \textbf{Language Reference Manual} --- Sketch's grammar, and and a description of the language.
+	\item \textbf{Project Plan} --- a timeline and basic structure of our project, and what we aimed to acheive from it.
+	\item \textbf{Language Evolution} --- the decisions and thought process behind the language syntax and domain, and our reasoning.
+	\item \textbf{Compiler Architecture} --- an explanation of the 5 different sections of the compiler module:
 	\begin{itemize}
 		\item Lexer and Parser
 		\item Code Generator
-		\item Shader Manager
 		\item Abstract Machine
+		\item Shader Manager
 		\item Module Facade
 	\end{itemize}
-	\item Development Environment:- The environment(s) that we used to help structure and create this programming language
-	\item Test Plan and Test Suites :- An overview on how we tested the language, using what, and any bugs we discovered
-	\item Conclusions :- This will cover what, as a team, we learned and discovered during this project, any problems we encountered, and anything we would try differently.
+	\item \textbf{Development Environment} --- the environment used by the team to help structure and create this programming language.
+	\item \textbf{Test Plan and Test Suites} --- an overview of the language's testing strategy, approaches taken, and any bugs discovered.
+	\item \textbf{Conclusions} --- This will cover what, as a team, we learned and discovered during this project, any problems we encountered, and anything we would try differently.
 \end{itemize}
 
 %==============================================================================
@@ -130,7 +130,7 @@ The remaining sections of this report will cover the following topics:
 This chapter comprises of a brief introduction of how to use our language.
 \section{Getting Started}
 \label{start}
-In every language, the first program to write is always 'hello world' - where you would print the words "hello world". However, as this language is mainly a graphical language, the equivalent would be 'hello square', and the aim is to draw a square. In Sketch, the program required to draw a square is:\\
+In every language, the first program to write is always "Hello World" - where you would print the words "Hello World". However, as this language is mainly a graphical language, the equivalent would be "Hello Square", and the aim is to draw a square. In Sketch, the program required to draw a square is:
 \lstset{%
       basicstyle=\ttfamily\footnotesize\bfseries,
       xleftmargin=.1\textwidth, xrightmargin=.1\textwidth,
@@ -143,15 +143,17 @@ In every language, the first program to write is always 'hello world' - where yo
         draw square;
     }
 \end{lstlisting}
+
 To compile any Sketch program, insert the code into the browser page for our project and click "Render". The result of the program will then be shown on the canvas.
-\\ [12pt]
+
 Any Sketch program you write will have to consist of at least one function, and variables. These functions and variables can be named anything you like. You can call other functions to help carry out the task, only ones that you have written, as there are no libraries provided in the current version of the language. 
-\\ [12pt]
+
 In Sketch, implicit semi-colons exist at the end of every line. This means that, you don't have to end each line with a semi-colon, and whether you do or not will not have an effect on the compilation of the program. 
-\\ [12pt]
-The draw() function is used to pass the shapes you want to draw to the correct function, so it can be written to the canvas. This will be discussed in detail later.
-\\ [12pt]
-One way in which you can pass data between functions is by including variables in the calling statement as arguments. However, you can only do this if the function that is being called is expecting the same number and type of variables. An example is:
+
+The draw keyword is used to pass the shapes you want to draw to the correct function, so they can be written to the canvas. This will be discussed in detail later.
+
+One way in which you can pass data between functions is by including variables in the calling statement as parameters. However, you can only do this if the function that is being called is expecting the same number and type of variables. An example is:
+
 \begin{lstlisting}[caption={Function Parameters},label={lst:tutorial-parameters}]
     function init(){
         int n = 2;
@@ -161,11 +163,13 @@ One way in which you can pass data between functions is by including variables i
         takesParams(n);
     }
 \end{lstlisting}
-Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If there was another argument included, for example \textit{takesParams(n, 7)}, or the wrong types, then it would not compile. This will be talked about in more detail in Chapter \ref{func}. As you can see in Listing \ref{lst:tutorial-hello}, the code inside of a function is enclosed by curly braces \{\}. The draw keyword is used to draw any shapes that you have constructed to the canvas. It will take one parameter, either the point,line or polygon that you have constructed. This is a predefined keyword in the language, so you don't have to write it, but you cannot name any of your functions \textit{draw()} as a result. 
+
+Here, you see that the calling statement - \textit{takesParams(n);} - provides the correct number and type of arguments. If another parameter was included, for example \textit{takesParams(n, 7)}, or the wrong types, then the program would not compile. This will be talked about in more detail in Chapter \ref{func}. As you can see in Listing \ref{lst:tutorial-hello}, the code inside of a function is enclosed by curly braces "\{\}". The draw keyword is used to draw any shapes that you have constructed to the canvas. It will take one parameter, either the point,line or polygon that you have constructed. This is a predefined keyword in the language, so you don't have to write it, but you cannot name any of your functions \textit{draw()} as a result. 
 
 \section{Variables and Arithmetic operators}
 \label{vars}
 This next section will use a more complicated program than before, introducing more features, such as comments, loops, and expand on previously touched on features, such as variables.
+
 \begin{lstlisting}[caption={Comments and Point Addition},label={lst:tutorial-comment}]
 #This Program will draw 3 different shapes - triangle, square and pentagon.
 //Both of these lines are ignored by the compiler.
@@ -189,32 +193,35 @@ function init(){
     }
 }
 \end{lstlisting}
-The initial lines indicate how to show comments in your code in Sketch. Using a hashsign (\#) or a double slash (//) will cause the compiler to ignore all characters until the next newline, and show that the current line is a comment. These can be used to explain how your programs works, and make it easier to read and understand, for you or other users. The 'clear' function in this example is a reserved keyword, and is used to clear the canvas. A reserved keyword is a word that cannot be used otherwise, for variable names, of function calls - 'draw' is one such example we have shown.
-\\ [12pt]
-As you can see in Listing \ref{lst:tutorial-comment}, there are two ways of declaring variables, explicitly and implicitly. Each variable declaration must include the variable name, which is an alphanumeric string that always begins with a letter. To explicitly define your variable, each variable name must be preceeded by the intended type. For example, the variables 'sides' and 'counter' in Listing \ref{lst:tutorial-comment} are declared explicitly. Explicit declaration allows for the ability to not initialise the variable immediately. Implicit declaration is when the type is not defined by the user, but instead taken from the context. The type is inferred from the initialization of the variable afterwards. For example, 'pt2' in Listing \ref{lst:tutorial-comment} is implicitly defined, and from the context, the compiler will recognise that it is of type Point. However, with implicit types, you must immediately initialise the variable so its type can be inferred.
-\\ [12pt]
-The while loop in Sketch is of standard format and standard functionality. This means that the condition contained in the parentheses is tested, and if it returns true, then the body of the loop, and whatever statements it may contain, are executed. Then the original condition is retested. if true, it again executes the body. This continues until the condition is false, at which point, the body of the loop is not executed, and the next command outside the loop is executed and the program continues. A while loop has the format: 
-\begin{lstlisting}[caption={The "While" Loop},label={lst:tutorial-while},xleftmargin=.35\textwidth,xrightmargin=.5\textwidth,]
+
+The initial lines indicate how to show comments in your code in Sketch. Using a hash sign (\#) or a double slash (//) will cause the compiler to ignore all characters until the next newline, and show that the current line is a comment. These can be used to explain how your programs works, and make it easier to read and understand, for you or other users. The "clear" function in this example is a reserved keyword, and is used to clear the canvas. A reserved keyword is a word that cannot be used otherwise, for variable names, of function calls - "draw" is one such example we have shown.
+
+As you can see in Listing \ref{lst:tutorial-comment}, there are two ways of declaring variables, explicitly and implicitly. Each variable declaration must include the variable name, which is an alphanumeric string that always begins with a letter. To explicitly define your variable, each variable name must be preceded by the intended type. For example, the variables "sides" and "counter" in Listing \ref{lst:tutorial-comment} are declared explicitly. Explicit declaration provides the ability to not initialise the variable immediately. Implicit declaration is when the type is not defined by the user, but instead taken from the context. The type is inferred from the initialization of the variable afterwards. For example, "pt2" in Listing \ref{lst:tutorial-comment} is implicitly defined, and from the context, the compiler will recognise that it is of type Point. However, with implicit types, you must immediately initialise the variable so its type can be inferred.
+
+The while loop in Sketch is of standard format and standard functionality. This means that the condition contained in the parentheses is tested, and if it returns true, then the body of the loop, and whatever statements it may contain, are executed. Then the original condition is retested. if true, it again executes the body. This continues until the condition is false, at which point, the body of the loop is not executed, and the next command outside the loop is performed and the program continues. A while loop has the format: 
+
+\begin{lstlisting}[caption={The "While" Loop},label={lst:tutorial-while},xleftmargin=0.1\textwidth,xrightmargin=0\textwidth]
 while(condition){
 	#insert body here
 } 
 \end{lstlisting}
-Sketch has three main types for drawing shapes, lines and so forth. These are Point, Line and Polygon. Lets start with Point; Point is the basis of all possible shapes. Points make the vertices on which the shapes will be drawn about. A point is defined in the following format \{$x$ Coordinate, $y$ Coordinate\}. An example of both implicit and explicit declaration is shown in Listing \ref{lst:tutorial-comment} with 'pt1' and 'pt2'. These points can be added together to create a Line. Lines are a collection of two points joined together. The format for defining a line, shown by 'l1' in Listing \ref{lst:tutorial-comment}, is Line = (Point1 + Point2). Lines can be extended from the centre point by multiplying it by a number. For example, multiplying a line by 4 will make it 4 times the size. Finally, variables of type Polygon are a collection of lines, displayed as a closed circuit. Polygons can be defined by either adding multiple lines together, but they must all join, or by defining one line, and multiplying it by the number of sides you would like. This would create a shape of the stated number of lines, closed off, with the origin being the first co-ordinate of the line. The format of this would be either Polygon = (Line2 + Line2 ... + LineN) or Polygon = Line * N. In these examples, N is the number of sides desired.
-\\ [12pt]
-The line 'counter++' increments the counter, using the modifying operator '++'. We will explain modifying operators later in this tutorial.
-\\ [12pt]
-Sketch also has one more type of loop - the "for" loop. The for loop has a completely different structure to the while loop, but has, more or less, the same functionality. The choice between these two types is based on the context, which one would make more sense, for example, incrementations should be used in for loops, while boolean variables should be the control in while loops. The following is the while loop from Listing \ref{lst:tutorial-comment}, changed to a for loop:
+
+Sketch has three main types for drawing shapes, lines and so forth. These are Point, Line and Polygon. Let's start with Point: Points are the basis of all possible shapes, and are the vertices from which shapes will be drawn. A point is defined in the following format \{$x$ Coordinate, $y$ Coordinate\}. An example of both implicit and explicit declaration is shown in Listing \ref{lst:tutorial-comment} with "pt1" and "pt2". These points can be added together to create a Line. Lines are a collection of two points joined together. The format for defining a line, shown by "l1" in Listing \ref{lst:tutorial-comment}, is Line = (Point1 + Point2). Lines can be extended from the centre point by multiplying it by a number. For example, multiplying a line by 4 will create a line 4 times the size from the same origin and direction. Finally, variables of type Polygon are a collection of lines, displayed as a closed circuit. Polygons can be defined by either adding multiple lines together, but they must all join, or by defining one line, and multiplying it by the number of sides you would like. This would create a shape of the stated number of lines, closed off, with the origin being the first co-ordinate of the line. The format of this would be either Polygon = (Line2 + Line2 ... + LineN) or Polygon = Line * N. In these examples, N is the number of sides desired.
+
+The line "counter++" increments the counter, using the modifying operator "++". We will explain modifying operators later in this tutorial.
+
+Sketch also has one more type of loop - the "for" loop. The for loop has a completely different structure to the while loop, but has, more or less, the same functionality. The choice between these two types is based on the context, which one would make more sense, for example, incrementation should be used in for loops, while boolean variables should be the control in while loops. The following is the while loop from Listing \ref{lst:tutorial-comment}, changed to a for loop:
 \clearpage
 \begin{lstlisting}[caption={The "For" Loop},label={lst:tutorial-for},xleftmargin=.1\textwidth,xrightmargin=.1\textwidth,]
-    for(int counter = 3; counter < 5; counter ++) {
+    for(int counter = 3; counter < 5; counter++) {
         ...
     }
 \end{lstlisting}
 
 The for loop statement has three parts. Firstly, the control variable is initialised (it also does not need to be declared beforehand), then the statement that will be checked after every execute of the body, and finally, the incrementation of the control variable. The general functionality is the same as the while loop.
-\section{If statement and comparitive operators}
+\section{If Statements and Comparative operators}
 \label{comp}
-This section will cover how to perform comparing statements in Sketch. The following is an if statement which compares to check if a varaible is equal to something else:
+This section will cover how to perform comparing statements in Sketch. The following is an if statement which compares to check if a variable is equal to something else:
 \begin{lstlisting}[caption={If-Else Conditionals},label={lst:tutorial-ifelse}]
     function init(){
         int n = 5;
@@ -229,7 +236,8 @@ This section will cover how to perform comparing statements in Sketch. The follo
         }
     }
 \end{lstlisting}
-If statements are a way of executing a series of commands, but only if a particular statement returns true. To compare to elements, a comparitive operator is needed. In Sketch, there exists a series of six comparative operators:
+
+If statements are a way of executing a series of commands, but only if a particular statement returns true. To compare to elements, a comparative operator is needed. In Sketch, there exists a series of six comparative operators:
 \begin{itemize}
 \item \textbf{?=} will return true if left hand side is equal to right hand side.
 \item \textbf{?\textgreater} will return true if left hand side is greater than right hand side.
@@ -238,6 +246,7 @@ If statements are a way of executing a series of commands, but only if a particu
 \item \textbf{!\textgreater} will return true if left hand side is not greater than right hand side (ie is less than or equal to).
 \item \textbf{!\textless} will return true if left hand side is not less than right hand side (ie is greater than or equal to).
 \end{itemize}
+
 An exclamation mark can be inserted in front of the check statement in the if, to receive the inverse of what it returns.
 
 \section{Modifying Operators}
@@ -255,12 +264,14 @@ This section will cover how you can make use of sketch's modifying operators. Th
         n = (n + 3) * 5; #line 9
     }
 \end{lstlisting}
+
 Listing \ref{lst:tutorial-modify} outlines many modifying operators in Sketch. To explain each one, we will walk through the program itself. As previously mentioned, the first line will declare n to be of type int, with a value of 1. The next line will change the value of n by adding one to it. The general syntax would be \textit{*variable to be changed* += *how many to change it by*}. The next three lines follow the same syntax and semantics, with the exception that, line 3 would multiply the variable by the second value and assign it, line 4 would divide it by the second value and assign it, and line 5 would subtract by the second value and assign it, and finally line 6 would change the variable to equal the value of it modulo the second variable. This means that it would change it to the remainder after being divided by that number. So, after line 2, n would be equal to 3, after line 3, n would equal 6, after line 4, n would equal 3, after line 5 n would equal 1 and after line 6, n would still equal 1, as the remainder of 1 / 2 is still 1. These operators are functionally a shorter way of writing \textit{n = n + *value*;}, but obviously changed respective to the context (division, multiplication, subtraction and modulo).
-\\ [12pt]
-Line 6 is different. This operator will increment the variable by only 1. In the context of this program, n will now equal 2. The following line following the same structure, but instead subtracts one, meaning n is back to equal 1. These can be useful in loops for example, to increment or decrement your controlling variable as necessary. The final line outlines how parenthesis work in regards to performing mathematic actions. The flow it would take, is to first, add  to n, making it equal 4, and then multiply by 5, hence n equals 20. The brackets would specify what task has to be carried out first, as if they were not here on this occasion, by the laws of maths, 3 would be multiplied by 5 and then added to n, giving a different outcome. All of these modifying operators, except on line 9, are functionally just shorthand, but can be very useful and time saving while writing a program.
+
+Line 7 is different. This operator will increment the variable by only 1. In the context of this program, n will now equal 2. The following line has the same structure, but instead subtracts one, returning n's value is back to 1. These can be useful in loops for example, to increment or decrement your controlling variable as necessary. The final line outlines how parenthesis work in regards to performing arithmetic operations. The flow it would take, is to first, add to n, making it equal 4, and then multiply by 5, hence n equals 20. The brackets would specify what task has to be carried out first, as if they were not here on this occasion, by the laws of maths, 3 would be multiplied by 5 and then added to n, giving a different outcome. All of these modifying operators, except on line 9, are functionally just shorthand, but can be very useful and time saving while writing a program.
+
 \section{Functions and Scope}
 \label{func}
-In Sketch, functions, as mentioned before, taken certain types and number of parameters dependant on what you specify, it can range from 0 to n. Furthermore, these functions can be called whatever you decide, and can either have a return type or not, dependant on your needs. Example 1.6 will show these in action:
+In Sketch, functions, as mentioned before, taken certain types and number of parameters dependant on what you specify, it can range from 0 to n. Furthermore, these functions can be called whatever you decide, and can either have a return type or not, dependant on your needs. Listing \ref{lst:tutorial-functions} will show these in action:
 \begin{lstlisting}[caption={Functions and Scope}, label={lst:tutorial-functions}]
 function init(){
     int x = 1;
@@ -276,7 +287,8 @@ function init(){
     foo2(int x);
 }
 \end{lstlisting}
-In Listing \ref{lst:tutorial-functions}, you can see different properties of defining and calling a function. If a function is not returning anything, then you can see that the void is implicit. Furthermore, if a function has a return type, then you can assign a variable to equal its returned value, if it is of the same type. In regards to scope, functions have local scope, meaning that they would alter outside variables, or variables in other functions. This means that, as shown here, you can call variables the same name in two different functions, and there will be no crossover or confusion of values or any conflicts. 
+
+In Listing \ref{lst:tutorial-functions}, you can see different properties of defining and calling a function. If a function lacks a return type, then you can see that the void is implicit. Furthermore, if a function has a return type, then you can assign a variable to equal its returned value, if it is of the same type. In regards to scope, functions have local scope, meaning that they would alter outside variables, or variables in other functions. This means that, as shown here, you can call variables the same name in two different functions, and there will be no crossover or confusion of values or any conflicts.
 
 
 %==============================================================================
@@ -290,15 +302,15 @@ In Listing \ref{lst:tutorial-functions}, you can see different properties of def
 %==============================================================================
 \chapter{Language Evolution}
 \label{evo}
-In the following section, all the decisions we made for the language syntax and domain will be described and why we made them. 
+In the following section, all the decisions we made for the language syntax and domain will be described as well as our reasoning. 
 
-\section{Graphics programming language or general purpose one?}
-The first decision that had to be made regarding the project was what type of language should be developed. The two main types we were considering were graphics programming language or general purpose one.Each of them had its advantages and disadvantages but we decided to go for a graphics programming language since we considered it to be less difficult to implement in theory than a general purpose one. It would be much more interesting for us rather that the other type and we would be able to be create amazing graphs and shapes within just a few lines of code.  
+\section{Graphics Programming Language, or General Purpose?}
+The first decision that had to be made regarding the project was what type of language should be developed. The two main types we were considering were a graphics programming language and a general purpose language. Each had their advantages and disadvantages, but we decided to go for a graphics programming language since we considered it to be less difficult to implement in theory than a general purpose one. It would be much more interesting for us rather than a standard language, and we would be able to be create amazing graphs and shapes within just a few lines of code.  
 
-\section {How should our main program look like?}
-Our main program consists of 2 functions called init() and render(). Having both of them is not mandatory, but at least one of them should be present into the source file. In init(), the user specifies all variables and expression that he is using. Everything that should be drawn is specified in render(). Of course, the user can use variable declarations and everything else from the syntax, but the draw function should be called from render(). Example can be seen in Listing \ref{main} .
+\section {Program Structure and Appearance}
+Our main program consists of 2 functions called init() and render(). Having both of them is not mandatory, but at least one of them should be present into the source file. In init(), the user specifies all variables and expression that he is using. Everything that should be drawn is specified in render(). Of course, the user can use variable declarations and all other aspects of the syntax, but the draw keyword should be called from render(). Example can be seen in Listing \ref{main} .
 
-We were considering having only one function called main() for the whole code or not having main function at all, but at the end we decided that having that separation would make our language more readable, easy to learn and initiative for every user.
+We were considering having only one function called main() for the entire program or not having a main function at all, but in the end we decided that having this separation would make our language more readable, easier to learn and more intuitive for user.
 \begin{center}
 \lstset{
     basicstyle=\small\ttfamily,
@@ -318,32 +330,40 @@ We were considering having only one function called main() for the whole code or
   \end{lstlisting}
   \end{center}
  
-\section{What should be the primitive  types in our language?}
-The initial selection of primitive types consisted of \textbf{int, float, double, vector, Point} and \textbf{String}. We thought that these 6 types would be enough for our language.We were considering having a single \textbf{num} type, which we replace all the numerical types, but this idea was quickly rejected, since we reckoned that it would limit the functionality of Sketch and would cause a lot of ambiguities in given circumstances.
+\section{Primitive Types}
+The initial selection of primitive types consisted of \textbf{int, float, double, vector, Point} and \textbf{String}. We thought that these 6 types would be enough for our language. We considered having a single \textbf{num} type which would replace all specific numeric types, but this idea was quickly rejected, since we reckoned that it would limit the functionality of Sketch and would cause ambiguities in certain circumstances.
 
-Prior to the beginning  of the implementation, we made a new change in our primitive types. New type \textbf{bool} was added to the initial set, because we decide that it would be useful in situations where the validity of given condition should be met. Instead of having float and double, we agreed on one type \textbf{float}, which would combine these two, since  they were increasing the complexity of our language.  
+Prior to the beginning of the implementation, we made a change to our set of primitive types.  A new type, \textbf{bool}, was added since we believed that it would be useful in situations where the validity of a given condition should be met. Instead of having float and double, we agreed on one type \textbf{float}, which would combine these two, since they were increasing the complexity of our language.  
 
+At the end, two new types were added - \textbf{Line} and \textbf{Polygon} as we assumed that they would be necessary for the special kind of arithmetic that the language can perform. Although we had envisaged vectors and strings as having a key place in Sketch, they had to be removed from the implementation due to time constraints. The final list of primitive types present in Sketch is \textbf{bool, int, float, Point, Line and Polygon}.
 
-At the end, two new types were added \textbf{Line} and \textbf{Polygon} as we assumed that they would be necessary for the special kind of arithmetic that the language can perform. The final list of primitive type of Sketch is \textbf{bool, int, float,vector, String, Point, Line and  Polygon}.
+\section {Function Declaration}
+After some considerations, it was decided that function will be declared using \textbf{function} keyword followed by its name and list of parameters. The challenging bit here was how to specify the return type. The two options were either having it at the beginning of the declaration as in some programming languages or just after the parameters list specified by "-\textgreater" and the return type (a notation used in Apple's Swift programming language, Rust, and numerous functional programming languages). We decided to go for the arrow syntax, because using "-\textgreater" is very similar to mathematical notation for mapping one domain to another - we felt this would be appropriate for the context of our programming language.
 
-\section {Function declaration}
-After some considerations, it was decided that function will be declared using \textbf{function} keyword followed by its name and list of parameters. The challenging bit here was how to specify the return type. The two options were either having it at the beginning of the declaration as in some programming languages or just after the parameters list specified by "-\textgreater" and the return type (similar notation is used in Swift programming language). We decided to go for the second one, because using  "-\textgreater" is similar to what is used in mathematical functions for mapping one domain to another and this would be appropriate for the context of our programming language.
+Another feature that is inspired by Swift is implicit void return type for a function's declaration. If a return type is not specified, then the function is assumed to return no value. This would increase the flexibility and usability of our language by removing the need for programmers to state.
+The possibility of multiple return types was considered, but we decided at this initial stage it would increase the complexity of our language and it would possibly be a reason for confusion of our users.
 
-Another feature, that is inspired for Swift, is the implicit void of a function. If a return type is not specified, then the function is void. This would increase the flexibility and usability of our language.
-A possibility for multiple return types was consider, but we decided at this initial stage it would increase the complexity and it would possibly be a reason for confusion of our users.
+\section{Function Parameter Syntax and Semantics}
+Further drawing inspiration from other languages, the team conducted research into how function parameters are defined, handled and presented in other programming styles. While we were more used to the traditional style of C-like parameters, where parameters are named during function definition and simply presented in order for function execution, we found ourselves strongly drawn to named parameters.
 
-\section{Comparison operators}
-Very often it is confusion for inexperienced programmers to distinguish between assignment operator( often '=') and comparison operator for equality(often "=="). We decided to introduce a completely different notation for comparison. In order to check if two variables are equal, we use \textbf{"?="}. For consistency reasons, operators for less than and greater are \textbf{'?\textless'} and \textbf{'?\textgreater'}. We believe that this makes Sketch easier for new programmers and it makes is unique since we haven not seen these kind of notation in any other language.
+The most popular examples of languages featuring this behaviour are C\# and Swift, yet even these implementations have their differences. When calling a function in C\#, the language does not require the user to specify the names or values of all parameters - they may be used verbatim, with their name for identification purposes or omitted to assume the default value. Swift, however, requires users to provide the parameters in the order they were presented when making a function call, with their omission causing the default value to be inserted as in C\#. Rather uniquely, Swift has the concept of external and internal parameter names - allowing function calls to be extremely descriptive and describe their operation in a very natural way.
+
+While almost all members of the team were initially enamoured with Swift's expressive and intuitive syntax, we found that implementing such a system with our limited resources would be a risky move. As such, we decided to forego this syntax in favour of tradition - tabling the idea for the future.
+
+\section{Comparison Operators}
+Very often it is confusing for inexperienced programmers to distinguish between the assignment operator (often "=") and the comparison operator for equality (often "=="). We decided to introduce a completely different, unique notation for comparison. In order to check if two variables are equal, we use \textbf{"?="}. For consistency reasons, operators for less than and greater are \textbf{"?\textless"} and \textbf{"?\textgreater"}. This naturally extends to the inverse operations, \textbf{"!="}, \textbf{"!\textless{}"} and \textbf{"!\textgreater{}"} - creating a very elegant syntax that we were surprised to have never come across before. We believe that this makes Sketch easier for new programmers and its uniqueness helps our language to stand out from the crowd, so to speak.
+
 \section {Semicolons}
-Semicolons are very often a reason for compilation errors, but meanwhile it makes the code more readable. In order to limit the possibility of errors, semicolons in our language are optional.
+Semicolons are very often a frustrating reason for compilation errors, but equally they can make code more readable to developers. In order to limit the frequency of errors that rookie (and even experienced) programmers are likely to make, semicolons in our language are optional. To support this, the language follows several methods employed by JavaScript - newlines between statements function as though a semicolon were present, while they do not disrupt an existing statement if the programmer chooses to break a function call over multiple lines for instance.
+
 \section {Loops}
-We were considering the idea of having only one type of iterator in Sketch, but having in mind that some users prefer 'for-loop'-s,other 'while-loop'-s, we decided our syntax to have all of the most common loops. Having only one iteration statement would limit the flexibility of our language and some of our users would not be happy with this.
+We were considering the idea of having only one type of iterator in Sketch, but bearing in mind that some users prefer for-loops and others while-loops, we decided our syntax should have all of the most common loops. Having only one iteration method would limit the flexibility of our language and some of our users would not be comfortable with this.
  
-\section {If statements and switches }
-Sketch has if statements and supports if-else as well. We wanted to have switches in our language, but due to time constraints, we decided to keep this structure for later versions of our language.
+\section {"If" Statements and Switches}
+Sketch contains if statements and supports else and else-if as well - we established that these were essential features of any programming language. We chose to stick with C's syntax - we knew it best, and we believe that it is the most intuitive. We wanted to have switches in our language, but due to time constraints, we decided to keep this structure for later versions of our language. Regardless, switches can be emulated by a patient programmer using a large chain of if-else conditionals.
 
 \section{Other parts of the syntax}
-For parts of the syntax not mentioned above, quick decision was made. We wanted our language to be easy to learn by everyone so having syntax not consistent with other programming languages would change this (especially for experienced programmers). Sketch's syntax is similar to the syntax of two of leading programming languages Java and C. 
+For parts of the syntax not mentioned above, quick decisions were made. We wanted our language to be easy to learn for everyone, so having syntax not consistent with other programming languages would change this (especially for experienced programmers). Sketch's syntax is similar to the two of the leading programming languages, Java and C - although we honestly believe that our augmentations and modifications are the right choices to make to escape from questionable historical design decisions plaguing both of these languages. 
 
 
 
@@ -449,7 +469,7 @@ condition_statements
   \end{lstlisting}
 \end{center}
 
-\subsubsection { Abstract Syntax Tree (AST)}
+\subsubsection {Abstract Syntax Tree (AST)}
 If a source program in Sketch uses the correct syntax and grammar rules, after parsing an Abstract Syntax Tree would be generated and passed to the code generator. Our parser produces a tree represented as an object in JSON format. As a result, the JISON file had to be changed and for each grammar rule the corresponding JSON object was added. In Listing  \ref{lst:ast-example}, the output for \textbf{"Hello Square"} program is show.
 If one of the grammar rules is violated, no AST will be generated and error will be thrown - this feature is provided for us by the parser generator.
 
@@ -847,6 +867,14 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 %------------------------------------------------------------------------------
 \subsection{Program}
 \label{cont-prog}
+\begin{itemize}
+\item \textbf{Parser} --- Kristiyan Dimitrov
+\item \textbf{Code Generator} --- David Creigh
+\item \textbf{Virtual Machine} --- Darren Findlay
+\item \textbf{Shader Manager} --- Kyle Simpson
+\item \textbf{Module Fa\c{c}ade} --- Kyle Simpson
+\item \textbf{Online IDE} --- Kyle Simpson
+\end{itemize}
 
 %==============================================================================
 \appendix
