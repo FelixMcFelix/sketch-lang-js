@@ -75,6 +75,10 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		LOADIDX:104,
 		SETIDX: 105,
 		PGDARW: 106,
+		LNTOPG: 107,
+		LNADD: 	108,
+		PTADD: 	109,
+		PGMUL: 	110,
 		EXIT: 	999
 	};
 
@@ -437,6 +441,43 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					var value = dataStore[sp];
 					arr[arrayIndex] = value;
 					break;
+				case opCodes.LNTOPG:
+					sp--;
+					var lineAddress = dataStore[sp];
+					sp--;
+					var numSides = dataStore[sp];
+					var line = constantPool[lineAddress];
+					var polygon = line.slice(0);
+					var i = 2;
+					var angle = 360 / numSides;
+					var pt1xIdx = 0;
+					var pt1yIdx = 1;
+					var pt2xIdx = 2;
+					var pt2yIdx = 3;
+					var pt3xIdx = 4;
+					var pt3yIdx = 5;
+					while(i < numSides) {
+						var pivot = [polygon[pt1xIdx],polygon[pt1yIdx]];
+						var point = [polygon[pt2xIdx],polygon[pt2yIdx]];
+						var newpt = rotatePoint(pivot,point,angle);
+						// Shift new point
+						offSetx = polygon[pt1xIdx] - polygon[pt2xIdx];
+						offSety = polygon[pt1yIdx] - polygon[pt2yIdx];
+						newpt[0] -= offSetx;
+						newpt[1] -= offSety;
+						// Add new point to polygon
+						polygon[pt3xIdx] = newpt[0];
+						polygon[pt3yIdx] = newpt[1];
+						pt1xIdx += 2;
+						pt1yIdx += 2;
+						pt2xIdx += 2;
+						pt2yIdx += 2;
+						pt3xIdx += 2;
+						pt3yIdx += 2;
+
+						i++;
+					}
+					break;
 			}
 			console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
 			if(debugMode) console.log(JSON.stringify(dataStore));
@@ -455,5 +496,29 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		needsUpdate = 0;
 		//setTimeout(window.mvm.interpret,1);
 		window.requestAnimationFrame(window.mvm.interpret);
+	}
+
+	function rotatePoint(pivot, point, angle) {
+		// Get origin x, y
+		var pivx = pivot[0];
+		var pivy = pivot[1];
+		// Get point x, y
+		var ptx = point[0];
+		var pty = point[1];
+		// Get sin and cos of angle
+		var s = Math.sin(angle);
+		var c = Math.cos(angle);
+		// Translate point back to origin
+		ptx -= pivx;
+		pty -= pivy;
+		// Rotate point
+		var newx = ptx * c - pty * s;
+		var newy = ptx * s + pty * c;
+		// Translate new point back
+		newx += pivx;
+		newy += pivy;
+		// Create new point
+		var newPt = [newx,newy];
+		return newPt;
 	}
 }
