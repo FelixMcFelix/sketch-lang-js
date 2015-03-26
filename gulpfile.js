@@ -25,7 +25,7 @@ gulp.task("default", ["clean"], function(){
 
 
 //BUILD TASKS
-gulp.task("build",["build:Palette", "build:parser", "build:MVM","build:generator","build:Sketch"], function(){
+gulp.task("build",["build:Palette", "build:parser", "build:MVM","build:generator","build:Sketch","build:editor"], function(){
 	return gulp.src(configs.interDir+"*.js")
 			.pipe(concat("main.js"))
 			.pipe(gulp.dest(configs.destDir))
@@ -67,6 +67,12 @@ gulp.task("build:Sketch", function(){
 	return gulp.src([configs.srcDir+"Sketch/Sketch.js",configs.srcDir+"Sketch/*.js"])
 			.pipe(concat("Sketch.js"))
 			.pipe(gulp.dest(configs.interDir));
+});
+
+gulp.task("build:editor", function(){
+	//Copy shaders/ into editor/, so that it has the latest copy of the module's shaders.
+	return gulp.src("shaders/*.json")
+		.pipe(gulp.dest("./editor/shaders/"));
 });
 
 //CLEAN TASKS

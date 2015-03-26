@@ -11,6 +11,6 @@ var Sketch = Sketch || {};
  */
 Sketch.createSketch = function(inCanvas){
 	var out = new Sketch.Driver(inCanvas);
-	out.addShader("shaders/simpleSquareShader.json");
+	out.addShader("shaders/sketch-default.json");
 	return out;
 };
