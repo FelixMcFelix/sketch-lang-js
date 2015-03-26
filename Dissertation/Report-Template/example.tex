@@ -290,6 +290,8 @@ In Listing \ref{lst:tutorial-functions}, you can see different properties of def
 %==============================================================================
 \chapter{Language Evolution}
 \label{evo}
+In the following section, all the decisions we made for the language syntax and domain will be described and why we made them. 
+
 \section{Graphics programming language or general purpose one?}
 The first decision that had to be made regarding the project was what type of language should be developed. The two main types we were considering were graphics programming language or general purpose one.Each of them had its advantages and disadvantages but we decided to go for a graphics programming language since we considered it to be less difficult to implement in theory than a general purpose one. It would be much more interesting for us rather that the other type and we would be able to be create amazing graphs and shapes within just a few lines of code.  
 
@@ -806,9 +808,9 @@ The testing of our language can be covered in three different categories:
 \item \textbf{Opcode tests} used as a means of testing the abstract machine
 \item \textbf{Output from tests} used as a means to test the remaining areas of the compiler - ie output from parser used for code generator, and output from the abstract machine used to test the shader manager
 \end{itemize}
-The source code tests were originally the only test methods, however, as the project proceeded, we understood the need for tests for each component of the compiler. This was due to fact while the components didnt work, they obviously couldnt interact with one another.
+The source code tests were originally the only test methods, however, as the project proceeded, we understood the need for tests for each component of the compiler. This was due to fact while the components didn't work, they obviously could not interact with one another.
 \\[12pt]
-These source code fragments range from very small and straightforward, for example declaring and assigining a value to variable, to slightly more complex, like loops and nested if statements, to complex, which included creating a short animation, or creating multiple different shapes dependant on the value a line is multiplied by. These tests were very useful in testing the parser to ensure the correct output was given. When these tests were parsed, the output of the parser, the abstract syntax tree (AST), were used as testing for the code generation component. This component would take in the AST, and produce opcodes for the abstract machine.
+These source code fragments range from very small and straightforward, for example declaring and assigning a value to variable, to slightly more complex, like loops and nested if statements, to complex, which included creating a short animation, or creating multiple different shapes dependant on the value a line is multiplied by. These tests were very useful in testing the parser to ensure the correct output was given. When these tests were parsed, the output of the parser, the abstract syntax tree (AST), were used as testing for the code generation component. This component would take in the AST, and produce opcodes for the abstract machine.
 The opcode tests consisted of small programs due to the higher workload involved in them, but still became quite complex, in drawing shapes etc. These tests contained the source code translated into the relevant opcodes and operands. This meant that it could be run directly from the abstract machine module, and it could be solitarily tested, without the need of other components. The output from this was also used to test the shader manager.
 
 We felt this was the most informative, and altogether best structured approach towards testing our language. It allowed us to test different modules by themselves, but also the compiler as a whole and how each module interacted with the next.
@@ -830,7 +832,7 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 \textit{\textbf{Writing:}}
 \begin{itemize}
 \item \emph{David Creigh:} Chapter
-\item \emph{Kristiyan Dimitrov:} Chapter \ref{arch-lex}
+\item \emph{Kristiyan Dimitrov:} Chapter \ref{evo}, \ref{arch-lex}
 \item \emph{Gerard Docherty:} Chapter 
 \item \emph{Darren Findlay:} Chapter 
 \item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{arch-module}, \ref{dev}, \ref{ide}
