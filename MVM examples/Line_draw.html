@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script type="text/javascript" src="../src/Palette/Palette.js"></script>
-	<script type="text/javascript" src="../src/MVM/MVM.js"></script>	
+	<script type="text/javascript" src="../mid-build/Palette.js"></script>
+	<script type="text/javascript" src="../mid-build/MVM.js"></script>	
 </head>
 <body>
 	<canvas id="mvm-can" width="800" height="600"></canvas>
@@ -54,11 +54,7 @@ window.onload = function(){
 
 	manager.addShader(shaderStore);
 	
-	var line1 = [
-		[-0.5,0.5],
-		[0.5,0.5],
-		[0.0,1.0,0.0,1.0]
-	];
+	var line1 = [0.0,1.0,0.0,1.0,100,100,200,200];
 	var line2 = [
 		[0.5,-0.5],
 		[-0.5,-0.5],
@@ -89,8 +85,8 @@ window.onload = function(){
 		[(Math.random() * 2) - 1,(Math.random() * 2) - 1],
 		[0.0,0.0,0.0,1.0]
 	];*/
-	var constantPool = [line1,line2,line3,line4];
-	var codeStore = [101,4,0,21,4,1,21,4,2,21,4,3,21,22];
+	var constantPool = [line1];
+	var codeStore = [101,4,0,21,22];
 	//mvm.interpret(1,codeStore);
 	window.mvm = new MVM(glctx, manager, codeStore, constantPool, 0);
 	window.mvm.interpret();
