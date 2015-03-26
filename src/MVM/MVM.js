@@ -393,32 +393,40 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					var pt1y = lineStruct[5];
 					var pt2x = lineStruct[6];
 					var pt2y = lineStruct[7];
-					var theLine = new Float32Array([pt1x,pt1y,0,
-													pt2x,pt2y,0]);
+
+					var theLine = new Float32Array([pt1x,pt1y,0, pt2x,pt2y,0]);
 					var theColor = new Float32Array([r,g,b,a]);
+
 					var prog = manager.getProgram("square", "square");
+					var canWidth = glctx.canvas.width;
+					var canHeight = glctx.canvas.height;
 					prog.setDrawMode(Palette.Program.LINES);
-					prog.draw(theLine, {width:[glctx.canvas.width], height: [glctx.canvas.height]}, {color: theColor})
+					prog.draw(theLine, {width:[canWidth], height: [canHeight]}, {color: theColor})
+
 					if(debugMode) console.log("LNDRAW: " + lineStruct);
 					break;
 				case opCodes.PGDARW:
-					var polygonAddress = codeStore[cp];
-					cp++;
+					sp--
+					var polygonAddress = dataStore[sp];
 					var polygonStruct = constantPool[polygonAddress];
 					var r = polygonStruct[0];
 					var g = polygonStruct[1];
 					var b = polygonStruct[2];
 					var a = polygonStruct[3];
-					var theColor = Float32Array([r,g,b,a]);
+					var theColor = new Float32Array([r,g,b,a]);
 
 					var points = [];
 					var i;
 					for (i = 4; i < polygonStruct.length; i+=2) {
 						var pt = [polygonStruct[i],polygonStruct[i+1]];
+						points.push(pt);
 					}
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.POLYGON);
-					prog.draw(points, {}, {color: theColor});
+					//prog.draw(points, {}, {color: theColor});
+					var canWidth = glctx.canvas.width;
+					var canHeight = glctx.canvas.height;
+					prog.draw(points, {width:[canWidth], height: [canHeight]}, {color: theColor})
 					break;
 				case opCodes.RENDER:
 					needsUpdate = 1;
@@ -470,12 +478,12 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					var polygon = line.slice(0);
 					var i = 2;
 					var angle = 360 / numSides;
-					var pt1xIdx = 0;
-					var pt1yIdx = 1;
-					var pt2xIdx = 2;
-					var pt2yIdx = 3;
-					var pt3xIdx = 4;
-					var pt3yIdx = 5;
+					var pt1xIdx = 4;
+					var pt1yIdx = 5;
+					var pt2xIdx = 6;
+					var pt2yIdx = 7;
+					var pt3xIdx = 8;
+					var pt3yIdx = 9;
 					while(i < numSides) {
 						var pivot = [polygon[pt1xIdx],polygon[pt1yIdx]];
 						var point = [polygon[pt2xIdx],polygon[pt2yIdx]];
@@ -497,6 +505,9 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 						i++;
 					}
+					var targetAddress = codeStore[cp];
+					cp++;
+					constantPool[targetAddress] = polygon;
 					break;
 				case opCodes.PTADD:
 					sp--;
@@ -537,10 +548,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 					break;
 			}
-			//console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
 			if(debugMode) console.log(JSON.stringify(dataStore));
-			lc++;
-			if (/*lc > 50*/0) {console.log("INF LOOP");break};
 		}
 		if (needsUpdate) {render();}
 	};
@@ -563,8 +571,8 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		var ptx = point[0];
 		var pty = point[1];
 		// Get sin and cos of angle
-		var s = Math.sin(angle);
-		var c = Math.cos(angle);
+		var s = Math.sin((angle) * (Math.PI/180));
+		var c = Math.cos((angle) * (Math.PI/180));
 		// Translate point back to origin
 		ptx -= pivx;
 		pty -= pivy;

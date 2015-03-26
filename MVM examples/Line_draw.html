@@ -71,7 +71,7 @@ window.onload = function(){
 		[0.0,0.0,0.0,1.0]
 	];*/
 	var constantPool = [line1];
-	var codeStore = [101,4,0,21,22];
+	var codeStore = [4,0,31,3,0,4,0,25,27];
 	//mvm.interpret(1,codeStore);
 	window.mvm = new MVM(glctx, manager, codeStore, constantPool, 0);
 	window.mvm.interpret();
