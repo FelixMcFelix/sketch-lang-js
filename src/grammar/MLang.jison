@@ -266,7 +266,7 @@ exp
 
     | prim_expr MINUS exp
                 {$$ = { 
-                        type: 'minus',
+                        type: 'subtraction',
                         arguments:[
                             $1, 
                             $3]
