@@ -1,4 +1,3 @@
-/* global Palette */
 /**
 * @classdesc Abstraction of program references to allow easy manipulation.
 * @description The Program object, generated from linked pairs of vs-fs combinations.
@@ -60,13 +59,13 @@ Palette.Program = function(gl, vs, fs){
 	* @private
 	* @readonly
 	*/
-	this.attrs = {vs: {access:{},store:{},send:{}}
-					, fs: {access:{},store:{},send:{}}};
+	this.attrs = {vs: {access:{},store:{},send:{}},
+					fs: {access:{},store:{},send:{}}};
 
 	/**
 	* The Selected Draw Mode for the program.
 	* @name Palette.Program#drawMode
-	* @type Integer
+	* @type int
 	* @private
 	* @readonly
 	*/
@@ -92,10 +91,9 @@ Palette.Program.prototype = {
 		if(!conf1) conf1 = {};
 		var tempDrawMode = this.drawMode;
 
-		if(verts != null){
+		if(verts !== null){
 		switch(this.drawMode){
 			case Palette.Program.POLYGON:
-				debugger;
 				var temp = earcut([verts], true);
 				var itemSize = this.attrs.vs.access.vertexBuffer.itemSize;
 				var temper = new Float32Array(temp.indices.length * itemSize);
@@ -131,15 +129,15 @@ Palette.Program.prototype = {
 
 		this.passAttrstoProg();
 
-		this.context.drawArrays(tempDrawMode, 0
-			, this.attrs.vs.send.vertexBuffer.length/this.attrs.vs.access.vertexBuffer.itemSize);
+		this.context.drawArrays(tempDrawMode, 0,
+			this.attrs.vs.send.vertexBuffer.length/this.attrs.vs.access.vertexBuffer.itemSize);
 	},
 
 	/**
 	* Restore a program's object config for either shader or both.
 	* @method Palette.Program#restoreDefaultConfig
 	* @public
-	* @param {integer} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE,
+	* @param {int} mode - The identifier for which config object to revert. Supports Palette.Program.VS_MODE,
 	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
 	*/
 	restoreDefaultConfig: function(mode){
@@ -168,7 +166,7 @@ Palette.Program.prototype = {
 	* Object properties not in the supplied object will not overwrite the program state.
 	* @method Palette.Program#setConfig
 	* @public
-	* @param {integer} mode - The identifier for which config object to set. Supports Palette.Program.VS_MODE,
+	* @param {int} mode - The identifier for which config object to set. Supports Palette.Program.VS_MODE,
 	* Palette.Program.FS_MODE, Palette.Program.BOTH_MODE.
 	* @param {object} conf - The config object to inject into the program state.
 	*/
@@ -183,7 +181,7 @@ Palette.Program.prototype = {
 			for(var prop in attrPointer.access){
 				var attrDest = attrPointer.store[prop];
 
-				if(conf[prop]!= undefined)
+				if(conf[prop]!== undefined)
 					attrDest = conf[prop];
 			}
 		}
@@ -284,7 +282,7 @@ Palette.Program.prototype = {
 	* Set a program's draw mode.
 	* @method Palette.Program#setDrawMode
 	* @public
-	* @param {integer} mode - The gl code for drawing mode. Supports Palette.Program.POINTS, .LINES, .LINE_LOOP,
+	* @param {int} mode - The gl code for drawing mode. Supports Palette.Program.POINTS, .LINES, .LINE_LOOP,
 	* .LINE_STRIP, .TRIANGLES, .TRIANGLE_STRIP, .TRIANGLE_FAN.
 	*/
 	setDrawMode: function(mode){
@@ -299,7 +297,7 @@ Palette.Program.prototype = {
 	*/
 	generateSend: function(dest, conf){
 		var toSend;
-		for(name in dest.access){
+		for(var name in dest.access){
 			if(conf[name]) toSend = conf[name];
 			else toSend = dest.store[name];
 			dest.send[name] = toSend;
@@ -317,23 +315,25 @@ Palette.Program.fetchSetter = function(gl, type){
 	var oneParamFromArray = function(convertFunc){
 		return function(ptr, array){
 			convertFunc(ptr, array[0]);
-		}
-	}
+		};
+	};
 	var twoParamFromArray = function(convertFunc){
 		return function(ptr, array){
 			convertFunc(ptr, array[0],array[1]);
-		}
-	}
+		};
+	};
 	var threeParamFromArray = function(convertFunc){
 		return function(ptr, array){
 			convertFunc(ptr, array[0],array[1],array[2]);
-		}
-	}
+		};
+	};
 	var fourParamFromArray = function(convertFunc){
 		return function(ptr, array){
 			convertFunc(ptr, array[0],array[1],array[2],array[3]);
-		}
-	}
+		};
+	};
+
+	var k;
 
 	switch(type){
 		case "float":
@@ -378,16 +378,16 @@ Palette.Program.fetchSetter = function(gl, type){
 			alert("You're on your own, kid.");
 			return null;
 		case "vertexAttrib":
-			var k = function(attrib, buffer){
+			k = function(attrib, buffer){
 				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
 				gl.vertexAttribPointer(attrib.pointer, buffer.itemSize, gl.FLOAT, false, 0, 0);
-			}
+			};
 			return k.bind(gl);
 		case "buffer":
-			var k = function(buffer, bufferData){
+			k = function(buffer, bufferData){
 				gl.bindBuffer(gl.ARRAY_BUFFER, buffer.pointer);
 				gl.bufferData(gl.ARRAY_BUFFER, bufferData, gl.DYNAMIC_DRAW);
-			}
+			};
 			return k.bind(gl);
 		default:
 			alert("Not gonna lie - you really messed up. I can't pass "+type+" onto the shader.");

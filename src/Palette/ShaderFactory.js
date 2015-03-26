@@ -95,7 +95,7 @@ Palette.ShaderFactory.prototype = {
 		var rdr = new XMLHttpRequest();
 		rdr.open("GET", url, true);
 		rdr.onload = function(){
-			console.log(that)
+			console.log(that);
 			that.addShader(rdr.response);
 			that.downloadInProgress = false;
 		};
@@ -118,8 +118,11 @@ Palette.ShaderFactory.prototype = {
 			type = Palette.ShaderFactory.SOURCE_OBJECT;
 		} else if(this.isJSON(shader)){
 			type = Palette.ShaderFactory.JSON;
-		} else if(this.isString(shader)){
-			type = Palette.ShaderFactory.URL;
+			/*} else if(this.isString(shader)){
+			 type = Palette.ShaderFactory.URL;
+			 }*/
+		}else{
+			console.log("PALETTE: BAD SHADER. MALFORMED JSON OR BAD OBJECT SHAPE.");
 		}
 		return type;
 	},

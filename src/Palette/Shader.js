@@ -1,4 +1,4 @@
-/* global Palette */
+/* global WebGLShader */
 /**
 * @classdesc Abstraction of shader references to allow easy manipulation.
 * @class Palette.Shader
@@ -23,7 +23,7 @@ Palette.Shader = function(gl, name, type, source, attrs){
 	/**
 	* The type of shader, either Palette.Shader.VS or Palette.Shader.FS for objects.
 	* @name Palette.Shader#type
-	* @type Integer
+	* @type int
 	* @protected
 	* @readonly
 	*/

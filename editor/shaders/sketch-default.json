@@ -1,0 +1,49 @@
+{
+	"type": 2,
+	"content": [
+		{
+			"type": 0,
+			"name": "square",
+			"src": "#version 100\n attribute vec3 aVertexPos;\n uniform float width;\n uniform float height;\n void main(){\n vec3 transform = ((vec3(2.0/width,2.0/height,1.0)*aVertexPos)-vec3(1.0,1.0,0.0))*vec3(1.0, -1.0, 1.0);\n gl_Position = vec4(transform, 1.0);\n}",
+			"attrs": [
+				[
+					"aVertexPos",
+					"vertexAttrib",
+					"vertexBuffer"
+				],
+				[
+					"vertexBuffer",
+					"buffer",
+					3
+				],
+				[
+					"width",
+					"float",
+					800
+				],
+				[
+					"height",
+					"float",
+					600
+				]
+			]
+		},
+		{
+			"type": 1,
+			"name": "square",
+			"src": "#version 100\n precision mediump float;\n uniform vec4 color;\n void main(){gl_FragColor = color;}",
+			"attrs": [
+				[
+					"color",
+					"vec4",
+					[
+						0,
+						1,
+						0,
+						1
+					]
+				]
+			]
+		}
+	]
+}

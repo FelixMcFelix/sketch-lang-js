@@ -79,6 +79,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		LNADD: 	108,
 		PTADD: 	109,
 		PGMUL: 	110,
+		LNMUL:  110,
 		EXIT: 	999
 	};
 
@@ -489,6 +490,37 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					var lineAddress = codeStore[cp];
 					cp++;
 					constantPool[lineAddress] = line;
+					break;
+				case opCodes.LNMUL:
+					sp--;
+					var mulValue = dataStore[sp];
+					sp--;
+					var lineAddress = constantPool[sp];
+					var line = constantPool[lineAddress];
+					pt1x = line[0];
+					pt1y = line[1];
+					pt2x = line[2];
+					pt2y = line[3];
+
+					var a = pt1x - pt2x;
+					var b = pt1y - pt2y;
+
+					var distance = Math.sqrt( a*a + b*b );
+
+					xDirection = (pt1x > pt2x) ? 1 : -1;
+					yDirection = (pt1y > pt2y) ? 1 : -1;
+
+					xDistance = (distance * mulValue) * xDirection;
+					yDistance = (distance * mulValue) * yDirection;
+
+					var targetLineAddress = codeStore[cp];
+					cp++;
+
+					var newLine = line.slice(0);
+					newLine[2] += xDistance;
+					newLine[3] += yDistance;
+					constantPool[targetLineAddress] = newLine;
+
 					break;
 			}
 			//console.log("cp:"+cp+"sp:"+sp+"fp"+fp);

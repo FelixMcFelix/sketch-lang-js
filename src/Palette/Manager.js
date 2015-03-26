@@ -1,4 +1,5 @@
 /* global Palette */
+/* global WebGLRenderingContext */
 /**
 * @classdesc The core part of the system - initialise this to begin using the shader manager.
 * @class Palette.Manager
@@ -18,21 +19,21 @@ Palette.Manager = function(gl){
     * An object storing all processed Vertex Shaders.
     * @name Palette.Manager#vertShaders
 	* @type Object
-    * @private
+    * @protected
     */
 	this.vertShaders 	= {};
 	/**
     * An object storing all processed Fragment Shaders.
     * @name Palette.Manager#fragShaders
 	* @type Object
-    * @private
+    * @protected
     */
 	this.fragShaders	= {};
 	/**
     * An object storing all processed Programs.
     * @name Palette.Manager#programs
 	* @type Object
-    * @private
+    * @protected
     */
 	this.programs		= {};
 
@@ -106,7 +107,7 @@ Palette.Manager.prototype = {
 	* Request a shader object from storage using its type and name.
 	* @method Palette.Manager#getShader
 	* @public
-	* @param {integer} type - Either Palette.Shader.VS or Palette.Shader.FS.
+	* @param {int} type - Either Palette.Shader.VS or Palette.Shader.FS.
 	* @param {string} name - The shader's identifier.
 	* @return {Palette.Shader} The requested {@link Palette.Shader}. If a shader was not found, NULL is returned.
 	*/

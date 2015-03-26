@@ -7,7 +7,7 @@ Sketch.Driver = function(canvas){
 	/**
 	 * Internal counter used to block execution calls while shaders are still being added.
 	 * @name Sketch.Driver#readyLock
-	 * @type Integer
+	 * @type int
 	 * @private
 	 */
 	this.readyLock = 0;
@@ -28,7 +28,7 @@ Sketch.Driver = function(canvas){
 	 * @protected
 	 * @readonly
 	 */
-	this.context = canvas.getContext("webgl");
+	this.context = canvas.getContext("webgl", {preserveDrawingBuffer: true});
 
 	//Space hold-y stuff.
 	/**
@@ -129,8 +129,12 @@ Sketch.Driver.prototype = {
 	 * @public
 	 */
 	compile: function(text){
-		if(this.readyLock){
-			alert("Sketch driver is still loading shaders - be patient!");
+		if(this.readyLock>0){
+			alert("Sketch driver is still loading shaders - be patient!" +
+			" If it's been excessively long then you may have tried to add a malformed shader.");
+			return false;
+		}	else{
+			alert("All my shaders compiled, we're good to go.");
 			return false;
 		}
 	}
