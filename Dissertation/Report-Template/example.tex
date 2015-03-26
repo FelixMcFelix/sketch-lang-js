@@ -97,7 +97,7 @@ Our Motivation behind the choosing of this particular project is that, especiall
 
 \section{Aim}
 
-The aim for this project is to create a graphical programming language that is simple to use and read, and can be picked up by nearly any novice user, but is also powerful, and can be used to create drawings, or edit pictures. Our idea for a simple language came from Processing, a graphical language created by Casey Reas, and the basis for the language is going to be WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, for example using {} for functions and loops and keeping the familiar structure of the for and while loops, and making sure our language follows them, while finding what we believe to be confusing or annoying common features of programming languages, like the double equals for the comparison of two objects, and replace them with what we find suitable and more 
+The aim for this project is to create a graphical programming language that is simple to use and read, and can be picked up by nearly any novice user, but is also powerful, and can be used to create drawings. Our idea for a simple language came from Processing, a graphical language created by Casey Reas, and the basis for the language is going to be WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, for example using {} for functions and loops and keeping the familiar structure of the for and while loops, and making sure our language follows them, while finding what we believe to be confusing or annoying common features of programming languages, like the double equals for the comparison of two objects, and replace them with what we find suitable and more 
 
 \section{WebGL Background}
 
@@ -800,7 +800,20 @@ Being able to produce this page in less than two days, we realised that we had d
 %==============================================================================
 \chapter{Test Plan and test suites}
 \label{test}
+The testing of our language can be covered in three different categories:
+\begin{itemize}
+\item[Source code tests] used as a means of testing the parser and integrated compiler as a whole
+\item[Opcode tests] used as a means of testing the abstract machine
+\item[Output from tests] used as a means to test the remaining areas of the compiler - ie output from parser used for code generator, and output from the abstract machine used to test the shader manager
+The source code tests were originally the only test methods, however, as the project proceeded, we understood the need for tests for each component of the compiler. This was due to fact while the components didnt work, they obviously couldnt interact with one another.
+\\[12pt]
+These source code fragments range from very small and straightforward, for example declaring and assigining a value to variable, to slightly more complex, like loops and nested if statements, to complex, which included creating a short animation, or creating multiple different shapes dependant on the value a line is multiplied by. These tests were very useful in testing the parser to ensure the correct output was given. When these tests were parsed, the output of the parser, the abstract syntax tree (AST), were used as testing for the code generation component. This component would take in the AST, and produce opcodes for the abstract machine.
+The opcode tests consisted of small programs due to the higher workload involved in them, but still became quite complex, in drawing shapes etc. These tests contained the source code translated into the relevant opcodes and operands. This meant that it could be run directly from the abstract machine module, and it could be solitarily tested, without the need of other components. The output from this was also used to test the shader manager.
 
+We felt this was the most informative, and altogether best structured approach towards testing our language. It allowed us to test different modules by themselves, but also the compiler as a whole and how each module interacted with the next.
+
+\subsection{User Testing}
+At this stage of the implementation of Sketch, we felt that any user evaluation, while would have showed flaws in our program, was not particularly necessary. Any problems, or areas to work on, that occurred due to user evaluations we would either already be aware of, or if not, then we would have more important flaws to work. This led us to agree that, in the future, user evaluations will be very useful, when we feel the language is ready for release, but at this stage in development, we know what we have to work on to get it to that stage, and will ensure we have those implemented first.
 %==============================================================================
 \chapter{Conclusion}
 \label{conc}
