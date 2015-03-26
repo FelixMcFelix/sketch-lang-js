@@ -485,11 +485,11 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 			if (/*lc > 50*/0) {console.log("INF LOOP");break};
 		}
 		if (needsUpdate) {render();}
-	}
+	};
 
 	render = function() {
 		if (needsClear) {
-			needsClear = 0
+			needsClear = 0;
 			//glctx.clearColor(0.0,0.0,0.0,1.0);
 			//glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
 		}
