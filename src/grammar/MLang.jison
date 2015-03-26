@@ -113,6 +113,8 @@ start
            {typeof console !== 'undefined' ? console.log("%j",$1) : print($1);
           return $1; }
         }
+  | EOF 
+   {return [];} 
 ; 
 program 
    : declarations 
@@ -207,7 +209,7 @@ condition_statements
        {$$ = { type : "ifelse",
                arguments : [ $3,
                              $5,
-                             $6
+                             $7
                            ]
              };
      }
