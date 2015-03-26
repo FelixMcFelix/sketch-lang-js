@@ -60,14 +60,7 @@
 "%="                       return 'OP_MOD_ASSIGNMENT';
 "%"                        return 'MODULO';
 "&&"                       return 'OP_AND';
-"&="                       return 'OP_AND_ASSIGNMENT';
-"&"                        return 'AMP';
 "||"                       return 'OP_OR';
-"|="                       return 'OP_OR_ASSIGNMENT';
-"|"                        return 'BITWISE_OR';
-"^="                       return 'OP_XOR_ASSIGNMENT';
-"^"                        return 'CARET';
-"~"                        return 'TILDE';
 "?="                       return 'OP_EQ';
 "?<"                       return 'LT';
 "?>"                       return 'GT';
@@ -75,11 +68,6 @@
 "!>"                       return 'OP_LE';
 "!<"                       return 'OP_GE';
 "!"                        return 'EXCL';
-"<<="                      return 'OP_LEFT_SHIFT_ASSIGNMENT';
-"<<"                       return 'OP_LEFT_SHIFT';
-">>="                      return 'OP_RIGHT_SHIFT_ASSIGNMENT';
-">>>"                      return 'ZERO_FILL_RIGHT_SHIFT';
-">>"                       return 'OP_RIGHT_SHIFT';
 <<EOF>>                    return 'EOF';
 
 
@@ -394,58 +382,7 @@ exp
                             $3]
                        };
                 }
-    | prim_expr CARET  exp 
-                   {$$ = { 
-                        type: 'bit-XOR',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
 
-    | prim_expr AMP   exp 
-                   {$$ = { 
-                        type: 'bit-AND',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr BITWISE_OR exp 
-                   {$$ = { 
-                        type: 'bit-OR',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_RIGHT_SHIFT exp 
-                   {$$ = { 
-                        type: 'bit-right-shift',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-
-    | prim_expr OP_LEFT_SHIFT exp 
-                   {$$ = { 
-                        type: 'bit-left-shift',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
-    | prim_expr ZERO_FILL_RIGHT_SHIFT exp 
-                   {$$ = { 
-                        type: 'zero-fill-right-shift',
-                        arguments:[
-                            $1, 
-                            $3]
-                       };
-                }
     | prim_expr OP_EQ exp 
                   {$$ = { 
                         type: 'equality',
