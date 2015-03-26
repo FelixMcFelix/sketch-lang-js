@@ -167,7 +167,7 @@ function walkFunction(obj){
  	var declarator = obj.arguments[0];			// name of function
 	var declarationList = obj.arguments[1];		// list of parameters
 	var returnType = obj.arguments[2];			// return type of function
-	var functionBody = obj.arguments[3];		// optional decl/statement_lists
+	var functionBody = obj.arguments[3];		// optional decl/statement-lists
 	
 	// add function name/return type to symbol table
 	// walk list of parameters (which implies adding them to symbol table also)
@@ -465,7 +465,6 @@ function walkDecrement (obj){
 }
 
 // boolean logic ---------------------------------------------------------------
-// TODO: evaluation function for boolean logic
 
 function walkAnd (obj){
 	/* assigns variables to both sides of statement
@@ -477,7 +476,6 @@ function walkAnd (obj){
 	var left = obj.arguments[0];
 	var right = obj.arguments[1];
 	
-	// TODO: make evaluate function
 	// check both evaluate to true.
 	// Evaluate(left)
 	// Evaluate(right)
@@ -567,8 +565,6 @@ function walkEquality (obj){
 }
 
 // bitwise operations ----------------------------------------------------------
-
-// TODO check with Darren about bitwise operator opcodes.
 
 function walkBitAND (obj){
 	/* assigns variables to both sides of statement
@@ -680,7 +676,7 @@ function walk(obj) {
 		case "function":
 			walkFunction(obj);
 			break;
-		case "variable-decl-assign":		// TODO: ensure consistency - multiword nodes: underscores or hyphens?
+		case "variable-decl-assign":
 			walkVariableDeclAssign(obj);
 			break;
 		case "variable-decl":
@@ -690,13 +686,13 @@ function walk(obj) {
 		case "if":
 			walkIf(obj);
 			break;
-		case "ifelse":			// TODO: ensure consistency - multiword nodes: underscores or hyphens?
+		case "if-else":
 			walkIfElse(obj);
 			break;
 		case "while":
 			walkWhile(obj);
 			break;
-		case "do_while":		// TODO: ensure consistency - multiword nodes: underscores or hyphens?
+		case "do-while":
 			walkDoWhile(obj);
 			break;
 		case "for":
@@ -718,21 +714,21 @@ function walk(obj) {
 		case "modulo":
 			walkModulo(obj);
 			break;
-	// shorthand operations		// TODO: ensure consistency - multiword nodes: underscores or hyphens?
+	// shorthand operations
 	// 	--assignment
-		case "add_assign":
+		case "add-assign":
 			walkAddAssign(obj);
 			break;
-		case "sub_assign":
+		case "sub-assign":
 			walkSubAssign(obj);
 			break;
-		case "multi_assign":
+		case "multi-assign":
 			walkMultiAssign(obj);
 			break;
-		case "div_assign":
+		case "div-assign":
 			walkDivAssign(obj);
 			break;
-		case "mod_assign":
+		case "mod-assign":
 			walkModAssign(obj);
 			break;
 	// 	--increment/decrement
@@ -749,14 +745,14 @@ function walk(obj) {
 		case "or":
 			walkOr(obj);
 			break;
-	// comparison operations		// TODO: ensure consistency - multiword nodes: underscores or hyphens?
+	// comparison operations
 		case "equality":
 			walkEquality(obj);
 			break
 		case "less-than":
 			walkLessThan(obj);
 			break;
-		case "larger-than":		// TODO : consistency - larger than OR greater than, not both.
+		case "greater-than":
 			walkLargerThan(obj);
 			break;
 		case "not-equal":
@@ -768,7 +764,7 @@ function walk(obj) {
 		case "greater-than-or-equal":
 			walkGreaterThanOrEqual(obj);
 			break;	
-	// bitwise operations		// TODO: ensure consistency - multiword nodes: underscores or hyphens?
+	// bitwise operations
 		case "bit-XOR":
 			walkBitXOR(obj);
 			break;
