@@ -2,7 +2,7 @@
 <html>
 <head>
 	<script type="text/javascript" src="../mid-build/Palette.js"></script>
-	<script type="text/javascript" src="../mid-build/MVM.js"></script>	
+	<script type="text/javascript" src="../src/MVM/MVM.js"></script>	
 </head>
 <body>
 	<canvas id="mvm-can" width="800" height="600"></canvas>
@@ -55,21 +55,6 @@ window.onload = function(){
 	manager.addShader(shaderStore);
 	
 	var line1 = [0.0,1.0,0.0,1.0,100,100,200,200];
-	var line2 = [
-		[0.5,-0.5],
-		[-0.5,-0.5],
-		[0.0,1.0,0.0,1.0]
-	];
-	var line3 = [
-		[0.5,-0.5],
-		[0.5,0.5],
-		[0.0,1.0,0.0,1.0]
-	];
-	var line4 = [
-		[-0.5,-0.5],
-		[-0.5,0.5],
-		[0.0,1.0,0.0,1.0]
-	];
 	/*var line1 = [
 		[(Math.random() * 2) - 1,(Math.random() * 2) - 1],
 		[(Math.random() * 2) - 1,(Math.random() * 2) - 1],

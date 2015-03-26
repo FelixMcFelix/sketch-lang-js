@@ -1087,7 +1087,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		LNADD: 	108,
 		PTADD: 	109,
 		PGMUL: 	110,
-		LNMUL:  110,
+		LNMUL:  111,
 		EXIT: 	999
 	};
 
@@ -1505,10 +1505,10 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					sp--;
 					var lineAddress = constantPool[sp];
 					var line = constantPool[lineAddress];
-					pt1x = line[0];
-					pt1y = line[1];
-					pt2x = line[2];
-					pt2y = line[3];
+					pt1x = line[4];
+					pt1y = line[5];
+					pt2x = line[6];
+					pt2y = line[7];
 
 					var a = pt1x - pt2x;
 					var b = pt1y - pt2y;

@@ -54,33 +54,32 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		ISUB: 	6,
 		IMUL: 	7,
 		IDIV: 	8,
-		FADD: 	9,
-		FSUB: 	10,
-		FMUL: 	11,
-		FDIV: 	12,
-		NCMPEQ: 13,
-		NCMPLT: 14,
-		NCMPGT: 15,
-		JUMP: 	16,
-		JUMPT: 	17, 
-		JUMPF: 	18,
-		CALL: 	19, 
-		RETURN: 20,
-		LNDRAW: 21,
-		REQAN: 	22,
-		RENDER: 100,
-		CLEAR: 	101,
-		PRINTST:102,
-		PRINTS: 103,
-		LOADIDX:104,
-		SETIDX: 105,
-		PGDARW: 106,
-		LNTOPG: 107,
-		LNADD: 	108,
-		PTADD: 	109,
-		PGMUL: 	110,
-		LNMUL:  110,
-		EXIT: 	999
+		IMOD: 	9,
+		FADD: 	10,
+		FSUB: 	11,
+		FMUL: 	12,
+		FDIV: 	13,
+		FMOD: 	14,
+		LOADIDX:15,
+		SETIDX: 16,
+		NCMPEQ: 17,
+		NCMPLT: 18,
+		NCMPGT: 19,
+		JUMP: 	20,
+		JUMPT: 	21, 
+		JUMPF: 	22,
+		CALL: 	23, 
+		RETURN: 24,
+		LNDRAW: 25,
+		PGDARW: 26,
+		RENDER: 27,
+		CLEAR: 	28,
+		PTADD: 	29,
+		LNTOPG: 30,
+		LNMUL:  31,
+		PRINTST:32,
+		PRINTS: 33,
+		EXIT: 	34
 	};
 
 	var glctx = glctx;
@@ -212,6 +211,16 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					sp++;
 					if(debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
 					break;
+				case opCodes.IMOD:
+					sp--;
+					var i = Math.floor(dataStore[sp]);
+					sp--;
+					var j = Math.floor(dataStore[sp]);
+					var result = Math.floor(j % i);
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("IMOD: " + j + " % " + i + " = " + result);
+					break;
 				case opCodes.FADD:
 					sp--;
 					var i = dataStore[sp];
@@ -247,6 +256,16 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					sp--;
 					var j = dataStore[sp];
 					var result = j / i;
+					dataStore[sp] = result;
+					sp++;
+					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+					break;
+				case opCodes.FMOD:
+					sp--;
+					var i = dataStore[sp];
+					sp--;
+					var j = dataStore[sp];
+					var result = j % i;
 					dataStore[sp] = result;
 					sp++;
 					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
@@ -379,7 +398,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					var theColor = new Float32Array([r,g,b,a]);
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.LINES);
-					prog.draw(theLine, {}, {color: theColor}); 
+					prog.draw(theLine, {width:[glctx.canvas.width], height: [glctx.canvas.height]}, {color: theColor})
 					if(debugMode) console.log("LNDRAW: " + lineStruct);
 					break;
 				case opCodes.PGDARW:
@@ -495,30 +514,25 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					sp--;
 					var mulValue = dataStore[sp];
 					sp--;
-					var lineAddress = constantPool[sp];
+					var lineAddress = dataStore[sp];
 					var line = constantPool[lineAddress];
-					pt1x = line[0];
-					pt1y = line[1];
-					pt2x = line[2];
-					pt2y = line[3];
+					pt1x = line[4];
+					pt1y = line[5];
+					pt2x = line[6];
+					pt2y = line[7];
 
-					var a = pt1x - pt2x;
-					var b = pt1y - pt2y;
+					var xDist = pt2x - pt1x;
+					var yDist = pt2y - pt1y;
 
-					var distance = Math.sqrt( a*a + b*b );
-
-					xDirection = (pt1x > pt2x) ? 1 : -1;
-					yDirection = (pt1y > pt2y) ? 1 : -1;
-
-					xDistance = (distance * mulValue) * xDirection;
-					yDistance = (distance * mulValue) * yDirection;
+					var xLen = (xDist * mulValue) - xDist; 
+					var yLen = (yDist * mulValue) - yDist; 
 
 					var targetLineAddress = codeStore[cp];
 					cp++;
 
 					var newLine = line.slice(0);
-					newLine[2] += xDistance;
-					newLine[3] += yDistance;
+					newLine[6] += xLen;
+					newLine[7] += yLen;
 					constantPool[targetLineAddress] = newLine;
 
 					break;
@@ -534,11 +548,10 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 	render = function() {
 		if (needsClear) {
 			needsClear = 0;
-			//glctx.clearColor(0.0,0.0,0.0,1.0);
-			//glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
+			glctx.clearColor(0.0,0.0,0.0,1.0);
+			glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
 		}
 		needsUpdate = 0;
-		//setTimeout(window.mvm.interpret,1);
 		window.requestAnimationFrame(window.mvm.interpret);
 	}
 
