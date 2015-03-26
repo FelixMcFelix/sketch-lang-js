@@ -206,7 +206,7 @@ condition_statements
        }
 
   | IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement 
-       {$$ = { type : "ifelse",
+       {$$ = { type : "if-else",
                arguments : [ $3,
                              $5,
                              $7
@@ -225,7 +225,7 @@ iteration_statements
      }
 
   | DO statement WHILE OPEN_PARENS exp CLOSE_PARENS semi
-               {$$ = {type : "do_while", 
+               {$$ = {type : "do-while", 
               arguments: [ $2,
                            $5
                          ]
@@ -318,7 +318,7 @@ exp
 
     | prim_expr OP_ADD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'add_assign',
+                        type: 'add-assign',
                         arguments:[
                             $1, 
                             $3]
@@ -327,7 +327,7 @@ exp
 
     | prim_expr OP_SUB_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'sub_assign',
+                        type: 'sub-assign',
                         arguments:[
                             $1, 
                             $3]
@@ -336,7 +336,7 @@ exp
 
     | prim_expr OP_MULT_ASSIGNMENT exp
                    {$$ = { 
-                        type: 'multi_assign',
+                        type: 'multi-assign',
                         arguments:[
                             $1, 
                             $3]
@@ -345,7 +345,7 @@ exp
 
     | prim_expr OP_DIV_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'div_assign',
+                        type: 'div-assign',
                         arguments:[
                             $1, 
                             $3]
@@ -354,7 +354,7 @@ exp
 
     | prim_expr OP_MOD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'mod_assign',
+                        type: 'mod-assign',
                         arguments:[
                             $1, 
                             $3]
@@ -363,7 +363,7 @@ exp
 
     | prim_expr OP_INC  
                    {$$ = { 
-                        type: 'increments',
+                        type: 'increment',
                         arguments:[
                             $1]
                        };
@@ -466,7 +466,7 @@ exp
 
     | prim_expr GT  exp
                    {$$ = { 
-                        type: 'larger-than',
+                        type: 'greater-than',
                         arguments:[
                             $1, 
                             $3]
