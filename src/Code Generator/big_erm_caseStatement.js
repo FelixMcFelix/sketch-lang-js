@@ -640,7 +640,7 @@ function walkUndefined() {
 	printNode()
 }
 
-// default - this means that something unexpected has got into the tree. ------------
+// default - this means that something unexpected has got into the tree. -------
 function walkUnknown(obj) {
 
 	unknown = new Object();
@@ -650,7 +650,6 @@ function walkUnknown(obj) {
 	console.log("Unwalkable node")
 	printNode(unknown);
 }
-
 
 //==================================================================================================
 // case statement corresponds with each of the structures in the BNF.
@@ -788,13 +787,26 @@ function walk(obj) {
 		case "zero-fill-right-shift":
 			walkZeroFillRightShift(obj);
 			break;
+			
+	// "OH NO"des - if either of these two is reached, then something has gone horribly wrong.
+	/*
+	 *	This would happen if we haven't accounted for something in the parser.
+	 *	To account for the error, we keep it at the same depth as its parent, 
+	 *  which we've done here by decrementing/incrementing the treeDepth
+	 *	in pre/postorder traversal respectively.
+	 */
+	 	
 	// undefined -- usually an empty node, e.g. a blank program.
 		case undefined:
+			treeDepth -= 1;
 			walkUndefined();
+			treeDepth += 1;
 			break;
 	// default - this means that something unexpected has got into the tree.
 		default :
+			treeDepth -= 1;
 			walkUnknown(obj);
+			treeDepth += 1;
 			break;
 	}
 
