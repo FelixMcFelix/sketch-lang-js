@@ -290,6 +290,60 @@ In Listing \ref{lst:tutorial-functions}, you can see different properties of def
 %==============================================================================
 \chapter{Language Evolution}
 \label{evo}
+\section{Graphics programming language or general purpose one?}
+The first decision that had to be made regarding the project was what type of language should be developed. The two main types we were considering were graphics programming language or general purpose one.Each of them had its advantages and disadvantages but we decided to go for a graphics programming language since we considered it to be less difficult to implement in theory than a general purpose one. It would be much more interesting for us rather that the other type and we would be able to be create amazing graphs and shapes within just a few lines of code.  
+
+\section {How should our main program look like?}
+Our main program consists of 2 functions called init() and render(). Having both of them is not mandatory, but at least one of them should be present into the source file. In init(), the user specifies all variables and expression that he is using. Everything that should be drawn is specified in render(). Of course, the user can use variable declarations and everything else from the syntax, but the draw function should be called from render(). Example can be seen in Listing \ref{main} .
+
+We were considering having only one function called main() for the whole code or not having main function at all, but at the end we decided that having that separation would make our language more readable, easy to learn and initiative for every user.
+\begin{center}
+\lstset{
+    basicstyle=\small\ttfamily,
+    frame=lrtb,
+  }
+ 
+
+ 
+  \begin{lstlisting}[caption= {Main program in Sketch}, label= {main}]
+  function init(){
+    //variable declarations
+  }
+ 
+  function render(){
+  // draw()
+  }
+  \end{lstlisting}
+  \end{center}
+ 
+\section{What should be the primitive  types in our language?}
+The initial selection of primitive types consisted of \textbf{int, float, double, vector, Point} and \textbf{String}. We thought that these 6 types would be enough for our language.We were considering having a single \textbf{num} type, which we replace all the numerical types, but this idea was quickly rejected, since we reckoned that it would limit the functionality of Sketch and would cause a lot of ambiguities in given circumstances.
+
+Prior to the beginning  of the implementation, we made a new change in our primitive types. New type \textbf{bool} was added to the initial set, because we decide that it would be useful in situations where the validity of given condition should be met. Instead of having float and double, we agreed on one type \textbf{float}, which would combine these two, since  they were increasing the complexity of our language.  
+
+
+At the end, two new types were added \textbf{Line} and \textbf{Polygon} as we assumed that they would be necessary for the special kind of arithmetic that the language can perform. The final list of primitive type of Sketch is \textbf{bool, int, float,vector, String, Point, Line and  Polygon}.
+
+\section {Function declaration}
+After some considerations, it was decided that function will be declared using \textbf{function} keyword followed by its name and list of parameters. The challenging bit here was how to specify the return type. The two options were either having it at the beginning of the declaration as in some programming languages or just after the parameters list specified by "-\textgreater" and the return type (similar notation is used in Swift programming language). We decided to go for the second one, because using  "-\textgreater" is similar to what is used in mathematical functions for mapping one domain to another and this would be appropriate for the context of our programming language.
+
+Another feature, that is inspired for Swift, is the implicit void of a function. If a return type is not specified, then the function is void. This would increase the flexibility and usability of our language.
+A possibility for multiple return types was consider, but we decided at this initial stage it would increase the complexity and it would possibly be a reason for confusion of our users.
+
+\section{Comparison operators}
+Very often it is confusion for inexperienced programmers to distinguish between assignment operator( often '=') and comparison operator for equality(often "=="). We decided to introduce a completely different notation for comparison. In order to check if two variables are equal, we use \textbf{"?="}. For consistency reasons, operators for less than and greater are \textbf{'?\textless'} and \textbf{'?\textgreater'}. We believe that this makes Sketch easier for new programmers and it makes is unique since we haven not seen these kind of notation in any other language.
+\section {Semicolons}
+Semicolons are very often a reason for compilation errors, but meanwhile it makes the code more readable. In order to limit the possibility of errors, semicolons in our language are optional.
+\section {Loops}
+We were considering the idea of having only one type of iterator in Sketch, but having in mind that some users prefer 'for-loop'-s,other 'while-loop'-s, we decided our syntax to have all of the most common loops. Having only one iteration statement would limit the flexibility of our language and some of our users would not be happy with this.
+ 
+\section {If statements and switches }
+Sketch has if statements and supports if-else as well. We wanted to have switches in our language, but due to time constraints, we decided to keep this structure for later versions of our language.
+
+\section{Other parts of the syntax}
+For parts of the syntax not mentioned above, quick decision was made. We wanted our language to be easy to learn by everyone so having syntax not consistent with other programming languages would change this (especially for experienced programmers). Sketch's syntax is similar to the syntax of two of leading programming languages Java and C. 
+
+
 
 %==============================================================================
 \chapter{Compiler Architecture}
