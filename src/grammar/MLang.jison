@@ -27,13 +27,10 @@
 "Point"                                return 'POINT';
 "Polygon"                              return 'POLYGON';
 "return"                               return 'RETURN';
-"String"                               return 'STRING';
 "true"                                 return 'TRUE';
 "void"                                 return 'VOID';
 "while"                                return 'WHILE';
-"vec2"                                 return 'VEC2';
-"vec3"                                 return 'VEC3';
-"vec4"                                 return 'VEC4';
+
 
 
 "{"                        return 'OPEN_BRACE';
@@ -71,9 +68,8 @@
 <<EOF>>                    return 'EOF';
 
 
-\"[^"]+\"                 yytext = yytext.slice(1,-1); return 'STRINGA' 
+ 
 [0-9]+("."[0-9]*)?        return 'NUMBER';
-"."[0-9]+                 return 'NUMBER';
 [a-zA-Z_]+[a-zA-Z0-9_]*   return 'IDENTIFIER';
 
 
@@ -454,7 +450,6 @@ prim_expr
     |  NUMBER 
     | TRUE 
     | FALSE
-    | STRINGA
     | NOT prim_expr
            {$$ = [$1,$2];}
     | OPEN_PARENS exp CLOSE_PARENS
@@ -491,14 +486,10 @@ declaration
 
 type
    :VOID 
-   |STRING 
    |INT
    |FLOAT 
    |BOOL
-   |POINT 
-   |VEC2
-   |VEC3
-   |VEC4
+   |POINT
    |LINE
    |POLYGON
 ;
