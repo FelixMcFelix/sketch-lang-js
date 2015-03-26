@@ -22,11 +22,13 @@ function Sketch (syntaxTree) {
    	this.arguments = JSON.parse(syntaxTree);
 }
 
-treeDepth = 0;
+var treeDepth = 0;
 
 //TODO - scope tree, {symbol, label} table, constant pool
 
 var thisSketch = new Sketch (AST);
+
+var codeStore = [];
 
 //==================================================================================================
 /* Now we simply walk the tree */
@@ -93,6 +95,16 @@ function printToDocument(obj) {
 	if (typeof obj != 'undefined' && obj.hasOwnProperty("arguments"))		// if node not undefined or leaf node
 		document.write(" - " + obj.arguments);		
 	document.write("<br>");
+}
+
+//==================================================================================================
+/* Misc functions */
+
+function push (opcodes) {
+
+	// opcodes are to be sent to abstract machine, along with refrences to label table and constant pool.
+	codeStore.concat(opcodes);
+	// abstractMachine.run(codeStore, labelTable, constantPool);	// TODO: get syntax for interacting with abstract machine
 }
 
 //==================================================================================================
