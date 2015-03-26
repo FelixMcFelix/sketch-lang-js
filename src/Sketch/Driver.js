@@ -70,7 +70,7 @@ Sketch.Driver = function(canvas){
 	 * @protected
 	 * @readonly
 	 */
-	this.shaderManager = new Palette.Manager(context);
+	this.shaderManager = new Palette.Manager(this.context);
 	/**
 	 * The module's reference to the VM.
 	 * @name Sketch.Driver#vm
@@ -105,7 +105,7 @@ Sketch.Driver.prototype = {
 		var x = new XMLHttpRequest();
 		x.open("GET", url, true);
 		x.onload = function(){
-			that.addShaderInternal(x.response);
+			that.addShaderInternal(x.responseText);
 		};
 		x.send();
 	},
@@ -133,9 +133,11 @@ Sketch.Driver.prototype = {
 			alert("Sketch driver is still loading shaders - be patient!" +
 			" If it's been excessively long then you may have tried to add a malformed shader.");
 			return false;
-		}	else{
-			alert("All my shaders compiled, we're good to go.");
-			return false;
 		}
+
+		alert("All my shaders compiled, we're good to go.");
+		var jsonAst = this.parser.parse(text);
+		console.log(JSON.parse(jsonAst));return true;
+
 	}
 };

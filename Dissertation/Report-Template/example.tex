@@ -742,9 +742,9 @@ The now defunct 0x10co.de (Figure \ref{fig:ide-0x10code}), an online community b
 
 \section{Implementation}
 \label{ide-impl}
-\begin{wrapfigure}{r}{0.4\textwidth}
+\begin{wrapfigure}{r}{0.38\textwidth}
   \centering
-  \includegraphics[width=0.38\textwidth]{images/sketch-syntax}
+  \includegraphics[width=0.36\textwidth]{images/sketch-syntax}
   \caption{Sketch's syntax colouring, provided by CodeMirror.}
   \label{fig:ide-syntax}
 \end{wrapfigure}
@@ -760,26 +760,25 @@ Creating a new syntax colouration template was at first a difficult task - in es
 \begin{lstlisting}[caption={Syntax Highlighting State Machine},label={lst:ide-fsm},language=JavaScript]
 CodeMirror.defineSimpleMode("mlang",{
     start:[
-        {regex: /"(?:[^\\]|\\.)*?"/, token: "string"},
 		{regex: /(function)(\s+)([a-z$][\w$]*)/,
 			token: ["keyword", null, "variable-2"]},
 		{regex: /#.*/, token: "comment"},
 		{regex: /\/\/.*/, token:"comment"},
+		{regex: /\/\*/, token: "comment", next: "comment"},
 		{regex: /true|false/, token: "atom"},
 		{regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i,
 			token: "number"},
 		{regex: /\/(?:[^\\]|\\.)*?\//, token: "variable"},
-		{regex: /\b(?:function|return|if|for|while|else|do
-				|this|draw|clear|width|height)\b/, token: "keyword"},
-		{regex: /\b(?:int|float|bool|string|Line|Point|Polygon|void
-				|color|vec2|vec3|vec4|Circle)\b/, token: "keyword"},
+		{regex: /\b(?:function|return|if|for|while|else|do|this|draw|clear|width|height)\b/, token: "keyword"},
+		{regex: /\b(?:int|float|bool|Line|Point|Polygon|void|color|Circle)\b/, token: "keyword"},
 		{regex: /\b(?:vector\([234]\))\b/, token: "keyword"},
 		{regex: /[-+\/*=<>!]+/, token: "operator"},
 		{regex: /[a-z$][\w$]*/, token: "variable"},
 		{regex: /([a-z$][\w$]*)(?=(\s*)\()/, token:"keyword"}
     ],
     comment:[
-
+		{regex: /.*?\*\//, token: "comment", next: "start"},
+		{regex: /.*/, token: "comment"}
     ],
     meta: {
         dontIndentStates: ["comment"],
@@ -792,7 +791,7 @@ The page itself (Figure \ref{fig:ide-full}) is a very simple arrangement of bloc
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\textwidth]{images/sketch-ide}
+\includegraphics[width=0.9\textwidth]{images/sketch-ide}
 \caption{An image of the Sketch online IDE.}
 \label{fig:ide-full}
 \end{figure}

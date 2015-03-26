@@ -1,6 +1,10 @@
 <!doctype html>
 <head>
-	<script type="text/javascript" src="../build/main.min.js"></script>
+	<!--<script type="text/javascript" src="../build/main.min.js"></script>-->
+    <script type="text/javascript" src="../mid-build/Palette.js"></script>
+    <script type="text/javascript" src="../mid-build/MLang.js"></script>
+    <script type="text/javascript" src="../mid-build/MVM.js"></script>
+    <script type="text/javascript" src="../mid-build/Sketch.js"></script>
     <link rel="stylesheet" href="theme/paraiso-dark.css">
     <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="lib/codemirror.js"></script>
@@ -8,23 +12,30 @@
 	<link rel="stylesheet" href="lib/codemirror.css">
 	<script src="mode/mlang/mlang.js"></script>
 	<script type="text/javascript">
-	window.onload = function(){
+        var renderClick;
+        window.onload = function(){
 
-	    var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('mlang-box'),{
-            lineNumbers: true,
-            styleActiveLine: true,
-            matchBrackets: true,
-	    	mode: "mlang"
-	    });
+    	    var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('mlang-box'),{
+                lineNumbers: true,
+                styleActiveLine: true,
+                matchBrackets: true,
+    	    	mode: "mlang"
+	        });
 
-        myCodeMirror.setOption("theme", "paraiso-dark");
-        var can = document.getElementById("mlang-canvas");
-        var glctx = can.getContext("webgl");
+            myCodeMirror.setOption("theme", "paraiso-dark");
+            var can = document.getElementById("mlang-canvas");
 
-        glctx.clearColor(68/255, 46/255, 67/255,1.0);
-        glctx.clear(glctx.COLOR_BUFFER_BIT);
-	}
+            var driver = Sketch.createSketch(can);
+            var glctx = driver.context;
 
+            glctx.clearColor(68/255, 46/255, 67/255,1.0);
+            glctx.clear(glctx.COLOR_BUFFER_BIT);
+
+            renderClick = function(){
+                var t = myCodeMirror.getValue();
+                driver.compile(t);
+            }
+	    }
 	</script>
 	<style type="text/css">
 	    body{
@@ -165,21 +176,19 @@
 	</p>
 </div>
 <div id="texty">
-	<textarea id="mlang-box" autofocus="true" cols="50" rows="6">function k();  #Comment
+	<textarea id="mlang-box" autofocus="true" cols="50" rows="6">
 //Comment
 Line a;
-function init(){
-    a = {0,1};
+function init()->void{
+    a = {0,0} + {width, height};
+    # Inline Comment
 }
+
 function render(){
-    draw march(a);
-}
-function march(Point p)->Point{
-    vector(2) b = {1,1};
-    string c = "A string";
-    return a+b;
+    clear;
+    draw a;
 }
 </textarea>
-<a href="#" class="myButton">Render</a>
+<a href="#" class="myButton" onclick="renderClick()">Render</a>
 </div>
 </body>
