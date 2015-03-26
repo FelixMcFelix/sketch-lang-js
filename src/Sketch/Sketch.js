@@ -4,6 +4,7 @@
 var Sketch = Sketch || {};
 
 /**
+ * Creates an instance of the Sketch module with standard configuration.
  * @method Sketch.createSketch
  * @param inCanvas
  * @returns {Sketch.Driver}
@@ -11,6 +12,6 @@ var Sketch = Sketch || {};
  */
 Sketch.createSketch = function(inCanvas){
 	var out = new Sketch.Driver(inCanvas);
-	out.addShader("shaders/sketch-default.json");
+	out.addShaderURL("shaders/sketch-default.json");
 	return out;
 };
