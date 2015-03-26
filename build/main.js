@@ -1476,7 +1476,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					var theColor = new Float32Array([r,g,b,a]);
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.LINES);
-					prog.draw(theLine, {}, {color: theColor});
+					prog.draw(theLine, {}, {color: theColor}); 
 					if(debugMode) console.log("LNDRAW: " + lineStruct);
 					break;
 				case opCodes.PGDARW:
@@ -1576,8 +1576,20 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 						i++;
 					}
 					break;
+				case opCodes.PTADD:
+					sp--;
+					var pt2Address = dataStore[sp];
+					var pt2 = constantPool[pt2Address];
+					sp--;
+					var pt1Address = dataStore[sp];
+					var pt1 = constantPool[pt1Address];
+					var line = [pt1[0],pt1[1],pt2[0],pt2[1]];
+					var lineAddress = codeStore[cp];
+					cp++;
+					constantPool[lineAddress] = line;
+					break;
 			}
-			console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
+			//console.log("cp:"+cp+"sp:"+sp+"fp"+fp);
 			if(debugMode) console.log(JSON.stringify(dataStore));
 			lc++;
 			if (/*lc > 50*/0) {console.log("INF LOOP");break};
