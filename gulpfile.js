@@ -64,7 +64,7 @@ gulp.task("build:generator", function(){
 });
 
 gulp.task("build:Sketch", function(){
-	return gulp.src([configs.srcDir+"Sketch/*.js"])
+	return gulp.src([configs.srcDir+"Sketch/Sketch.js",configs.srcDir+"Sketch/*.js"])
 			.pipe(concat("Sketch.js"))
 			.pipe(gulp.dest(configs.interDir));
 });
