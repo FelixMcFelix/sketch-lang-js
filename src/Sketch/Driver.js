@@ -151,7 +151,7 @@ Sketch.Driver.prototype = {
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print he stack's top value to demonstrate our wonderful
 			//calculator.
-			//alert("The Virtual Machine's final result is: "+window.MVM.dataStore[0]);
+			alert("The Virtual Machine's final result is: "+window.MVM.dataStore[0]);
 		} catch (e){
 			alert("Error detected while rendering! See console for stack trace.");
 			console.log(e);

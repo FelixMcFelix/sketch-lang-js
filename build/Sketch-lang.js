@@ -168,7 +168,7 @@ Sketch.Driver.prototype = {
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print he stack's top value to demonstrate our wonderful
 			//calculator.
-			//alert("The Virtual Machine's final result is: "+window.MVM.dataStore[0]);
+			alert("The Virtual Machine's final result is: "+window.MVM.dataStore[0]);
 		} catch (e){
 			alert("Error detected while rendering! See console for stack trace.");
 			console.log(e);
@@ -1269,7 +1269,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 	var cl;
 
 	// Data store (Stack)
-	var dataStore = [];
+	window.MVM.dataStore = [];
 
 	// Points to the first free space at the top of the data store
 	var sp = 0;
@@ -1295,7 +1295,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 
 	this.interpret = function() {
 
-		//var dataStore = window.dataStore;
+		var dataStore = window.MVM.dataStore;
 
 		cl = codeStore.length;
 
