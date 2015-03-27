@@ -1,3 +1,4 @@
+
 % This example An LaTeX document showing how to use the l3proj class to
 % write your report. Use pdflatex and bibtex to process the file, creating 
 % a PDF file as output (there is no need to use dvips when using pdflatex).
@@ -444,7 +445,7 @@ All primitive data types in the defined by the Sketch Virtual Machine are stored
 \subsubsection{Reference Types}
 Structs in the sketch programming language are represented as arrays. Each struct member is mapped to an index of the array. These arrays exist in the Constant Pool data structure produced by the compiler. Instructions that operate on structs, such as PTADD, have operands that are addresses into the Constant Pool. These address are Integer values.
 
-\subsubsection{Run-time Data Areas}
+\subsection{Run-time Data Areas}
 The Sketch Virtual Machine has four special purpose Registers: Program Counter, Code Limit, Stack Pointer and Frame pointer.
 \begin{itemize}
 	\item\textit{Program Counter:} The program counter holds the address of the next instruction to be executed in the code store.
@@ -452,6 +453,73 @@ The Sketch Virtual Machine has four special purpose Registers: Program Counter, 
 	\item\textit{Stack Pointer} The Stack pointer holds the address of the location immediately above the topmost element on the stack.
 	\item\textit{Frame Pointer} The Frame Pointer holds the address of the first element in the topmost frame on the stack.
 \end{itemize}
+
+\subsection{The Stack}
+The Sketch Virtual Machine uses a stack data structure to store data in a LIFO (Last In First Out) fashion. This data can be frames, local variables, operands and operation results.
+
+\subsubsection{Stack Frames}
+The stack maintains a fame for each active routine (function). Each frame contains a dynamic link, return address and a local data.
+\begin{itemize}
+	\item\textit{Dynamic link} - holds the address of location on the stack of the first element of the previous frame. 
+	\item\textit{Return address} - Holds the address of the location in the code store where the program should jump to after the current active function returns.
+	\item\textit{Local data area} - The area of the frame where the variables declared within the current active function are stored.
+\end{itemize}
+
+\subsection{Global data area}
+The Sketch Virtual Machine maintains a separate stack for global data.
+
+\subsection{Instruction set}
+The Sketch Virtual Machine defines a reverse polish notation style instruction set. When using a arithmetic operations such as IADD, the operands must be first pushed on to the stack. When IADD is executed, the operands are popped off the stack, added together then the result is pushed back on to the stack.
+\ref{fig:add-insruction}.
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{images/add-instruction}
+	\caption{Addition}
+	\label{fig:add-insruction}
+\end{figure}
+
+\subsubsection{Arithmetic Operations}
+The arithmetic operations include addition, subtraction, multiplication, division and modulo. Each instruction has a different variation for integer and floating point number manipulation. All arithmetic instructions are one word long. When executed, they pop the top 2 elements from the stack, perform the operation then push the result onto the stack.
+
+\subsubsection{Logic Operations}
+Integers and floats are compared using the \textit{Compare Equal}, \textit{Compare Less Than} and \textit{Compare Greater Than} instructions. All comparison instructions are one word. The first element popped from the Stack (a) is used as the right operand. The second element popped off the stack (b) is used as the left operand. the operation is carried out and the boolean result is pushed onto the stack.
+
+\subsubsection{Local and Store Operations}
+Data can be pushed onto the stack, and moved between the stack and data areas using the load and store instructions. Their are three types of load and store instructions:
+\begin{itemize}
+	\item\textit{Load Constant} - A two word instruction where the second word is a float or integer to be pushed onto the stack.
+	\item\textit{Load Local, Store Local} - Two word instructions where the second word is a local address. \textit{Load Local} pushes the value at the local address specified onto the stack. \textit{Store Local} pops the top element from the stack and stores it at the local address specified.
+	\item\textit{Load Global, Store Global} - Two word instructions where the second word is a global address. \textit{Load Global} pushes the value at the global address specified onto the stack. \textit{Store Global} pops the top element from the stack and stores it at the local address specified.
+\end{itemize}
+
+\subsubsection{Array Operations}
+Structs are represented using arrays. Each each index in the array corresponds to an array member. The \textit{Load Index} and \textit{Set Index} operations are used to access and modify array elements. Both are three word instructions, where the second word is the address of the array in the constant pool and the third word is the index of the array to be accessed or modified. \textit{Load Index} pushes the stored at the index of the array on to the stack. \textit{Set Index} pops the top element off the stack and stores it at the index of the array specified.
+
+\subsubsection{Jump Operations}
+These operations change the program counter. All jump instructions are two word instructions where the second word is the address into the label table that holds the address in the code store to jump to. The \textit{Jump} instruction simply sets the program counter to the address specified. \textit{Jump If True} and \textit{Jump If False} instructions first pop the top element of the stack and jumps depending on its boolean value.
+
+\subsubsection{Call Operation}
+The call operation is used to to push a new frame onto the stack. It is a three word instruction where the second word is the address to jump to and the third word is the number of elements to pop off the stack (function arguments) and copy into the new frame’s local data area.
+
+\subsubsection{Return Operation}
+The return operation is used to pop the current stack frame and set the program counter to the value of the return address of the current frame. It is a two word instruction where the second word is a boolean value specifying wether to copy the top element from the stack to the previous frame.
+
+\subsubsection{Drawing Operations }
+Drawing operations are used to manipulate the canvas.
+\begin{itemize}
+	\item\textit{Line Draw / Polygon Draw} - Both one two word instructions. The pop the top elements of the stack which is an address in the constant pool where the line or polygon structure exists. The vertex data in these structures are passed to the shader manager to perform the drawing.
+	\item\textit{Render} - The render operation signals that all previous drawing done by the drawing instructions should now be rendered to the canvas.
+	\item\textit{Clear} - This operation clears the canvas.
+\end{itemize}
+
+\subsubsection{Point, Line and Shape Manipulation Instructions}
+These instructions are used to modify and create new lines and shapes.
+\begin{itemize}
+	\item\textit{Point Add} - A two word instruction where the second word is the address in the constant pool to store the newly created line. The top two elements are popped off the stack which are addresses of the Points in the constant pool that will be used to create the line. The line is created using the using the two points and stored at the address specified.
+	\item\textit{Line multiplication} - A two word instruction where the second word is the address in the constant pool to store the newly created line. The top element of the stack is popped off which is an address into the constant pool where line exists. The second element is popped off the stack which is a value indicted how many time larger or smaller the resulting the should be. The new line is stored at the address specified. 
+	\item\textit{Line to Polygon} - A two word instruction where the second word is an address into the constant pool to store the new Polygon. The first element is popped off the stack which is the address in the constant pool where the line exists. The second element is popped off the stack which specifies the number of sides the new polygon should have. A new polygon is created with the number of sides specified and the length of the sides determined by the length of the line. The new polygon is stored at the address specified.
+\end{itemize}
+
 %------------------------------------------------------------------------------
 \section{Shader Manager}
 \label{arch-shad}

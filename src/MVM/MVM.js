@@ -1,6 +1,6 @@
 // M Bytecode interperator
 
-var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
+var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
 
 	/*	Op codes
 	*	
