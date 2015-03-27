@@ -58,7 +58,7 @@ function Sketch (syntaxTree) {
 
 var treeDepth = 0;
 
-var thisSketch = new Sketch ('{"type": "multiplication", "arguments": [{"type": "subtract", "arguments": ["1", "2"]}, "1"]}');
+var thisSketch = new Sketch ('{"type": "multiplication", "arguments": [{"type": "subtraction", "arguments": ["1", "2"]}, "1"]}');
 
 var codeStore = [];		// an integer array that corresponds with opcodes and integers to push to the Abstract Machine stack
 var constantPool = [] 	// a miscellaneous array, holds all of the non-integer constants (which can't be pushed onto stack)
@@ -282,7 +282,7 @@ function walkAddition(obj){
 	walkMathematical(obj, OPCODES.IADD);
 }
 
-function walkSubtract(obj){
+function walkSubtraction(obj){
 	walkMathematical(obj, OPCODES.ISUB);
 }
 
@@ -314,7 +314,7 @@ function walkAddAssign(obj){
 }
 
 function walkSubAssign(obj){
-	obj.type = "subtract";
+	obj.type = "subtraction";
 	walkAssign(obj.arguments[0], walkSubtract(obj));
 }
 
@@ -533,7 +533,7 @@ function walk(obj){
 		case "addition":
 			walkAddition(obj);
 			break;
-		case "subtract":
+		case "subtraction":
 			walkSubtract(obj);
 			break;
 		case "multiplication":
