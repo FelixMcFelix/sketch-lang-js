@@ -7,7 +7,7 @@ var configs = {
 	browserify = require("browserify"),
 	gulp = require("gulp"),
 	jshint = require("gulp-jshint"),
-	concat = require("gulp-concat"),
+	concat = require("gulp-concat-util"),
 	uglify = require("gulp-uglify"),
 	rename = require("gulp-rename"),
 	jison  = require("gulp-jison"),
@@ -26,8 +26,8 @@ gulp.task("default", ["clean"], function(){
 
 //BUILD TASKS
 gulp.task("build",["build:Palette", "build:parser", "build:MVM","build:generator","build:Sketch","build:editor"], function(){
-	return gulp.src(configs.interDir+"*.js")
-			.pipe(concat("main.js"))
+	return gulp.src([configs.interDir+"Sketch.js", configs.interDir+"MLang.js", configs.interDir+"MVM.js", configs.interDir+"generator.js",configs.interDir+"Palette.js"])
+			.pipe(concat("Sketch-lang.js"))
 			.pipe(gulp.dest(configs.destDir))
 			.pipe(rename({suffix: ".min"}))
 			.pipe(uglify())
@@ -38,12 +38,14 @@ gulp.task("build:parser", function(){
 	return gulp.src([configs.srcDir+"grammar/MLang.jison"])
 			.pipe(jison({moduleName: "sketchParse"}))
 			//.pipe(gulp.rename("sketchParse.js"))
+			.pipe(concat.footer('\n;\n// end\n'))
 			.pipe(gulp.dest(configs.interDir));
 });
 
 gulp.task("build:Palette", function(){
 	return gulp.src([configs.srcDir+"Palette/Palette.js",configs.srcDir+"Palette/*.js","./node_modules/earcut/src/earcut.js"])
 			.pipe(concat("Palette.js"))
+			.pipe(concat.footer('\n;\n// end\n'))
 			//.pipe(browserified)
 			.pipe(gulp.dest(configs.interDir));
 			//.pipe(rename({suffix: ".min"}))
@@ -54,18 +56,21 @@ gulp.task("build:Palette", function(){
 gulp.task("build:MVM", function(){
 	return gulp.src([configs.srcDir+"MVM/*.js"])
 			.pipe(concat("MVM.js"))
+			.pipe(concat.footer('\n;\n// end\n'))
 			.pipe(gulp.dest(configs.interDir));
 });
 
 gulp.task("build:generator", function(){
 	return gulp.src([configs.srcDir+"Code Generator/*.js"])
 			.pipe(concat("generator.js"))
+			.pipe(concat.footer('\n;\n// end\n'))
 			.pipe(gulp.dest(configs.interDir));
 });
 
 gulp.task("build:Sketch", function(){
 	return gulp.src([configs.srcDir+"Sketch/Sketch.js",configs.srcDir+"Sketch/*.js"])
 			.pipe(concat("Sketch.js"))
+			.pipe(concat.footer('\n;\n// end\n'))
 			.pipe(gulp.dest(configs.interDir));
 });
 
