@@ -76,7 +76,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 	var cl;
 
 	// Data store (Stack)
-	var dataStore = [];
+	window.MVM.dataStore = [];
 
 	// Points to the first free space at the top of the data store
 	var sp = 0;
@@ -102,7 +102,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 
 	this.interpret = function() {
 
-		//var dataStore = window.dataStore;
+		var dataStore = window.MVM.dataStore;
 
 		cl = codeStore.length;
 
