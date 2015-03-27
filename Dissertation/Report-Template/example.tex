@@ -431,6 +431,9 @@ If one of the grammar rules is violated, no AST will be generated and error will
 \section{Code Generator}
 \label{arch-gen}
 
+\subsection{Status Report}
+As of March 27th 2015, the code generator is lacking most of its intended functionality. It can traverse a tree consisting of numbers (both integer and floating point) and the following mathematical operations: add, subtract, multiply, divide and modulo (i.e. calculate the remainder). The other operations cannot be successfully traversed, as they require resolving variables and evaluating boolean expressions, amongst other things. In this section we will discuss both the intended and successfully implemented architectures of the code generator.
+
 %------------------------------------------------------------------------------
 \section{Virtual Machine}
 \label{arch-abs}
