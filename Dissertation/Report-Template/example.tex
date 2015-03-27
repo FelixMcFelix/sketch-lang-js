@@ -1,3 +1,4 @@
+
 % This example An LaTeX document showing how to use the l3proj class to
 % write your report. Use pdflatex and bibtex to process the file, creating 
 % a PDF file as output (there is no need to use dvips when using pdflatex).
@@ -9,6 +10,7 @@
 \usepackage{listings}
 \usepackage{subcaption}
 \usepackage{wrapfig}
+\usepackage[english]{babel}
 % More listing stuff.
 %\usepackage{bera}% optional: just to have a nice mono-spaced font
 \usepackage{listings}
@@ -68,6 +70,7 @@
 \usepackage{amsfonts}
 \setlength\parindent{24pt}
 \begin{document}
+\nocite{*}
 \title{Design and implement your own programming language}
 \author{Kyle Simpson\\
 		Kristiyan Dimitrov\\
@@ -101,16 +104,14 @@ The aim for this project is to create a graphical programming language that is s
 
 \section{WebGL Background}
 
-Web Graphics Library (WebGL) is a JavaScript API, that makes use of the \textless{}canvas\textgreater{} element available in HTML to render interactive 2d/3d graphics. It is a branch of the Open Graphics Library Embedded Systems 2.0 (OpenGL ES 2.0), and is supported by most modern browsers, like Google Chrome and Mozilla Firefox, with no necessary plugin (as it makes use of \textless{}canvas\textgreater{}). A WebGL program consists of control code written in JavaScript, and function code (shader code) that is executed by a computer's GPU. 
+Web Graphics Library (WebGL) is a JavaScript API, that makes use of the \textless{}canvas\textgreater{} element available in HTML to render interactive 2D/3D graphics. It is a branch of the Open Graphics Library Embedded Systems 2.0 (OpenGL ES 2.0), and is supported by most modern browsers, like Google Chrome and Mozilla Firefox, with no necessary plugin (as it makes use of \textless{}canvas\textgreater{}). A WebGL program consists of control code written in JavaScript, and function code (shader code) that is executed by a computer's GPU. 
 
 \section{Outline of report}
 
-The remaining sections of this report will cover the following topics:
+The remaining sections of this report cover the following topics:
 \begin{itemize}
-	\item \textbf{Language Tutorial} --- a brief introduction to our programming language, which we have named \textbf{Sketch}.
-	\item \textbf{Language Reference Manual} --- Sketch's grammar, and and a description of the language.
 	\item \textbf{Project Plan} --- a timeline and basic structure of our project, and what we aimed to acheive from it.
-	\item \textbf{Language Evolution} --- the decisions and thought process behind the language syntax and domain, and our reasoning.
+	\item \textbf{Language Evolution} --- the decisions and thought process behind the syntax and language domain design choices.
 	\item \textbf{Compiler Architecture} --- an explanation of the 5 different sections of the compiler module:
 	\begin{itemize}
 		\item Lexer and Parser
@@ -123,7 +124,12 @@ The remaining sections of this report will cover the following topics:
 	\item \textbf{Test Plan and Test Suites} --- an overview of the language's testing strategy, approaches taken, and any bugs discovered.
 	\item \textbf{Conclusions} --- This will cover what, as a team, we learned and discovered during this project, any problems we encountered, and anything we would try differently.
 \end{itemize}
-
+The appendices contain the following:
+\begin{itemize}
+	\item \textbf{Language Tutorial} --- a brief introduction to  \textbf{Sketch}, our programming language.
+	\item \textbf{Language Reference Manual} --- Sketch's grammar, and and a description of the language.
+	\item \textbf{Source Listing} --- the key components of the compiler.
+\end{itemize}
 
 %==============================================================================
 \chapter{Project Plan}
@@ -179,9 +185,21 @@ We researched the two categories, and finding a solution was not easy. The abstr
 
 Soon after this point, we established that a component was missing from our system. We realised that we needed a component that had the functionality of walking the abstract syntax tree and producing the opcodes for the abstract machine. Now, we had identified 5 key areas that needed research and implementation, and we set each member a task to complete. These were Parser, code generator, abstract machine, shader manager and testing. We researched our own ideas and brought them back to the group to discuss. The parser did not need a huge amount of research, only implementation. The code generation needed studying to see in which way it worked. This took some time due to its complexity. Symbol trees, scope and jumps being the most confusing areas. The abstract machine would have a stack based architecture, providing an intermediary language between source code and WebGL. The shader manager would act as the WebGL calls, being provided information, type, name, src, and attributes, from the abstract machine, and then executing these calls, and drawing to the canvas. The testing comprised of source code tests for the parser and code generator, and opcode-based tests for the abstract machine and shader manager.
 
-Following this, all members continued work on their respective components, giving updates weekly or more, usually a couple of times a week, or when a breakthrough had been made. Members of communicating components had more frequent communication, as they had to ensure they output from their respective component would give the correct type and format of output. Testing was the first section to be completed, as it had the least volume and difficulty of work involved. The team member involved in this could then help other members with their implementation.
+Following this, all members continued work on their respective components, giving updates weekly or more, usually a couple of times a week, or when a breakthrough had been made. Members of communicating components had more frequent communication, as they had to ensure they output from their respective component would give the correct type and format of output. Testing was the first section to be completed, as it had the least volume and difficulty of work involved. This team member involved in this could then help other members with their implementation.
 
-With all components coming along at a good rate, despite still being a little behind, we decided that the web module should be implemented. We were inspired by ShaderToy and 0x10co.de for the design, and used a tool called CodeMirror to build the syntax highlighting. We could have made it more complex, but time constraints ensured that this was not the case, as we decided that there was more important and urgent things that needed work. For now, we only needed a working IDE, a complex and useful version can come in later months.
+Despite our forward planning and hard work, due to other commitments throughout the year that we possibly didnt fully take into account, in the final month of the project we were quite a bit behind where we were aiming to be. A few aspects of the project were not implemented, mainly the code generator and web module. This meant that a significant amount of careful planning had to be done, if we were to ensure we completed the project. With the shader manager close to completion, and other components nearing completion but still needing work, we could all help, to differing extents, with the generator and module. One member with previous knowledge of writing webpages such as these, set up the module. Inspiration for desing was taken from sites such as ShaderToy. The CSS for the buttons was obtained from the site \url{http://www.bestcssbuttongenerator.com/#/zR8uusexhJ}, and a tool called CodeMirror used for syntax highlighting. With the aforementioned time constraints, the IDE was a simple, but working model. An agreement was made that it would be improved in the coming months, however, that was not necessary for this deadline, and the work would be more appreciated elsewhere. Other team members balanced their component and helping with the code generator, however, this was not easy. The main issue being raised by the code generator was how complex it was, and how many aspects were difficult to understand. This meant that adding more team members, after 1 or 2, would not help with the implementation, and could possibly confuse it more. The other members either focused on their respective components, ensuring they were completed, or writing up documentation for the project. The team member responsible for testing was given the task of starting the dissertation, as all testing was complete, and there were many parts of the dissertation the complete.
+
+With very little time remaining, and too much work to feasibly complete in this time, we had to revisit the original requirements to remove any we deemed surplus. Regrettably, we had to cut the following requirements:
+\begin{itemize}
+\item Named parameters
+\item Image import and export
+\item Ability to import external libraries
+\end{itemize}
+These cuts meant that we had a more reasonable target to reach, especially with the addition of completion of the dissertation. All remaining functionality was now completed in both shader manager and abstract machine, with only the colour manipulation omitted from the parser. However, the code generator was still not implemented. Despite this, we had a presentation for the project, which took priority.
+
+Following the presentation, several break-throughs in the understanding of the code meant progress was made. A code generator of sorts was implemented by the end, but only a very basic one. It will walk the Abstract syntax tree, but only perform actions for basic arithmetic functions such as add, multiply as so forth. Obviously, completing this is a high priority, but time was a huge issue in this regard, and it will have to be completed in the future. At this point, the dissertation was the main area that still needed completion, that could conceivably be done. Work was still done on the code generator, but no more progress was made. We split the dissertation up by giving each member their respective area to write about, and with the intoduction, and language tutorial already completed by the tester, we collaborated on other team based sections.
+
+
 
 %==============================================================================
 \chapter{Language Evolution}
@@ -444,7 +462,7 @@ All primitive data types in the defined by the Sketch Virtual Machine are stored
 \subsubsection{Reference Types}
 Structs in the sketch programming language are represented as arrays. Each struct member is mapped to an index of the array. These arrays exist in the Constant Pool data structure produced by the compiler. Instructions that operate on structs, such as PTADD, have operands that are addresses into the Constant Pool. These address are Integer values.
 
-\subsubsection{Run-time Data Areas}
+\subsection{Run-time Data Areas}
 The Sketch Virtual Machine has four special purpose Registers: Program Counter, Code Limit, Stack Pointer and Frame pointer.
 \begin{itemize}
 	\item\textit{Program Counter:} The program counter holds the address of the next instruction to be executed in the code store.
@@ -452,6 +470,73 @@ The Sketch Virtual Machine has four special purpose Registers: Program Counter, 
 	\item\textit{Stack Pointer} The Stack pointer holds the address of the location immediately above the topmost element on the stack.
 	\item\textit{Frame Pointer} The Frame Pointer holds the address of the first element in the topmost frame on the stack.
 \end{itemize}
+
+\subsection{The Stack}
+The Sketch Virtual Machine uses a stack data structure to store data in a LIFO (Last In First Out) fashion. This data can be frames, local variables, operands and operation results.
+
+\subsubsection{Stack Frames}
+The stack maintains a fame for each active routine (function). Each frame contains a dynamic link, return address and a local data.
+\begin{itemize}
+	\item\textit{Dynamic link} - holds the address of location on the stack of the first element of the previous frame. 
+	\item\textit{Return address} - Holds the address of the location in the code store where the program should jump to after the current active function returns.
+	\item\textit{Local data area} - The area of the frame where the variables declared within the current active function are stored.
+\end{itemize}
+
+\subsection{Global data area}
+The Sketch Virtual Machine maintains a separate stack for global data.
+
+\subsection{Instruction set}
+The Sketch Virtual Machine defines a reverse polish notation style instruction set. When using a arithmetic operations such as IADD, the operands must be first pushed on to the stack. When IADD is executed, the operands are popped off the stack, added together then the result is pushed back on to the stack.
+\ref{fig:add-insruction}.
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{images/add-instruction}
+	\caption{Addition}
+	\label{fig:add-insruction}
+\end{figure}
+
+\subsubsection{Arithmetic Operations}
+The arithmetic operations include addition, subtraction, multiplication, division and modulo. Each instruction has a different variation for integer and floating point number manipulation. All arithmetic instructions are one word long. When executed, they pop the top 2 elements from the stack, perform the operation then push the result onto the stack.
+
+\subsubsection{Logic Operations}
+Integers and floats are compared using the \textit{Compare Equal}, \textit{Compare Less Than} and \textit{Compare Greater Than} instructions. All comparison instructions are one word. The first element popped from the Stack (a) is used as the right operand. The second element popped off the stack (b) is used as the left operand. the operation is carried out and the boolean result is pushed onto the stack.
+
+\subsubsection{Local and Store Operations}
+Data can be pushed onto the stack, and moved between the stack and data areas using the load and store instructions. Their are three types of load and store instructions:
+\begin{itemize}
+	\item\textit{Load Constant} - A two word instruction where the second word is a float or integer to be pushed onto the stack.
+	\item\textit{Load Local, Store Local} - Two word instructions where the second word is a local address. \textit{Load Local} pushes the value at the local address specified onto the stack. \textit{Store Local} pops the top element from the stack and stores it at the local address specified.
+	\item\textit{Load Global, Store Global} - Two word instructions where the second word is a global address. \textit{Load Global} pushes the value at the global address specified onto the stack. \textit{Store Global} pops the top element from the stack and stores it at the local address specified.
+\end{itemize}
+
+\subsubsection{Array Operations}
+Structs are represented using arrays. Each each index in the array corresponds to an array member. The \textit{Load Index} and \textit{Set Index} operations are used to access and modify array elements. Both are three word instructions, where the second word is the address of the array in the constant pool and the third word is the index of the array to be accessed or modified. \textit{Load Index} pushes the stored at the index of the array on to the stack. \textit{Set Index} pops the top element off the stack and stores it at the index of the array specified.
+
+\subsubsection{Jump Operations}
+These operations change the program counter. All jump instructions are two word instructions where the second word is the address into the label table that holds the address in the code store to jump to. The \textit{Jump} instruction simply sets the program counter to the address specified. \textit{Jump If True} and \textit{Jump If False} instructions first pop the top element of the stack and jumps depending on its boolean value.
+
+\subsubsection{Call Operation}
+The call operation is used to to push a new frame onto the stack. It is a three word instruction where the second word is the address to jump to and the third word is the number of elements to pop off the stack (function arguments) and copy into the new frame’s local data area.
+
+\subsubsection{Return Operation}
+The return operation is used to pop the current stack frame and set the program counter to the value of the return address of the current frame. It is a two word instruction where the second word is a boolean value specifying wether to copy the top element from the stack to the previous frame.
+
+\subsubsection{Drawing Operations }
+Drawing operations are used to manipulate the canvas.
+\begin{itemize}
+	\item\textit{Line Draw / Polygon Draw} - Both one two word instructions. The pop the top elements of the stack which is an address in the constant pool where the line or polygon structure exists. The vertex data in these structures are passed to the shader manager to perform the drawing.
+	\item\textit{Render} - The render operation signals that all previous drawing done by the drawing instructions should now be rendered to the canvas.
+	\item\textit{Clear} - This operation clears the canvas.
+\end{itemize}
+
+\subsubsection{Point, Line and Shape Manipulation Instructions}
+These instructions are used to modify and create new lines and shapes.
+\begin{itemize}
+	\item\textit{Point Add} - A two word instruction where the second word is the address in the constant pool to store the newly created line. The top two elements are popped off the stack which are addresses of the Points in the constant pool that will be used to create the line. The line is created using the using the two points and stored at the address specified.
+	\item\textit{Line multiplication} - A two word instruction where the second word is the address in the constant pool to store the newly created line. The top element of the stack is popped off which is an address into the constant pool where line exists. The second element is popped off the stack which is a value indicted how many time larger or smaller the resulting the should be. The new line is stored at the address specified. 
+	\item\textit{Line to Polygon} - A two word instruction where the second word is an address into the constant pool to store the new Polygon. The first element is popped off the stack which is the address in the constant pool where the line exists. The second element is popped off the stack which specifies the number of sides the new polygon should have. A new polygon is created with the number of sides specified and the length of the sides determined by the length of the line. The new polygon is stored at the address specified.
+\end{itemize}
+
 %------------------------------------------------------------------------------
 \section{Shader Manager}
 \label{arch-shad}
@@ -739,7 +824,7 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 \begin{itemize}
 \item \emph{David Creigh:} Chapter
 \item \emph{Kristiyan Dimitrov:} Chapter \ref{evo}, \ref{arch-lex}
-\item \emph{Gerard Docherty:} Chapter 
+\item \emph{Gerard Docherty:} Chapter \ref{intro}, \ref{tut}, \ref{test}, \ref{plan} 
 \item \emph{Darren Findlay:} Chapter 
 \item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{arch-module}, \ref{dev}, \ref{ide}
 \end{itemize}

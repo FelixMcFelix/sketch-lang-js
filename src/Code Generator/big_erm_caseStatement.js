@@ -62,10 +62,10 @@ var treeDepth = 0;
 
 var codeStore = [];		// an integer array that corresponds with opcodes and integers to push to the Abstract Machine stack
 var constantPool = [] 	// a miscellaneous array, holds all of the non-integer constants (which can't be pushed onto stack)
+var labelTable = [];	// an array of addresses for jump instructions to entries in the code store
 
 //==================================================================================================
 /* Now we simply walk the tree */
-
 //walk (thisSketch);
 
 //==================================================================================================
