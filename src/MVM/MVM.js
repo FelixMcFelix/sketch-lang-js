@@ -522,6 +522,8 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("LNMUL " + newLine);
 					break;
 			}
+			// remove garbage from stack
+			dataStore.splice(sp,dataStore.length - sp);
 			if(debugMode) console.log(JSON.stringify(dataStore));
 		}
 		if (needsUpdate) {render();}
