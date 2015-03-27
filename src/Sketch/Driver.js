@@ -78,7 +78,7 @@ Sketch.Driver = function(canvas){
 	 * @protected
 	 * @readonly
 	 */
-	this.vm = new MVM(this.context, this.shaderManager, this.codeStore, this.constantPool, false);
+	this.vm = new MVM(this.context, this.shaderManager, codeStore, constantPool, false);
 };
 
 Sketch.Driver.prototype = {
@@ -137,8 +137,11 @@ Sketch.Driver.prototype = {
 		}
 
 		alert("All my shaders compiled, we're good to go.");
-		var jsonAst = this.parser.parse(text);
-		console.log(JSON.parse(jsonAst));return true;
+		var ast = this.parser.parse(text);
+		console.log(ast);
+		this.codeGen = new SketchGen(ast);
+		walk(this.codeGen);
 
+		this.vm.interpret();
 	}
 };
