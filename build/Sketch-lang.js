@@ -1682,7 +1682,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					sp--;
 					var pt1Address = dataStore[sp];
 					var pt1 = constantPool[pt1Address];
-					var line = [pt1[0],pt1[1],pt2[0],pt2[1]];
+					var line = [0,1,0,1,pt1[0],pt1[1],pt2[0],pt2[1]];
 					var lineAddress = codeStore[cp];
 					cp++;
 					constantPool[lineAddress] = line;
@@ -1711,6 +1711,10 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					var newLine = line.slice(0);
 					newLine[6] += xLen;
 					newLine[7] += yLen;
+					newLine[0] = 0;
+					newLine[1] = 1;
+					newLine[2] = 0;
+					newLine[3] = 1;
 					constantPool[targetLineAddress] = newLine;
 					if(debugMode) console.log("LNMUL " + newLine);
 					break;
