@@ -84,19 +84,24 @@
             margin-left: 0.5%;
             display: inline;
         }
-        .link:link{
-            transition: color 0.25s ease 0s;
+        a{
+            text-decoration: none;
+        }
+        a:link{
+            transition: color 0.1s ease 0s;
             color: #b9b6b0;
         }
-        .link:visited{
+        a:visited{
             color: #b9b6b0;
         }
-        .link:hover{
+        a:hover{
             color: #ef6155;
         }
-        .link:focus{
+        a:focus{
+            color: #4bd3ff;
         }
-        .link:active{
+        a:active{
+            color: #4bd3ff;
         }
         .link{
             transition: color 0.25s ease 0s;
@@ -168,7 +173,11 @@
 <body>
 <div class="topbar">
     <div class="title"><b>Sketch<div class="flair">.</div></b></div>
-    <div class="link-space"><div class="link">Download</div><div class="link">API</div><div class="link">Tutorial</div></div>
+    <div class="link-space">
+        <a href="https://github.com/FelixMcFelix/laughing-ironman/archive/master.zip"><div class="link">Download</div></a>
+        <a href="../docs/index.html"><div class="link">API</div></a>
+        <a href="#"><div class="link">Tutorial</div></a>
+    </div>
 </div>
 <div id="display">
 	<p>
