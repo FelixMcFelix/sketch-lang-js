@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="../build/main.js" ></script>
+        <script type="text/javascript" src="gl-matrix-min.js"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				x = new XMLHttpRequest();
+				x.open("GET", "https://dl.dropboxusercontent.com/u/15574345/laughing-ironman/shaders/sketch-default.json", true);
+				x.onload = function(){
+					execute(x.response);
+				};
+				x.send();
+			}
+			
+			execute = function(text){
+				// Setup canvas
+				var canvas = document.getElementById("testingcanvas");
+				var glctx = canvas.getContext("webgl", { preserveDrawingBuffer: true });
+				// Setup palette
+				var manager = new Palette.Manager(glctx);
+                manager.addShader(text);
+                var prog = manager.getProgram("square", 'square');
+                prog.setDrawMode(Palette.Program.POLYGON);
+                prog.setConfig(Palette.Program.VS_MODE, {width: [canvas.width], height: [canvas.height]});
+                // Clear canvas
+                glctx.clearColor(0.0,0.0,0.0,1.0);
+                glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
+				
+				// Create shpes
+                var line1 = [0.0,1.0,0.0,1.0,200,200,300,200];
+                var line2 = [1.0,0.0,0.0,1.0,200,200,201,200];
+				var constantPool = [line1,line2];
+
+				// Program
+				var codeStore = [4,		6,		// Push 6
+								 4,		0,		// Push 0
+								 30,	1,		// Multiply line, store polygon at 1
+								 4,		1,		// Push 1
+								 26,			// Draw Polygon
+								 27];			// Render
+
+				window.mvm = new MVM(glctx, manager, codeStore, constantPool, [], 1);
+				window.mvm.interpret();
+
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id="testingcanvas" width="800" height="600">Get a modern browser please!</canvas>
+	</body>
+</html>
