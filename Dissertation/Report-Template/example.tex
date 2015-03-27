@@ -381,9 +381,9 @@ The core language module can be divided into 5 main parts:
 \begin{enumerate}
 \item \textbf{Lexer and Parser} --- The program component charged with tokenising and interpreting Sketch programs, generating an abstract syntax tree for use in code generation.
 \item \textbf{Code Generator} --- The program component responsible for conversion of abstract syntax trees into bytecode sequences, for execution by the abstract machine.
+\item \textbf{Virtual Machine} --- The main active subsystem present in the module, responsible for all runtime code execution. The abstract machine relies on the shader manager to make draw calls, but handles direct WebGL manipulation for certain key functions separately.
 \item \textbf{Shader Manager} --- An active subsystem of the module responsible for management, selection and execution of shader programs for drawing at runtime.
-\item \textbf{Abstract Machine} --- The main active subsystem present in the module, responsible for all runtime code execution. The abstract machine relies on the shader manager to make draw calls, but handles direct WebGL manipulation for certain key functions separately.
-\item \textbf{Module Facade} --- The active component responsible for managing the interconnections and operation of the above components, as well as exposing the module interface to programmers.
+\item \textbf{Module Fa\c{c}ade} --- The active component responsible for managing the interconnections and operation of the above components, as well as exposing the module interface to programmers.
 \end{enumerate}
 Individual and detailed discussion of each system is provided below. The module's subsystems are then connected as shown in Figure \ref{fig:sketch-overall}.
 \begin{figure}[!h]
@@ -397,23 +397,23 @@ Individual and detailed discussion of each system is provided below. The module'
 \section{Lexer and Parser}
 \label{arch-lex}
 \subsection{Introduction}
-The lexer and the parser are both part of the syntactic analysis of the compiler. During this stage, a source program is parsed in order to determine if it is well-formed, and to determine its phrase structure , in accordance with the syntax of our programming language. If the source program complies with the syntax and grammar of Sketch, an abstract syntax tree(AST) will be returned from the parser. An AST is a way to represent a source program’s phrase structure. 
+The lexer and the parser are both part of the syntactic analysis of the compiler. During this stage, a source program is parsed in order to determine if it is well-formed, and to determine its phrase structure, in accordance with the syntax of our programming language. If the source program complies with the syntax and grammar of Sketch, an \textit{Abstract Syntax Tree} (AST) will be returned from the parser. An AST is a way to represent a source program’s phrase structure. 
 
 \subsection{Initial steps}
-At the beginning of implementing parser and lexer for our grammar, an appropriate parser generator for JavaScript had to be found. We found three possible parser generators, each of which would helped us with desired result. ANTLR, JISON and PEG.js were considered as possibilities.
-\\[12pt]
-ANTLR uses LL(*) parsing and it can generate lexers,parsers, tree parsers and lexer-parsers. Parsers produced by it are able to automatically generate an AST, which was necessary for our design. However, the most recent release of the software (ANTLR 4) does not support JavaScript as a target source, even though the previous version does. 
-\\[12pt]
-JISON and PEG.js do not encounter the same program - they successfully support JavaScript as a target and both could have been appropriate choice for our parser. PEG.js is based on parsing expression grammar formalism, which is more powerful that traditional LL(k) and LR(k) parsers. On the other hand, Jison can recognize languages described by LALR(1) grammars and provides additional features(i.e the ability to define operator associations and precendence). Because of this additional features, JISON was our choice for parser generator. 
+At the beginning of implementation of the parser and lexer for our grammar, an appropriate parser generator for JavaScript had to be found. We found three possible parser generators, each of which would helped us achieve the desired result. ANTLR, JISON and PEG.js were considered as possibilities.
+
+ANTLR uses LL(*) parsing and it can generate lexers, parsers, tree parsers and lexer-parsers. Parsers produced by it are able to automatically generate an AST, which was necessary for our design. However, the most recent release of the software (ANTLR 4) does not support JavaScript as a target platform, even though the previous version does. 
+
+JISON and PEG.js do not encounter the same program - they successfully support JavaScript as a target and both could have been appropriate choice for our parser. PEG.js is based on parsing expression grammar formalism, which is more powerful that traditional LL(k) and LR(k) parsers. On the other hand, Jison can recognize languages described by LALR(1) grammars and provides additional features (i.e the ability to define operator associations and precendence). Because of this additional features, JISON was our chosen parser generator. 
 
 
 \setcounter{secnumdepth}{3}
 \subsection{Design}
-JISON provided us with the opportunity to specify both tokenizing rules and language grammar in the same file. This turn out to be very helpful in latter stages when the communication between the parser and code generator had to happen. The whole design process is comprised of three stages: lexical analysis, specification of the grammar and specification of the abstract syntax tree in JSON format. 
+JISON provided us with the opportunity to specify both tokenizing rules and language grammar in the same file. This turn out to be very helpful in latter stages when the communication between the parser and code generator had to happen. The whole design process was comprised of three stages: lexical analysis, specification of the grammar and specification of the abstract syntax tree in JSON format. 
 
 \subsubsection{Lexer}
-Lexer is a program or function that performs lexical analysis (the process of converting a sequence of characters into a sequence of tokens).
-A token consist of a token name and attribute value. The token name represents a kind of lexical unit(i.e. keyword,identifier) and later the token names are processed by the parser. 
+A lexer is a program or function that performs lexical analysis (the process of converting a string of characters into a sequence of tokens).
+A token consist of a token name and attribute value. The token name represents a kind of lexical unit (i.e. keyword,identifier) and later the token names are processed by the parser. 
 
 For each keyword of  our language, a token was specified in the grammar file. Each of the operators and punctuations symbols have a specified token as well. There are tokens for the identifiers, numbers and strings as well. This way, all the possible tokens for Sketch were covered in the grammar file. In Listing \ref{lst:token-example}, an example for each of them is presented. 
 \begin{center}
@@ -470,7 +470,7 @@ condition_statements
 \end{center}
 
 \subsubsection {Abstract Syntax Tree (AST)}
-If a source program in Sketch uses the correct syntax and grammar rules, after parsing an Abstract Syntax Tree would be generated and passed to the code generator. Our parser produces a tree represented as an object in JSON format. As a result, the JISON file had to be changed and for each grammar rule the corresponding JSON object was added. In Listing  \ref{lst:ast-example}, the output for \textbf{"Hello Square"} program is show.
+If a source program in Sketch uses the correct syntax and grammar rules, after parsing an Abstract Syntax Tree would be generated and passed to the code generator. Our parser produces a tree represented as an object in JSON format. As a result, the JISON file had to be changed and for each grammar rule the corresponding JSON object was added. In Listing \ref{lst:ast-example}, the output for \textbf{"Hello Square"} program is show.
 If one of the grammar rules is violated, no AST will be generated and error will be thrown - this feature is provided for us by the parser generator.
 
 \lstset{%
@@ -510,9 +510,9 @@ If one of the grammar rules is violated, no AST will be generated and error will
 \label{arch-abs}
 
 \subsection{Introduction}
-The Sketch Virtual Machine is an abstract computing machine. It bridges the gap from the Sketch programming language to javascript and the WebGL API and provides an intermediate language stage for compilation. The instruction set provided by the Sketch Virtual Machine is tailored specifically to implement the operations of the Sketch programming language.
+The Sketch Virtual Machine is an abstract computing machine. It bridges the gap from the Sketch programming language to JavaScript and the WebGL API and provides an intermediate language stage for compilation. The instruction set provided by the Sketch Virtual Machine is tailored specifically to implement the operations of the Sketch programming language.
 
-As Sketch is a programming language for drawing graphics on webpages, the Sketch Virtual Machine must be able to run in a browser environment. As Javascript is supported by most modern browsers and is the implementation language for WebGL, it was decided that the Sketch Virtual Machine would be implemented using javascript. This makes Sketch a very portable programming language as it can be run on any machine that can run a browser with Javascript support.
+As Sketch is a programming language for drawing graphics on webpages, the Sketch Virtual Machine must be able to run in a browser environment. As JavaScript is supported by most modern browsers and is the implementation language for WebGL, it was decided that the Sketch Virtual Machine would be implemented using JavaScript. This makes Sketch a very portable programming language as it can be run on any machine that can run a browser with JavaScript support.
 
 Talk a bit about the Sketch Virtual Machine knowing nothing of the sketch programming language, or how some instructions are tightly coupled with the sketch language.
 Talk a bit about how the Sketch Virtual Machine is tightly coupled with the shader management system for drawing.
@@ -528,7 +528,7 @@ The Sketch Virtual Machine assumes type checking is done at the compilation stag
 The Sketch Virtual Machine supports a three primitive types: \textit{Integer}, \textit{Float} and \textit{Boolean}.
 \begin{itemize}
 	\item \textit{Integer:} Represents 53-bit signed integer values. Has a default value of 0. 
-	\item \textit{Float:} Represents 64-bit signed integer values. Has a default value of 0.
+	\item \textit{Float:} Represents 64-bit signed float values. Has a default value of 0.
 	\item \textit{Boolean:} Represents the logical values true and false. Has a default value of false.
 \end{itemize}
 All primitive data types in the defined by the Sketch Virtual Machine are stored in 64-bits. This is due to javascript using a single 64-bit type: Number, to represent all numeric values. Boolean values are actually Integer types. Zero represents false and any non-zero value represents true.
@@ -572,16 +572,16 @@ The unique needs of our module created an interesting set of design requirements
 \item \textbf{Portability} --- Such tailored draw code cannot be imported without putting users at significant security risk by requiring them to execute arbitrary code. Some way to infer the attribute update process from the shader itself is a necessity.
 \item \textbf{Ease of Use} --- Definition of new shader files should be intuitive and an easy process, provided the user has valid shader code. The linking and compilation of shaders and shader programs must be handled internally, and completely sequestered from external control to centralise most of the API manipulation.
 \item \textbf{Configurability} --- Shader programs should have variable control methods exposed as an external interface, to provide a simple means of control over the intricacies of the WebGL API. For instance, programmers must be able to change the draw mode on a moment's notice, or even extract the shader program pointer if they require direct access to WebGL.
-\item \textbf{Simplicity} --- Interactions with the module should be designed with brevity in mind - being able to execute variable update and draw functions as a single method call makes WebGL usage simpler in the other subsystem implementations - lowering the barrier of entry. WebGL is plagued by esoteric function names, inconsistent function prototypes and an arcane set of named constants: all of which must be used regularly to render graphics.
+\item \textbf{Simplicity} --- WebGL is plagued by esoteric function names, inconsistent function prototypes and an arcane set of named constants: all of which must be used regularly to render graphics. Interactions with the module should be designed with brevity in mind - being able to execute variable update and draw functions as a single method call makes WebGL usage simpler in the other subsystem implementations - lowering the barrier of entry.
 \end{itemize}
 
 \subsection{Design Process and Issues}
 \label{arch-shad-design}
 The first challenge encountered stemmed from trying to find a way to pass shape definitions within our language. At first, we reasoned that since shapes and objects traditionally have predefined draw functions then we'd need to find a way to export raw JavaScript for each shape class. As mentioned in the requirements, we found that direct code evaluation would not only require difficult scoping considerations but would also present a massive security risk to users of the system. From here, we considered merely assigning shape classes a pair of shaders - this seemed to be the logical choice.
 
-We had originally considered allowing programmers to add shader object JSON from a URL source; this would provide an even more convenient set-up for the manager by reducing shader registration to a single line of code per file. However, we ran into trouble with the management of asynchronous execution calls caused by the main thread running while the download completed. We briefly considered making the HTTP request synchronous, but this caused the entire window to freeze until downloading had completed - we quickly discarded this plan for the time being.
+We had originally considered allowing programmers to add shader object JSON from a URL source; this would provide an even more convenient set-up for the manager by reducing shader registration to a single line of code per file. However, we ran into trouble with the management of asynchronous execution calls caused by the main thread running while the download completed. We briefly considered making the HTTP request synchronous, but this caused the entire window to freeze until downloading had completed - we quickly discarded this plan until a later time.
 
-Although our JSON system of "[name, type, default]" worked well for numeric and matrix attributes, we were originally at a loss for how buffers and vertex attributes should be handled. By forcing programmers to supply a buffer object with a known name as well as a vertex attribute specific to their shader code, we managed to bypass this problem with regards to the vertex buffer. We found that using the default value to store the name of the referenced buffer was an eloquent solution - keeping each array to size 3. As far as buffers were concerned, we then realised that we could perform the same substitution to store the itemSize of a buffer. There are many other possible configuration options which had to be cast aside (stride, offset, etc.) to allow this simplicity, however.
+Although our JSON system of "[name, type, default]" worked well for numeric and matrix uniforms, we were originally at a loss for how buffers and vertex attributes should be handled. By forcing programmers to supply a buffer object with a known name as well as a vertex attribute specific to their shader code, we managed to bypass this problem with regards to the vertex buffer. We found that using the default value to store the name of the referenced buffer was an eloquent solution - keeping each array in Shader JSON at the same size. As far as buffers were concerned, we then realised that we could perform the same substitution to store the itemSize of a buffer. There are many other possible configuration options which had to be cast aside (stride, offset, etc.) to allow this simplicity, however. Finding a simple means of expressing these in our format would be a great addition.
 
 Midway through the development of the abstract machine, we realised that we needed a means to convert from planar polygons (like those that Sketch works with) into triangle sets to render any geometry to the screen. While researching polygon triangulation algorithms we came across \textit{earcut} (https://github.com/mapbox/earcut), a JavaScript library which provides the features and speed that our platform would need to make use of. By patching in an extra draw mode to Palette on top of the standard WebGL modes, the simplicity of execution at the abstract machine level was maintained.
 
@@ -706,6 +706,8 @@ A fa\c{c}ade as shown in Figure \ref{fig:module-uml} was a necessity if we wishe
 The implementation of the module provides very little functionality of its own, and merely abstracts the calls it receives to its registered components. From the beginning, we established that users would only desire to create an instance of the module, to add shaders to the system and to compile and execute Sketch source files they had written.
 
 The only interactions which require functional code are adding shaders from URL, which delegates to the addShader method regardless, and program compilation. Program compilation follows the same execution order outlined in Chapter \ref{arch-over}, and executes the virtual machine as its final command. Aside from this, it must mediate between the components' output formats and the input arguments of the next step. For instance, the parser outputs the JSON string format of an object, which is functionally useless if we wish to traverse the tree in this form. This required communication between all team members who had developed components, to understand the data transformations required.
+
+Handling asynchronous loading of shader files had now become a necessary consideration, as this functionality was not present in the Shader Manager. To prevent users from trying to execute program code before the shaders were present, a semaphore-like system was used - an internal counter increments for every addShader() or addShaderURL() call made, and decrements when the process finishes. Although we were surprised that this mechanism was sufficient here, it likely would not be sophisticated enough to be used within Palette to deal with asynchronous behaviour on a generalised scale.
 %==============================================================================
 \chapter{Development Environment}
 \label{dev}
@@ -714,17 +716,17 @@ For a project of this scale, distributed management of our development environme
 \label{dev-scm}
 At the beginning of this year, most of our team were inexperienced with regards to proper source control systems - their operation differences, their configuration and their usage. Luckily, this meant that none of us would have to unlearn any SCM operation habits (as such platforms are notoriously different), and reduced the selection of a revision control system to one of availability and popularity. Our choices were narrowed down to two systems - \textit{SVN} and \textit{Git}.
 
-From here, we decided that Git would be the ideal choice for our project's needs as it provides simple branch management, ease of access thanks to the rise of GitHub and an effective GUI client. Although some of Git's concepts were lost upon the team at first, we've since grown to be relatively adept at its operation. We've found it to be a great source of our effectiveness by enabling distributed collaboration for very little effort.
+From here, we decided that Git would be the ideal choice for our project's needs; it provides simple branch management, ease of access thanks to the rise of GitHub and an effective GUI client. Although some of Git's concepts were lost upon the team at first, we've since grown to be relatively adept at its operation and have found it to be a great source of our effectiveness by enabling distributed collaboration for very little effort.
 
 \section{Development Tools}
 \label{dev-tools}
-As our project is JavaScript based, there have been no provisions for an IDE or editor of choice - each team member used whatever they felt most comfortable with. Among our team Sublime Text was a popular choice as a pure text editor, with WebStorm occasionally being used by those who preferred a full IDE. All testing and code operation was performed within the browser as required by JavaScript.
+As our project is JavaScript based, there have been no provisions for an IDE or editor of choice - each team member used whatever they felt most comfortable with. Amongst our team Sublime Text was a popular choice as a pure text editor, with WebStorm occasionally being used by those who preferred a full IDE, with one member choosing to work with gedit due to his Linux background. All testing and code operation was performed within the browser and browser console as mandated by JavaScript.
 
 \section{Build Management}
 \label{dev-build}
-The project uses Gulp (http://gulpjs.com/) for its build management solution. Gulp is a stream-based build system based around the automation of tasks - providing functionality such as concatenation, minification and documentation generation. Gulp is similar to Apache Ant and Maven, but eschews their configuration-driven approach in favour of a code-driven approach. We found this to be ideal, as it allowed the team to spend time working on their components with the build generation doing a lot of the menial tasks.
+The project uses Gulp (http://gulpjs.com/) for its build management solution. Gulp is a stream-based build system based around the automation of tasks - providing functionality such as concatenation, minification and documentation generation. Gulp is similar to Apache Ant and Maven, but eschews their configuration-driven approach in favour of a code-driven approach. We found this to be ideal, as it allowed the team to spend time working on their components with the build generation doing a lot of the menial tasks - with each one being built from simple actions.
 
-One particular strength was the litany of plugins available for Gulp - we found that we could automate our documentation production, library downloading and even the generation of our parser from its Jison file. Generation of these tasks was easy for the system integrator, and so the addition of new build tasks never added significant workload (unlike our past experiences with Ant and Ivy). Gulp is also the key to allowing us to provide a single JavaScript file for import by users, simplifying end-user implementation cost for Sketch greatly.
+One particular strength was the litany of plugins available for Gulp - we found that we could automate our documentation production, library downloading and even the generation of our parser from its Jison file. Generation of these tasks was easy for the system integrator, and so the addition of new build tasks never added significant workload (unlike our past experiences with Ant and Ivy). Gulp is also the key element in us providing a single JavaScript file for import by users, simplifying end-user implementation cost for Sketch greatly.
 
 \section{Continuous Integration and Quality Metrics}
 \label{dev-ci}
@@ -738,7 +740,7 @@ As part of our overall project plan, we decided that an environment for users to
 
 \section{Design Process}
 \label{ide-design}
-Our team had not originally considered the production of a development environment for our language, until the topic had been raised by our supervisor in the language development stages. Up until that point we had merely assumed that users would produce programs on a desktop computer in their text editor of choice, before linking the code up to the module on a web-page via the JavaScript API. However, mobile devices were left with no means to write their own Sketch programs - this left out a potential user base that we were specifically trying to target by electing to use WebGL.
+Most of the team had not originally considered the production of a development environment for our language, until the topic had been raised by our project manager, David, in the language development stages. Up until that point we had merely assumed that users would produce programs on a desktop computer in their text editor of choice, before linking the code up to the module on a web-page via the JavaScript API. However, mobile devices were left with no means to write their own Sketch programs - this left out a potential user base that we were specifically trying to target by electing to use WebGL.
 
 \begin{figure}
 \centering
@@ -756,9 +758,9 @@ Our team had not originally considered the production of a development environme
 \label{fig-ide-other}
 \end{figure}
 
-We began to look at existent online IDEs for various languages to serve as design inspiration for our own. Chief among these was ShaderToy (Figure \ref{fig:ide-shadertoy}), an online community built around sharing and discussing complex fragment shaders. ShaderToy's design makes the code and the visual output the primary focus for users, with both sections taking up relatively equal screen space at opposite ends of the screen. It's noted that the code segment takes up slightly more screen space - this is likely due to the far larger size of GLSL fragment shader code. While many elements of its design are bland, we found the structure of the page to be a perfect fit for graphics dependent languages where the canvas takes centre stage. We even found that the bland colour scheme of the site likely helped the key visual elements - the canvas and the code - to stand out to users by reducing visual clutter and noise elsewhere.\\
+We began to look at existent online IDEs for various languages to serve as design inspiration for our own. Chief among these was ShaderToy (Figure \ref{fig:ide-shadertoy}), an online community built around sharing and discussing complex fragment shaders. ShaderToy's design makes the code and the visual output the primary focus for users, with both sections taking up relatively equal screen space at opposite ends of the screen. It's noted that the code segment takes up slightly more screen space - this is likely due to the far larger size of GLSL fragment shader code. While many elements of its design are bland, we found the structure of the page to be a perfect fit for graphics dependent languages where the canvas takes centre stage. We even found that the bland colour scheme of the site likely helped the key visual elements - the canvas and the code - to stand out to users by reducing visual clutter and noise elsewhere.
 
-The now defunct 0x10co.de (Figure \ref{fig:ide-0x10code}), an online community based around the fictional DCPU-16, was another key influence in this regard - it also followed a minimalistic design scheme, placing code and graphical output at the forefront. We decided upon minimalism as our go-to style after our investigation to give the page and language presentation the purity we desired, and chose to go for a 50-50 split as our programs are intended to be relatively small. The key decision to deviate from the light pages in our two exemplars was made in light of modern trends within text editors such as Sublime Text - developers were regularly finding darker environments to be more aesthetically pleasing and less likely to cause eye-strain. As such, we decided to go for a darker web design; not only for these reasons, but also to enhance the appearance of the canvas by creating a stronger contrast.
+The now defunct 0x10co.de (Figure \ref{fig:ide-0x10code}), an online community based around the fictional DCPU-16, was another key influence in this regard - it also followed a minimalistic design scheme, placing code and graphical output at the forefront. We decided upon minimalism as our go-to style after our investigation to give the page and language presentation the purity we desired, and chose to go for a 50-50 split as our programs are intended to be relatively small. The key decision to deviate from the bright pages in our two exemplars was made in light of modern trends within text editors such as Sublime Text - developers were regularly finding darker environments to be more aesthetically pleasing and less likely to cause eye-strain. As such, we decided to go for a darker web design; not only for these reasons, but also to enhance the appearance of the canvas by creating a stronger contrast.
 
 \section{Implementation}
 \label{ide-impl}
@@ -819,23 +821,24 @@ The page itself (Figure \ref{fig:ide-full}) is a very simple arrangement of bloc
 \label{ide-eval}
 Being able to produce this page in less than two days, we realised that we had definitely made the correct choice in our library research. The page itself has much room to improve, however - there are vast amounts of unused whitespace, currently links to our documentation are non-functional and the page feels very barren, overall. We believe that the value that this aspect of our project provides is far greater than the time cost involved in creating it, thanks to the simple set-up process and the past experience of team members with HTML and CSS as well as its own intrinsic value.
 %==============================================================================
-\chapter{Test Plan and test suites}
+\chapter{Test Plan and Test Suites}
 \label{test}
 The testing of our language can be covered in three different categories:
 \begin{itemize}
-\item \textbf{Source code tests} used as a means of testing the parser and integrated compiler as a whole
-\item \textbf{Opcode tests} used as a means of testing the abstract machine
-\item \textbf{Output from tests} used as a means to test the remaining areas of the compiler - ie output from parser used for code generator, and output from the abstract machine used to test the shader manager
+\item \textbf{Source code tests} used as a means of testing the parser and integrated compiler as a whole.
+\item \textbf{Opcode tests} used as a means of testing the abstract machine.
+\item \textbf{Output from tests} used as a means to test the remaining areas of the compiler - ie output from parser used for code generator, and output from the abstract machine used to test the shader manager.
 \end{itemize}
 The source code tests were originally the only test methods, however, as the project proceeded, we understood the need for tests for each component of the compiler. This was due to fact while the components didn't work, they obviously could not interact with one another.
-\\[12pt]
+
 These source code fragments range from very small and straightforward, for example declaring and assigning a value to variable, to slightly more complex, like loops and nested if statements, to complex, which included creating a short animation, or creating multiple different shapes dependant on the value a line is multiplied by. These tests were very useful in testing the parser to ensure the correct output was given. When these tests were parsed, the output of the parser, the abstract syntax tree (AST), were used as testing for the code generation component. This component would take in the AST, and produce opcodes for the abstract machine.
-The opcode tests consisted of small programs due to the higher workload involved in them, but still became quite complex, in drawing shapes etc. These tests contained the source code translated into the relevant opcodes and operands. This meant that it could be run directly from the abstract machine module, and it could be solitarily tested, without the need of other components. The output from this was also used to test the shader manager.
+
+The opcode tests consisted of small programs due to the higher workload involved in creating them, but still became quite complex, in drawing shapes etc. These tests contained the source code translated into the relevant opcodes and operands. This meant that it could be run directly from the abstract machine module, and it could be tested in isolation, without the need of other components. The output from this was also used to test the shader manager.
 
 We felt this was the most informative, and altogether best structured approach towards testing our language. It allowed us to test different modules by themselves, but also the compiler as a whole and how each module interacted with the next.
 
-\subsection{User Testing}
-At this stage of the implementation of Sketch, we felt that any user evaluation, while would have showed flaws in our program, was not particularly necessary. Any problems, or areas to work on, that occurred due to user evaluations we would either already be aware of, or if not, then we would have more important flaws to work. This led us to agree that, in the future, user evaluations will be very useful, when we feel the language is ready for release, but at this stage in development, we know what we have to work on to get it to that stage, and will ensure we have those implemented first.
+\section{User Testing}
+At this stage of the implementation of Sketch, we felt that any user evaluation, while would have showed flaws in our program, was not particularly necessary. Any problems, or areas to work on, that occurred due to user evaluations we would either already be aware of, or if not, then we would have more important flaws to work on. This led us to agree that, in the future, user evaluations will be very useful, when we feel the language is ready for release, but at this stage in development, we know what we have to work on to get it to that stage, and will ensure we have our core feature set implemented first.
 %==============================================================================
 \chapter{Conclusion}
 \label{conc}
@@ -874,6 +877,12 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 \item \textbf{Shader Manager} --- Kyle Simpson
 \item \textbf{Module Fa\c{c}ade} --- Kyle Simpson
 \item \textbf{Online IDE} --- Kyle Simpson
+\end{itemize}
+%------------------------------------------------------------------------------
+\subsection{Roles and Responsibilities}
+\label{cont-prog}
+\begin{itemize}
+\item \textbf{Language Guru}
 \end{itemize}
 
 %==============================================================================

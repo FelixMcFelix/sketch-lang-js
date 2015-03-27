@@ -97,6 +97,7 @@ Sketch.Driver.prototype = {
 	 * Add a shader from a URL.
 	 * @method Sketch.Driver#addShaderURL
 	 * @param {String} url - the URL string leading to a shader object.
+	 * @async
 	 * @public
 	 */
 	addShaderURL: function(url){
