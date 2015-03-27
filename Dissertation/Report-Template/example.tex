@@ -424,6 +424,43 @@ A function returns to its caller by the two types of the \textit{return} stateme
 %==============================================================================
 \chapter{Project Plan}
 \label{plan}
+This section will cover how we tackled our project; how we set, assigned, and completed tasks by the deadline. The first half of our project plan mainly consisted of research and plannning, with most of the implementation being completed in the latter half.
+
+To begin with this project, we had to decide on the domain for the language we were designing. Initially we had a list that covered nearly every domain, but we rounded it down to two; Graphical and General purpose. Pros and cons were written up for these two domains to help with the decision. After a week, we had chosen the route of graphical programming language. This came down to a graphical language sounding more interesting, and that creating any kind of general purpose language that stands out from the others as unique is not an easy task.
+
+After the domain had been chosen, we divided outselves into two sub-groups; one group to research which requirements we wanted the language to meet, and the other to research which graphics library to build out language on. Initially, our main requirements included 3D graphics being a necessity, the movement and transformation of shapes, colour support,it must be aesthetically pleasing and inutuitive. However, after being advised that some of that could be fairly challenging, we made some changes and toned it down so that we had key goals, along with extra features we could add if time was available. The main necessary features we decided on were:
+\begin{itemize}
+\item 2D graphics are essential
+\item The language must be aestetically pleasing
+\item The langauge must be simple and easy to learn
+\item The language must maintain high performance
+\item The language must run on all systems
+\end{itemize}
+The second group, researching which graphics library we should use, initially rounded it down to 3. These were DirectX, OpenGL and WebGL. We discounted DirectX, due to it only being available on Windows compatible machines. In the remaining two, both were very similar, due to the fact that WebGL is based on OpenGL. Our requirement of the language being able to run on all systems made WebGL the obvious choice. This was down to the fact that WebGL runs on any modern browser which supports HTML5, hence any system can run our language so long as it has a browser.
+
+The next research we had to carry out was more straightforward than the others, but still just as important, as we had to decide what language to implement. This was fairly straightforward as we were quite heavily pointed towards JavaScript due to previous decisions. WebGL is written in JavaScript, and JavaScript is compiled in the browser, so all of our requirements were met. Furthermore, some of our team had quite a large understanding of JavaScript, due to previous programming knowledge. We did consider other languages, for example Java and C++, but quickly ruled them out, as we unanimously decided that JavaScript was by fart he best option for the reasons above. 
+
+Following deciding our implementation, we had to discover what the parser would be written in and what it would output. For the implementation, we wanted a parser generator, as it would allow us to concentrate on writing other components, rather than writing a piece of functionality that already exists. However, because JavaScript is not very well supported in the way of parsers, we did not have much choice. ANTLR did originally have JavaScript target support, but the most recent releases do not support the most recent version of JavaScript. Our choice came down to JSON, which does support JavaScript as a target. In regards to output from the parser the only real route for us to follow was for it to create an abstract syntax tree, which the compiler would then walk and compile.
+
+Before we created the system diagram, we had to decide on the means in which users will write and compile code written in our language. As JavaScript and WebGL are run in the browser, that was the main option we had. We decided to make a module which could be embedded in any web page, and would compile code in our language. \textbf{i know this was the original plan, but does it still match this? tyty}
+
+The System diagram was the first concrete document we created for this project. It contains the structure of our project, including how different components will interact with one another. It comprises of many of the decisions we had made to this date. This diagram shows how a user will interact with the module, how the code will be compiled, interaction with WebGL, and then the result is pushed to the browser's canvas element and drawn.
+
+Once the system diagram was completed, we could focus on the syntax and semantics of the language, and creating the BNF for it. This is when we made decisions for the unique qualities of our language, including the previously discussed \textit{point + point = line} and \textit{line * n = shape} ideas. We decided that we wanted to keep things that made sense about languages, while removing points of confusion or annoyance for new users. We took inspiration from JavaScript and Swift mainly for the syntax. Our main decisions on syntax were:
+
+\begin{itemize}
+\item ?= as an equality comparator, and keeping that consistent throughout the comparators.
+\item Implicit type declaration for variables
+\item Implicit semi colons
+\item Implicit void in function definitions
+\item Ability to add 2 points to make a line
+\item Ability to multiply a line to make a shape, if type if polygon
+\item Ability to multiple a line to make a longer line, if type is line
+\end{itemize}
+
+After making these decisions, we could create a BNF for our language. The BNF comprised of all the syntax available in Sketch. The BNF was written in such a way that it could be read by JSON, the parser generator could understand, and comprise the parser based on it.
+
+\textit{Thats it for the first half of "Sketch: The uncut story". Join us next time to find out how we did nothing for 3 months then crammed it in at the end. Welcome to university.}
 
 %==============================================================================
 \chapter{Language Evolution}
