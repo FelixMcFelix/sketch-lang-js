@@ -1,6 +1,6 @@
 // M Bytecode interperator
 
-var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
+var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
 
 	/*	Op codes
 	*	
@@ -77,9 +77,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		PTADD: 	29,
 		LNTOPG: 30,
 		LNMUL:  31,
-		PRINTST:32,
-		PRINTS: 33,
-		EXIT: 	34
+		EXIT: 	32
 	};
 
 	var glctx = glctx;
@@ -97,7 +95,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 	var cl;
 
 	// Data store (Stack)
-	this.dataStore = [];
+	var dataStore = [];
 
 	// Points to the first free space at the top of the data store
 	var sp = 0;
@@ -119,11 +117,9 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 	var needsUpdate = 0;
 
-	var needsClear = 0;
-
 	this.interpret = function() {
 
-		var dataStore = this.dataStore;
+		//var dataStore = window.dataStore;
 
 		cl = codeStore.length;
 
@@ -423,7 +419,6 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					}
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.POLYGON);
-					//prog.draw(points, {}, {color: theColor});
 					var canWidth = glctx.canvas.width;
 					var canHeight = glctx.canvas.height;
 					prog.draw(points, {width:[canWidth], height: [canHeight]}, {color: theColor})
@@ -432,7 +427,6 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 					needsUpdate = 1;
 					break;
 				case opCodes.CLEAR:
-					needsClear = 1;
 					glctx.clearColor(0.0,0.0,0.0,1.0);
 					glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
 					break;
@@ -554,11 +548,6 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 	};
 
 	render = function() {
-		if (needsClear) {
-			needsClear = 0;
-			glctx.clearColor(0.0,0.0,0.0,1.0);
-			glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
-		}
 		needsUpdate = 0;
 		window.requestAnimationFrame(window.mvm.interpret);
 	}
