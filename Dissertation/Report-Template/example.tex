@@ -329,10 +329,9 @@ The following identifiers are reserved for the use as keywords, and may not be u
     \end{tabular}
 \end{center}
 \subsection{Constants}
-\section{Syntax notation}
+
 \section{Meaning of Identifiers} 
 \section{Conversions}
-\section{Expressions}
 \section{Expressions}
 \subsection{Primary Expressions}
 Primary expressions are identifiers, numeric constants, boolean values,negation of primary expression, expressions in parenthesis, function calls, point declarations  and list of comma separated primary expressions.\\
@@ -384,6 +383,58 @@ Primary expressions are identifiers, numeric constants, boolean values,negation 
 An identifier is a primary expression if specified in a proper way, described in section \ref{ident}.\\ All numerical constants can be used as a primary expression.\\ Boolean values "true" and "false" can be used as primary expressions with comparison operators.\\ A parenthesized expression is primary expression as long as it represents a valid expression.\\ Functions calls are primary expressions as long as they corresponds to a function definition provided in the source code. \\Point declarations are valid primary  if they are surrounded by braces and each of the component are comma separated.\\ A list of comma separated primary expression is used only when the function draw() is called.  
 
 \section {Declarations}
+\subsection{Variable and function declarations}
+There are two types of declarations - in-decl (used for variable declaration) and out-decl (used for function declaration).
+\begin{lstlisting}
+out-decl
+  :FUNCTION declarator declaration_list func_return body 
+  ;
+
+in-decl 
+  : param ASSIGN exp semi
+  | param semi 
+    
+;
+\end{lstlisting}
+
+Function declarations begin with \textbf{function} keyword followed by declarator (which is identifier, specifying the name of the function) followed by declaration\_list, func\_return and body. 
+Declaration list can be empty  or  a list of parameters (param\_list),which specifies the type and identifier of different parameters passed to the function separated by comma. Function return consist of "-\textgreater" and the return type of the function.The return type can be any on the return types of the language specified in Section \ref{types_man} or can be omitted, which means that the function is implicitly void. Function body (body)  is described in Section \ref{body}
+
+Variable declaration consist of type and identifier (param) or type and identifier (param) followed by "=" and expression. At the end of both of these declaration optional semicolon can be placed. 
+\begin{lstlisting}
+func_return  
+  : RETURN_TYPE type
+  |
+;
+ declaration_list 
+  : OPEN_PARENS CLOSE_PARENS
+  | OPEN_PARENS param_list CLOSE_PARENS
+  ;
+
+param_list
+  : param 
+  | param_list COMMA param
+ ;
+
+ param 
+   : type declarator
+ ; 
+\end{lstlisting}
+\subsection{Types}
+\label{types_man}
+The types of Sketch are \textbf{void ,int, float, bool, Point, Line} and \textbf{Polygon}.
+\begin{lstlisting}
+type
+   :VOID 
+   |INT
+   |FLOAT 
+   |BOOL
+   |POINT
+   |LINE
+   |POLYGON
+;
+
+\end{lstlisting}
 \section {Statements}
 Statements are executed in sequence. A statement can be expression, a sequence of statements surrounded by braces(body), function declarations, condition statements, iteration statements and jump statements.
 
@@ -465,7 +516,7 @@ A \textit{break} can appear only in iteration statement. It cause the terminatio
 
 A function returns to its caller by the two types of the \textit{return} statement. When \textit{return} is followed by an expression, the value is returned to the caller of the function. Otherwise, when there is no expression to be returned, the return value is undefined. 
 
-\subsection{The last one I think}
+\section{The last one I think}
 
 %==============================================================================
 \chapter{Project Plan}
