@@ -825,11 +825,11 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 
 \textit{\textbf{Writing:}}
 \begin{itemize}
-\item \emph{David Creigh:} Chapter
-\item \emph{Kristiyan Dimitrov:} Chapter \ref{evo}, \ref{arch-lex}
-\item \emph{Gerard Docherty:} Chapter \ref{intro}, \ref{tut}, \ref{test}, \ref{plan} 
-\item \emph{Darren Findlay:} Chapter 
-\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{arch-module}, \ref{dev}, \ref{ide}
+\item \emph{David Creigh:} Chapter \ref{arch-gen}
+\item \emph{Kristiyan Dimitrov:} Chapter \ref{evo}, \ref{arch-lex}, \ref{manual}, 
+\item \emph{Gerard Docherty:} Chapter \ref{intro}, \ref{plan}, \ref{test}, \ref{tut}
+\item \emph{Darren Findlay:} Chapter \ref{arch-abs}
+\item \emph{Kyle Simpson:} Chapter \ref{dev}, \ref{arch-over}, \ref{arch-shad}, \ref{arch-module}, \ref{ide}
 \end{itemize}
 
 \textit{Editing duties performed by all team members across the entire document.}
@@ -849,10 +849,14 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 \subsection{Roles and Responsibilities}
 \label{cont-prog}
 \begin{itemize}
-\item \textbf{Project Manager}
-\item \textbf{Language Guru}
-\end{itemize}
+\item \textbf{Project Manager} --- David Creigh 
+\item \textbf{Language Guru} --- Kristiyan Dimitrov
+\item \textbf{System Architect} --- Darren Findlay
+\item \textbf{System Integrator} --- Kyle Simpson
+\item \textbf{System Tester} --- Gerard Docherty
 
+
+\end{itemize}
 %==============================================================================
 \appendix
 \chapter{Language Tutorial}
@@ -1060,6 +1064,7 @@ The following identifiers are reserved for the use as keywords, and may not be u
 \end{center}
 
 \section{Conversions}
+Conversions of integers and floats does not work at code generator level. On abstract machine level, conversions works depending on what type of opcode is send to it. For example, if the opcode is \textbf{IADD} and an integer and float have to be added, the float value will be converted to integer and the operation will be carried our as adding two integers.  
 \section{Expressions}
 \subsection{Primary Expressions}
 Primary expressions are identifiers, numeric constants, boolean values,negation of primary expression, expressions in parenthesis, function calls, point declarations  and list of comma separated primary expressions.\\
@@ -1242,7 +1247,7 @@ A \textit{break} can appear only in iteration statement. It cause the terminatio
 
 A function returns to its caller by the two types of the \textit{return} statement. When \textit{return} is followed by an expression, the value is returned to the caller of the function. Otherwise, when there is no expression to be returned, the return value is undefined. 
 
-\section{Scope}
+
 
 %==============================================================================
 \chapter{Source Listing}
