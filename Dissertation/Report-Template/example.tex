@@ -99,7 +99,7 @@ The past few years have brought computing to the forefront of teaching. Many par
 
 \section{Aim}
 
-The aim for this project is to create a graphical programming language that is simple to use and read, and can be picked up by nearly any novice user, but is also powerful, and can be used to create drawings. Our idea for a simple language came from Processing, a graphical language created by Casey Reas and Benjamin Fry, and the basis for the language is going to be WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, for example using {} for functions and loops and keeping the familiar structure of the for and while loops, and making sure our language follows them, while finding what we believe to be confusing or annoying common features of programming languages, like the double equals for the comparison of two objects, and replace them with what we find suitable and more 
+We wanted to create a powerful graphical programming language that is simple to use and read, can be picked up by nearly any novice user, whilst still being able to be used to create complex drawings. Our inspriation for such a language came from Processing, a Java-based graphical language created by Casey Reas and Benjamin Fry of MIT. To improve on portability and reach, we made the basis for our language WebGL – a browser version of OpenGL. With this project, we want to create a language that follows what we think are useful and intuitive features in the design of most programming languages, (e.g. using curly braces for functions and loops, keeping the familiar structure of the for and while loops), while replacing what we believe are confusing or annoying common features of programming languages (e.g. the == operator, obligatory semicolons).
 
 \section{WebGL Background}
 
@@ -133,17 +133,17 @@ The appendices contain the following:
 %==============================================================================
 \chapter{Project Plan}
 \label{plan}
-This section will cover how we tackled our project; how we set, assigned, and completed tasks by the deadline. The first half of our project plan mainly consisted of research and plannning, with most of the implementation being completed in the latter half.
+This section will cover how we tackled our project; how we set, assigned, and completed tasks by the deadline. The first half of our project plan mainly consisted of research and planning, with most of the implementation being completed in the latter half.
 
-It was set in the first semester that on Wednesday of every week we would meet our advisor, and give updates on where we are, ask questions and be given tasks for the following week. We also had a concrete meeting on Monday of every week, where we would discuss decisions or work to do as a team, with any other meetings being frequent but optional and erratic.
+We had two regularly scheduled meetings from the beginning of the year - one with our supervisor, where we could give updates on our progress, ask questions and allocate tasks for the following week. We also had one where we could discuss decisions or work to do as a team, with any other meetings being frequent but optional and erratic.
 
 To begin with this project, we had to decide on the domain for the language we were designing. Initially we had a list that covered nearly every domain, but we rounded it down to two; Graphical and General purpose. Pros and cons were written up for these two domains to help with the decision. After a week, we had chosen the route of graphical programming language. This came down to a graphical language sounding more interesting, and that creating any kind of general purpose language that stands out from the others as unique is not an easy task.
 
-After the domain had been chosen, we divided outselves into two sub-groups; one group to research which requirements we wanted the language to meet, and the other to research which graphics library to build out language on. Initially, our main requirements included 3D graphics being a necessity, the movement and transformation of shapes, colour support,it must be aesthetically pleasing and inutuitive. However, after being advised that some of that could be fairly challenging, we made some changes and toned it down so that we had key goals, along with extra features we could add if time was available. The main necessary features we decided on were:
+After the domain had been chosen, we divided ourselves into two sub-groups; one group to research which requirements we wanted the language to meet, and the other to research which graphics library to build out language on. Initially, our main requirements included 3D graphics being a necessity, the movement and transformation of shapes, colour support,it must be aesthetically pleasing and intuitive. However, after being advised that some of that could be fairly challenging, we made some changes and toned it down so that we had key goals, along with extra features we could add if time was available. The main necessary features we decided on were:
 \begin{itemize}
 \item 2D graphics are essential
-\item The language must be aestetically pleasing
-\item The langauge must be simple and easy to learn
+\item The language must be aesthetically pleasing
+\item The language must be simple and easy to learn
 \item The language must maintain high performance
 \item The language must run on all systems
 \item Movement/transformation of shapes
@@ -813,6 +813,20 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 %==============================================================================
 \chapter{Conclusion}
 \label{conc}
+\section{Summary}
+The graphical programming language Sketch was a huge undertaking, the size of which we did not originally fully realise. The original aim was to create a graphical programming, which was portable, intuitive, and elimiated common mistakes in programming. This module would have acted as a front end for WebGL. To complete this volume of work in such a short amount of time was always going to be a challenge. As it is, there is not a fully functioning compiler completed. 3 out of 4 modules are complete - Parser, abstract machine and shader manager - however, the code generator will only complete basic arithmetic functions. Despite this, we feel that we still achieved a huge amount. Obviously we did not meet all the requirements we originally set, and even had to cut certain ones we felt were surplus to core functionality, like importing images, and importing external libraries. These will be included in the future plans.
+
+\section{Future Plans}
+
+Going forward from this project, out main goal is to complete the code generator component of the compiler. We will evenly split this amongst all available team members to complete as soon as possible. Other than this, the plans are to implement functionality to:
+\begin{itemize}
+\item Support 3D manipulation and rendering
+\item Support importing of external libraries
+\item Support importing and exporting of images
+\item Allow named parameters in functions
+\end{itemize}
+
+We aim to complete the bulk of these over the coming months, with the code generator taking priority over all other requirements.
 
 %------------------------------------------------------------------------------
 \section{Contributions}
@@ -824,11 +838,11 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 
 \textit{\textbf{Writing:}}
 \begin{itemize}
-\item \emph{David Creigh:} Chapter
-\item \emph{Kristiyan Dimitrov:} Chapter \ref{evo}, \ref{arch-lex}
-\item \emph{Gerard Docherty:} Chapter \ref{intro}, \ref{tut}, \ref{test}, \ref{plan} 
-\item \emph{Darren Findlay:} Chapter 
-\item \emph{Kyle Simpson:} Chapter \ref{arch-over}, \ref{arch-shad}, \ref{arch-module}, \ref{dev}, \ref{ide}
+\item \emph{David Creigh:} Chapter \ref{arch-gen}
+\item \emph{Kristiyan Dimitrov:} Chapter \ref{evo}, \ref{arch-lex}, \ref{manual}, 
+\item \emph{Gerard Docherty:} Chapter \ref{intro}, \ref{plan}, \ref{test}, \ref{tut}
+\item \emph{Darren Findlay:} Chapter \ref{arch-abs}
+\item \emph{Kyle Simpson:} Chapter \ref{dev}, \ref{arch-over}, \ref{arch-shad}, \ref{arch-module}, \ref{ide}
 \end{itemize}
 
 \textit{Editing duties performed by all team members across the entire document.}
@@ -848,10 +862,14 @@ At this stage of the implementation of Sketch, we felt that any user evaluation,
 \subsection{Roles and Responsibilities}
 \label{cont-prog}
 \begin{itemize}
-\item \textbf{Project Manager}
-\item \textbf{Language Guru}
-\end{itemize}
+\item \textbf{Project Manager} --- David Creigh 
+\item \textbf{Language Guru} --- Kristiyan Dimitrov
+\item \textbf{System Architect} --- Darren Findlay
+\item \textbf{System Integrator} --- Kyle Simpson
+\item \textbf{System Tester} --- Gerard Docherty
 
+
+\end{itemize}
 %==============================================================================
 \appendix
 \chapter{Language Tutorial}
@@ -940,7 +958,7 @@ Sketch has three main types for drawing shapes, lines and so forth. These are Po
 The line "counter++" increments the counter, using the modifying operator "++". We will explain modifying operators later in this tutorial.
 
 Sketch also has one more type of loop - the "for" loop. The for loop has a completely different structure to the while loop, but has, more or less, the same functionality. The choice between these two types is based on the context, which one would make more sense, for example, incrementation should be used in for loops, while boolean variables should be the control in while loops. The following is the while loop from Listing \ref{lst:tutorial-comment}, changed to a for loop:
-\clearpage
+
 \begin{lstlisting}[caption={The "For" Loop},label={lst:tutorial-for},xleftmargin=.1\textwidth,xrightmargin=.1\textwidth,]
     for(int counter = 3; counter < 5; counter++) {
         ...
@@ -1059,6 +1077,7 @@ The following identifiers are reserved for the use as keywords, and may not be u
 \end{center}
 
 \section{Conversions}
+Conversions of integers and floats does not work at code generator level. On abstract machine level, conversions works depending on what type of opcode is send to it. For example, if the opcode is \textbf{IADD} and an integer and float have to be added, the float value will be converted to integer and the operation will be carried our as adding two integers.  
 \section{Expressions}
 \subsection{Primary Expressions}
 Primary expressions are identifiers, numeric constants, boolean values,negation of primary expression, expressions in parenthesis, function calls, point declarations  and list of comma separated primary expressions.\\
@@ -1098,13 +1117,14 @@ Expressions with the additive operators \textbf{+} (PLUS) and \textbf{-} (MINUS)
 
 Expressions with multiplicative operators \textbf{*} (ASTERIX), \textbf{\textbackslash } (DIV) and \textbf{\%} (MODULO)  group left-to-right. The \textit{ASTERIX} operator denotes multiplication. The  \textit{DIV} operator yields the quotient, and the \textit{PERCENT} operator the remainder, of the division of the first operand by the second.
 
-There are several expressions with assignment operators( = , += , -= , *= , \textbackslash= , \%= ). In the simple assignment with =, the old value is replaced with the new value of the expression.   An expression of the form exp1 op= exp2 is equivalent to exp1 = exp1 op exp2, In the simple assignment with =, the old value is replaced with the new value of the expression.  An expression of the form exp1 op = exp2 except that exp1 is evaluated only once. \textbf{Need some help here, not able to format it properly}
+here are several expressions with assignment operators( = , += , -= , *= , \textbackslash= , \%= ). In the simple assignment with =, the old value is replaced with the new value of the expression.   An expression of the form \textit{``exp1 op= exp2''} is equivalent to \textit{``exp1 = exp1 op exp2''}, In the simple assignment with =, the old value is replaced with the new value of the expression.  An expression of the form \textit{``exp1 op = exp2''} except that exp1 is evaluated only once. 
+
 
 There are 6 comparison operators in Sketch - ?= (check for equality) , ?\textless (check for less than) , ?\textgreater (check for greater than) , != (check for inequality ) , !\textgreater(check for less than or equal), !\textless (check for greater than or equal). All of them return either \textbf{true} or \textbf{false}. 
 
 Operators \textbf{++} and \textbf{- -} decrements or increments the value of the operand after which they are place by one.
 
-The \textbf{OP\_AND} operator groups left-to-right. It returns \textbf{true}  if both its operands compare to \textbf{true}, \textbf{false} otherwise. THe \textbf{OP\_OR} operator also groups left-to-right. If returns \textbf{true} if either of it operands compare unequal to \textbf{false}, and \textbf{true} otherwise. 
+The \textbf{OP\_AND} operator groups left-to-right. It returns \textbf{true}  if both its operands compare to \textbf{true}, \textbf{false} otherwise. The \textbf{OP\_OR} operator also groups left-to-right. If returns \textbf{true} if either of it operands compare unequal to \textbf{false}, and \textbf{true} otherwise. 
 
 
 \section {Declarations}
@@ -1241,7 +1261,7 @@ A \textit{break} can appear only in iteration statement. It cause the terminatio
 
 A function returns to its caller by the two types of the \textit{return} statement. When \textit{return} is followed by an expression, the value is returned to the caller of the function. Otherwise, when there is no expression to be returned, the return value is undefined. 
 
-\section{Scope}
+
 
 %==============================================================================
 \chapter{Source Listing}
