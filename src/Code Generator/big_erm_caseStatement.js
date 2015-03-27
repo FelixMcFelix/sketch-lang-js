@@ -315,7 +315,7 @@ function walkAddAssign(obj){
 
 function walkSubAssign(obj){
 	obj.type = "subtraction";
-	walkAssign(obj.arguments[0], walkSubtract(obj));
+	walkAssign(obj.arguments[0], walkSubtraction(obj));
 }
 
 function walkMultiAssign(obj){
@@ -534,7 +534,7 @@ function walk(obj){
 			walkAddition(obj);
 			break;
 		case "subtraction":
-			walkSubtract(obj);
+			walkSubtraction(obj);
 			break;
 		case "multiplication":
 			walkMultiplication(obj);
