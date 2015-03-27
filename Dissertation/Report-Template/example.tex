@@ -294,6 +294,132 @@ In Listing \ref{lst:tutorial-functions}, you can see different properties of def
 %==============================================================================
 \chapter{Language Reference Manual}
 \label{manual}
+\section{Introduction}
+This manual describes the Sketch programming language patterned after the reference manual for the C programming language in Kernighan and Ritchie’s book, The C Programming Language.
+
+\section{Lexical Convention}
+ADD TEXT 
+\subsection{Tokens}
+There are 6 classes of tokens : identifiers, keywords, numerical constants, string literals, operators and other separators. Blanks, tabs,newlines and comments are ignored.Some white space is required to separated otherwise adjacent identifiers, keywords and constants.  
+\subsection{Comments} 
+The characters '\#' and '//' introduce a comment. They do not nest, and they do not occur within a string. Comments can be added anywhere else  in a given program. 
+\subsection{Identifiers}
+\label{ident}
+ An identifier is a sequence of letters and digit. The first character must be a letter and there is not a restriction for the length of the sequence. The underscore \_ counts as a letter and there is difference between lower-case and upper-case letters. 
+
+\subsection{Keywords}
+The following identifiers are reserved for the use as keywords, and may not be used otherwise: 
+
+
+\begin{center}
+    \begin{tabular}{ | l | l | l | l | l |l|l|}
+    \hline
+    \textit{bool} & \textit{break} & \textit{clear} & \textit{continue}& \textit{do}  &  \textit{else} & \textit{false}\\
+    \hline \textit{float} & \textit{for}& \textit{function} &
+ 
+    \textit{if} & \textit{Line} & \textit{int} & \textit{not}\\ 
+    \hline
+    
+    \textit{null} &
+    \textit{Point} & \textit{Polygon} & \textit{return} & \textit{true}
+     &
+    \textit{void} & \textit{while} \\
+    \hline
+
+    \end{tabular}
+\end{center}
+\subsection{Constants}
+\section{Syntax notation}
+\section{Meaning of Identifiers} 
+\section{Conversions}
+\section{Expressions}
+\subsection{Primary Expressions}
+Primary expressions are identifiers, numeric constants, boolean values,negation of primary expression, expressions in parenthesis, function calls, point declarations  and list of comma separated primary expressions.\\
+An identifier is a primary expression if specified in a proper way, described in section \ref{ident}.\\ All numerical constants can be used as a primary expression.\\ Boolean values "true" and "false" can be used as primary expressions with comparison operators.\\ A parenthesized expression is primary expression as long as it represents a valid expression.\\ Functions calls are primary expressions as long as they corresponds to a function definition provided in the source code. \\Point declarations are valid primary  if they are surrounded by braces and each of the component are comma separated.\\ A list of comma separated primary expression is used only when the function draw() is called.  
+
+\section {Declarations}
+\section {Statements}
+Statements are executed in sequence. A statement can be expression, a sequence of statements surrounded by braces(body), function declarations, condition statements, iteration statements and jump statements.
+
+\begin{lstlisting}
+
+statement
+  : exp semi
+  | body
+  | function
+  | condition_statements
+  | iteration_statements
+  | jump_statements
+
+;
+
+\end{lstlisting}
+
+\subsection{Expressions} 
+Expression are every statement describe in section ?? followed by semicolon or not. All the side effects form the expression are completed before the next statement is executed. Most of them are assignments. 
+
+\subsection{Body}
+\label{body}
+Body is every sequence of declarations and/or statements surrounded by braces. The body cannot be used on is own. It should be used as  function body or as body after condition statements or iteration statements. The body can be empty(i.e no declaration and statements in it), but is not recommended as it would not provide any functionality. 
+\begin{lstlisting}
+
+body
+  : OPEN_BRACE CLOSE_BRACE
+  | OPEN_BRACE statement_list CLOSE_BRACE
+  | OPEN_BRACE decl_list CLOSE_BRACE
+  | OPEN_BRACE decl_list statement_list CLOSE_BRACE
+;
+
+
+\end{lstlisting}
+
+
+\subsection{Function declarations}
+Function declarations can be used as only when they are defined within Sketch's two main functions(init() and render() ); Most of them should have a function body (\ref{body}), but functions with empty body are allowed as well, even though not recommended since they do not provide any functionality. More information about functions can be fount in Section ??.
+
+\subsection{Condition statements} 
+Condition statements are if statement or if statement followed by else clause.  They choose one of several flows of control.
+\begin{lstlisting}
+
+condition_statements  
+  : IF OPEN_PARENS exp CLOSE_PARENS statement %prec IF_WITHOUT_ELSE
+  | IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement 
+  ;
+\end{lstlisting}
+
+The expression of this clauses should return boolean values, any other values is invalid. A given \textit{else} is connected with the last encountered \textit{else}-less \textit{if}. 
+
+\subsection{Iteration statements}
+Iteration statements specify looping. There are three types of loops in Sketch. 
+\begin{lstlisting}
+iteration_statements  
+  : WHILE OPEN_PARENS exp CLOSE_PARENS statement
+  | DO statement WHILE OPEN_PARENS exp CLOSE_PARENS semi
+  | FOR OPEN_PARENS in-decl semi exp semi exp CLOSE_PARENS statement
+;
+\end{lstlisting}
+In the \textit{while} and \textit{do} statements, the sub-statement is execute repeatedly as long as the value of expression is equal to \textit{true}, the expression must use comparison operators. With \textit{while}, the test, including all side effects from the expression, occurs before each execution of statement. With \textit{do}, the test follows each iteration. 
+
+In the \textit{for} statements, the declarations specifies initialization the loop. The first expression must evaluate to a boolean value and it is evaluated before each iteration. If its value is \textit{false}, the \textit{for} loop is terminated. The second expression is evaluated after each iteration and specifies a reinitialization for the loop. For this statement to be valid, the declaration and two expressions should be present. Otherwise, it is an invalid statement. 
+\subsection{Jump statements} 
+Jump statements transfer control unconditionally. 
+\begin{lstlisting}
+jump_statements 
+  : CONTINUE semi
+  | BREAK semi 
+  | RETURN exp  semi 
+  | RETURN  semi 
+;
+\end{lstlisting}
+Each of the jump statements are followed by optional semicolon. 
+
+A \textit{continue} statement may appear only within and iteration statement. It causes control to pass to the loop-continuation portion of the smallest enclosing such statement.
+
+A \textit{break} can appear only in iteration statement. It cause the terminations of such statements. 
+
+A function returns to its caller by the two types of the \textit{return} statement. When \textit{return} is followed by an expression, the value is returned to the caller of the function. Otherwise, when there is no expression to be returned, the return value is undefined. 
+
+\subsection{The last one I think}
 
 %==============================================================================
 \chapter{Project Plan}
