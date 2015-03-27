@@ -333,6 +333,52 @@ The following identifiers are reserved for the use as keywords, and may not be u
 \section{Meaning of Identifiers} 
 \section{Conversions}
 \section{Expressions}
+\section{Expressions}
+\subsection{Primary Expressions}
+Primary expressions are identifiers, numeric constants, boolean values,negation of primary expression, expressions in parenthesis, function calls, point declarations  and list of comma separated primary expressions.\\
+An identifier is a primary expression if specified in a proper way, described in section \ref{ident}.\\ All numerical constants can be used as a primary expression.\\ Boolean values "true" and "false" can be used as primary expressions with comparison operators.\\ A parenthesized expression is primary expression as long as it represents a valid expression.\\ Functions calls are primary expressions as long as they corresponds to a function definition provided in the source code. \\Point declarations are valid primary  if they are surrounded by braces and each of the component are comma separated.\\ A list of comma separated primary expression is used only when the function draw() is called.  
+
+\subsection{Expressions}
+\label{expr-man}
+Expressions are from the following types : additive, multiplicative, comparison, equality and assignment expressions. Expressions with logical operators \textbf{AND} and \textbf{OR} are also present. Operators for decrement and increment are also considered as expressions. 
+\begin{lstlisting}
+exp
+    :prim_expr
+    | prim_expr PLUS exp 
+    | prim_expr MINUS exp
+    | prim_expr ASTERIX  exp
+    | prim_expr DIV exp  
+    | prim_expr PERCENT exp 
+    | prim_expr OP_ADD_ASSIGNMENT exp 
+    | prim_expr OP_SUB_ASSIGNMENT exp 
+    | prim_expr OP_MULT_ASSIGNMENT exp
+    | prim_expr OP_DIV_ASSIGNMENT exp 
+    | prim_expr OP_MOD_ASSIGNMENT exp 
+    | prim_expr OP_INC  
+    | prim_expr OP_DEC  
+    | prim_expr OP_AND exp 
+    | prim_expr OP_OR  exp 
+    | prim_expr OP_EQ exp 
+    | prim_expr LT exp 
+    | prim_expr GT  exp
+    | prim_expr OP_NE exp
+    | prim_expr OP_LE exp
+    | prim_expr OP_GE exp
+    | prim_expr ASSIGN exp     
+    }
+      
+\end{lstlisting}
+Expressions with the additive operators \textbf{+} (PLUS) and \textbf{-} (MINUS) group left-to-right. The result of the \textit{PLUS} is the sum of the operands. The result of the \textit{MINUS} is the difference of the operands.
+
+Expressions with multiplicative operators \textbf{*} (ASTERIX), \textbf{\textbackslash } (DIV) and \textbf{\%} (PERCENT)  group left-to-right. The \textit{ASTERIX} operator denotes multiplication. The  \textit{DIV} operator yields the quotient, and the \textit{PERCENT} operator the remainder, of the division of the first operand by the second.
+
+There are several expressions with assignment operators( = , += , -= , *= , \textbackslash= , \%= ). In the simple assignment with =, the old value is replaced with the new value of the expression.   An expression of the form exp1 op= exp2 is equivalent to exp1 = exp1 op exp2, In the simple assignment with =, the old value is replaced with the new value of the expression.  An expression of the form exp1 op = exp2 except that exp1 is evaluated only once. \textbf{Need some help here, not able to format it properly}
+
+There are 6 comparison operators in Sketch - ?= (check for equality) , ?\textless (check for less than) , ?\textgreater (check for greater than) , != (check for inequality ) , !\textgreater(check for less than or equal), !\textless (check for greater than or equal). All of them return either \textbf{true} or \textbf{false}. 
+
+Operators \textbf{++} and \textbf{- -} decrements or increments the value of the operand after which they are place by one.
+
+The \textbf{OP\_AND} operator groups left-to-right. It returns \textbf{true}  if both its operands compare to \textbf{true}, \textbf{false} otherwise. THe \textbf{OP\_OR} operator also groups left-to-right. If returns \textbf{true} if either of it operands compare unequal to \textbf{false}, and \textbf{true} otherwise. 
 \subsection{Primary Expressions}
 Primary expressions are identifiers, numeric constants, boolean values,negation of primary expression, expressions in parenthesis, function calls, point declarations  and list of comma separated primary expressions.\\
 An identifier is a primary expression if specified in a proper way, described in section \ref{ident}.\\ All numerical constants can be used as a primary expression.\\ Boolean values "true" and "false" can be used as primary expressions with comparison operators.\\ A parenthesized expression is primary expression as long as it represents a valid expression.\\ Functions calls are primary expressions as long as they corresponds to a function definition provided in the source code. \\Point declarations are valid primary  if they are surrounded by braces and each of the component are comma separated.\\ A list of comma separated primary expression is used only when the function draw() is called.  
@@ -356,7 +402,7 @@ statement
 \end{lstlisting}
 
 \subsection{Expressions} 
-Expression are every statement describe in section ?? followed by semicolon or not. All the side effects form the expression are completed before the next statement is executed. Most of them are assignments. 
+Expression are every statement describe in Section \ref{expr-man} followed by semicolon or not. All the side effects form the expression are completed before the next statement is executed. Most of them are assignments. 
 
 \subsection{Body}
 \label{body}
