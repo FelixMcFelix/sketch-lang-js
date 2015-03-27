@@ -3206,7 +3206,7 @@ Sketch.Driver = function(canvas){
 	 * @protected
 	 * @readonly
 	 */
-	this.vm = new MVM(this.context, this.shaderManager, codeStore, constantPool, false);
+	this.vm = null;
 };
 
 Sketch.Driver.prototype = {
@@ -3263,14 +3263,25 @@ Sketch.Driver.prototype = {
 			" If it's been excessively long then you may have tried to add a malformed shader.");
 			return false;
 		}
+		codeStore = [];
+		constantPool = [];
+		labelTable = [];
+		this.vm = null;
+		this.codeGen = null;
+		try{
+			var ast = this.parser.parse(text);
+			console.log(ast);
+			this.codeGen = new SketchGen(ast);
+			walk(this.codeGen);
 
-		alert("All my shaders compiled, we're good to go.");
-		var ast = this.parser.parse(text);
-		console.log(ast);
-		this.codeGen = new SketchGen(ast);
-		walk(this.codeGen);
-
-		this.vm.interpret();
+			this.vm = new MVM(this.context, this.shaderManager, codeStore, constantPool, labelTable, true);
+			this.vm.interpret();
+		} catch (e){
+			alert("Error detected while rendering! See console for stack trace.");
+			console.log(e);
+			return false;
+		}
+		return false;
 	}
 };
 //==================================================================================================
@@ -3590,7 +3601,7 @@ function walkAddAssign(obj){
 
 function walkSubAssign(obj){
 	obj.type = "subtraction";
-	walkAssign(obj.arguments[0], walkSubtract(obj));
+	walkAssign(obj.arguments[0], walkSubtraction(obj));
 }
 
 function walkMultiAssign(obj){
@@ -3809,7 +3820,7 @@ function walk(obj){
 			walkAddition(obj);
 			break;
 		case "subtraction":
-			walkSubtract(obj);
+			walkSubtraction(obj);
 			break;
 		case "multiplication":
 			walkMultiplication(obj);
