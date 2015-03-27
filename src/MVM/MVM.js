@@ -280,12 +280,12 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("NCMPLT: " + j + " > " + i + " = " + result);
 					break;
 				case opCodes.JUMP:
-					var address = codeStore[cp];
+					var address = labelTable[codeStore[cp]];
 					cp = address;
 					if(debugMode) console.log("JUMP: " + address);
 					break;
 				case opCodes.JUMPT:
-					var address = codeStore[cp];
+					var address = labelTable[codeStore[cp]];
 					sp--;
 					var i = dataStore[sp];
 					result = i == 1;
@@ -298,7 +298,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("JUMPT: " + i + " " + result);
 					break;
 				case opCodes.JUMPF:
-					var address = codeStore[cp];
+					var address = labelTable[codeStore[cp]];
 					sp--;
 					var i = dataStore[sp];
 					var result = i == 0;
