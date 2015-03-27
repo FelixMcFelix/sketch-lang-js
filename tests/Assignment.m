@@ -1,4 +1,5 @@
-init(){
+function init(){
+Line l = {0,0} + {5,0} 
 int n = 1;
 #testing comments 
 n += 1;
@@ -8,5 +9,9 @@ n /= 3; #comment
 n -= 1;
 n = (n+3) * 2;
 //final comment 
-print(n);
+
 }
+
+funcion render() { 
+   draw ((l*n)) ; 
+} 

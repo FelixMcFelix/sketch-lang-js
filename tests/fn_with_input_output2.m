@@ -1,7 +1,7 @@
 
 #global variable 
 int n = 40;
-init(){
+function init(){
 //function declaration 
 function givesOutput(int n) -> int{
 		return(n);
@@ -9,5 +9,6 @@ function givesOutput(int n) -> int{
 
 #assign with function 
 n = givesOutput(n);
-print(n)
+Line l2 = {5,0} + {5, 5}
+draw((l2*n));
 }

@@ -1,13 +1,12 @@
 //creating function 
-init(){
- 	function givesOutput(int n, String s) -> String{
-		n++
-		s = "world"
-		return s ;
+function init(){
+ 	function givesOutput(int n) -> Polygon{
+		Line l1 = {0,0} + {5,0};
+		Polygon random = l1 *n
+         return random 
 	}
-        #function call 
-	String s = givesOutput(4,"hello");
-	print (s);
+        //will draw square
+	draw(givesOutput(4));
 }
 
 

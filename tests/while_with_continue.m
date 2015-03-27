@@ -1,4 +1,4 @@
-init(){
+function init(){
 	num n = 0;
 	bool b = true;
 	while(b){
@@ -11,4 +11,8 @@ init(){
 	}
 	print(n);
 
+}
+
+funciton render(){
+      draw((({0,0} +{5,0}) * n));
 }

@@ -1,4 +1,4 @@
-main(){
+draw(){
 	Point p1 = {1,1};
 	Point p2 = {5,5};
 	for(int n = 0; n<7; n++){

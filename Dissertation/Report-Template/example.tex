@@ -937,7 +937,7 @@ In Listing \ref{lst:tutorial-functions}, you can see different properties of def
 This manual describes the Sketch programming language patterned after the reference manual for the C programming language in Kernighan and Ritchie’s book, The C Programming Language.
 
 \section{Lexical Convention}
-ADD TEXT 
+
 \subsection{Tokens}
 There are 6 classes of tokens : identifiers, keywords, numerical constants, string literals, operators and other separators. Blanks, tabs,newlines and comments are ignored.Some white space is required to separated otherwise adjacent identifiers, keywords and constants.  
 \subsection{Comments} 
@@ -967,9 +967,7 @@ The following identifiers are reserved for the use as keywords, and may not be u
 
     \end{tabular}
 \end{center}
-\subsection{Constants}
 
-\section{Meaning of Identifiers} 
 \section{Conversions}
 \section{Expressions}
 \subsection{Primary Expressions}
@@ -1008,7 +1006,7 @@ exp
 \end{lstlisting}
 Expressions with the additive operators \textbf{+} (PLUS) and \textbf{-} (MINUS) group left-to-right. The result of the \textit{PLUS} is the sum of the operands. The result of the \textit{MINUS} is the difference of the operands.
 
-Expressions with multiplicative operators \textbf{*} (ASTERIX), \textbf{\textbackslash } (DIV) and \textbf{\%} (PERCENT)  group left-to-right. The \textit{ASTERIX} operator denotes multiplication. The  \textit{DIV} operator yields the quotient, and the \textit{PERCENT} operator the remainder, of the division of the first operand by the second.
+Expressions with multiplicative operators \textbf{*} (ASTERIX), \textbf{\textbackslash } (DIV) and \textbf{\%} (MODULO)  group left-to-right. The \textit{ASTERIX} operator denotes multiplication. The  \textit{DIV} operator yields the quotient, and the \textit{PERCENT} operator the remainder, of the division of the first operand by the second.
 
 There are several expressions with assignment operators( = , += , -= , *= , \textbackslash= , \%= ). In the simple assignment with =, the old value is replaced with the new value of the expression.   An expression of the form exp1 op= exp2 is equivalent to exp1 = exp1 op exp2, In the simple assignment with =, the old value is replaced with the new value of the expression.  An expression of the form exp1 op = exp2 except that exp1 is evaluated only once. \textbf{Need some help here, not able to format it properly}
 
@@ -1017,9 +1015,7 @@ There are 6 comparison operators in Sketch - ?= (check for equality) , ?\textles
 Operators \textbf{++} and \textbf{- -} decrements or increments the value of the operand after which they are place by one.
 
 The \textbf{OP\_AND} operator groups left-to-right. It returns \textbf{true}  if both its operands compare to \textbf{true}, \textbf{false} otherwise. THe \textbf{OP\_OR} operator also groups left-to-right. If returns \textbf{true} if either of it operands compare unequal to \textbf{false}, and \textbf{true} otherwise. 
-\subsection{Primary Expressions}
-Primary expressions are identifiers, numeric constants, boolean values,negation of primary expression, expressions in parenthesis, function calls, point declarations  and list of comma separated primary expressions.\\
-An identifier is a primary expression if specified in a proper way, described in section \ref{ident}.\\ All numerical constants can be used as a primary expression.\\ Boolean values "true" and "false" can be used as primary expressions with comparison operators.\\ A parenthesized expression is primary expression as long as it represents a valid expression.\\ Functions calls are primary expressions as long as they corresponds to a function definition provided in the source code. \\Point declarations are valid primary  if they are surrounded by braces and each of the component are comma separated.\\ A list of comma separated primary expression is used only when the function draw() is called.  
+
 
 \section {Declarations}
 \subsection{Variable and function declarations}
@@ -1155,7 +1151,7 @@ A \textit{break} can appear only in iteration statement. It cause the terminatio
 
 A function returns to its caller by the two types of the \textit{return} statement. When \textit{return} is followed by an expression, the value is returned to the caller of the function. Otherwise, when there is no expression to be returned, the return value is undefined. 
 
-\section{The last one I think}
+\section{Scope}
 
 %==============================================================================
 \chapter{Source Listing}

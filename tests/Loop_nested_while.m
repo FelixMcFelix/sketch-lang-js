@@ -1,4 +1,4 @@
-init(){
+function init(){
 #nested while loop
 
 
@@ -12,7 +12,11 @@ init(){
 			i++;
 		}
 	}
+}
 
-	print(n);
-	print(i);
+function render(){
+   Polygon shape = {0,0} +{5,0};
+   draw((shape *n), (shape *i));
+
+
 }
