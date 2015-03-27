@@ -1,3 +1,4 @@
+draw(){
 Point pt1 = {1,1}
 Point pt2 = {5,2}
 	
@@ -8,3 +9,4 @@ function shapeWithParams(Line l1) -> Polygon{
 		draw(triangle);
 	}
 	shapeWithParams(l1);
+}

@@ -71,7 +71,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 		CALL: 	23, 
 		RETURN: 24,
 		LNDRAW: 25,
-		PGDARW: 26,
+		PGDRAW: 26,
 		RENDER: 27,
 		CLEAR: 	28,
 		PTADD: 	29,
@@ -401,7 +401,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, debugMode) {
 
 					if(debugMode) console.log("LNDRAW: " + lineStruct);
 					break;
-				case opCodes.PGDARW:
+				case opCodes.PGDRAW:
 					sp--
 					var polygonAddress = dataStore[sp];
 					var polygonStruct = constantPool[polygonAddress];

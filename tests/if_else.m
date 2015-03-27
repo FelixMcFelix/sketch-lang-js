@@ -1,13 +1,13 @@
-init(){
+function init(){
 #if and else
 
 
 	int n = 6;
 	if(n ?= 5){
-		print("hi");
+		continue;
 	}
 	else{
-		print(n);
+		n +=7;
 	}
 
 }

@@ -1,14 +1,13 @@
-init(){
+function init(){
 #if else if and else statement
-
+        Line line = {0,0} + {5,0}
 	int n = 6;
 	if(n ?= 5){
-		print("hi");
+		line = line * n
 	}
 	else if(n ?= 7){
-		print("hello");
+		line = line /n 
 	}
-	else{
-		print(n);	
-	}
+
+       draw(line)
 }

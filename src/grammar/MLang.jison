@@ -170,6 +170,7 @@ body
 statement
   : exp semi
   | body
+  | function
   | condition_statements
   | iteration_statements
   | jump_statements
@@ -248,11 +249,14 @@ statement_list
   : statement
   | statement_list statement
      {$$= [$1,$2];} 
+ | statement_list decl_list
+  {$$= [$1,$2];} 
+
+;
       
 
  
-   
-;
+  
 exp
     :prim_expr
     | prim_expr PLUS exp 
@@ -291,7 +295,7 @@ exp
                        };
                 }
 
-    | prim_expr PERCENT exp 
+    | prim_expr MODULO exp 
                    {$$ = { 
                         type: 'modulo',
                         arguments:[
@@ -447,7 +451,7 @@ exp
 
 prim_expr
     : IDENTIFIER 
-    |  NUMBER 
+    | NUMBER 
     | TRUE 
     | FALSE
     | NOT prim_expr

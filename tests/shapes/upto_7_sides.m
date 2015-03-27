@@ -1,8 +1,13 @@
-draw(){
-	Point p1 = {1,1};
-	Point p2 = {5,5};
-	for(int n = 0; n<7; n++){
-		Polygon shape = (p1 + p2) * n;
-		draw(shape);
+function inti(){Point pt1 = {1,1}
+Point pt2 = {5,2}
+Line l = pt1 + pt2;
+
+function shapeWithParams(Line l1) -> Polygon{
+		Polygon triangle = l1 * 3;
+		return triangle
 	}
+}
+function render(){
+	draw(shapeWithParams(l));
+
 }

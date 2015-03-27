@@ -4,6 +4,7 @@ init(){
 	for(int i = 0; i?<10; i++){
 		n += i;
 	}
-
-	print(n);
+        if( n ?= 11){
+               n = 0 ; 
+       } 
 }
