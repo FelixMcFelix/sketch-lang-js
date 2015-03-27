@@ -1,34 +1,13 @@
-// M Bytecode interperator
+/*
+* Sketch Virtual Machine
+* Darren Findlay
+*
+* 15th January 2015
+*
+*/
+
 
 var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
-
-	/*	Op codes
-	*	
-	*	MNEMONIC	OPERANDS	DESCRIPTION
-	*	STOREG		2			store global at address
-	*	LOADG		1			push global at address
-	*	STOREL		1			store local at address
-	*	LOADL		1			push local at local address
-	*	LOADC		1			push constant
-	*	IADD		0			i = pop off stack. j = pop off stack. push j + i
-	*	ISUB		0			i = pop off stack. j = pop off stack. push j - i
-	*	IMUL		0			i = pop off stack. j = pop off stack. push j * i
-	*	IDIV		0			i = pop off stack. j = pop off stack. push j / i
-	*	FADD		0			i = pop off stack. j = pop off stack. push j + i
-	*	FSUB		0			i = pop off stack. j = pop off stack. push j - i
-	*	FMUL		0			i = pop off stack. j = pop off stack. push j * i
-	*	FDIV		0			i = pop off stack. j = pop off stack. push j / i
-	*	NCMPEQ		0			i = pop off stack. j = pop off stack. push result of j == i
-	*	NCMPLT		0			i = pop off stack. j = pop off stack. push result of j < i
-	*	NCMPGT		0			i = pop off stack. j = pop off stack. push result of j > i
-	*	JUMP		1			jump to address
-	*	JUMPT		1			pop value off stack. Jump to address if value == 1
-	*	JUMPF		1			pop value off stack. Jump to address if value == 0
-	*	CALL		2			arg 1 = address of function. arg2 = number of params
-	*	RETURN		1			Takes the number of values to return
-
-	*	LOADIDX		2			arg1 = index into the constant pool. arg2 = index into the array.
-	*/
 
 	/*
 	*	Struct layouts
@@ -44,6 +23,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 	*
 	*/
 
+	// Operation codes
 	var opCodes = {
 		STOREG: 0,
 		LOADG: 	1,
@@ -80,10 +60,11 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 		EXIT: 	32
 	};
 
+	// WebGL context
 	var glctx = glctx;
-	var manager = manager;
 
-	var lastRender;
+	// Shader manager
+	var manager = manager;
 
 	// Loop Counter - For debugging
 	var lc = 0;
@@ -115,6 +96,8 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 	// Global data store
 	var globalStore = [];
 
+	// Flags wether the virtual machine should hand over control
+	// to the browser so te canvas can be rendered
 	var needsUpdate = 0;
 
 	this.interpret = function() {
@@ -422,26 +405,20 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					var canWidth = glctx.canvas.width;
 					var canHeight = glctx.canvas.height;
 					prog.draw(points, {width:[canWidth], height: [canHeight]}, {color: theColor})
+					if(debugMode) console.log("PGDRAW: " + polygonStruct);
 					break;
 				case opCodes.RENDER:
 					needsUpdate = 1;
+					if(debugMode) console.log("RENDER");
 					break;
 				case opCodes.CLEAR:
 					glctx.clearColor(0.0,0.0,0.0,1.0);
 					glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
-					break;
-				case opCodes.REQAN:
-					needsUpdate = 1;
+					if(debugMode) console.log("CLEAR");
 					break;
 				case opCodes.EXIT:
 					cp = cl;
 					console.log("EXIT");
-					break;
-				case opCodes.PRINTST: // Print top of stack
-					if(debugMode) console.log(dataStore[sp - 1]);
-					break;
-				case opCodes.PRINTS: // Print top of stack
-					if(debugMode) console.log(dataStore);
 					break;
 				case opCodes.LOADIDX:
 					var constPoolindex = codeStore[cp];
@@ -452,6 +429,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					var value = arr[arrayIndex];
 					dataStore[sp] = value;
 					sp++;
+					if(debugMode) console.log("LOADIDX: constant pool index " + constPoolindex + " array index: " + arrayIndex);
 					break;
 				case opCodes.SETIDX:
 					var constPoolindex = codeStore[cp];
@@ -462,6 +440,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					sp--;
 					var value = dataStore[sp];
 					arr[arrayIndex] = value;
+					if(debugMode) console.log("SETIDX: constant pool index " + constPoolindex + " array index: " + arrayIndex);
 					break;
 				case opCodes.LNTOPG:
 					sp--;
@@ -496,12 +475,12 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 						pt2yIdx += 2;
 						pt3xIdx += 2;
 						pt3yIdx += 2;
-
 						i++;
 					}
 					var targetAddress = codeStore[cp];
 					cp++;
 					constantPool[targetAddress] = polygon;
+					if(debugMode) console.log("LNTOPG " + polygon);
 					break;
 				case opCodes.PTADD:
 					sp--;
@@ -514,6 +493,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					var lineAddress = codeStore[cp];
 					cp++;
 					constantPool[lineAddress] = line;
+					if(debugMode) console.log("PTADD " + line);
 					break;
 				case opCodes.LNMUL:
 					sp--;
@@ -539,7 +519,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					newLine[6] += xLen;
 					newLine[7] += yLen;
 					constantPool[targetLineAddress] = newLine;
-
+					if(debugMode) console.log("LNMUL " + newLine);
 					break;
 			}
 			if(debugMode) console.log(JSON.stringify(dataStore));
@@ -547,11 +527,15 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 		if (needsUpdate) {render();}
 	};
 
+	// Passes control to the browser to update the canvas and
+	// requests a call back to start interpreting once the rendering has
+	// complete
 	render = function() {
 		needsUpdate = 0;
 		window.requestAnimationFrame(window.mvm.interpret);
 	}
 
+	// angle parameter in deegrees
 	function rotatePoint(pivot, point, angle) {
 		// Get origin x, y
 		var pivx = pivot[0];
