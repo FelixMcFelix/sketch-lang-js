@@ -2464,7 +2464,11 @@ Sketch.SketchGen = function(){
 	var buffer = [];
 
 	interpretNode = function(node){
-		instructions[node.type](node.arguments);
+		if(Array.isArray(node)){
+			node.forEach(interpretNode);
+		} else{
+			instructions[node.type](node.arguments);
+		}
 	}
 
 	/**
@@ -2476,10 +2480,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.interpret = function(program){
 		buffer = [];
-		console.log("Object instantiated and called, walking tree.");
-		console.log(program);
-		interpretNode(program);
-		console.log(buffer);
+		interpretNode({type: "program", arguments: program});
 		return buffer;
 	}
 }
