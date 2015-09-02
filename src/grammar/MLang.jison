@@ -96,7 +96,8 @@ start
  : program EOF
     {
            {typeof console !== 'undefined' ? console.log("%j",$1) : print($1);
-          return $1; }
+          return $1;
+           }
         }
   | EOF 
    {return [];} 
@@ -451,8 +452,10 @@ exp
 ;
 
 prim_expr
-    : IDENTIFIER 
+    : IDENTIFIER
+          { $$ = {type: 'ident', arguments: yytext};}
     | NUMBER 
+          { $$ = {type: 'num', arguments: Number(yytext)};}
     | TRUE 
     | FALSE
     | NOT prim_expr

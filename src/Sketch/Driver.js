@@ -142,9 +142,6 @@ Sketch.Driver.prototype = {
 		this.vm = null;
 		try{
 			var ast = this.parser.parse(text);
-			console.log(ast);
-			// this.codeGen = new SketchGen(ast);
-			// walk(this.codeGen);
 
 			var code = this.codeGen.interpret(ast);
 

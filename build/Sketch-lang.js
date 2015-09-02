@@ -160,9 +160,6 @@ Sketch.Driver.prototype = {
 		this.vm = null;
 		try{
 			var ast = this.parser.parse(text);
-			console.log(ast);
-			// this.codeGen = new SketchGen(ast);
-			// walk(this.codeGen);
 
 			var code = this.codeGen.interpret(ast);
 
@@ -271,7 +268,8 @@ switch (yystate) {
 case 1:
 
            {typeof console !== 'undefined' ? console.log("%j",$$[$0-1]) : print($$[$0-1]);
-          return $$[$0-1]; }
+          return $$[$0-1];
+           }
         
 break;
 case 2:
@@ -552,6 +550,12 @@ this.$ = {
                             $$[$0]]
                        };
                 
+break;
+case 66:
+ this.$ = {type: 'ident', arguments: yytext};
+break;
+case 67:
+ this.$ = {type: 'num', arguments: Number(yytext)};
 break;
 case 71: case 73: case 74:
  this.$ = $$[$0-1];
@@ -2439,12 +2443,22 @@ var Sketch = Sketch || {};
  */
 
 Sketch.SketchGen = function(){
+	var emit = function(code){
+		buffer.push(code);
+	}
+
 	var instructions = {
-		program: function(args){console.log(args);},
-		addition: function(args){console.log("add");},
-		subtraction: function(args){console.log("sub");},
-		multiplication: function(args){console.log("mul");},
-		division: function(args){console.log("div");}
+		//Program header.
+		program: function(args){interpretNode(args);},
+
+		//Arithmetic instructions
+		addition: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IADD);},
+		subtraction: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.ISUB);},
+		multiplication: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IMUL);},
+		division: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IDIV);},
+
+		//Literals and identifiers.
+		num: function(args){emit(MVM.opCodes.LOADC);emit(args);}
 	}
 
 	var buffer = [];
@@ -2463,10 +2477,9 @@ Sketch.SketchGen = function(){
 	this.interpret = function(program){
 		buffer = [];
 		console.log("Object instantiated and called, walking tree.");
-		interpretNode({
-			type: "program",
-			arguments: program
-		});
+		console.log(program);
+		interpretNode(program);
+		console.log(buffer);
 		return buffer;
 	}
 }
