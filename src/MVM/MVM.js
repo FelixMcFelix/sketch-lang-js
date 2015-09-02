@@ -106,7 +106,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 
 		cl = codeStore.length;
 
-		//var opCodes = this.opCodes;
+		var opCodes = MVM.opCodes;
 		while (cp < cl && needsUpdate == 0) {
 			lc++
 			var opCode = codeStore[cp];
@@ -566,3 +566,39 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 		return newPt;
 	}
 }
+
+MVM.opCodes = {
+	STOREG: 0,
+	LOADG: 	1,
+	STOREL: 2,
+	LOADL: 	3,
+	LOADC: 	4,
+	IADD: 	5,
+	ISUB: 	6,
+	IMUL: 	7,
+	IDIV: 	8,
+	IMOD: 	9,
+	FADD: 	10,
+	FSUB: 	11,
+	FMUL: 	12,
+	FDIV: 	13,
+	FMOD: 	14,
+	LOADIDX:15,
+	SETIDX: 16,
+	NCMPEQ: 17,
+	NCMPLT: 18,
+	NCMPGT: 19,
+	JUMP: 	20,
+	JUMPT: 	21, 
+	JUMPF: 	22,
+	CALL: 	23, 
+	RETURN: 24,
+	LNDRAW: 25,
+	PGDRAW: 26,
+	RENDER: 27,
+	CLEAR: 	28,
+	PTADD: 	29,
+	LNTOPG: 30,
+	LNMUL:  31,
+	EXIT: 	32
+};

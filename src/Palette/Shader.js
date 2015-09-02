@@ -9,6 +9,7 @@
 * @param {string} source - The source code to compile the shader from.
 * @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
 * @param {object} [attrs] - The array which contains attribute names and default values, as an array of 3-tuples.
+* @author FelixMcFelix (Kyle S.)
 */
 Palette.Shader = function(gl, name, type, source, attrs){
 	/**

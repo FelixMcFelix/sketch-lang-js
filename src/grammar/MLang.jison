@@ -1,6 +1,8 @@
 
 /*Parser for Sketch graphics programming language*/
 
+/* Author: Kris Dimitrov */
+
 /* lexical grammar */
 %lex
 %%
@@ -51,7 +53,7 @@
 "--"                       return 'OP_DEC';
 "-"                        return 'MINUS';
 "*="                       return 'OP_MULT_ASSIGNMENT';
-"*"                        return 'ASTERIX';
+"*"                        return 'MULT';
 "/="                       return 'OP_DIV_ASSIGNMENT';
 "/"                        return 'DIV';
 "%="                       return 'OP_MOD_ASSIGNMENT';
@@ -79,9 +81,8 @@
 
 /* operator associations and precedence */
 
-%left '+' '-'
-%left '*' '/'
-%left '^'
+%left PLUS MINUS
+%left MULT DIV
 %right '!'
 %right '%'
 %nonassoc IF_WITHOUT_ELSE
@@ -259,7 +260,7 @@ statement_list
   
 exp
     :prim_expr
-    | prim_expr PLUS exp 
+    | exp PLUS exp 
                 {$$ = {
                         type: 'addition',
                         arguments: [ 
@@ -268,7 +269,7 @@ exp
                         }; 
                 }
 
-    | prim_expr MINUS exp
+    | exp MINUS exp
                 {$$ = { 
                         type: 'subtraction',
                         arguments:[
@@ -277,7 +278,7 @@ exp
                        };
                 }
 
-    | prim_expr ASTERIX  exp
+    | exp MULT  exp
                    {$$ = { 
                         type: 'multiplication',
                         arguments:[
@@ -286,7 +287,7 @@ exp
                        };
                 }
 
-    | prim_expr DIV exp  
+    | exp DIV exp  
                    {$$ = { 
                         type: 'division',
                         arguments:[
@@ -295,7 +296,7 @@ exp
                        };
                 }
 
-    | prim_expr MODULO exp 
+    | exp MODULO exp 
                    {$$ = { 
                         type: 'modulo',
                         arguments:[

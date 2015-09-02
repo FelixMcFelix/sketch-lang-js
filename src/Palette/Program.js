@@ -5,6 +5,7 @@
 * @param {WebGLRenderingContext} gl - The context the shaders of this program will belong to and be compiled by.
 * @param {Palette.Shader} vs - The {@link Palette.Shader} acting as the vertex shader for this program.
 * @param {Palette.Shader} fs - The {@link Palette.Shader} acting as the fragment shader for this program.
+* @author FelixMcFelix (Kyle S.)
 */
 Palette.Program = function(gl, vs, fs){
 	/**

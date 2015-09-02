@@ -4,6 +4,7 @@
 * @classdesc The core part of the system - initialise this to begin using the shader manager.
 * @class Palette.Manager
 * @param {WebGLRenderingContext} gl - The context all shaders and programs will belong to and be compiled by.
+* @author FelixMcFelix (Kyle S.)
 */
 Palette.Manager = function(gl){
 	/**

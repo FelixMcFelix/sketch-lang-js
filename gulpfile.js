@@ -2,7 +2,8 @@ var configs = {
 		srcDir: "./src/",
 		destDir: "./build/",
 		interDir: "./mid-build/",
-		docsDir: "./docs/"
+		docsDir: "./docs/",
+		editorDir: "./editor/lib/"
 	},
 	browserify = require("browserify"),
 	gulp = require("gulp"),
@@ -29,9 +30,11 @@ gulp.task("build",["build:Palette", "build:parser", "build:MVM","build:generator
 	return gulp.src([configs.interDir+"Sketch.js", configs.interDir+"MLang.js", configs.interDir+"MVM.js", configs.interDir+"generator.js",configs.interDir+"Palette.js"])
 			.pipe(concat("Sketch-lang.js"))
 			.pipe(gulp.dest(configs.destDir))
+			.pipe(gulp.dest(configs.editorDir))
 			.pipe(rename({suffix: ".min"}))
 			.pipe(uglify())
-			.pipe(gulp.dest(configs.destDir));
+			.pipe(gulp.dest(configs.destDir))
+			.pipe(gulp.dest(configs.editorDir));
 });
 
 gulp.task("build:parser", function(){
