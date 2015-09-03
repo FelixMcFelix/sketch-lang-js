@@ -292,7 +292,7 @@ this.$ = {
           arguments: $$[$0-1]};
     
 break;
-case 11: case 15:
+case 11:
 this.$ = $$[$0];
 break;
 case 12:
@@ -304,11 +304,14 @@ break;
 case 14: case 19: case 20:
 this.$ = $$[$0-1];
 break;
+case 15:
+this.$ = [$$[$0]];
+break;
 case 16:
-this.$= [$$[$0-2],$$[$0]];
+this.$= $$[$0-2]; this.$.push($$[$0]);
 break;
 case 17:
-this.$ = [$$[$0-1], $$[$0]];
+this.$ = {type: "decl", arguments: [$$[$0-1], $$[$0]]};
 break;
 case 18:
  this.$ = "";
@@ -361,8 +364,14 @@ break;
 case 35:
  this.$ = [$$[$0-2], $$[$0-1]];
 break;
-case 39: case 40: case 42: case 43:
+case 39: case 40:
 this.$= [$$[$0-1],$$[$0]];
+break;
+case 41:
+this.$= [$$[$0]]
+break;
+case 42: case 43:
+this.$ = $$[$0-1]; this.$.push($$[$0]);
 break;
 case 45:
 this.$ = {

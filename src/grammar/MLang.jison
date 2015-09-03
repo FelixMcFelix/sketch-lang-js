@@ -148,14 +148,14 @@ func_return
 
 param_list
   : param 
-      {$$ = $1;}
+      {$$ = [$1];}
   | param_list COMMA param
-       {$$= [$1,$3];} 
+       {$$= $1; $$.push($3);} 
  ;
 
  param 
    : type declarator
-       {$$ = [$1, $2];} 
+       {$$ = {type: "decl", arguments: [$1, $2]};} 
  ; 
 
 body
@@ -249,10 +249,11 @@ decl_list
 
 statement_list 
   : statement
+      {$$= [$1]}
   | statement_list statement
-     {$$= [$1,$2];} 
+      {$$ = $1; $$.push($2);} 
  | statement_list decl_list
-  {$$= [$1,$2];} 
+      {$$ = $1; $$.push($2);} 
 
 ;
       
