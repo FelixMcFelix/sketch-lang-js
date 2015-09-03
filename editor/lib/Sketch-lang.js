@@ -2453,7 +2453,8 @@ var Sketch = Sketch || {};
 
 Sketch.SketchGen = function(){
 	var emit = function(code){
-		buffer.push(code);
+		outBuffer.push(code);
+		programCounter++;
 	}
 
 	var instructions = {
@@ -2470,15 +2471,60 @@ Sketch.SketchGen = function(){
 		num: function(args){emit(MVM.opCodes.LOADC);emit(args);}
 	}
 
-	var buffer = [];
+	var outBuffer = [];
+	var programCounter = 0;
+	var scopeStack = [];
+	var stackPtr = 0;
 
-	interpretNode = function(node){
+	var interpretNode = function(node){
 		if(Array.isArray(node)){
 			node.forEach(interpretNode);
 		} else{
 			instructions[node.type](node.arguments);
 		}
-	}
+	};
+
+	var scopePush = function(){
+		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
+		stackPtr++;
+	};
+
+	var scopePop = function(){
+		scopeStack.pop();
+		stackPtr--;
+
+		// TODO: Patch function calls (equivalent to hoisting).
+		// TODO: Handle missed variable lookups in a different manner.
+	};
+
+	var scopeRegister = function(label, type){
+		var curFrame = scopeStack[stackPtr];
+
+		if (!curFrame.labelTable[label]){
+			var destAddr = (type === "function") ? programCounter : curFrame.nextData++;
+			curFrame.labelTable[label] = new Sketch.SketchGen.Label(destAddr, type);
+		} else {
+			throw "Illegal attempt to redefine variable "+label+".";
+		}
+	};
+
+	var scopeLookup = function(label){
+		var stack = 0;
+		var out = null;
+
+		for(null; stackPtr-stack>=0; stack++){
+			var frame = scopeStack[stackPtr-stack];
+			var entry = frame.labelTable[label];
+			if (entry){
+				out = {entry: entry, stack: stack};
+				break;
+			}
+		}
+
+		// TODO: Track lookup failures to patch function calls.
+
+		return out;
+	};
 
 	/**
 	 * Compile a Sketch program.
@@ -2488,10 +2534,63 @@ Sketch.SketchGen = function(){
 	 * @public
 	 */
 	this.interpret = function(program){
-		buffer = [];
+		this.cleanState();
+
+		//this.testStack();
+
 		interpretNode({type: "program", arguments: program});
-		return buffer;
+		return outBuffer;
+	};
+
+	this.cleanState = function(){
+		outBuffer = [];
+		programCounter = 0;
+		scopeStack = [];
+		scopePush();
+		stackPtr = 0;
 	}
+
+	this.testStack = function(){
+		//Test stack architecture
+		scopeRegister("globalInt", "int")
+		scopePush();
+		scopeRegister("intA", "int");
+		scopeRegister("intB", "int");
+
+		console.log("Registered a higher up int as well as two closer ones.");
+
+		console.log("Performing a lookup for each entry. Expect \n\t{entry:{address:0, type:\"int\"}, stack: 1}\n\t{entry:{address:1, type:\"int\"}, stack: 0}");
+		console.log(scopeLookup("globalInt"));
+		console.log(scopeLookup("intB"));
+
+		console.log("Performing a double registration.");
+		try {
+			scopeRegister("intA", "int");
+			console.log("Double registration of intA succeeded, something broke!");
+		} catch (e) {
+			console.log("Double registration of intA threw, as expected.");
+		}
+
+		console.log("Testing override of globalInt with a float. Expect \n\t{entry:{address:2, type:\"float\"}, stack: 0}");
+		scopeRegister("globalInt", "float");
+		console.log(scopeLookup("globalInt"));
+
+		console.log(scopeStack);
+
+		scopePop();
+
+		//End test
+	}
+}
+
+Sketch.SketchGen.ScopeStackFrame = function(){
+	this.labelTable = {};
+	this.nextData = 0;
+}
+
+Sketch.SketchGen.Label = function(addr, type){
+	this.address = addr;
+	this.type = type;
 }
 ;
 // end

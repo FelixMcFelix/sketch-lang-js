@@ -81,6 +81,8 @@
 
 /* operator associations and precedence */
 
+/* TODO: Use C precedence for all operators */
+
 %left PLUS MINUS
 %left MULT DIV
 %right '!'
@@ -238,7 +240,7 @@ jump_statements
 ;
 
 decl_list
- :in-decl 
+ : in-decl 
  | out-decl 
  | decl_list in-decl
     {$$= [$1,$2];} 
