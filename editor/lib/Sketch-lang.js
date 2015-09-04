@@ -2622,8 +2622,11 @@ Sketch.SketchGen.ScopeStackFrame = function(){
 
 /*
  * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen.ScopeStackFrame} label table.
- * @class Sketch.SketchGen.ScopeStackFrame
+ * @class Sketch.SketchGen.Label
  * @public
+ * @param {Number} addr - the address the label references within its data frame.
+ * @param {String} type - the type of the variable represented by the label.
+ * @param {Object} [extra] - any extra data (function parameters etc.) that must be known about the label.
  * @author FelixMcFelix (Kyle S.)
  */
 Sketch.SketchGen.Label = function(addr, type, extra){
