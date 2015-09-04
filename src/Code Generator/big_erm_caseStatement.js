@@ -51,10 +51,10 @@ var OPCODES = {
 	EXIT: 	34		// Exit Program
 };
 
-var SketchGen = function(syntaxTree) {
-    this.type = "program";
-   	this.arguments = syntaxTree;
-}
+//var SketchGen = function(syntaxTree) {
+//    this.type = "program";
+//   	this.arguments = syntaxTree;
+//}
 
 var treeDepth = 0;
 

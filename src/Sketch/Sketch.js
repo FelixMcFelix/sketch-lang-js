@@ -9,6 +9,7 @@ var Sketch = Sketch || {};
  * @param {HTMLCanvasElement} inCanvas
  * @returns {Sketch.Driver}
  * @public
+ * @author FelixMcFelix (Kyle S.)
  */
 Sketch.createSketch = function(inCanvas){
 	var out = new Sketch.Driver(inCanvas);

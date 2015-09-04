@@ -7,10 +7,9 @@
 * This is a deliberate choice, to abstract some functionality away from the central {@link Palette.Manager}
 * class.
 * @class Palette.ShaderFactory
-* @description
-* Create a new ShaderFactory object - this is done automatically by {@link Palette.Manager}.
-*
-* @param {Palette.Manager} manager - The manager to place 
+* @description Create a new ShaderFactory object - this is done automatically by {@link Palette.Manager}.
+* @param {Palette.Manager} manager - The manager object to place generated shaders into. 
+* @author FelixMcFelix (Kyle S.)
 */
 Palette.ShaderFactory = function(manager){
 	/**

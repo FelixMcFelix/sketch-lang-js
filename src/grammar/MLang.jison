@@ -1,6 +1,8 @@
 
 /*Parser for Sketch graphics programming language*/
 
+/* Author: Kris Dimitrov */
+
 /* lexical grammar */
 %lex
 %%
@@ -51,7 +53,7 @@
 "--"                       return 'OP_DEC';
 "-"                        return 'MINUS';
 "*="                       return 'OP_MULT_ASSIGNMENT';
-"*"                        return 'ASTERIX';
+"*"                        return 'MULT';
 "/="                       return 'OP_DIV_ASSIGNMENT';
 "/"                        return 'DIV';
 "%="                       return 'OP_MOD_ASSIGNMENT';
@@ -79,9 +81,10 @@
 
 /* operator associations and precedence */
 
-%left '+' '-'
-%left '*' '/'
-%left '^'
+/* TODO: Use C precedence for all operators */
+
+%left PLUS MINUS
+%left MULT DIV
 %right '!'
 %right '%'
 %nonassoc IF_WITHOUT_ELSE
@@ -95,7 +98,8 @@ start
  : program EOF
     {
            {typeof console !== 'undefined' ? console.log("%j",$1) : print($1);
-          return $1; }
+          return $1;
+           }
         }
   | EOF 
    {return [];} 
@@ -146,14 +150,14 @@ func_return
 
 param_list
   : param 
-      {$$ = $1;}
+      {$$ = [$1];}
   | param_list COMMA param
-       {$$= [$1,$3];} 
+       {$$= $1; $$.push($3);} 
  ;
 
  param 
    : type declarator
-       {$$ = [$1, $2];} 
+       {$$ = {type: "decl", arguments: [$1, $2]};} 
  ; 
 
 body
@@ -236,7 +240,7 @@ jump_statements
 ;
 
 decl_list
- :in-decl 
+ : in-decl 
  | out-decl 
  | decl_list in-decl
     {$$= [$1,$2];} 
@@ -247,10 +251,11 @@ decl_list
 
 statement_list 
   : statement
+      {$$= [$1]}
   | statement_list statement
-     {$$= [$1,$2];} 
+      {$$ = $1; $$.push($2);} 
  | statement_list decl_list
-  {$$= [$1,$2];} 
+      {$$ = $1; $$.push($2);} 
 
 ;
       
@@ -259,7 +264,7 @@ statement_list
   
 exp
     :prim_expr
-    | prim_expr PLUS exp 
+    | exp PLUS exp 
                 {$$ = {
                         type: 'addition',
                         arguments: [ 
@@ -268,7 +273,7 @@ exp
                         }; 
                 }
 
-    | prim_expr MINUS exp
+    | exp MINUS exp
                 {$$ = { 
                         type: 'subtraction',
                         arguments:[
@@ -277,7 +282,7 @@ exp
                        };
                 }
 
-    | prim_expr ASTERIX  exp
+    | exp MULT  exp
                    {$$ = { 
                         type: 'multiplication',
                         arguments:[
@@ -286,7 +291,7 @@ exp
                        };
                 }
 
-    | prim_expr DIV exp  
+    | exp DIV exp  
                    {$$ = { 
                         type: 'division',
                         arguments:[
@@ -295,7 +300,7 @@ exp
                        };
                 }
 
-    | prim_expr MODULO exp 
+    | exp MODULO exp 
                    {$$ = { 
                         type: 'modulo',
                         arguments:[
@@ -450,8 +455,10 @@ exp
 ;
 
 prim_expr
-    : IDENTIFIER 
+    : IDENTIFIER
+          { $$ = {type: 'ident', arguments: yytext};}
     | NUMBER 
+          { $$ = {type: 'num', arguments: Number(yytext)};}
     | TRUE 
     | FALSE
     | NOT prim_expr

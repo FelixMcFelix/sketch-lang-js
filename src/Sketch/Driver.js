@@ -2,6 +2,7 @@
  * @classdesc The driver class for the sketch module. Initialise via Sketch.createSketch(...) for default configs.
  * @class Sketch.Driver
  * @param {HTMLCanvasElement} canvas - The canvas element that sketch will be targeting.
+ * @author FelixMcFelix (Kyle S.)
  */
 Sketch.Driver = function(canvas){
 	/**
@@ -62,7 +63,7 @@ Sketch.Driver = function(canvas){
 	 * @protected
 	 * @readonly
 	 */
-	this.codeGen = null;
+	this.codeGen = new Sketch.SketchGen();
 	/**
 	 * The module's reference to the shader manager.
 	 * @name Sketch.Driver#shaderManager
@@ -139,17 +140,15 @@ Sketch.Driver.prototype = {
 		constantPool = [];
 		labelTable = [];
 		this.vm = null;
-		this.codeGen = null;
 		try{
 			var ast = this.parser.parse(text);
-			console.log(ast);
-			this.codeGen = new SketchGen(ast);
-			walk(this.codeGen);
 
-			this.vm = new MVM(this.context, this.shaderManager, codeStore, constantPool, labelTable, true);
+			var code = this.codeGen.interpret(ast);
+
+			this.vm = new MVM(this.context, this.shaderManager, code, constantPool, labelTable, true);
 			this.vm.interpret();
 			//Since the code generator is not capable of outputting graphical operations
-			//we shall simply print he stack's top value to demonstrate our wonderful
+			//we shall simply print the stack's top value to demonstrate our wonderful
 			//calculator.
 			alert("The Virtual Machine's final result is: "+window.MVM.dataStore[0]);
 		} catch (e){
@@ -157,6 +156,6 @@ Sketch.Driver.prototype = {
 			console.log(e);
 			return false;
 		}
-		return false;
+		return true;
 	}
 };
