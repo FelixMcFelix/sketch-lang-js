@@ -50,11 +50,11 @@ Sketch.SketchGen = function(){
 		scopeStack.pop();
 		stackPtr--;
 
-		// TODO: Patch function calls (equivalent to hoisting).
+		// TODO: Patch missed function calls (equivalent to hoisting).
 		// TODO: Handle missed variable lookups in a different manner.
 	};
 
-	var scopeRegister = function(label, type){
+	var scopeRegister = function(label, type, extra){
 		var curFrame = scopeStack[stackPtr];
 
 		if (!curFrame.labelTable[label]){
@@ -93,7 +93,7 @@ Sketch.SketchGen = function(){
 	this.interpret = function(program){
 		this.cleanState();
 
-		//this.testStack();
+		// this.testStack();
 
 		interpretNode({type: "program", arguments: program});
 		return outBuffer;
@@ -132,6 +132,9 @@ Sketch.SketchGen = function(){
 		scopeRegister("globalInt", "float");
 		console.log(scopeLookup("globalInt"));
 
+		console.log("Testing failed lookup.");
+		console.log(scopeLookup("notReal"));
+
 		console.log(scopeStack);
 
 		scopePop();
@@ -140,12 +143,27 @@ Sketch.SketchGen = function(){
 	}
 }
 
+/**
+ * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen} scope stack.
+ * @class Sketch.SketchGen.ScopeStackFrame
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
 Sketch.SketchGen.ScopeStackFrame = function(){
 	this.labelTable = {};
 	this.nextData = 0;
 }
 
-Sketch.SketchGen.Label = function(addr, type){
+/*
+ * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen.ScopeStackFrame} label table.
+ * @class Sketch.SketchGen.ScopeStackFrame
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
+Sketch.SketchGen.Label = function(addr, type, extra){
 	this.address = addr;
 	this.type = type;
+	if(extra){
+		this.extra = extra;
+	}
 }

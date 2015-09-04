@@ -525,6 +525,25 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					constantPool[targetLineAddress] = newLine;
 					if(debugMode) console.log("LNMUL " + newLine);
 					break;
+				//Augmentations to support scoping.
+				case opCodes.STORER:
+					//Store a value in a given relative stack frame, in a given index. (Store Relative)
+					//USE: stack index value STORER
+					//e.g. 1 0 5 STORER stores value 5 in the slot 0 of the data stack frame above the current one.
+					break;
+				case opCodes.LOADR:
+					//Load a value from a relative stack frame, from a given index. (Load Relative)
+					//USE: stack index LOADR
+					//e.g. 2 0 LOADR loads the value in slot 0 of the data stack frame 2 layers above the current one.
+					break;
+				case opCodes.POPSC:
+					//Pop off and discard the current stack data frame, equivalent to leaving a code block. (Pop Scope)
+					//USE: POPSC
+					break;
+				case opCodes.PUSHSC:
+					//Create and push a new stack data frame, equivalent to entering a code block. (Push Scope)
+					//USE: PUSHSC
+					break;
 			}
 			// remove garbage from stack
 			dataStore.splice(sp,dataStore.length - sp);
@@ -600,5 +619,9 @@ MVM.opCodes = {
 	PTADD: 	29,
 	LNTOPG: 30,
 	LNMUL:  31,
-	EXIT: 	32
+	EXIT: 	32,
+	STORER: 33,
+	LOADR:	34,
+	POPSC:	35,
+	PUSHSC:	36
 };

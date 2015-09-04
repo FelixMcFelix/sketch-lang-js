@@ -1734,6 +1734,25 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					constantPool[targetLineAddress] = newLine;
 					if(debugMode) console.log("LNMUL " + newLine);
 					break;
+				//Augmentations to support scoping.
+				case opCodes.STORER:
+					//Store a value in a given relative stack frame, in a given index. (Store Relative)
+					//USE: stack index value STORER
+					//e.g. 1 0 5 STORER stores value 5 in the slot 0 of the data stack frame above the current one.
+					break;
+				case opCodes.LOADR:
+					//Load a value from a relative stack frame, from a given index. (Load Relative)
+					//USE: stack index LOADR
+					//e.g. 2 0 LOADR loads the value in slot 0 of the data stack frame 2 layers above the current one.
+					break;
+				case opCodes.POPSC:
+					//Pop off and discard the current stack data frame, equivalent to leaving a code block. (Pop Scope)
+					//USE: POPSC
+					break;
+				case opCodes.PUSHSC:
+					//Create and push a new stack data frame, equivalent to entering a code block. (Push Scope)
+					//USE: PUSHSC
+					break;
 			}
 			// remove garbage from stack
 			dataStore.splice(sp,dataStore.length - sp);
@@ -1809,7 +1828,11 @@ MVM.opCodes = {
 	PTADD: 	29,
 	LNTOPG: 30,
 	LNMUL:  31,
-	EXIT: 	32
+	EXIT: 	32,
+	STORER: 33,
+	LOADR:	34,
+	POPSC:	35,
+	PUSHSC:	36
 };
 
 ;
@@ -2493,11 +2516,11 @@ Sketch.SketchGen = function(){
 		scopeStack.pop();
 		stackPtr--;
 
-		// TODO: Patch function calls (equivalent to hoisting).
+		// TODO: Patch missed function calls (equivalent to hoisting).
 		// TODO: Handle missed variable lookups in a different manner.
 	};
 
-	var scopeRegister = function(label, type){
+	var scopeRegister = function(label, type, extra){
 		var curFrame = scopeStack[stackPtr];
 
 		if (!curFrame.labelTable[label]){
@@ -2536,7 +2559,7 @@ Sketch.SketchGen = function(){
 	this.interpret = function(program){
 		this.cleanState();
 
-		//this.testStack();
+		// this.testStack();
 
 		interpretNode({type: "program", arguments: program});
 		return outBuffer;
@@ -2575,6 +2598,9 @@ Sketch.SketchGen = function(){
 		scopeRegister("globalInt", "float");
 		console.log(scopeLookup("globalInt"));
 
+		console.log("Testing failed lookup.");
+		console.log(scopeLookup("notReal"));
+
 		console.log(scopeStack);
 
 		scopePop();
@@ -2583,14 +2609,29 @@ Sketch.SketchGen = function(){
 	}
 }
 
+/**
+ * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen} scope stack.
+ * @class Sketch.SketchGen.ScopeStackFrame
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
 Sketch.SketchGen.ScopeStackFrame = function(){
 	this.labelTable = {};
 	this.nextData = 0;
 }
 
-Sketch.SketchGen.Label = function(addr, type){
+/*
+ * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen.ScopeStackFrame} label table.
+ * @class Sketch.SketchGen.ScopeStackFrame
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
+Sketch.SketchGen.Label = function(addr, type, extra){
 	this.address = addr;
 	this.type = type;
+	if(extra){
+		this.extra = extra;
+	}
 }
 ;
 // end
