@@ -1,3 +1,5 @@
+var MVM = MVM || {};
+
 MVM.DataModel = function(){
 	this.root = new MVM.DataModel.StackFrame(null);
 	this.stack = [this.root];
@@ -32,7 +34,11 @@ MVM.DataModel.prototype = {
 	},
 
 	exit: function(){
-		this.stack[this.stack.length - 1] = this.current().parent;
+		if(this.current() !== this.root){
+			this.stack[this.stack.length - 1] = this.current().parent;
+		} else{
+			throw "Tried to exit from scope past root level."
+		}
 
 		return this;
 	},
