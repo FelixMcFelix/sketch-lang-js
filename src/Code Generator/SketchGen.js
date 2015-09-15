@@ -14,9 +14,29 @@ Sketch.SketchGen = function(){
 		programCounter++;
 	}
 
+	// TODO: convert to ENUM+Array based solution.
+
 	var instructions = {
+		//CONVENTION: All functions return an object with their return type. This is how we do type checking.
+
 		//Program header.
 		program: function(args){interpretNode(args);},
+
+		//Variable declaration and assignment
+		variable_decl: function(args){interpretNode(args);},
+		variable_decl_assign: function(args){},
+		decl: function(args){
+			scopeRegister(args[1],args[0]); return args[0];
+		},
+		assign: function(args){
+			var left = interpretNode(args[0]);
+			var right = interpretNode(args[1]);
+			emit(MVM.opCodes.STOREL);
+			emit(left.data.entry.address);
+			console.log(outBuffer);
+			emit(MVM.opCodes.LOADL);
+			emit(left.data.entry.address);
+		},
 
 		//Arithmetic instructions
 		addition: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IADD);},
@@ -24,8 +44,13 @@ Sketch.SketchGen = function(){
 		multiplication: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IMUL);},
 		division: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IDIV);},
 
+		//Arithmetic assignment instructions.
+
 		//Literals and identifiers.
-		num: function(args){emit(MVM.opCodes.LOADC);emit(args);}
+		num: function(args){emit(MVM.opCodes.LOADC);emit(args);},
+		ident: function(args){
+			return {type: "ident", data: scopeLookup(args)};
+		}
 	}
 
 	var outBuffer = [];
@@ -37,7 +62,7 @@ Sketch.SketchGen = function(){
 		if(Array.isArray(node)){
 			node.forEach(interpretNode);
 		} else{
-			instructions[node.type](node.arguments);
+			return instructions[node.type](node.arguments);
 		}
 	};
 
@@ -170,3 +195,5 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 		this.extra = extra;
 	}
 }
+
+Sketch.SketchGen.enume = "test";

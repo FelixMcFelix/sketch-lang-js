@@ -64,7 +64,7 @@ gulp.task("build:MVM", function(){
 });
 
 gulp.task("build:generator", function(){
-	return gulp.src([configs.srcDir+"Code Generator/*.js"])
+	return gulp.src([configs.srcDir+"Code Generator/SketchGen.js"])
 			.pipe(concat("generator.js"))
 			.pipe(concat.footer('\n;\n// end\n'))
 			.pipe(gulp.dest(configs.interDir));
@@ -78,7 +78,7 @@ gulp.task("build:Sketch", function(){
 });
 
 gulp.task("build:editor", function(){
-	//Copy shaders/ into editor/, so that it has the latest copy of the module's shaders.
+	//Copy shaders into editor, so that it has the latest copy of the module's shaders.
 	return gulp.src("shaders/*.json")
 		.pipe(gulp.dest("./editor/shaders/"));
 });

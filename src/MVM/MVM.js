@@ -7,7 +7,7 @@
 */
 
 
-var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
+MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
 
 	/*
 	*	Struct layouts
@@ -143,6 +143,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("LOADL: " + dataStore[sp - 1] + " " + localAddress);
 					break;
 				case opCodes.LOADC:
+					//Place the next codeword on the top of the stack.
 					var contsant = codeStore[cp];
 					cp++;
 					dataStore[sp] = contsant;
@@ -150,6 +151,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("LOADC: " + contsant);
 					break;
 				case opCodes.IADD:
+					//Pop two integers off the stack, add them and push the new result onto the stack.
 					sp--;
 					var i = Math.floor(dataStore[sp]);
 					sp--;
@@ -161,6 +163,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.ISUB:
+					//Pop two integers off the stack, subbtract them and push the new result onto the stack.
 					sp--;
 					var i = Math.floor(dataStore[sp]);
 					sp--;
@@ -171,6 +174,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.IMUL:
+					//Pop two integers off the stack, multiply them and push the new result onto the stack.
 					sp--;
 					var i = Math.floor(dataStore[sp]);
 					sp--;
@@ -181,6 +185,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.IDIV:
+					//Pop two integers off the stack, divide them and push the new result onto the stack.
 					sp--;
 					var i = Math.floor(dataStore[sp]);
 					sp--;
@@ -191,6 +196,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 					if(debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.IMOD:
+					//Pop two integers off the stack, take modulus and push the new result onto the stack.
 					sp--;
 					var i = Math.floor(dataStore[sp]);
 					sp--;
@@ -528,13 +534,13 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 				//Augmentations to support scoping.
 				case opCodes.STORER:
 					//Store a value in a given relative stack frame, in a given index. (Store Relative)
-					//USE: stack index value STORER
-					//e.g. 1 0 5 STORER stores value 5 in the slot 0 of the data stack frame above the current one.
+					//USE: STORER stack index
+					//e.g. STORER 1 0 stores the top value on the stack in slot 0 of the data stack frame above the current one.
 					break;
 				case opCodes.LOADR:
 					//Load a value from a relative stack frame, from a given index. (Load Relative)
-					//USE: stack index LOADR
-					//e.g. 2 0 LOADR loads the value in slot 0 of the data stack frame 2 layers above the current one.
+					//USE: LOADR stack index
+					//e.g. LOADR 2 0 loads the value in slot 0 of the data stack frame 2 layers above the current one.
 					break;
 				case opCodes.POPSC:
 					//Pop off and discard the current stack data frame, equivalent to leaving a code block. (Pop Scope)
