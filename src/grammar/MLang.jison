@@ -126,11 +126,11 @@ out-decl
 
 in-decl 
   : param ASSIGN exp semi
-   { $$ = { type: 'variable_decl_assign',
+   { $$ = { type: Sketch.SketchGenNodes["variable_decl_assign"],
            arguments: [ $1,$3]};}
   | param semi 
      {$$ = {
-          type: 'variable_decl',
+          type: Sketch.SketchGenNodes["variable_decl"],
           arguments: $1};
     }
 ;
@@ -157,7 +157,7 @@ param_list
 
  param 
    : type declarator
-       {$$ = {type: "decl", arguments: [$1, $2]};} 
+       {$$ = {type: Sketch.SketchGenNodes["decl"], arguments: [$1, $2]};} 
  ; 
 
 body
@@ -266,7 +266,7 @@ exp
     :prim_expr
     | exp PLUS exp 
                 {$$ = {
-                        type: 'addition',
+                        type: Sketch.SketchGenNodes["addition"],
                         arguments: [ 
                             $1,
                             $3]
@@ -275,7 +275,7 @@ exp
 
     | exp MINUS exp
                 {$$ = { 
-                        type: 'subtraction',
+                        type: Sketch.SketchGenNodes["subtraction"],
                         arguments:[
                             $1, 
                             $3]
@@ -284,7 +284,7 @@ exp
 
     | exp MULT  exp
                    {$$ = { 
-                        type: 'multiplication',
+                        type: Sketch.SketchGenNodes["multiplication"],
                         arguments:[
                             $1, 
                             $3]
@@ -293,7 +293,7 @@ exp
 
     | exp DIV exp  
                    {$$ = { 
-                        type: 'division',
+                        type: Sketch.SketchGenNodes["division"],
                         arguments:[
                             $1, 
                             $3]
@@ -302,7 +302,7 @@ exp
 
     | exp MODULO exp 
                    {$$ = { 
-                        type: 'modulo',
+                        type: Sketch.SketchGenNodes["modulo"],
                         arguments:[
                             $1, 
                             $3]
@@ -445,7 +445,7 @@ exp
      
     | prim_expr ASSIGN exp  
                {$$ = { 
-                        type: 'assign',
+                        type: Sketch.SketchGenNodes["assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -456,9 +456,9 @@ exp
 
 prim_expr
     : IDENTIFIER
-          { $$ = {type: 'ident', arguments: yytext};}
+          { $$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext};}
     | NUMBER 
-          { $$ = {type: 'num', arguments: Number(yytext)};}
+          { $$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)};}
     | TRUE 
     | FALSE
     | NOT prim_expr

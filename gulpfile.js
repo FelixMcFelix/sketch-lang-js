@@ -22,6 +22,7 @@ var configs = {
 
 gulp.task("default", ["clean"], function(){
 	gulp.start("build", "doc");
+	// gulp.start("build");
 });
 
 
@@ -64,7 +65,7 @@ gulp.task("build:MVM", function(){
 });
 
 gulp.task("build:generator", function(){
-	return gulp.src([configs.srcDir+"Code Generator/SketchGen.js"])
+	return gulp.src([configs.srcDir+"Code Generator/*.js"])
 			.pipe(concat("generator.js"))
 			.pipe(concat.footer('\n;\n// end\n'))
 			.pipe(gulp.dest(configs.interDir));

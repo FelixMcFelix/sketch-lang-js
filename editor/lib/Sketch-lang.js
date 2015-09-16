@@ -284,12 +284,12 @@ this.$ = {type: "function",
           arguments: [$$[$0-3],$$[$0-2],$$[$0-1],$$[$0]]};
 break;
 case 9:
- this.$ = { type: 'variable_decl_assign',
+ this.$ = { type: Sketch.SketchGenNodes["variable_decl_assign"],
            arguments: [ $$[$0-3],$$[$0-1]]};
 break;
 case 10:
 this.$ = {
-          type: 'variable_decl',
+          type: Sketch.SketchGenNodes["variable_decl"],
           arguments: $$[$0-1]};
     
 break;
@@ -312,7 +312,7 @@ case 16:
 this.$= $$[$0-2]; this.$.push($$[$0]);
 break;
 case 17:
-this.$ = {type: "decl", arguments: [$$[$0-1], $$[$0]]};
+this.$ = {type: Sketch.SketchGenNodes["decl"], arguments: [$$[$0-1], $$[$0]]};
 break;
 case 18:
  this.$ = "";
@@ -376,7 +376,7 @@ this.$ = $$[$0-1]; this.$.push($$[$0]);
 break;
 case 45:
 this.$ = {
-                        type: 'addition',
+                        type: Sketch.SketchGenNodes["addition"],
                         arguments: [ 
                             $$[$0-2],
                             $$[$0]]
@@ -385,7 +385,7 @@ this.$ = {
 break;
 case 46:
 this.$ = { 
-                        type: 'subtraction',
+                        type: Sketch.SketchGenNodes["subtraction"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -394,7 +394,7 @@ this.$ = {
 break;
 case 47:
 this.$ = { 
-                        type: 'multiplication',
+                        type: Sketch.SketchGenNodes["multiplication"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -403,7 +403,7 @@ this.$ = {
 break;
 case 48:
 this.$ = { 
-                        type: 'division',
+                        type: Sketch.SketchGenNodes["division"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -412,7 +412,7 @@ this.$ = {
 break;
 case 49:
 this.$ = { 
-                        type: 'modulo',
+                        type: Sketch.SketchGenNodes["modulo"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -554,7 +554,7 @@ this.$ = {
 break;
 case 65:
 this.$ = { 
-                        type: 'assign',
+                        type: Sketch.SketchGenNodes["assign"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -562,10 +562,10 @@ this.$ = {
                 
 break;
 case 66:
- this.$ = {type: 'ident', arguments: yytext};
+ this.$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext};
 break;
 case 67:
- this.$ = {type: 'num', arguments: Number(yytext)};
+ this.$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)};
 break;
 case 71: case 73: case 74:
  this.$ = $$[$0-1];
@@ -1994,69 +1994,32 @@ var Sketch = Sketch || {};
  */
 
 Sketch.SketchGen = function(){
-	var emit = function(code){
-		outBuffer.push(code);
-		programCounter++;
-	}
-
-	// TODO: convert to ENUM+Array based solution.
-
-	var instructions = {
-		//CONVENTION: All functions return an object with their return type. This is how we do type checking.
-
-		//Program header.
-		program: function(args){interpretNode(args);},
-
-		//Variable declaration and assignment
-		variable_decl: function(args){interpretNode(args);},
-		variable_decl_assign: function(args){},
-		decl: function(args){
-			scopeRegister(args[1],args[0]); return args[0];
-		},
-		assign: function(args){
-			var left = interpretNode(args[0]);
-			var right = interpretNode(args[1]);
-			emit(MVM.opCodes.STOREL);
-			emit(left.data.entry.address);
-			console.log(outBuffer);
-			emit(MVM.opCodes.LOADL);
-			emit(left.data.entry.address);
-		},
-
-		//Arithmetic instructions
-		addition: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IADD);},
-		subtraction: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.ISUB);},
-		multiplication: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IMUL);},
-		division: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IDIV);},
-
-		//Arithmetic assignment instructions.
-
-		//Literals and identifiers.
-		num: function(args){emit(MVM.opCodes.LOADC);emit(args);},
-		ident: function(args){
-			return {type: "ident", data: scopeLookup(args)};
-		}
-	}
-
 	var outBuffer = [];
 	var programCounter = 0;
 	var scopeStack = [];
 	var stackPtr = 0;
 
-	var interpretNode = function(node){
+	var instructions = Sketch.bindInstructions(this);
+
+	this.emit = function(code){
+		outBuffer.push(code);
+		programCounter++;
+	}
+
+	this.interpretNode = function(node){
 		if(Array.isArray(node)){
-			node.forEach(interpretNode);
+			node.forEach(this.interpretNode.bind(this));
 		} else{
 			return instructions[node.type](node.arguments);
 		}
 	};
 
-	var scopePush = function(){
+	this.scopePush = function(){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
 	};
 
-	var scopePop = function(){
+	this.scopePop = function(){
 		scopeStack.pop();
 		stackPtr--;
 
@@ -2064,7 +2027,7 @@ Sketch.SketchGen = function(){
 		// TODO: Handle missed variable lookups in a different manner.
 	};
 
-	var scopeRegister = function(label, type, extra){
+	this.scopeRegister = function(label, type, extra){
 		var curFrame = scopeStack[stackPtr];
 
 		if (!curFrame.labelTable[label]){
@@ -2075,7 +2038,7 @@ Sketch.SketchGen = function(){
 		}
 	};
 
-	var scopeLookup = function(label){
+	this.scopeLookup = function(label){
 		var stack = 0;
 		var out = null;
 
@@ -2088,7 +2051,8 @@ Sketch.SketchGen = function(){
 			}
 		}
 
-		// TODO: Track lookup failures to patch function calls.
+		if (out === null)
+			throw "BAD LOOKUP.";
 
 		return out;
 	};
@@ -2105,7 +2069,7 @@ Sketch.SketchGen = function(){
 
 		// this.testStack();
 
-		interpretNode({type: "program", arguments: program});
+		this.interpretNode({type: Sketch.SketchGenNodes["program"], arguments: program});
 		return outBuffer;
 	};
 
@@ -2113,41 +2077,41 @@ Sketch.SketchGen = function(){
 		outBuffer = [];
 		programCounter = 0;
 		scopeStack = [];
-		scopePush();
+		this.scopePush();
 		stackPtr = 0;
 	}
 
 	this.testStack = function(){
 		//Test stack architecture
-		scopeRegister("globalInt", "int")
-		scopePush();
-		scopeRegister("intA", "int");
-		scopeRegister("intB", "int");
+		this.scopeRegister("globalInt", "int")
+		this.scopePush();
+		this.scopeRegister("intA", "int");
+		this.scopeRegister("intB", "int");
 
 		console.log("Registered a higher up int as well as two closer ones.");
 
 		console.log("Performing a lookup for each entry. Expect \n\t{entry:{address:0, type:\"int\"}, stack: 1}\n\t{entry:{address:1, type:\"int\"}, stack: 0}");
-		console.log(scopeLookup("globalInt"));
-		console.log(scopeLookup("intB"));
+		console.log(this.scopeLookup("globalInt"));
+		console.log(this.scopeLookup("intB"));
 
 		console.log("Performing a double registration.");
 		try {
-			scopeRegister("intA", "int");
+			this.scopeRegister("intA", "int");
 			console.log("Double registration of intA succeeded, something broke!");
 		} catch (e) {
 			console.log("Double registration of intA threw, as expected.");
 		}
 
 		console.log("Testing override of globalInt with a float. Expect \n\t{entry:{address:2, type:\"float\"}, stack: 0}");
-		scopeRegister("globalInt", "float");
-		console.log(scopeLookup("globalInt"));
+		this.scopeRegister("globalInt", "float");
+		console.log(this.scopeLookup("globalInt"));
 
 		console.log("Testing failed lookup.");
-		console.log(scopeLookup("notReal"));
+		console.log(this.scopeLookup("notReal"));
 
-		console.log(scopeStack);
+		console.log(this.scopeStack);
 
-		scopePop();
+		this.scopePop();
 
 		//End test
 	}
@@ -2182,6 +2146,123 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 }
 
 Sketch.SketchGen.enume = "test";
+Sketch.EnumBase = function(){
+	_count = 0;
+	this.propAdd = function(name){
+		this[name] = _count++;
+	}
+}
+
+Sketch.SketchGenInstructions = [];
+
+Sketch.SketchGenNodes = new Sketch.EnumBase();
+
+//Program header.
+Sketch.SketchGenNodes.propAdd("program");
+
+//Variable declaration and assignment
+Sketch.SketchGenNodes.propAdd("variable_decl");
+Sketch.SketchGenNodes.propAdd("variable_decl_assign");
+Sketch.SketchGenNodes.propAdd("decl");
+Sketch.SketchGenNodes.propAdd("assign");
+
+//Arithmetic instructions
+Sketch.SketchGenNodes.propAdd("addition");
+Sketch.SketchGenNodes.propAdd("subtraction");
+Sketch.SketchGenNodes.propAdd("multiplication");
+Sketch.SketchGenNodes.propAdd("division");
+
+//Arithmetic assignment instructions.
+
+//Literals and identifiers.
+Sketch.SketchGenNodes.propAdd("num");
+Sketch.SketchGenNodes.propAdd("ident");
+Sketch.SketchGenInstr = [];
+
+//CONVENTION: All functions return an object with their return type. This is how we do type checking.
+
+/*
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["template"]] = function(args){
+	var type;
+	return type;
+}
+*/
+
+//Program header.
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
+	this.interpretNode(args);
+}
+
+//Variable declaration and assignment
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
+	this.interpretNode(args);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(args){
+	this.interpretNode({type: Sketch.SketchGenNodes["decl"], arguments: args[0]});
+	this.interpretNode({type: Sketch.SketchGenNodes["assign"], arguments: [args[0].arguments[0], args[1]]});
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){
+	this.scopeRegister(args[1],args[0]);
+	return args[0];
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
+	var left = this.interpretNode(args[0]);
+	var right = this.interpretNode(args[1]);
+
+	//TODO: check left is ident and right matches the ident's resolved type.
+
+	this.emit(MVM.opCodes.STORER);
+	this.emit(left.data.stack);
+	this.emit(left.data.entry.address);
+}
+
+//Arithmetic Instructions
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["addition"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.IADD);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["subtraction"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.ISUB);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["multiplication"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.IMUL);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.IDIV);
+}
+
+//Arithmetic assignment Instructions.
+
+//Literals and identifiers.
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["num"]] = function(args){
+	this.emit(MVM.opCodes.LOADC);
+	this.emit(args);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args){
+	return {type: "ident", data: this.scopeLookup(args)};
+}
+
+Sketch.bindInstructions = function(sketchgen){
+	var out = [];
+	for (var i = 0; i < Sketch.SketchGenInstr.length; i++){
+		out[i] = Sketch.SketchGenInstr[i].bind(sketchgen);
+	}
+	return out;
+}
 ;
 // end
 
