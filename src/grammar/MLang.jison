@@ -24,6 +24,7 @@
 "if"                                   return 'IF';
 "Line"                                 return 'LINE';
 "int"                                  return 'INT';
+"num"                                  return 'NUM';
 "not"                                  return 'NOT';
 "null"                                 return 'NULL';
 "Point"                                return 'POINT';
@@ -499,6 +500,7 @@ type
    :VOID 
    |INT
    |FLOAT 
+   |NUM
    |BOOL
    |POINT
    |LINE

@@ -20,8 +20,15 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
 }
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(args){
-	this.interpretNode({type: Sketch.SketchGenNodes["decl"], arguments: args[0]});
-	this.interpretNode({type: Sketch.SketchGenNodes["assign"], arguments: [args[0].arguments[0], args[1]]});
+	this.interpretNode(args[0]);
+
+	this.interpretNode({
+		type: Sketch.SketchGenNodes["assign"], 
+		arguments: [{
+			type: Sketch.SketchGenNodes["ident"], 
+			arguments: args[0].arguments[1]
+		}, args[1]]
+	});
 }
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){
@@ -30,39 +37,53 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){
 }
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
-	var left = this.interpretNode(args[0]);
+	var left = this.interpretNode(args[0], true);
 	var right = this.interpretNode(args[1]);
 
-	//TODO: check left is ident and right matches the ident's resolved type.
+	if(left.type != "ident"){
+		throw "ERROR: non-identity type on left side of assignment operator."
+	}
+
+	//TODO: check right matches the ident's resolved type.
 
 	this.emit(MVM.opCodes.STORER);
 	this.emit(left.data.stack);
 	this.emit(left.data.entry.address);
+
+	return left;
 }
 
 //Arithmetic Instructions
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["addition"]] = function(args){
 	this.interpretNode(args[0]);
 	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.IADD);
+	this.emit(MVM.opCodes.FADD);
+
+	return {type: "num"};
 }
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["subtraction"]] = function(args){
 	this.interpretNode(args[0]);
 	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.ISUB);
+	this.emit(MVM.opCodes.FSUB);
+
+	return {type: "num"};
 }
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["multiplication"]] = function(args){
 	this.interpretNode(args[0]);
 	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.IMUL);
+	this.emit(MVM.opCodes.FMUL);
+
+	return {type: "num"};
 }
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
 	this.interpretNode(args[0]);
 	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.IDIV);
+	this.emit(MVM.opCodes.FDIV);
+
+	return {type: "num"};
 }
 
 //Arithmetic assignment Instructions.
@@ -71,10 +92,17 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["num"]] = function(args){
 	this.emit(MVM.opCodes.LOADC);
 	this.emit(args);
+	return {type: "num"};
 }
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args){
-	return {type: "ident", data: this.scopeLookup(args)};
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess){
+	var d = this.scopeLookup(args);
+	if(!noaccess){
+		this.emit(MVM.opCodes.LOADR);
+		this.emit(d.stack);
+		this.emit(d.entry.address);
+	}
+	return {type: "ident", data: d};
 }
 
 Sketch.bindInstructions = function(sketchgen){

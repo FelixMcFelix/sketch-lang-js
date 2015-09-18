@@ -25,6 +25,7 @@ Sketch.SketchGen = function(){
 		if(Array.isArray(node)){
 			node.forEach(this.interpretNode.bind(this));
 		} else{
+			console.log(node);
 			return instructions[node.type](node.arguments);
 		}
 	};

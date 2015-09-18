@@ -217,53 +217,69 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					if(debugMode) console.log("IMOD: " + j + " % " + i + " = " + result);
 					break;
 				case opCodes.FADD:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, add them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j + i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.FSUB:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					dataStore[sp] = j - i;
-					sp++;
+					//Pop two integers off the stack, subtract them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+					var result = j - i;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.FMUL:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, multiply them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j * i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.FDIV:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, divide them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j / i;
-					dataStore[sp] = result;
-					sp++;
-					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("FDIV: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.FMOD:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, divide them and push the remainder onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j % i;
-					dataStore[sp] = result;
-					sp++;
-					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("FMOD: " + j + " % " + i + " = " + result);
 					break;
 				case opCodes.NCMPEQ:
 					sp--;
@@ -586,8 +602,8 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					break;
 			}
 			// remove garbage from stack
-			dataStore.splice(sp,dataStore.length - sp);
-			if(debugMode) console.log(JSON.stringify(dataStore));
+			//dataStore.splice(sp,dataStore.length - sp);
+			//if(debugMode) console.log(JSON.stringify(dataStore));
 		}
 		if (needsUpdate) {render();}
 		return data;
