@@ -24,6 +24,7 @@
 "if"                                   return 'IF';
 "Line"                                 return 'LINE';
 "int"                                  return 'INT';
+"num"                                  return 'NUM';
 "not"                                  return 'NOT';
 "null"                                 return 'NULL';
 "Point"                                return 'POINT';
@@ -97,7 +98,7 @@
 start 
  : program EOF
     {
-           {typeof console !== 'undefined' ? console.log("%j",$1) : print($1);
+           {typeof console !== 'undefined' ? console.log("%j",$1) : print($1); console.log(Sketch.SketchGen.enume);
           return $1;
            }
         }
@@ -126,11 +127,11 @@ out-decl
 
 in-decl 
   : param ASSIGN exp semi
-   { $$ = { type: 'variable-decl-assign',
+   { $$ = { type: Sketch.SketchGenNodes["variable_decl_assign"],
            arguments: [ $1,$3]};}
   | param semi 
      {$$ = {
-          type: 'variable-decl',
+          type: Sketch.SketchGenNodes["variable_decl"],
           arguments: $1};
     }
 ;
@@ -157,18 +158,18 @@ param_list
 
  param 
    : type declarator
-       {$$ = {type: "decl", arguments: [$1, $2]};} 
+       {$$ = {type: Sketch.SketchGenNodes["decl"], arguments: [$1, $2]};} 
  ; 
 
 body
   : OPEN_BRACE CLOSE_BRACE
       { $$ = "";}
   | OPEN_BRACE statement_list CLOSE_BRACE
-     {$$ = $2;}
+      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
   | OPEN_BRACE decl_list CLOSE_BRACE
-       {$$ = $2;}
+      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
   | OPEN_BRACE decl_list statement_list CLOSE_BRACE
-         {$$= [$2,$3];} 
+      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: [$2,$3]};}
 ;
 
 statement
@@ -195,7 +196,7 @@ condition_statements
        }
 
   | IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement 
-       {$$ = { type : "if-else",
+       {$$ = { type : "if_else",
                arguments : [ $3,
                              $5,
                              $7
@@ -214,7 +215,7 @@ iteration_statements
      }
 
   | DO statement WHILE OPEN_PARENS exp CLOSE_PARENS semi
-               {$$ = {type : "do-while", 
+               {$$ = {type : "do_while", 
               arguments: [ $2,
                            $5
                          ]
@@ -240,7 +241,7 @@ jump_statements
 ;
 
 decl_list
- : in-decl 
+ : in-decl
  | out-decl 
  | decl_list in-decl
     {$$= [$1,$2];} 
@@ -266,7 +267,7 @@ exp
     :prim_expr
     | exp PLUS exp 
                 {$$ = {
-                        type: 'addition',
+                        type: Sketch.SketchGenNodes["addition"],
                         arguments: [ 
                             $1,
                             $3]
@@ -275,7 +276,7 @@ exp
 
     | exp MINUS exp
                 {$$ = { 
-                        type: 'subtraction',
+                        type: Sketch.SketchGenNodes["subtraction"],
                         arguments:[
                             $1, 
                             $3]
@@ -284,7 +285,7 @@ exp
 
     | exp MULT  exp
                    {$$ = { 
-                        type: 'multiplication',
+                        type: Sketch.SketchGenNodes["multiplication"],
                         arguments:[
                             $1, 
                             $3]
@@ -293,7 +294,7 @@ exp
 
     | exp DIV exp  
                    {$$ = { 
-                        type: 'division',
+                        type: Sketch.SketchGenNodes["division"],
                         arguments:[
                             $1, 
                             $3]
@@ -302,7 +303,7 @@ exp
 
     | exp MODULO exp 
                    {$$ = { 
-                        type: 'modulo',
+                        type: Sketch.SketchGenNodes["modulo"],
                         arguments:[
                             $1, 
                             $3]
@@ -311,7 +312,7 @@ exp
 
     | prim_expr OP_ADD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'add-assign',
+                        type: 'add_assign',
                         arguments:[
                             $1, 
                             $3]
@@ -320,7 +321,7 @@ exp
 
     | prim_expr OP_SUB_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'sub-assign',
+                        type: 'sub_assign',
                         arguments:[
                             $1, 
                             $3]
@@ -329,7 +330,7 @@ exp
 
     | prim_expr OP_MULT_ASSIGNMENT exp
                    {$$ = { 
-                        type: 'multi-assign',
+                        type: 'multi_assign',
                         arguments:[
                             $1, 
                             $3]
@@ -338,7 +339,7 @@ exp
 
     | prim_expr OP_DIV_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'div-assign',
+                        type: 'div_assign',
                         arguments:[
                             $1, 
                             $3]
@@ -347,7 +348,7 @@ exp
 
     | prim_expr OP_MOD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'mod-assign',
+                        type: 'mod_assign',
                         arguments:[
                             $1, 
                             $3]
@@ -399,7 +400,7 @@ exp
 
     | prim_expr LT exp 
                    {$$ = { 
-                        type: 'less-than',
+                        type: 'less_than',
                         arguments:[
                             $1, 
                             $3]
@@ -408,7 +409,7 @@ exp
 
     | prim_expr GT  exp
                    {$$ = { 
-                        type: 'greater-than',
+                        type: 'greater_than',
                         arguments:[
                             $1, 
                             $3]
@@ -417,7 +418,7 @@ exp
 
     | prim_expr OP_NE exp
                    {$$ = { 
-                        type: 'not-equal',
+                        type: 'not_equal',
                         arguments:[
                             $1, 
                             $3]
@@ -426,7 +427,7 @@ exp
 
     | prim_expr OP_LE exp
                    {$$ = { 
-                        type: 'less-than-or-equal ',
+                        type: 'less_than_or_equal ',
                         arguments:[
                             $1, 
                             $3]
@@ -435,7 +436,7 @@ exp
 
     | prim_expr OP_GE exp
                    {$$ = { 
-                        type: 'greater-than-or-equal' ,
+                        type: 'greater_than_or_equal' ,
                         arguments:[
                             $1, 
                             $3]
@@ -445,7 +446,7 @@ exp
      
     | prim_expr ASSIGN exp  
                {$$ = { 
-                        type: 'assign',
+                        type: Sketch.SketchGenNodes["assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -456,9 +457,9 @@ exp
 
 prim_expr
     : IDENTIFIER
-          { $$ = {type: 'ident', arguments: yytext};}
+          { $$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext};}
     | NUMBER 
-          { $$ = {type: 'num', arguments: Number(yytext)};}
+          { $$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)};}
     | TRUE 
     | FALSE
     | NOT prim_expr
@@ -499,6 +500,7 @@ type
    :VOID 
    |INT
    |FLOAT 
+   |NUM
    |BOOL
    |POINT
    |LINE

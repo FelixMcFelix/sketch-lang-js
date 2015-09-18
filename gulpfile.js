@@ -22,6 +22,7 @@ var configs = {
 
 gulp.task("default", ["clean"], function(){
 	gulp.start("build", "doc");
+	// gulp.start("build");
 });
 
 
@@ -78,7 +79,7 @@ gulp.task("build:Sketch", function(){
 });
 
 gulp.task("build:editor", function(){
-	//Copy shaders/ into editor/, so that it has the latest copy of the module's shaders.
+	//Copy shaders into editor, so that it has the latest copy of the module's shaders.
 	return gulp.src("shaders/*.json")
 		.pipe(gulp.dest("./editor/shaders/"));
 });

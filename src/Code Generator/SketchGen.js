@@ -9,52 +9,49 @@ var Sketch = Sketch || {};
  */
 
 Sketch.SketchGen = function(){
-	var emit = function(code){
-		outBuffer.push(code);
-		programCounter++;
-	}
-
-	var instructions = {
-		//Program header.
-		program: function(args){interpretNode(args);},
-
-		//Arithmetic instructions
-		addition: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IADD);},
-		subtraction: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.ISUB);},
-		multiplication: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IMUL);},
-		division: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IDIV);},
-
-		//Literals and identifiers.
-		num: function(args){emit(MVM.opCodes.LOADC);emit(args);}
-	}
-
 	var outBuffer = [];
 	var programCounter = 0;
 	var scopeStack = [];
 	var stackPtr = 0;
 
-	var interpretNode = function(node){
+	var DEBUG = true;
+
+	var instructions = Sketch.bindInstructions(this);
+
+	this.emit = function(code){
+		outBuffer.push(code);
+		programCounter++;
+	}
+
+	this.interpretNode = function(node){
 		if(Array.isArray(node)){
-			node.forEach(interpretNode);
+			node.forEach(this.interpretNode.bind(this));
 		} else{
-			instructions[node.type](node.arguments);
+			if(DEBUG){
+				console.log("{\n"+Sketch.SketchGenNodes._rev[node.type]+",");
+				console.log(node.arguments);
+				console.log("}");
+			}
+			return instructions[node.type](node.arguments);
 		}
 	};
 
-	var scopePush = function(){
+	this.scopePush = function(){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
+		this.emit(MVM.opCodes.PUSHSC);
 	};
 
-	var scopePop = function(){
+	this.scopePop = function(){
 		scopeStack.pop();
 		stackPtr--;
+		this.emit(MVM.opCodes.POPSC);
 
 		// TODO: Patch missed function calls (equivalent to hoisting).
 		// TODO: Handle missed variable lookups in a different manner.
 	};
 
-	var scopeRegister = function(label, type, extra){
+	this.scopeRegister = function(label, type, extra){
 		var curFrame = scopeStack[stackPtr];
 
 		if (!curFrame.labelTable[label]){
@@ -65,7 +62,7 @@ Sketch.SketchGen = function(){
 		}
 	};
 
-	var scopeLookup = function(label){
+	this.scopeLookup = function(label){
 		var stack = 0;
 		var out = null;
 
@@ -78,7 +75,8 @@ Sketch.SketchGen = function(){
 			}
 		}
 
-		// TODO: Track lookup failures to patch function calls.
+		if (out === null)
+			throw "BAD LOOKUP.";
 
 		return out;
 	};
@@ -95,7 +93,7 @@ Sketch.SketchGen = function(){
 
 		// this.testStack();
 
-		interpretNode({type: "program", arguments: program});
+		this.interpretNode({type: Sketch.SketchGenNodes["program"], arguments: program});
 		return outBuffer;
 	};
 
@@ -103,41 +101,41 @@ Sketch.SketchGen = function(){
 		outBuffer = [];
 		programCounter = 0;
 		scopeStack = [];
-		scopePush();
+		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
 	}
 
 	this.testStack = function(){
 		//Test stack architecture
-		scopeRegister("globalInt", "int")
-		scopePush();
-		scopeRegister("intA", "int");
-		scopeRegister("intB", "int");
+		this.scopeRegister("globalInt", "int")
+		this.scopePush();
+		this.scopeRegister("intA", "int");
+		this.scopeRegister("intB", "int");
 
 		console.log("Registered a higher up int as well as two closer ones.");
 
 		console.log("Performing a lookup for each entry. Expect \n\t{entry:{address:0, type:\"int\"}, stack: 1}\n\t{entry:{address:1, type:\"int\"}, stack: 0}");
-		console.log(scopeLookup("globalInt"));
-		console.log(scopeLookup("intB"));
+		console.log(this.scopeLookup("globalInt"));
+		console.log(this.scopeLookup("intB"));
 
 		console.log("Performing a double registration.");
 		try {
-			scopeRegister("intA", "int");
+			this.scopeRegister("intA", "int");
 			console.log("Double registration of intA succeeded, something broke!");
 		} catch (e) {
 			console.log("Double registration of intA threw, as expected.");
 		}
 
 		console.log("Testing override of globalInt with a float. Expect \n\t{entry:{address:2, type:\"float\"}, stack: 0}");
-		scopeRegister("globalInt", "float");
-		console.log(scopeLookup("globalInt"));
+		this.scopeRegister("globalInt", "float");
+		console.log(this.scopeLookup("globalInt"));
 
 		console.log("Testing failed lookup.");
-		console.log(scopeLookup("notReal"));
+		console.log(this.scopeLookup("notReal"));
 
-		console.log(scopeStack);
+		console.log(this.scopeStack);
 
-		scopePop();
+		this.scopePop();
 
 		//End test
 	}
@@ -170,3 +168,5 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 		this.extra = extra;
 	}
 }
+
+Sketch.SketchGen.enume = "test";

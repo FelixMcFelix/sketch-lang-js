@@ -145,12 +145,13 @@ Sketch.Driver.prototype = {
 
 			var code = this.codeGen.interpret(ast);
 
-			this.vm = new MVM(this.context, this.shaderManager, code, constantPool, labelTable, true);
-			this.vm.interpret();
+			this.vm = new MVM.VM(this.context, this.shaderManager, code, constantPool, labelTable, true);
+			var d = this.vm.interpret().current();
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print the stack's top value to demonstrate our wonderful
 			//calculator.
-			alert("The Virtual Machine's final result is: "+window.MVM.dataStore[0]);
+			alert("The Virtual Machine's final state is in the console.");
+			console.log(d);
 		} catch (e){
 			alert("Error detected while rendering! See console for stack trace.");
 			console.log(e);

@@ -6,8 +6,9 @@
 *
 */
 
+var MVM = MVM || {};
 
-var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
+MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
 
 	/*
 	*	Struct layouts
@@ -22,43 +23,6 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 	*	Polygon 	[ 0 ,  0 ,255,255,100,100,200,200,150, 0 ,.............]
 	*
 	*/
-
-	// Operation codes
-	var opCodes = {
-		STOREG: 0,
-		LOADG: 	1,
-		STOREL: 2,
-		LOADL: 	3,
-		LOADC: 	4,
-		IADD: 	5,
-		ISUB: 	6,
-		IMUL: 	7,
-		IDIV: 	8,
-		IMOD: 	9,
-		FADD: 	10,
-		FSUB: 	11,
-		FMUL: 	12,
-		FDIV: 	13,
-		FMOD: 	14,
-		LOADIDX:15,
-		SETIDX: 16,
-		NCMPEQ: 17,
-		NCMPLT: 18,
-		NCMPGT: 19,
-		JUMP: 	20,
-		JUMPT: 	21, 
-		JUMPF: 	22,
-		CALL: 	23, 
-		RETURN: 24,
-		LNDRAW: 25,
-		PGDRAW: 26,
-		RENDER: 27,
-		CLEAR: 	28,
-		PTADD: 	29,
-		LNTOPG: 30,
-		LNMUL:  31,
-		EXIT: 	32
-	};
 
 	// WebGL context
 	var glctx = glctx;
@@ -77,6 +41,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 
 	// Data store (Stack)
 	window.MVM.dataStore = [];
+	var data = new MVM.DataModel();
 
 	// Points to the first free space at the top of the data store
 	var sp = 0;
@@ -104,6 +69,8 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 
 		var dataStore = window.MVM.dataStore;
 
+		if(debugMode) console.log(codeStore);
+
 		cl = codeStore.length;
 
 		var opCodes = MVM.opCodes;
@@ -113,141 +80,206 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 			cp++;
 			switch (opCode) {
 				case opCodes.STOREG:
-					var address = codeStore[cp]
-					cp++;
-					sp--;
-					var i = dataStore[sp];
-					globalStore[address] = i;
-					if(debugMode) console.log("STOREG: " + i + " " + address);
+					//Store a value in a given relative stack frame, in a given index.
+					//USE: STOREG index
+					//e.g. STORER 0 stores the top value on the stack in slot 0 of the root scope frame.
+					var ind = codeStore[cp++];
+					var val = data.current()
+								  .pop();
+
+					data.root
+						.setVar(ind, val);
+
+					if(debugMode) console.log("STOREG: " + val + " in index " + ind);
 					break;
 				case opCodes.LOADG:
-					var address = codeStore[cp];
-					cp++;
-					dataStore[sp] = globalStore[address];
-					sp++;
-					if(debugMode) console.log("LOADG: " + i + " " + address);
+					//Load a value from the root scope frame onto the current stack, from a given index.
+					//USE: LOADG index
+					//e.g. LOADG 0 loads the value in slot 0 of the root scope frame.
+					var ind = codeStore[cp++];	
+					var val = data.root
+								  .getVar(ind);
+
+					data.current()
+						.push(val);
+
+					if(debugMode) console.log("LOADG: " + val + " from index " + ind);
 					break;
 				case opCodes.STOREL:
-					var localAddress = codeStore[cp];
-					cp++;
-					sp--;
-					dataStore[fp + localAddress + 2] = dataStore[sp];
-					sp++;
-					if(debugMode) console.log("STOREL: " + dataStore[sp - 1] + " " + localAddress);
+					//Store a value in the current scope frame, in a given index.
+					//USE: STOREL index
+					//e.g. STOREL 0 stores the top value on the stack in slot 0 of the current scope frame.
+					var ind = codeStore[cp++];
+					var val = data.current()
+								  .pop();
+
+					data.current()
+						.setVar(ind, val);
+
+					if(debugMode) console.log("STOREL: " + val + " in index " + ind);
 					break;
 				case opCodes.LOADL:
-					var localAddress = codeStore[cp];
-					cp++;
-					dataStore[sp] = dataStore[fp + localAddress + 2];
-					sp++;
-					if(debugMode) console.log("LOADL: " + dataStore[sp - 1] + " " + localAddress);
+					//Load a value from the current scope frame onto the current stack, from a given index.
+					//USE: LOADL index
+					//e.g. LOADL 0 loads the value in slot 0 of the data stack frame.
+					var ind = codeStore[cp++];	
+					var val = data.current()
+								  .getVar(ind);
+
+					data.current()
+						.push(val);
+
+					if(debugMode) console.log("LOADL: "  + val + " from index " + ind);
 					break;
 				case opCodes.LOADC:
-					var contsant = codeStore[cp];
-					cp++;
-					dataStore[sp] = contsant;
-					sp++;
-					if(debugMode) console.log("LOADC: " + contsant);
+					//Place the next codeword on the top of the stack.
+					var constant = codeStore[cp++];
+
+					data.current()
+						.push(constant);
+
+					if(debugMode) console.log("LOADC: " + constant);
 					break;
 				case opCodes.IADD:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
-					var result = j + i
-					dataStore[sp] = result;
-					sp++
-					dataStore.splice(sp, 1);
+					//Pop two integers off the stack, add them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
+					var result = j + i;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.ISUB:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, subbtract them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
 					var result = j - i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.IMUL:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, multiply them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
 					var result = j * i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.IDIV:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, divide them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
+
 					var result = Math.floor(j / i);
-					dataStore[sp] = result;
-					sp++;
+					
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.IMOD:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, take modulus and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
 					var result = Math.floor(j % i);
-					dataStore[sp] = result;
-					sp++;
+					
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IMOD: " + j + " % " + i + " = " + result);
 					break;
 				case opCodes.FADD:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, add them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j + i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.FSUB:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					dataStore[sp] = j - i;
-					sp++;
+					//Pop two integers off the stack, subtract them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+					var result = j - i;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.FMUL:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, multiply them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j * i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.FDIV:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, divide them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j / i;
-					dataStore[sp] = result;
-					sp++;
-					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("FDIV: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.FMOD:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, divide them and push the remainder onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j % i;
-					dataStore[sp] = result;
-					sp++;
-					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("FMOD: " + j + " % " + i + " = " + result);
 					break;
 				case opCodes.NCMPEQ:
 					sp--;
@@ -528,28 +560,57 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 				//Augmentations to support scoping.
 				case opCodes.STORER:
 					//Store a value in a given relative stack frame, in a given index. (Store Relative)
-					//USE: stack index value STORER
-					//e.g. 1 0 5 STORER stores value 5 in the slot 0 of the data stack frame above the current one.
+					//USE: STORER stack index
+					//e.g. STORER 1 0 stores the top value on the stack in slot 0 of the data stack frame above the current one.
+					var rel = codeStore[cp++];
+					var ind = codeStore[cp++];
+					var val = data.current()
+								  .pop();
+
+					data.relative(rel)
+						.setVar(ind, val);
+
+					if(debugMode) console.log("STORER: placed "+val+" in index "+ind+" of relative frame "+rel+".");
 					break;
 				case opCodes.LOADR:
 					//Load a value from a relative stack frame, from a given index. (Load Relative)
-					//USE: stack index LOADR
-					//e.g. 2 0 LOADR loads the value in slot 0 of the data stack frame 2 layers above the current one.
+					//USE: LOADR stack index
+					//e.g. LOADR 2 0 loads the value in slot 0 of the data stack frame 2 layers above the current one.
+					var rel = codeStore[cp++];
+					var ind = codeStore[cp++];	
+					var val = data.relative(rel)
+								  .getVar(ind);
+
+					data.current()
+						.push(val);
+
+					if(debugMode) console.log("LOADR: retrieved "+val+" from index "+ind+" of relative frame "+rel+".");
 					break;
 				case opCodes.POPSC:
 					//Pop off and discard the current stack data frame, equivalent to leaving a code block. (Pop Scope)
 					//USE: POPSC
+					if(debugMode){
+						console.log("POPSC: exiting scope:");
+						console.log(data.current());
+					}
+					data.exit();
+
+					if(debugMode) console.log("POPSC: exited current block level.");
 					break;
 				case opCodes.PUSHSC:
 					//Create and push a new stack data frame, equivalent to entering a code block. (Push Scope)
 					//USE: PUSHSC
+					data.enter();
+
+					if(debugMode) console.log("PUSHSC: entered new block level.");
 					break;
 			}
 			// remove garbage from stack
-			dataStore.splice(sp,dataStore.length - sp);
-			if(debugMode) console.log(JSON.stringify(dataStore));
+			//dataStore.splice(sp,dataStore.length - sp);
+			//if(debugMode) console.log(JSON.stringify(dataStore));
 		}
 		if (needsUpdate) {render();}
+		return data;
 	};
 
 	// Passes control to the browser to update the canvas and

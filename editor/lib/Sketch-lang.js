@@ -163,12 +163,13 @@ Sketch.Driver.prototype = {
 
 			var code = this.codeGen.interpret(ast);
 
-			this.vm = new MVM(this.context, this.shaderManager, code, constantPool, labelTable, true);
-			this.vm.interpret();
+			this.vm = new MVM.VM(this.context, this.shaderManager, code, constantPool, labelTable, true);
+			var d = this.vm.interpret().current();
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print the stack's top value to demonstrate our wonderful
 			//calculator.
-			alert("The Virtual Machine's final result is: "+window.MVM.dataStore[0]);
+			alert("The Virtual Machine's final state is in the console.");
+			console.log(d);
 		} catch (e){
 			alert("Error detected while rendering! See console for stack trace.");
 			console.log(e);
@@ -254,12 +255,12 @@ Sketch.Driver.prototype = {
   }
 */
 var sketchParse = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,38],$V2=[1,18],$V3=[1,12],$V4=[1,19],$V5=[1,20],$V6=[1,21],$V7=[1,22],$V8=[1,23],$V9=[1,24],$Va=[1,25],$Vb=[1,33],$Vc=[1,34],$Vd=[1,35],$Ve=[1,36],$Vf=[1,37],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[5,10,21,25,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76],$Vo=[1,42],$Vp=[5,10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76],$Vq=[2,76],$Vr=[1,45],$Vs=[5,10,21,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76],$Vt=[1,47],$Vu=[1,48],$Vv=[1,49],$Vw=[1,50],$Vx=[1,51],$Vy=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75,76],$Vz=[1,68],$VA=[1,53],$VB=[1,54],$VC=[1,55],$VD=[1,56],$VE=[1,57],$VF=[1,58],$VG=[1,59],$VH=[1,60],$VI=[1,61],$VJ=[1,62],$VK=[1,63],$VL=[1,64],$VM=[1,65],$VN=[1,66],$VO=[1,67],$VP=[2,82],$VQ=[1,69],$VR=[1,85],$VS=[25,62],$VT=[5,10,16,21,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75,76],$VU=[22,24],$VV=[5,10,16,21,22,24,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75,76],$VW=[5,10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75,76],$VX=[1,120],$VY=[10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76],$VZ=[2,80],$V_=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,62,63,64,65,66,68,70,71,72,73,74,75,76],$V$=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,62,63,64,65,66,68,70,71,72,73,74,75,76],$V01=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75,76],$V11=[21,25,62,63,64,65,66],$V21=[22,24,26],$V31=[19,25];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,39],$V2=[1,18],$V3=[1,12],$V4=[1,19],$V5=[1,20],$V6=[1,21],$V7=[1,22],$V8=[1,23],$V9=[1,24],$Va=[1,25],$Vb=[1,34],$Vc=[1,35],$Vd=[1,36],$Ve=[1,37],$Vf=[1,38],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[5,10,21,25,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76,77],$Vp=[1,43],$Vq=[5,10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76,77],$Vr=[2,76],$Vs=[1,46],$Vt=[5,10,21,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76,77],$Vu=[1,48],$Vv=[1,49],$Vw=[1,50],$Vx=[1,51],$Vy=[1,52],$Vz=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$VA=[1,69],$VB=[1,54],$VC=[1,55],$VD=[1,56],$VE=[1,57],$VF=[1,58],$VG=[1,59],$VH=[1,60],$VI=[1,61],$VJ=[1,62],$VK=[1,63],$VL=[1,64],$VM=[1,65],$VN=[1,66],$VO=[1,67],$VP=[1,68],$VQ=[2,82],$VR=[1,70],$VS=[1,86],$VT=[25,62],$VU=[5,10,16,21,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$VV=[22,24],$VW=[5,10,16,21,22,24,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$VX=[5,10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$VY=[1,121],$VZ=[10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75,76,77],$V_=[2,80],$V$=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$V01=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$V11=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$V21=[21,25,62,63,64,65,66],$V31=[22,24,26],$V41=[19,25];
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"start":3,"program":4,"EOF":5,"declarations":6,"out-decl":7,"in-decl":8,"statement":9,"FUNCTION":10,"declarator":11,"declaration_list":12,"func_return":13,"body":14,"param":15,"ASSIGN":16,"exp":17,"semi":18,"RETURN_TYPE":19,"type":20,"OPEN_PARENS":21,"CLOSE_PARENS":22,"param_list":23,"COMMA":24,"OPEN_BRACE":25,"CLOSE_BRACE":26,"statement_list":27,"decl_list":28,"function":29,"condition_statements":30,"iteration_statements":31,"jump_statements":32,"IF":33,"ELSE":34,"WHILE":35,"DO":36,"FOR":37,"CONTINUE":38,"BREAK":39,"RETURN":40,"prim_expr":41,"PLUS":42,"MINUS":43,"MULT":44,"DIV":45,"MODULO":46,"OP_ADD_ASSIGNMENT":47,"OP_SUB_ASSIGNMENT":48,"OP_MULT_ASSIGNMENT":49,"OP_DIV_ASSIGNMENT":50,"OP_MOD_ASSIGNMENT":51,"OP_INC":52,"OP_DEC":53,"OP_AND":54,"OP_OR":55,"OP_EQ":56,"LT":57,"GT":58,"OP_NE":59,"OP_LE":60,"OP_GE":61,"IDENTIFIER":62,"NUMBER":63,"TRUE":64,"FALSE":65,"NOT":66,"init_list":67,"SEMICOLON":68,"declaration":69,"VOID":70,"INT":71,"FLOAT":72,"BOOL":73,"POINT":74,"LINE":75,"POLYGON":76,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",10:"FUNCTION",16:"ASSIGN",19:"RETURN_TYPE",21:"OPEN_PARENS",22:"CLOSE_PARENS",24:"COMMA",25:"OPEN_BRACE",26:"CLOSE_BRACE",29:"function",33:"IF",34:"ELSE",35:"WHILE",36:"DO",37:"FOR",38:"CONTINUE",39:"BREAK",40:"RETURN",42:"PLUS",43:"MINUS",44:"MULT",45:"DIV",46:"MODULO",47:"OP_ADD_ASSIGNMENT",48:"OP_SUB_ASSIGNMENT",49:"OP_MULT_ASSIGNMENT",50:"OP_DIV_ASSIGNMENT",51:"OP_MOD_ASSIGNMENT",52:"OP_INC",53:"OP_DEC",54:"OP_AND",55:"OP_OR",56:"OP_EQ",57:"LT",58:"GT",59:"OP_NE",60:"OP_LE",61:"OP_GE",62:"IDENTIFIER",63:"NUMBER",64:"TRUE",65:"FALSE",66:"NOT",68:"SEMICOLON",70:"VOID",71:"INT",72:"FLOAT",73:"BOOL",74:"POINT",75:"LINE",76:"POLYGON"},
-productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[30,5],[30,7],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[41,1],[41,1],[41,1],[41,1],[41,2],[41,3],[41,5],[41,3],[41,3],[18,1],[18,0],[11,1],[69,1],[69,4],[67,1],[67,3],[67,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
+symbols_: {"error":2,"start":3,"program":4,"EOF":5,"declarations":6,"out-decl":7,"in-decl":8,"statement":9,"FUNCTION":10,"declarator":11,"declaration_list":12,"func_return":13,"body":14,"param":15,"ASSIGN":16,"exp":17,"semi":18,"RETURN_TYPE":19,"type":20,"OPEN_PARENS":21,"CLOSE_PARENS":22,"param_list":23,"COMMA":24,"OPEN_BRACE":25,"CLOSE_BRACE":26,"statement_list":27,"decl_list":28,"function":29,"condition_statements":30,"iteration_statements":31,"jump_statements":32,"IF":33,"ELSE":34,"WHILE":35,"DO":36,"FOR":37,"CONTINUE":38,"BREAK":39,"RETURN":40,"prim_expr":41,"PLUS":42,"MINUS":43,"MULT":44,"DIV":45,"MODULO":46,"OP_ADD_ASSIGNMENT":47,"OP_SUB_ASSIGNMENT":48,"OP_MULT_ASSIGNMENT":49,"OP_DIV_ASSIGNMENT":50,"OP_MOD_ASSIGNMENT":51,"OP_INC":52,"OP_DEC":53,"OP_AND":54,"OP_OR":55,"OP_EQ":56,"LT":57,"GT":58,"OP_NE":59,"OP_LE":60,"OP_GE":61,"IDENTIFIER":62,"NUMBER":63,"TRUE":64,"FALSE":65,"NOT":66,"init_list":67,"SEMICOLON":68,"declaration":69,"VOID":70,"INT":71,"FLOAT":72,"NUM":73,"BOOL":74,"POINT":75,"LINE":76,"POLYGON":77,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",10:"FUNCTION",16:"ASSIGN",19:"RETURN_TYPE",21:"OPEN_PARENS",22:"CLOSE_PARENS",24:"COMMA",25:"OPEN_BRACE",26:"CLOSE_BRACE",29:"function",33:"IF",34:"ELSE",35:"WHILE",36:"DO",37:"FOR",38:"CONTINUE",39:"BREAK",40:"RETURN",42:"PLUS",43:"MINUS",44:"MULT",45:"DIV",46:"MODULO",47:"OP_ADD_ASSIGNMENT",48:"OP_SUB_ASSIGNMENT",49:"OP_MULT_ASSIGNMENT",50:"OP_DIV_ASSIGNMENT",51:"OP_MOD_ASSIGNMENT",52:"OP_INC",53:"OP_DEC",54:"OP_AND",55:"OP_OR",56:"OP_EQ",57:"LT",58:"GT",59:"OP_NE",60:"OP_LE",61:"OP_GE",62:"IDENTIFIER",63:"NUMBER",64:"TRUE",65:"FALSE",66:"NOT",68:"SEMICOLON",70:"VOID",71:"INT",72:"FLOAT",73:"NUM",74:"BOOL",75:"POINT",76:"LINE",77:"POLYGON"},
+productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[30,5],[30,7],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[41,1],[41,1],[41,1],[41,1],[41,2],[41,3],[41,5],[41,3],[41,3],[18,1],[18,0],[11,1],[69,1],[69,4],[67,1],[67,3],[67,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -267,7 +268,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-           {typeof console !== 'undefined' ? console.log("%j",$$[$0-1]) : print($$[$0-1]);
+           {typeof console !== 'undefined' ? console.log("%j",$$[$0-1]) : print($$[$0-1]); console.log(Sketch.SketchGen.enume);
           return $$[$0-1];
            }
         
@@ -283,12 +284,12 @@ this.$ = {type: "function",
           arguments: [$$[$0-3],$$[$0-2],$$[$0-1],$$[$0]]};
 break;
 case 9:
- this.$ = { type: 'variable-decl-assign',
+ this.$ = { type: Sketch.SketchGenNodes["variable_decl_assign"],
            arguments: [ $$[$0-3],$$[$0-1]]};
 break;
 case 10:
 this.$ = {
-          type: 'variable-decl',
+          type: Sketch.SketchGenNodes["variable_decl"],
           arguments: $$[$0-1]};
     
 break;
@@ -301,7 +302,7 @@ break;
 case 13:
 this.$ = "";
 break;
-case 14: case 19: case 20:
+case 14:
 this.$ = $$[$0-1];
 break;
 case 15:
@@ -311,13 +312,16 @@ case 16:
 this.$= $$[$0-2]; this.$.push($$[$0]);
 break;
 case 17:
-this.$ = {type: "decl", arguments: [$$[$0-1], $$[$0]]};
+this.$ = {type: Sketch.SketchGenNodes["decl"], arguments: [$$[$0-1], $$[$0]]};
 break;
 case 18:
  this.$ = "";
 break;
+case 19: case 20:
+this.$ = {type: Sketch.SketchGenNodes["block"], arguments: $$[$0-1]};
+break;
 case 21:
-this.$= [$$[$0-2],$$[$0-1]];
+this.$ = {type: Sketch.SketchGenNodes["block"], arguments: [$$[$0-2],$$[$0-1]]};
 break;
 case 28:
  this.$ = { type: "if",
@@ -327,7 +331,7 @@ case 28:
        
 break;
 case 29:
-this.$ = { type : "if-else",
+this.$ = { type : "if_else",
                arguments : [ $$[$0-4],
                              $$[$0-2],
                              $$[$0]
@@ -344,7 +348,7 @@ this.$ = {type : "while",
      
 break;
 case 31:
-this.$ = {type : "do-while", 
+this.$ = {type : "do_while", 
               arguments: [ $$[$0-5],
                            $$[$0-2]
                          ]
@@ -375,7 +379,7 @@ this.$ = $$[$0-1]; this.$.push($$[$0]);
 break;
 case 45:
 this.$ = {
-                        type: 'addition',
+                        type: Sketch.SketchGenNodes["addition"],
                         arguments: [ 
                             $$[$0-2],
                             $$[$0]]
@@ -384,7 +388,7 @@ this.$ = {
 break;
 case 46:
 this.$ = { 
-                        type: 'subtraction',
+                        type: Sketch.SketchGenNodes["subtraction"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -393,7 +397,7 @@ this.$ = {
 break;
 case 47:
 this.$ = { 
-                        type: 'multiplication',
+                        type: Sketch.SketchGenNodes["multiplication"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -402,7 +406,7 @@ this.$ = {
 break;
 case 48:
 this.$ = { 
-                        type: 'division',
+                        type: Sketch.SketchGenNodes["division"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -411,7 +415,7 @@ this.$ = {
 break;
 case 49:
 this.$ = { 
-                        type: 'modulo',
+                        type: Sketch.SketchGenNodes["modulo"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -420,7 +424,7 @@ this.$ = {
 break;
 case 50:
 this.$ = { 
-                        type: 'add-assign',
+                        type: 'add_assign',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -429,7 +433,7 @@ this.$ = {
 break;
 case 51:
 this.$ = { 
-                        type: 'sub-assign',
+                        type: 'sub_assign',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -438,7 +442,7 @@ this.$ = {
 break;
 case 52:
 this.$ = { 
-                        type: 'multi-assign',
+                        type: 'multi_assign',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -447,7 +451,7 @@ this.$ = {
 break;
 case 53:
 this.$ = { 
-                        type: 'div-assign',
+                        type: 'div_assign',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -456,7 +460,7 @@ this.$ = {
 break;
 case 54:
 this.$ = { 
-                        type: 'mod-assign',
+                        type: 'mod_assign',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -508,7 +512,7 @@ this.$ = {
 break;
 case 60:
 this.$ = { 
-                        type: 'less-than',
+                        type: 'less_than',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -517,7 +521,7 @@ this.$ = {
 break;
 case 61:
 this.$ = { 
-                        type: 'greater-than',
+                        type: 'greater_than',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -526,7 +530,7 @@ this.$ = {
 break;
 case 62:
 this.$ = { 
-                        type: 'not-equal',
+                        type: 'not_equal',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -535,7 +539,7 @@ this.$ = {
 break;
 case 63:
 this.$ = { 
-                        type: 'less-than-or-equal ',
+                        type: 'less_than_or_equal ',
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -544,7 +548,7 @@ this.$ = {
 break;
 case 64:
 this.$ = { 
-                        type: 'greater-than-or-equal' ,
+                        type: 'greater_than_or_equal' ,
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -553,7 +557,7 @@ this.$ = {
 break;
 case 65:
 this.$ = { 
-                        type: 'assign',
+                        type: Sketch.SketchGenNodes["assign"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -561,10 +565,10 @@ this.$ = {
                 
 break;
 case 66:
- this.$ = {type: 'ident', arguments: yytext};
+ this.$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext};
 break;
 case 67:
- this.$ = {type: 'num', arguments: Number(yytext)};
+ this.$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)};
 break;
 case 71: case 73: case 74:
  this.$ = $$[$0-1];
@@ -580,8 +584,8 @@ this.$ = [$$[$0-2],$$[$0]];
 break;
 }
 },
-table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},{1:[3]},{5:[1,39],6:40,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},{1:[2,2]},o($Vn,[2,3]),o($Vn,[2,5]),o($Vn,[2,6]),o($Vn,[2,7]),{11:41,62:$Vo},o($Vp,$Vq,{18:44,16:[1,43],68:$Vr}),o($Vs,$Vq,{18:46,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,68:$Vr}),o($Vs,[2,23]),o($Vs,[2,24]),o($Vs,[2,25]),o($Vs,[2,26]),o($Vs,[2,27]),{11:52,62:$Vo},o($Vy,[2,44],{16:$Vz,47:$VA,48:$VB,49:$VC,50:$VD,51:$VE,52:$VF,53:$VG,54:$VH,55:$VI,56:$VJ,57:$VK,58:$VL,59:$VM,60:$VN,61:$VO}),{7:75,8:74,9:73,10:$V0,14:11,15:9,17:10,20:16,21:$V1,24:$VP,25:$V2,26:$VQ,27:70,28:71,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:76,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,67:72,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},{21:[1,77]},{21:[1,78]},{9:79,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{21:[1,80]},o($Vs,$Vq,{18:81,68:$Vr}),o($Vs,$Vq,{18:82,68:$Vr}),o([5,10,26,29,33,34,35,36,37,38,39,40,70,71,72,73,74,75,76],$Vq,{41:17,17:83,18:84,21:$V1,25:$VR,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,68:$Vr}),o($VS,[2,83]),o($VS,[2,84]),o($VS,[2,85]),o($VS,[2,86]),o($VS,[2,87]),o($VS,[2,88]),o($VS,[2,89]),o([5,10,16,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75,76],[2,66],{21:[1,86]}),o($VT,[2,67]),o($VT,[2,68]),o($VT,[2,69]),{21:$V1,25:$VR,41:87,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VU,$VP,{41:76,17:88,67:89,21:$V1,25:$VR,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),{1:[2,1]},o($Vn,[2,4]),{12:90,21:[1,91]},o($VV,[2,77]),{17:92,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VW,[2,10]),o($VT,[2,75]),o($Vs,[2,22]),{17:93,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:94,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:95,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:96,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:97,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VV,[2,17]),{17:98,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:99,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:100,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:101,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:102,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vy,[2,55]),o($Vy,[2,56]),{17:103,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:104,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:105,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:106,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:107,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:108,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:109,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:110,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:111,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vs,[2,18]),{7:75,8:74,9:113,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,112],28:114,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},{7:118,8:117,9:73,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,115],27:116,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},{24:$VX,26:[1,119]},o($VY,[2,41]),o($VY,[2,37]),o($VY,[2,38]),o([10,21,22,24,25,26,29,33,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75,76],$VZ,{16:$Vz,47:$VA,48:$VB,49:$VC,50:$VD,51:$VE,52:$VF,53:$VG,54:$VH,55:$VI,56:$VJ,57:$VK,58:$VL,59:$VM,60:$VN,61:$VO}),{17:121,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:122,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{35:[1,123]},{8:124,15:9,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},o($Vs,[2,33]),o($Vs,[2,34]),o($Vs,$Vq,{18:125,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,68:$Vr}),o($Vs,[2,36]),o([24,26],$VP,{67:72,41:126,21:$V1,25:$VR,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VU,$VP,{41:126,67:127,21:$V1,25:$VR,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VT,[2,70]),{22:[1,128],42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx},{22:[1,129],24:$VX},{13:130,19:[1,131],25:[2,12]},{15:134,20:16,22:[1,132],23:133,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},o($Vp,$Vq,{18:135,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,68:$Vr}),o($V_,[2,45],{44:$Vv,45:$Vw,46:$Vx}),o($V_,[2,46],{44:$Vv,45:$Vw,46:$Vx}),o($V$,[2,47],{46:$Vx}),o($V$,[2,48],{46:$Vx}),o($V01,[2,49],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,50],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,51],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,52],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,53],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,54],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,57],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,58],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,59],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,60],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,61],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,62],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,63],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,64],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($V01,[2,65],{42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx}),o($Vs,[2,19]),o($VY,[2,42]),o([21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66],[2,43],{15:9,20:16,8:117,7:118,10:$V0,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm}),o($Vs,[2,20]),{7:75,8:74,9:113,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,136],28:114,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},o($VY,[2,39]),o($VY,[2,40]),o($VT,[2,73]),{21:$V1,25:$VR,41:137,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{22:[1,138],42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx},{22:[1,139],42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx},{21:[1,140]},o($V11,$Vq,{18:141,68:$Vr}),o($Vs,[2,35]),o($V21,$VZ),{22:[1,142],24:$VX},o($VT,[2,71]),o($VT,[2,74]),{14:143,25:[1,144]},{20:145,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},o($V31,[2,13]),{22:[1,146],24:[1,147]},o($VU,[2,15]),o($VW,[2,9]),o($Vs,[2,21]),o($V21,[2,81]),{9:148,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{9:149,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:150,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:151,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o([5,10,16,21,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,70,71,72,73,74,75,76],$Vq,{18:152,68:$Vr}),o($Vp,[2,8]),{7:75,8:74,9:73,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:$VQ,27:70,28:71,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},{25:[2,11]},o($V31,[2,14]),{15:153,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm},o($Vp,[2,28],{34:[1,154]}),o($Vs,[2,30]),{22:[1,155],42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx},o($V11,$Vq,{18:156,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,68:$Vr}),o($VT,[2,72]),o($VU,[2,16]),{9:157,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vs,$Vq,{18:158,68:$Vr}),{17:159,21:$V1,25:$VR,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vs,[2,29]),o($Vs,[2,31]),{22:[1,160],42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx},{9:161,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vs,[2,32])],
-defaultActions: {3:[2,2],39:[2,1],145:[2,11]},
+table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},{1:[3]},{5:[1,40],6:41,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},{1:[2,2]},o($Vo,[2,3]),o($Vo,[2,5]),o($Vo,[2,6]),o($Vo,[2,7]),{11:42,62:$Vp},o($Vq,$Vr,{18:45,16:[1,44],68:$Vs}),o($Vt,$Vr,{18:47,42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy,68:$Vs}),o($Vt,[2,23]),o($Vt,[2,24]),o($Vt,[2,25]),o($Vt,[2,26]),o($Vt,[2,27]),{11:53,62:$Vp},o($Vz,[2,44],{16:$VA,47:$VB,48:$VC,49:$VD,50:$VE,51:$VF,52:$VG,53:$VH,54:$VI,55:$VJ,56:$VK,57:$VL,58:$VM,59:$VN,60:$VO,61:$VP}),{7:76,8:75,9:74,10:$V0,14:11,15:9,17:10,20:16,21:$V1,24:$VQ,25:$V2,26:$VR,27:71,28:72,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:77,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,67:73,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},{21:[1,78]},{21:[1,79]},{9:80,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{21:[1,81]},o($Vt,$Vr,{18:82,68:$Vs}),o($Vt,$Vr,{18:83,68:$Vs}),o([5,10,26,29,33,34,35,36,37,38,39,40,70,71,72,73,74,75,76,77],$Vr,{41:17,17:84,18:85,21:$V1,25:$VS,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,68:$Vs}),o($VT,[2,83]),o($VT,[2,84]),o($VT,[2,85]),o($VT,[2,86]),o($VT,[2,87]),o($VT,[2,88]),o($VT,[2,89]),o($VT,[2,90]),o([5,10,16,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75,76,77],[2,66],{21:[1,87]}),o($VU,[2,67]),o($VU,[2,68]),o($VU,[2,69]),{21:$V1,25:$VS,41:88,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VV,$VQ,{41:77,17:89,67:90,21:$V1,25:$VS,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),{1:[2,1]},o($Vo,[2,4]),{12:91,21:[1,92]},o($VW,[2,77]),{17:93,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VX,[2,10]),o($VU,[2,75]),o($Vt,[2,22]),{17:94,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:95,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:96,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:97,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:98,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VW,[2,17]),{17:99,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:100,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:101,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:102,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:103,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vz,[2,55]),o($Vz,[2,56]),{17:104,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:105,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:106,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:107,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:108,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:109,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:110,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:111,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:112,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vt,[2,18]),{7:76,8:75,9:114,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,113],28:115,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},{7:119,8:118,9:74,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,116],27:117,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},{24:$VY,26:[1,120]},o($VZ,[2,41]),o($VZ,[2,37]),o($VZ,[2,38]),o([10,21,22,24,25,26,29,33,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75,76,77],$V_,{16:$VA,47:$VB,48:$VC,49:$VD,50:$VE,51:$VF,52:$VG,53:$VH,54:$VI,55:$VJ,56:$VK,57:$VL,58:$VM,59:$VN,60:$VO,61:$VP}),{17:122,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:123,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{35:[1,124]},{8:125,15:9,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},o($Vt,[2,33]),o($Vt,[2,34]),o($Vt,$Vr,{18:126,42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy,68:$Vs}),o($Vt,[2,36]),o([24,26],$VQ,{67:73,41:127,21:$V1,25:$VS,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VV,$VQ,{41:127,67:128,21:$V1,25:$VS,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VU,[2,70]),{22:[1,129],42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy},{22:[1,130],24:$VY},{13:131,19:[1,132],25:[2,12]},{15:135,20:16,22:[1,133],23:134,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},o($Vq,$Vr,{18:136,42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy,68:$Vs}),o($V$,[2,45],{44:$Vw,45:$Vx,46:$Vy}),o($V$,[2,46],{44:$Vw,45:$Vx,46:$Vy}),o($V01,[2,47],{46:$Vy}),o($V01,[2,48],{46:$Vy}),o($V11,[2,49],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,50],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,51],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,52],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,53],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,54],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,57],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,58],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,59],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,60],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,61],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,62],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,63],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,64],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($V11,[2,65],{42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy}),o($Vt,[2,19]),o($VZ,[2,42]),o([21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66],[2,43],{15:9,20:16,8:118,7:119,10:$V0,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn}),o($Vt,[2,20]),{7:76,8:75,9:114,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,137],28:115,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},o($VZ,[2,39]),o($VZ,[2,40]),o($VU,[2,73]),{21:$V1,25:$VS,41:138,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{22:[1,139],42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy},{22:[1,140],42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy},{21:[1,141]},o($V21,$Vr,{18:142,68:$Vs}),o($Vt,[2,35]),o($V31,$V_),{22:[1,143],24:$VY},o($VU,[2,71]),o($VU,[2,74]),{14:144,25:[1,145]},{20:146,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},o($V41,[2,13]),{22:[1,147],24:[1,148]},o($VV,[2,15]),o($VX,[2,9]),o($Vt,[2,21]),o($V31,[2,81]),{9:149,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{9:150,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:151,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:152,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o([5,10,16,21,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,70,71,72,73,74,75,76,77],$Vr,{18:153,68:$Vs}),o($Vq,[2,8]),{7:76,8:75,9:74,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:$VR,27:71,28:72,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},{25:[2,11]},o($V41,[2,14]),{15:154,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl,76:$Vm,77:$Vn},o($Vq,[2,28],{34:[1,155]}),o($Vt,[2,30]),{22:[1,156],42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy},o($V21,$Vr,{18:157,42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy,68:$Vs}),o($VU,[2,72]),o($VV,[2,16]),{9:158,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vt,$Vr,{18:159,68:$Vs}),{17:160,21:$V1,25:$VS,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vt,[2,29]),o($Vt,[2,31]),{22:[1,161],42:$Vu,43:$Vv,44:$Vw,45:$Vx,46:$Vy},{9:162,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vt,[2,32])],
+defaultActions: {3:[2,2],40:[2,1],146:[2,11]},
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1060,7 +1064,7 @@ case 1:/* ignore comment */
 break;
 case 2:/* ignore comment */
 break;
-case 3:return 73;
+case 3:return 74;
 break;
 case 4:return 39;
 break;
@@ -1082,100 +1086,102 @@ case 12:return 10
 break;
 case 13:return 33;
 break;
-case 14:return 75;
+case 14:return 76;
 break;
 case 15:return 71;
 break;
-case 16:return 66;
+case 16:return 73;
 break;
-case 17:return 'NULL';
+case 17:return 66;
 break;
-case 18:return 74;
+case 18:return 'NULL';
 break;
-case 19:return 76;
+case 19:return 75;
 break;
-case 20:return 40;
+case 20:return 77;
 break;
-case 21:return 64;
+case 21:return 40;
 break;
-case 22:return 70;
+case 22:return 64;
 break;
-case 23:return 35;
+case 23:return 70;
 break;
-case 24:return 25;
+case 24:return 35;
 break;
-case 25:return 26;
+case 25:return 25;
 break;
-case 26:return 'OPEN_BRACKET';
+case 26:return 26;
 break;
-case 27:return 'CLOSE_BRACKET';
+case 27:return 'OPEN_BRACKET';
 break;
-case 28:return 21;
+case 28:return 'CLOSE_BRACKET';
 break;
-case 29:return 22;
+case 29:return 21;
 break;
-case 30:return 24;
+case 30:return 22;
 break;
-case 31:return 'COLON';
+case 31:return 24;
 break;
-case 32:return 68;
+case 32:return 'COLON';
 break;
-case 33:return 19;
+case 33:return 68;
 break;
-case 34:return 16;
+case 34:return 19;
 break;
-case 35:return 47;
+case 35:return 16;
 break;
-case 36:return 52;
+case 36:return 47;
 break;
-case 37:return 42;
+case 37:return 52;
 break;
-case 38:return 48;
+case 38:return 42;
 break;
-case 39:return 53;
+case 39:return 48;
 break;
-case 40:return 43;
+case 40:return 53;
 break;
-case 41:return 49;
+case 41:return 43;
 break;
-case 42:return 44;
+case 42:return 49;
 break;
-case 43:return 50;
+case 43:return 44;
 break;
-case 44:return 45;
+case 44:return 50;
 break;
-case 45:return 51;
+case 45:return 45;
 break;
-case 46:return 46;
+case 46:return 51;
 break;
-case 47:return 54;
+case 47:return 46;
 break;
-case 48:return 55;
+case 48:return 54;
 break;
-case 49:return 56;
+case 49:return 55;
 break;
-case 50:return 57;
+case 50:return 56;
 break;
-case 51:return 58;
+case 51:return 57;
 break;
-case 52:return 59;
+case 52:return 58;
 break;
-case 53:return 60;
+case 53:return 59;
 break;
-case 54:return 61;
+case 54:return 60;
 break;
-case 55:return 'EXCL';
+case 55:return 61;
 break;
-case 56:return 5;
+case 56:return 'EXCL';
 break;
-case 57:return 63;
+case 57:return 5;
 break;
-case 58:return 62;
+case 58:return 63;
+break;
+case 59:return 62;
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:#.*)/,/^(?:bool\b)/,/^(?:break\b)/,/^(?:clear\b)/,/^(?:continue\b)/,/^(?:do\b)/,/^(?:else\b)/,/^(?:false\b)/,/^(?:float\b)/,/^(?:for\b)/,/^(?:function\b)/,/^(?:if\b)/,/^(?:Line\b)/,/^(?:int\b)/,/^(?:not\b)/,/^(?:null\b)/,/^(?:Point\b)/,/^(?:Polygon\b)/,/^(?:return\b)/,/^(?:true\b)/,/^(?:void\b)/,/^(?:while\b)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?::)/,/^(?:;)/,/^(?:->)/,/^(?:=)/,/^(?:\+=)/,/^(?:\+\+)/,/^(?:\+)/,/^(?:-=)/,/^(?:--)/,/^(?:-)/,/^(?:\*=)/,/^(?:\*)/,/^(?:\/=)/,/^(?:\/)/,/^(?:%=)/,/^(?:%)/,/^(?:&&)/,/^(?:\|\|)/,/^(?:\?=)/,/^(?:\?<)/,/^(?:\?>)/,/^(?:!=)/,/^(?:!>)/,/^(?:!<)/,/^(?:!)/,/^(?:$)/,/^(?:[0-9]+(\.[0-9]*)?)/,/^(?:[a-zA-Z_]+[a-zA-Z0-9_]*)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:#.*)/,/^(?:bool\b)/,/^(?:break\b)/,/^(?:clear\b)/,/^(?:continue\b)/,/^(?:do\b)/,/^(?:else\b)/,/^(?:false\b)/,/^(?:float\b)/,/^(?:for\b)/,/^(?:function\b)/,/^(?:if\b)/,/^(?:Line\b)/,/^(?:int\b)/,/^(?:num\b)/,/^(?:not\b)/,/^(?:null\b)/,/^(?:Point\b)/,/^(?:Polygon\b)/,/^(?:return\b)/,/^(?:true\b)/,/^(?:void\b)/,/^(?:while\b)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?::)/,/^(?:;)/,/^(?:->)/,/^(?:=)/,/^(?:\+=)/,/^(?:\+\+)/,/^(?:\+)/,/^(?:-=)/,/^(?:--)/,/^(?:-)/,/^(?:\*=)/,/^(?:\*)/,/^(?:\/=)/,/^(?:\/)/,/^(?:%=)/,/^(?:%)/,/^(?:&&)/,/^(?:\|\|)/,/^(?:\?=)/,/^(?:\?<)/,/^(?:\?>)/,/^(?:!=)/,/^(?:!>)/,/^(?:!<)/,/^(?:!)/,/^(?:$)/,/^(?:[0-9]+(\.[0-9]*)?)/,/^(?:[a-zA-Z_]+[a-zA-Z0-9_]*)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59],"inclusive":true}}
 });
 return lexer;
 })();
@@ -1207,6 +1213,109 @@ if (typeof module !== 'undefined' && require.main === module) {
 ;
 // end
 
+var MVM = MVM || {};
+
+MVM.DataModel = function(){
+	this.root = new MVM.DataModel.StackFrame(null);
+	this.stack = [this.root];
+}
+
+MVM.DataModel.prototype = {
+	current: function(){
+		try{
+			return this.stack[this.stack.length - 1];
+		} catch(e){
+			return undefined;
+		}
+	},
+
+	relative: function(count){
+		var cursor = this.current();
+		while(count>0 && cursor && cursor.parent){
+			cursor = cursor.parent;
+			count--;
+		}
+
+		if(count>0) throw "Invalid relative call - too few parents.";
+
+		return cursor;
+	},
+
+	enter: function(){
+		var tmp = new MVM.DataModel.StackFrame(this.current());
+		this.stack[this.stack.length - 1] = tmp;
+
+		return this;
+	},
+
+	exit: function(){
+		if(this.current() !== this.root){
+			this.stack[this.stack.length - 1] = this.current().parent;
+		} else{
+			throw "Tried to exit from scope past root level."
+		}
+
+		return this;
+	},
+
+	call: function(argc, rel){
+		var prev = this.current();
+		var parent = this.relative(rel);
+		this.stack.push(new MVM.DataModel.StackFrame(parent));
+
+		while (argc>0){
+			this.current()
+				.setVar(argc-1, prev.pop());	
+			argc--;
+		}
+
+		return this;
+	},
+
+	funcreturn: function(value){
+		this.stack.pop();
+
+		this.stack.current.push(value);
+
+		return this;
+	}
+}
+
+MVM.DataModel.StackFrame = function(parent){
+	this.parent = parent;
+	this.variables = [];
+	this.stack = [];
+}
+
+MVM.DataModel.StackFrame.prototype = {
+	push: function(value){
+		this.stack.push(value);
+
+		return this;
+	},
+
+	pop: function(){
+		return this.stack.pop();
+	},
+
+	peek: function(){
+		try {
+			return this.stack[this.stack.length-1];
+		} catch (e){
+			return undefined;
+		}
+	},
+
+	setVar: function(varNo, val){
+		this.variables[varNo] = val;
+
+		return this;
+	},
+
+	getVar: function(varNo){
+		return this.variables[varNo];
+	}
+}
 /*
 * Sketch Virtual Machine
 * Darren Findlay
@@ -1215,8 +1324,9 @@ if (typeof module !== 'undefined' && require.main === module) {
 *
 */
 
+var MVM = MVM || {};
 
-var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
+MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode) {
 
 	/*
 	*	Struct layouts
@@ -1231,43 +1341,6 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 	*	Polygon 	[ 0 ,  0 ,255,255,100,100,200,200,150, 0 ,.............]
 	*
 	*/
-
-	// Operation codes
-	var opCodes = {
-		STOREG: 0,
-		LOADG: 	1,
-		STOREL: 2,
-		LOADL: 	3,
-		LOADC: 	4,
-		IADD: 	5,
-		ISUB: 	6,
-		IMUL: 	7,
-		IDIV: 	8,
-		IMOD: 	9,
-		FADD: 	10,
-		FSUB: 	11,
-		FMUL: 	12,
-		FDIV: 	13,
-		FMOD: 	14,
-		LOADIDX:15,
-		SETIDX: 16,
-		NCMPEQ: 17,
-		NCMPLT: 18,
-		NCMPGT: 19,
-		JUMP: 	20,
-		JUMPT: 	21, 
-		JUMPF: 	22,
-		CALL: 	23, 
-		RETURN: 24,
-		LNDRAW: 25,
-		PGDRAW: 26,
-		RENDER: 27,
-		CLEAR: 	28,
-		PTADD: 	29,
-		LNTOPG: 30,
-		LNMUL:  31,
-		EXIT: 	32
-	};
 
 	// WebGL context
 	var glctx = glctx;
@@ -1286,6 +1359,7 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 
 	// Data store (Stack)
 	window.MVM.dataStore = [];
+	var data = new MVM.DataModel();
 
 	// Points to the first free space at the top of the data store
 	var sp = 0;
@@ -1313,6 +1387,8 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 
 		var dataStore = window.MVM.dataStore;
 
+		if(debugMode) console.log(codeStore);
+
 		cl = codeStore.length;
 
 		var opCodes = MVM.opCodes;
@@ -1322,141 +1398,206 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 			cp++;
 			switch (opCode) {
 				case opCodes.STOREG:
-					var address = codeStore[cp]
-					cp++;
-					sp--;
-					var i = dataStore[sp];
-					globalStore[address] = i;
-					if(debugMode) console.log("STOREG: " + i + " " + address);
+					//Store a value in a given relative stack frame, in a given index.
+					//USE: STOREG index
+					//e.g. STORER 0 stores the top value on the stack in slot 0 of the root scope frame.
+					var ind = codeStore[cp++];
+					var val = data.current()
+								  .pop();
+
+					data.root
+						.setVar(ind, val);
+
+					if(debugMode) console.log("STOREG: " + val + " in index " + ind);
 					break;
 				case opCodes.LOADG:
-					var address = codeStore[cp];
-					cp++;
-					dataStore[sp] = globalStore[address];
-					sp++;
-					if(debugMode) console.log("LOADG: " + i + " " + address);
+					//Load a value from the root scope frame onto the current stack, from a given index.
+					//USE: LOADG index
+					//e.g. LOADG 0 loads the value in slot 0 of the root scope frame.
+					var ind = codeStore[cp++];	
+					var val = data.root
+								  .getVar(ind);
+
+					data.current()
+						.push(val);
+
+					if(debugMode) console.log("LOADG: " + val + " from index " + ind);
 					break;
 				case opCodes.STOREL:
-					var localAddress = codeStore[cp];
-					cp++;
-					sp--;
-					dataStore[fp + localAddress + 2] = dataStore[sp];
-					sp++;
-					if(debugMode) console.log("STOREL: " + dataStore[sp - 1] + " " + localAddress);
+					//Store a value in the current scope frame, in a given index.
+					//USE: STOREL index
+					//e.g. STOREL 0 stores the top value on the stack in slot 0 of the current scope frame.
+					var ind = codeStore[cp++];
+					var val = data.current()
+								  .pop();
+
+					data.current()
+						.setVar(ind, val);
+
+					if(debugMode) console.log("STOREL: " + val + " in index " + ind);
 					break;
 				case opCodes.LOADL:
-					var localAddress = codeStore[cp];
-					cp++;
-					dataStore[sp] = dataStore[fp + localAddress + 2];
-					sp++;
-					if(debugMode) console.log("LOADL: " + dataStore[sp - 1] + " " + localAddress);
+					//Load a value from the current scope frame onto the current stack, from a given index.
+					//USE: LOADL index
+					//e.g. LOADL 0 loads the value in slot 0 of the data stack frame.
+					var ind = codeStore[cp++];	
+					var val = data.current()
+								  .getVar(ind);
+
+					data.current()
+						.push(val);
+
+					if(debugMode) console.log("LOADL: "  + val + " from index " + ind);
 					break;
 				case opCodes.LOADC:
-					var contsant = codeStore[cp];
-					cp++;
-					dataStore[sp] = contsant;
-					sp++;
-					if(debugMode) console.log("LOADC: " + contsant);
+					//Place the next codeword on the top of the stack.
+					var constant = codeStore[cp++];
+
+					data.current()
+						.push(constant);
+
+					if(debugMode) console.log("LOADC: " + constant);
 					break;
 				case opCodes.IADD:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
-					var result = j + i
-					dataStore[sp] = result;
-					sp++
-					dataStore.splice(sp, 1);
+					//Pop two integers off the stack, add them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
+					var result = j + i;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.ISUB:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, subbtract them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
 					var result = j - i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("ISUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.IMUL:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, multiply them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
 					var result = j * i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.IDIV:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, divide them and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
+
 					var result = Math.floor(j / i);
-					dataStore[sp] = result;
-					sp++;
+					
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IDIV: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.IMOD:
-					sp--;
-					var i = Math.floor(dataStore[sp]);
-					sp--;
-					var j = Math.floor(dataStore[sp]);
+					//Pop two integers off the stack, take modulus and push the new result onto the stack.
+					var i = Math.floor(
+						data.current()
+							.pop());
+					var j = Math.floor(
+						data.current()
+							.pop());
 					var result = Math.floor(j % i);
-					dataStore[sp] = result;
-					sp++;
+					
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("IMOD: " + j + " % " + i + " = " + result);
 					break;
 				case opCodes.FADD:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, add them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j + i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FADD: " + j + " + " + i + " = " + result);
 					break;
 				case opCodes.FSUB:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					dataStore[sp] = j - i;
-					sp++;
+					//Pop two integers off the stack, subtract them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+					var result = j - i;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FSUB: " + j + " - " + i + " = " + result);
 					break;
 				case opCodes.FMUL:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, multiply them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j * i;
-					dataStore[sp] = result;
-					sp++;
+
+					data.current()
+						.push(result);
+
 					if(debugMode) console.log("FMUL: " + j + " * " + i + " = " + result);
 					break;
 				case opCodes.FDIV:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, divide them and push the new result onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j / i;
-					dataStore[sp] = result;
-					sp++;
-					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("FDIV: " + j + " / " + i + " = " + result);
 					break;
 				case opCodes.FMOD:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
+					//Pop two integers off the stack, divide them and push the remainder onto the stack.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
 					var result = j % i;
-					dataStore[sp] = result;
-					sp++;
-					if(debugMode) console.log("FMUL: " + j + " / " + i + " = " + result);
+
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("FMOD: " + j + " % " + i + " = " + result);
 					break;
 				case opCodes.NCMPEQ:
 					sp--;
@@ -1737,28 +1878,57 @@ var MVM = function(glctx, manager, codeStore, constantPool, labelTable, debugMod
 				//Augmentations to support scoping.
 				case opCodes.STORER:
 					//Store a value in a given relative stack frame, in a given index. (Store Relative)
-					//USE: stack index value STORER
-					//e.g. 1 0 5 STORER stores value 5 in the slot 0 of the data stack frame above the current one.
+					//USE: STORER stack index
+					//e.g. STORER 1 0 stores the top value on the stack in slot 0 of the data stack frame above the current one.
+					var rel = codeStore[cp++];
+					var ind = codeStore[cp++];
+					var val = data.current()
+								  .pop();
+
+					data.relative(rel)
+						.setVar(ind, val);
+
+					if(debugMode) console.log("STORER: placed "+val+" in index "+ind+" of relative frame "+rel+".");
 					break;
 				case opCodes.LOADR:
 					//Load a value from a relative stack frame, from a given index. (Load Relative)
-					//USE: stack index LOADR
-					//e.g. 2 0 LOADR loads the value in slot 0 of the data stack frame 2 layers above the current one.
+					//USE: LOADR stack index
+					//e.g. LOADR 2 0 loads the value in slot 0 of the data stack frame 2 layers above the current one.
+					var rel = codeStore[cp++];
+					var ind = codeStore[cp++];	
+					var val = data.relative(rel)
+								  .getVar(ind);
+
+					data.current()
+						.push(val);
+
+					if(debugMode) console.log("LOADR: retrieved "+val+" from index "+ind+" of relative frame "+rel+".");
 					break;
 				case opCodes.POPSC:
 					//Pop off and discard the current stack data frame, equivalent to leaving a code block. (Pop Scope)
 					//USE: POPSC
+					if(debugMode){
+						console.log("POPSC: exiting scope:");
+						console.log(data.current());
+					}
+					data.exit();
+
+					if(debugMode) console.log("POPSC: exited current block level.");
 					break;
 				case opCodes.PUSHSC:
 					//Create and push a new stack data frame, equivalent to entering a code block. (Push Scope)
 					//USE: PUSHSC
+					data.enter();
+
+					if(debugMode) console.log("PUSHSC: entered new block level.");
 					break;
 			}
 			// remove garbage from stack
-			dataStore.splice(sp,dataStore.length - sp);
-			if(debugMode) console.log(JSON.stringify(dataStore));
+			//dataStore.splice(sp,dataStore.length - sp);
+			//if(debugMode) console.log(JSON.stringify(dataStore));
 		}
 		if (needsUpdate) {render();}
+		return data;
 	};
 
 	// Passes control to the browser to update the canvas and
@@ -1838,632 +2008,6 @@ MVM.opCodes = {
 ;
 // end
 
-//==================================================================================================
-/* Code Generator information:
- * 	Makes use of a Recursive Descent Tree Walker
- * 		Embedded Heterogeneous Tree Walker pattern
- * 	Generates opcodes for the code store
- * 
- */
-
-//==================================================================================================
-/* PROGRAM SETUP 
- * 
- */
-
-var LEAFNODES = ["int", "float", "bool", "void"];
-
-var OPCODES = {
-	STOREG: 0,		// Store Global
-	LOADG: 	1,		// Load Global
-	STOREL: 2,		// Store Local
-	LOADL: 	3,		// Load Local
-	LOADC: 	4,		// Load Constant
-	IADD: 	5,		// Integer Add
-	ISUB: 	6,		// Integer Subtract
-	IMUL: 	7,		// Integer Multiply
-	IDIV: 	8,		// Integer Divide
-	IMOD:	9,		// Integer Modulo
-	FADD: 	10,		// Float Add
-	FSUB: 	11,		// Float Subtract
-	FMUL: 	12,		// Float Multiply
-	FDIV: 	13,		// Float Division
-	FMOD:	14,		// Fload Modulo	
-	LOADIDX:15,		// Load Index
-	SETIDX: 16,		// Set Index
-	NCMPEQ: 17,		// (Numerical) Compare Equal
-	NCMPLT: 18,		// (Numerical) Compare Less Than
-	NCMPGT: 19,		// (Numerical) Compare Greater Than
-	JUMP: 	20,		// Jump Always
-	JUMPT: 	21, 	// Jump True
-	JUMPF: 	22,		// Jump False
-	CALL: 	23, 	// Call (to be used with functions only)
-	RETURN: 24,		// Return (boolean for whether to return top of stack)
-	LNDRAW: 25,		// Line Draw
-	PGDRAW: 26,		// Polygon Draw
-	RENDER: 27,		// Render Canvas
-	CLEAR: 	28,		// Clear Canvas
-	PTADD: 	29,		// Point Add
-	LNTOPG: 30,		// Line to Polygon
-	LNMUL:  31,		// Line Multiplication
-	PRINTST:32,		// Print Stack (Top)
-	PRINTS: 33,		// Print Stack (all)
-	EXIT: 	34		// Exit Program
-};
-
-//var SketchGen = function(syntaxTree) {
-//    this.type = "program";
-//   	this.arguments = syntaxTree;
-//}
-
-var treeDepth = 0;
-
-//var thisSketch = new Sketch ('{"type": "multiplication", "arguments": [{"type": "subtraction", "arguments": ["1", "2"]}, "1"]}');
-
-var codeStore = [];		// an integer array that corresponds with opcodes and integers to push to the Abstract Machine stack
-var constantPool = [] 	// a miscellaneous array, holds all of the non-integer constants (which can't be pushed onto stack)
-var labelTable = [];	// an array of addresses for jump instructions to entries in the code store
-
-//==================================================================================================
-/* Now we simply walk the tree */
-//walk (thisSketch);
-
-//==================================================================================================
-/* debug functions */
-
-function printNode(obj) {
-	console.log(obj)
-}
-
-//==================================================================================================
-/* Misc functions */
-
-function push (opcodes) {
-	// opcodes are to be sent to abstract machine, along with refrences to label table and constant pool.
-	codeStore = codeStore.concat(opcodes);
-	console.log(codeStore);
-}
-
-//==================================================================================================
-/* Walkers for all different types of node */
-
-// program root ----------------------------------------------------------------
-
-function walkProgram(obj) {
-	
-	var programTree = obj.arguments;
-	
-	walk (programTree);
-	
-}
-
-// assignment ------------------------------------------------------------------
-
-function walkAssign (obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x = 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-	
-	// find left in symbol table/scope tree, warn about undeclared if not there.
-	// evaluate (walk) right.
-	
-}
-
-// declarations (inner and outer) ----------------------------------------------
-
-function walkFunction(obj){
-	/* 
-	 * example:
-	 * 	 Function Foo(int x) -> int{
-	 * 		int y = x + 1;
-	 * 		return y;
-	 * 	 }
-	 * declarator = "Foo"
-	 * declarationList = ["int", "x"]
-	 * returnType = "int"
-	 *  functionBody would consist of a decl list and a statement list for what is contained in the body
-	 */
- 	var declarator = obj.arguments[0];			// name of function
-	var declarationList = obj.arguments[1];		// list of parameters
-	var returnType = obj.arguments[2];			// return type of function
-	var functionBody = obj.arguments[3];		// optional decl/statement-lists
-	
-	console.log(obj.type + " " + declarator + " returns " + returnType);
-	
-	// add function name/return type to symbol table/label table
-	// walk list of parameters (which implies adding them to symbol table also)
-	// walk body
-}
-
-function walkVariableDeclAssign(obj){
-	/* 
-	 * example:
-	 * 	int x = 1
-	 * type = int
-	 * declarator = x
-	 * exp = 1
-	 */	 
-	var type = obj.arguments[0];
-	var declarator = obj.arguments[1];
-	var exp = obj.arguments[2];
-	
-	// walkVariableDecl ([type, declarator])
-	// walkAssign ([type, arguments]) ?
-}
-
-function walkVariableDecl(obj){
-	/* 
-	 * example:
-	 * 	int x;
-	 * type = int
-	 * declarator = x
-	 */	 
-	var type = obj.arguments[0];
-	var declarator = obj.arguments[1];		// name of variable
-	
-	// add varable type/declarator to symbol table
-}
-
-// control structures ----------------------------------------------------------
-
-function walkIf(obj){
-	/* example:
-	 * 	if(x ?= 1) {*do some code"}
-	 * expression = x ?=1
-	 * statements = *do some code*
-	 */
-	var expression = obj.arguments[0];
-	var statements = obj.arguments[1];
-	
-	// evaluate(expression)
-	// walk statements if true
-}
-
-function walkIfElse(obj){
-	/* example:
-	 * 	if(x ?= 1) {*do some code*} else {*do some other code*}
-	 * exp = x ?= 1
-	 * statements = *do some code*
-	 * elseStatements = *do some other code*
-	 */
-	var exp = obj.arguments[0];
-	var statements = obj.arguments[1];
-	var elseStatements= obj.arguments[2];
-	
-	// walkIf ([expression, statements])
-	// for statment in statements: walk(Statement)
-}
-
-function walkWhile(obj){
-	/* example:
-	 * 	while(b ?= true){...}
-	 * exp = b ?= true
-	 * body = ...
-	 */
-	var exp = obj.arguments[0];
-	var body = obj.arguments[1];
-	
-	// evaluate exp to see whether we should walk body
-	//if (evaluate(exp)) {
-		walkDoWhile(obj)
-	//}
-}
-
-function walkDoWhile(obj){
-	/* example:
-	 * 	do{...}while(b ?= true)
-	 * exp = b ?= true
-	 * body = ...
-	 */
-	var exp = obj.arguments[0];
-	var body = obj.arguments[1];
-	
-	walk(body);
-	// evaluate exp to see whether we should walk body again
-}
-
-function walkFor(obj){
-	/* example:
-	 * 	for (int i = 0; i ?< 5; i++) {...}
-	 * decl = int i = 0
-	 * condition = i ?< 5
-	 * update = i++
-	 * body = ...
-	 */
-	var decl = obj.arguments[0];
-	var condition = obj.arguments[1];
-	var update = obj.arguments[2];
-	var body = obj.arguments[3];
-	
-	// walk declaration, add information to symbol table at local scope
-	//		current implementation doesn't allow for reuse of a variable from outwith this scope.
-	// evaluate condition to see if we should walk body
-	// walk body
-	// walk update clause and return to beginning.
-}
-
-// mathematical operations -----------------------------------------------------
-
-function walkMathematical(obj, opcode){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x OPERATION y
-	 * left = x
-	 * right = y
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-	
-	if (isNaN(left)) {
-		walk(left);
-	} else {
-		push ([OPCODES.LOADC, parseFloat(left)])
-	}
-	
-	if (isNaN(right)) {
-		walk(right);
-	} else {
-		push ([OPCODES.LOADC, parseFloat(right)]);
-	}
-	
-	push (opcode);	// <- this is the only difference between the 5 mathematical methods.
-	
-	// if int or float push to stack.
-	// any others will go to constant pool.
-	// after things pushed to their appropriate places, send opcodes for OPERATION
-}
-
-function walkAddition(obj){
-	walkMathematical(obj, OPCODES.IADD);
-}
-
-function walkSubtraction(obj){
-	walkMathematical(obj, OPCODES.ISUB);
-}
-
-function walkMultiplication(obj){
-	walkMathematical(obj, OPCODES.IMUL);
-}
-
-function walkDivision(obj){
-	walkMathematical(obj, OPCODES.IDIV);
-}
-
-function walkModulo(obj){
-	walkMathematical(obj, OPCODES.IMOD);
-}
-
-// shorthand operations --------------------------------------------------------
-// ---assignment - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// --- these operations have the general form:
-// ---		x [OPERATION]= y
-// --- where OPERATION corresponds with one of [=, -, *, /, %].
-// --- This can be expanded to the form:
-// ---		x = x [OPERATION] y
-// --- So, these operations are performed by combining the walkAssign function
-// --- with their respective walk[operation] function.
-
-function walkAddAssign(obj){
-	obj.type = "addition";
-	walkAssign(obj.arguments[0], walkAdd(obj));
-}
-
-function walkSubAssign(obj){
-	obj.type = "subtraction";
-	walkAssign(obj.arguments[0], walkSubtraction(obj));
-}
-
-function walkMultiAssign(obj){
-	obj.type = "multiplication";
-	walkAssign(obj.arguments[0], walkMultiply(obj));
-}
-
-function walkDivAssign(obj){
-	obj.type = "division";
-	walkAssign(obj.arguments[0], walkDivide(obj));
-}
-
-function walkModAssign(obj){
-	obj.type = "modulo";
-	walkAssign(obj.arguments[0], walkModulo(obj));
-}
-
-// ---increment/decrement	 - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-function walkIncrement(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x++
-	 * name = x
-	 */
-	var name = obj.arguments[0];
-	
-	// x++ expands to x = x + 1
-	// so, walkAssign(walkAdd(x,1))
-}
-
-function walkDecrement(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x--
-	 * name = x
-	 */
-	var name = obj.arguments[0];
-	
-	// x-- expands to x = x - 1
-	// so, walkAssign(walkSubtract(x,1))
-	// or, walkAssign(walkAdd(x,-1))
-}
-
-// boolean logic ---------------------------------------------------------------
-
-function walkAnd(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x && 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-	
-	// check both evaluate to true.
-	// Evaluate(left)
-	// Evaluate(right)
-}
-
-function walkOr(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x || 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-	
-	// check if either evaluates to true.
-	// Evaluate(left)
-	// Evaluate(right)
-}
-
-// comparison operations -------------------------------------------------------
-
-function walkNotEqual(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 *  x != 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-}
-
-function walkLessThanOrEqual(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x <= 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-}
-
-function walkLessThan(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x < 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-}
-
-function walkGreaterThan(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x > 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-}
-
-function walkGreaterThanOrEqual(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x >= 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-}
-
-function walkEquality(obj){
-	/* assigns variables to both sides of statement
-	 * example:
-	 * 	x ?= 2
-	 * left = x
-	 * right = 2
-	 */
-	var left = obj.arguments[0];
-	var right = obj.arguments[1];
-}
-
-// undefined -- usually an empty node, e.g. a blank program.
-function walkUndefined(){
-	
-	undef = new Object();
-	undef.type = "undefined";
-	undef.arguments = "---";
-	
-	console.log("Undefined node")
-	printNode(undef)
-}
-
-// default - this means that something unexpected has got into the tree. -------
-function walkUnknown(obj){
-
-	unknown = new Object();
-	unknown.type = "unknown";
-	unknown.arguments = "(" + obj.toString() + ")";
-	
-	console.log("Unwalkable node")
-	printNode(unknown);
-}
-
-//==================================================================================================
-// case statement corresponds with each of the structures in the BNF.
-//  (this could just as easily be implemented as a big if/else block)
-function walk(obj){
-
-  /* preorder */
-	printNode(obj);
-
-	treeDepth += 1;
-
-  /* inorder */	
-	switch(obj.type){
-
-	// program root
-		case "program":
-			walkProgram(obj);
-			break;
-	// assignment
-		case "assign":
-			walkAssign(obj);
-			break;
-	// declarations (inner and outer)
-		case "function":
-			walkFunction(obj);
-			break;
-		case "variable-decl-assign":
-			walkVariableDeclAssign(obj);
-			break;
-		case "variable-decl":
-			walkVariableDecl(obj);
-			break;
-	// control structures
-		case "if":
-			walkIf(obj);
-			break;
-		case "if-else":
-			walkIfElse(obj);
-			break;
-		case "while":
-			walkWhile(obj);
-			break;
-		case "do-while":
-			walkDoWhile(obj);
-			break;
-		case "for":
-			walkFor(obj);
-			break;
-	// mathematical operations
-		case "addition":
-			walkAddition(obj);
-			break;
-		case "subtraction":
-			walkSubtraction(obj);
-			break;
-		case "multiplication":
-			walkMultiplication(obj);
-			break;
-		case "division":
-			walkDivision(obj);
-			break
-		case "modulo":
-			walkModulo(obj);
-			break;
-	// shorthand operations
-	// 	--assignment
-		case "add-assign":
-			walkAddAssign(obj);
-			break;
-		case "sub-assign":
-			walkSubAssign(obj);
-			break;
-		case "multi-assign":
-			walkMultiAssign(obj);
-			break;
-		case "div-assign":
-			walkDivAssign(obj);
-			break;
-		case "mod-assign":
-			walkModAssign(obj);
-			break;
-	// 	--increment/decrement
-		case "increment":
-			walkIncrement(obj);
-			break;
-		case "decrement":
-			walkDecrement(obj);
-			break;
-	// boolean logic
-		case "and":
-			walkAnd(obj);
-			break;
-		case "or":
-			walkOr(obj);
-			break;
-	// comparison operations
-		case "equality":
-			walkEquality(obj);
-			break
-		case "less-than":
-			walkLessThan(obj);
-			break;
-		case "greater-than":
-			walkGreaterThan(obj);
-			break;
-		case "not-equal":
-			walkNotEqual(obj);
-			break;
-		case "less-than-or-equal":
-			walkLessThanOrEqual(obj);
-			break;
-		case "greater-than-or-equal":
-			walkGreaterThanOrEqual(obj);
-			break;
-			
-	// "OH NO"des - if either of these two is reached, then something has gone horribly wrong.
-	/*
-	 *	This would happen if we haven't accounted for something in the parser.
-	 *	To account for the error, we keep it at the same treeDepth as its parent, 
-	 *  which we've done here by decrementing/incrementing the treeDepth
-	 *	in pre/postorder traversal respectively.
-	 */
-	 	
-	// undefined -- usually an empty node, e.g. a blank program.
-		case undefined:
-			treeDepth -= 1;
-			walkUndefined();
-			treeDepth += 1;
-			break;
-	// default - this means that something unexpected has got into the tree.
-		default :
-			treeDepth -= 1;
-			walkUnknown(obj);
-			treeDepth += 1;
-			break;
-	}
-
-  /* postorder */
-	treeDepth -= 1;
-	printNode(obj);
-	
-}
-
 
 var Sketch = Sketch || {};
 
@@ -2475,52 +2019,49 @@ var Sketch = Sketch || {};
  */
 
 Sketch.SketchGen = function(){
-	var emit = function(code){
-		outBuffer.push(code);
-		programCounter++;
-	}
-
-	var instructions = {
-		//Program header.
-		program: function(args){interpretNode(args);},
-
-		//Arithmetic instructions
-		addition: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IADD);},
-		subtraction: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.ISUB);},
-		multiplication: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IMUL);},
-		division: function(args){interpretNode(args[0]);interpretNode(args[1]);emit(MVM.opCodes.IDIV);},
-
-		//Literals and identifiers.
-		num: function(args){emit(MVM.opCodes.LOADC);emit(args);}
-	}
-
 	var outBuffer = [];
 	var programCounter = 0;
 	var scopeStack = [];
 	var stackPtr = 0;
 
-	var interpretNode = function(node){
+	var DEBUG = true;
+
+	var instructions = Sketch.bindInstructions(this);
+
+	this.emit = function(code){
+		outBuffer.push(code);
+		programCounter++;
+	}
+
+	this.interpretNode = function(node){
 		if(Array.isArray(node)){
-			node.forEach(interpretNode);
+			node.forEach(this.interpretNode.bind(this));
 		} else{
-			instructions[node.type](node.arguments);
+			if(DEBUG){
+				console.log("{\n"+Sketch.SketchGenNodes._rev[node.type]+",");
+				console.log(node.arguments);
+				console.log("}");
+			}
+			return instructions[node.type](node.arguments);
 		}
 	};
 
-	var scopePush = function(){
+	this.scopePush = function(){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
+		this.emit(MVM.opCodes.PUSHSC);
 	};
 
-	var scopePop = function(){
+	this.scopePop = function(){
 		scopeStack.pop();
 		stackPtr--;
+		this.emit(MVM.opCodes.POPSC);
 
 		// TODO: Patch missed function calls (equivalent to hoisting).
 		// TODO: Handle missed variable lookups in a different manner.
 	};
 
-	var scopeRegister = function(label, type, extra){
+	this.scopeRegister = function(label, type, extra){
 		var curFrame = scopeStack[stackPtr];
 
 		if (!curFrame.labelTable[label]){
@@ -2531,7 +2072,7 @@ Sketch.SketchGen = function(){
 		}
 	};
 
-	var scopeLookup = function(label){
+	this.scopeLookup = function(label){
 		var stack = 0;
 		var out = null;
 
@@ -2544,7 +2085,8 @@ Sketch.SketchGen = function(){
 			}
 		}
 
-		// TODO: Track lookup failures to patch function calls.
+		if (out === null)
+			throw "BAD LOOKUP.";
 
 		return out;
 	};
@@ -2561,7 +2103,7 @@ Sketch.SketchGen = function(){
 
 		// this.testStack();
 
-		interpretNode({type: "program", arguments: program});
+		this.interpretNode({type: Sketch.SketchGenNodes["program"], arguments: program});
 		return outBuffer;
 	};
 
@@ -2569,41 +2111,41 @@ Sketch.SketchGen = function(){
 		outBuffer = [];
 		programCounter = 0;
 		scopeStack = [];
-		scopePush();
+		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
 	}
 
 	this.testStack = function(){
 		//Test stack architecture
-		scopeRegister("globalInt", "int")
-		scopePush();
-		scopeRegister("intA", "int");
-		scopeRegister("intB", "int");
+		this.scopeRegister("globalInt", "int")
+		this.scopePush();
+		this.scopeRegister("intA", "int");
+		this.scopeRegister("intB", "int");
 
 		console.log("Registered a higher up int as well as two closer ones.");
 
 		console.log("Performing a lookup for each entry. Expect \n\t{entry:{address:0, type:\"int\"}, stack: 1}\n\t{entry:{address:1, type:\"int\"}, stack: 0}");
-		console.log(scopeLookup("globalInt"));
-		console.log(scopeLookup("intB"));
+		console.log(this.scopeLookup("globalInt"));
+		console.log(this.scopeLookup("intB"));
 
 		console.log("Performing a double registration.");
 		try {
-			scopeRegister("intA", "int");
+			this.scopeRegister("intA", "int");
 			console.log("Double registration of intA succeeded, something broke!");
 		} catch (e) {
 			console.log("Double registration of intA threw, as expected.");
 		}
 
 		console.log("Testing override of globalInt with a float. Expect \n\t{entry:{address:2, type:\"float\"}, stack: 0}");
-		scopeRegister("globalInt", "float");
-		console.log(scopeLookup("globalInt"));
+		this.scopeRegister("globalInt", "float");
+		console.log(this.scopeLookup("globalInt"));
 
 		console.log("Testing failed lookup.");
-		console.log(scopeLookup("notReal"));
+		console.log(this.scopeLookup("notReal"));
 
-		console.log(scopeStack);
+		console.log(this.scopeStack);
 
-		scopePop();
+		this.scopePop();
 
 		//End test
 	}
@@ -2620,7 +2162,7 @@ Sketch.SketchGen.ScopeStackFrame = function(){
 	this.nextData = 0;
 }
 
-/*
+/**
  * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen.ScopeStackFrame} label table.
  * @class Sketch.SketchGen.Label
  * @public
@@ -2635,6 +2177,179 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 	if(extra){
 		this.extra = extra;
 	}
+}
+
+Sketch.SketchGen.enume = "test";
+Sketch.EnumBase = function(){
+	_count = 0;
+	this._rev = [];
+	this.propAdd = function(name){
+		this._rev[_count] = name;
+		this[name] = _count++;
+	}
+}
+
+Sketch.SketchGenInstructions = [];
+
+Sketch.SketchGenNodes = new Sketch.EnumBase();
+
+//Program header.
+Sketch.SketchGenNodes.propAdd("program");
+
+//Program Structure
+Sketch.SketchGenNodes.propAdd("block");
+
+//Variable declaration and assignment
+Sketch.SketchGenNodes.propAdd("variable_decl");
+Sketch.SketchGenNodes.propAdd("variable_decl_assign");
+Sketch.SketchGenNodes.propAdd("decl");
+Sketch.SketchGenNodes.propAdd("assign");
+
+//Arithmetic instructions
+Sketch.SketchGenNodes.propAdd("addition");
+Sketch.SketchGenNodes.propAdd("subtraction");
+Sketch.SketchGenNodes.propAdd("multiplication");
+Sketch.SketchGenNodes.propAdd("division");
+Sketch.SketchGenNodes.propAdd("modulo");
+
+//Arithmetic assignment instructions.
+
+//Literals and identifiers.
+Sketch.SketchGenNodes.propAdd("num");
+Sketch.SketchGenNodes.propAdd("ident");
+Sketch.SketchGenInstr = [];
+
+//CONVENTION: All functions return an object with their return type. This is how we do type checking.
+
+/*
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["template"]] = function(args){
+	var type;
+	return type;
+}
+*/
+
+//Program header.
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
+	this.interpretNode(args);
+}
+
+//Program Structure
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args){
+	//HAS NO TYPE - ORGANISATIONAL TYPE
+
+	this.scopePush();
+	this.interpretNode(args);
+	this.scopePop();
+}
+
+//Variable declaration and assignment
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
+	this.interpretNode(args);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(args){
+	this.interpretNode(args[0]);
+
+	this.interpretNode({
+		type: Sketch.SketchGenNodes["assign"], 
+		arguments: [{
+			type: Sketch.SketchGenNodes["ident"], 
+			arguments: args[0].arguments[1]
+		}, args[1]]
+	});
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){
+	this.scopeRegister(args[1],args[0]);
+	return args[0];
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
+	var left = this.interpretNode(args[0], true);
+	var right = this.interpretNode(args[1]);
+
+	if(left.type != "ident"){
+		throw "ERROR: non-identity type on left side of assignment operator."
+	}
+	if(right.type != left.data.entry.type){
+		throw "ERROR: right side of assignment does not match type of identifier."
+	}
+
+	//TODO: check right matches the ident's resolved type.
+
+	this.emit(MVM.opCodes.STORER);
+	this.emit(left.data.stack);
+	this.emit(left.data.entry.address);
+
+	return right;
+}
+
+//Arithmetic Instructions
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["addition"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.FADD);
+
+	return {type: "num"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["subtraction"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.FSUB);
+
+	return {type: "num"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["multiplication"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.FMUL);
+
+	return {type: "num"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.FDIV);
+
+	return {type: "num"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.FMOD);
+
+	return {type: "num"};
+}
+
+//Arithmetic assignment Instructions.
+
+//Literals and identifiers.
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["num"]] = function(args){
+	this.emit(MVM.opCodes.LOADC);
+	this.emit(args);
+	return {type: "num"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess){
+	var d = this.scopeLookup(args);
+	if(!noaccess){
+		this.emit(MVM.opCodes.LOADR);
+		this.emit(d.stack);
+		this.emit(d.entry.address);
+	}
+	return {type: "ident", data: d};
+}
+
+Sketch.bindInstructions = function(sketchgen){
+	var out = [];
+	for (var i = 0; i < Sketch.SketchGenInstr.length; i++){
+		out[i] = Sketch.SketchGenInstr[i].bind(sketchgen);
+	}
+	return out;
 }
 ;
 // end
