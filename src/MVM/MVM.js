@@ -281,17 +281,21 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 
 					if(debugMode) console.log("FMOD: " + j + " % " + i + " = " + result);
 					break;
-				case opCodes.NCMPEQ:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					var result = (j == i) ? 1 : 0;
-					dataStore[sp] = result;
-					sp++;
-					if(debugMode) console.log("NCMPEQ: " + j + " == " + i + " = " + result);
+				case opCodes.CMPEQ:
+					//Pop two values off the stack, push true if they equate or false if they do not.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+
+					var result = (j == i);
+					
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("CMPEQ: " + j + " == " + i + " = " + result);
 					break;
-				case opCodes.NCMPLT:
+				case opCodes.CMPLT:
 					sp--;
 					var i = dataStore[sp];
 					sp--;
@@ -299,9 +303,9 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					var result = (j < i) ? 1 : 0;
 					dataStore[sp] = result;
 					sp++;
-					if(debugMode) console.log("NCMPLT: " + j + " < " + i + " = " + result);
+					if(debugMode) console.log("CMPLT: " + j + " < " + i + " = " + result);
 					break;
-				case opCodes.NCMPGT:
+				case opCodes.CMPGT:
 					sp--;
 					var i = dataStore[sp];
 					sp--;
@@ -309,7 +313,7 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					var result = (j > i) ? 1 : 0;
 					dataStore[sp] = result;
 					sp++;
-					if(debugMode) console.log("NCMPLT: " + j + " > " + i + " = " + result);
+					if(debugMode) console.log("CMPGT: " + j + " > " + i + " = " + result);
 					break;
 				case opCodes.JUMP:
 					var address = labelTable[codeStore[cp]];
@@ -343,53 +347,39 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					}
 					break;
 				case opCodes.CALL:
-					var address = codeStore[cp];
-					cp++;
-					var numArgs = codeStore[cp];
-					cp++;
+					//Call a function.
+					//USE: CALL codeAddress definitionHeight numArgs
+					//e.g. CALL 90 1 3 calls a function starting at code address 90, defined 1 scope frame above the call site with 3 parameters.
+
+					var codeAddress = codeStore[cp++];
+					var definitionHeight = codeStore[cp++];
+					var numArgs = codeStore[cp++];
+
 					var returnAddress = cp;
-					var dynamicLink = fp;
-					var args = [];
-					// Copy Args
-					var i = 0;
-					while(i < numArgs) {
-						sp--;
-						args[i] = dataStore[sp];
-						i++;
-					}
-					// Add new Frame
-					fp = sp;
-					dataStore[sp] = dynamicLink;
-					sp++;
-					dataStore[sp] = returnAddress;
-					sp++;
-					// Add args as locals
-					while(i > 0) {
-						i--;
-						dataStore[sp] = args[i];
-						sp++;
-					}
-					// jump to address
-					cp = address;
-					if(debugMode) console.log("CALL: " + address + " " + numArgs);
+
+					data.call(numArgs, definitionHeight, returnAddress);
+					cp = codeAddress;
+
+					if(debugMode) console.log("CALL: " + codeAddress + "  with " + numArgs + " arguments, return to " + returnAddress);
+					break;
+				case opCodes.RETURNVAL:
+					//Return from a function, taking the top value from the stack from the function scope and placing it onto the resumed scope.
+					//USE: RETURNVAL
+
+					var value = data.current
+									.pop();
+
+					data.funcreturn(value);
+
+					if(debugMode) console.log("RETURNVAL: " + value + " returned, exiting function.");
 					break;
 				case opCodes.RETURN:
-					var shouldReturnValue = codeStore[cp];
-					var returnValue;
-					if (shouldReturnValue) {
-						returnValue = dataStore[sp - 1]
-					}
-					var returnAddress = dataStore[fp + RA];
-					var firstElement = fp;
-					if (shouldReturnValue) {firstElement++;}
-					var elementsInFrame = sp - fp;
-					cp = returnAddress;
-					sp = fp;
-					fp = dataStore[fp + DLA];
-					dataStore[sp] = returnValue;
-					sp++;
-					dataStore.splice(firstElement,elementsInFrame);
-					if(debugMode) console.log("RETURN: " + numArgs + " returnValue: " + returnValue);
+					//Return from a function, returning no value.
+					//USE: RETURN
+
+					data.funcreturn(null);
+
+					if(debugMode) console.log("RETURN: void return, exiting function.");
 					break;
 				case opCodes.LNDRAW:
 					// Get line
@@ -449,6 +439,8 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					if(debugMode) console.log("CLEAR");
 					break;
 				case opCodes.EXIT:
+					//Ends program operation.
+					//USE: EXIT
 					cp = cl;
 					console.log("EXIT");
 					break;
@@ -604,6 +596,48 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 
 					if(debugMode) console.log("PUSHSC: entered new block level.");
 					break;
+
+				//BOOLEAN OPERANDS
+				case opCodes.BAND:
+					//Pop two values off the stack, push A && B.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+
+					var result = (j && i);
+					
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("BAND: " + j + " && " + i + " = " + result);
+					break;
+				case opCodes.BOR:
+					//Pop two values off the stack, push A || B.
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+
+					var result = (j || i);
+					
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("BOR: " + j + " || " + i + " = " + result);
+					break;
+				case opCodes.BNEG:
+					//Pop one value off the stack, push !A.
+					var i = data.current()
+							.pop();
+
+					var result = !i;
+					
+					data.current()
+						.push(result);
+
+					if(debugMode) console.log("BNEG: !" + i + " = " + result);
+					break;
 			}
 			// remove garbage from stack
 			//dataStore.splice(sp,dataStore.length - sp);
@@ -665,9 +699,9 @@ MVM.opCodes = {
 	FMOD: 	14,
 	LOADIDX:15,
 	SETIDX: 16,
-	NCMPEQ: 17,
-	NCMPLT: 18,
-	NCMPGT: 19,
+	CMPEQ: 17,
+	CMPLT: 18,
+	CMPGT: 19,
 	JUMP: 	20,
 	JUMPT: 	21, 
 	JUMPF: 	22,
@@ -684,5 +718,9 @@ MVM.opCodes = {
 	STORER: 33,
 	LOADR:	34,
 	POPSC:	35,
-	PUSHSC:	36
+	PUSHSC:	36,
+	RETURNVAL: 37,
+	BAND:	38,
+	BOR:	39 ,
+	BNEG:	40
 };

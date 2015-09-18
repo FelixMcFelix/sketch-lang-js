@@ -23,7 +23,7 @@ Sketch.SketchGen = function(){
 		programCounter++;
 	}
 
-	this.interpretNode = function(node){
+	this.interpretNode = function(node, opt){
 		if(Array.isArray(node)){
 			node.forEach(this.interpretNode.bind(this));
 		} else{
@@ -32,7 +32,7 @@ Sketch.SketchGen = function(){
 				console.log(node.arguments);
 				console.log("}");
 			}
-			return instructions[node.type](node.arguments);
+			return instructions[node.type](node.arguments, opt);
 		}
 	};
 

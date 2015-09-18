@@ -56,8 +56,6 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 		throw "ERROR: right side of assignment does not match type of identifier."
 	}
 
-	//TODO: check right matches the ident's resolved type.
-
 	this.emit(MVM.opCodes.STORER);
 	this.emit(left.data.stack);
 	this.emit(left.data.entry.address);
@@ -108,6 +106,50 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
 
 //Arithmetic assignment Instructions.
 
+//Logical Instructions
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["and"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.BAND);
+	
+	return {type: "bool"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["or"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.BOR);
+	
+	return {type: "bool"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["equal"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.CMPEQ);
+	
+	return {type: "bool"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["not_equal"]] = function(args){
+	this.interpretNode({
+		type: Sketch.SketchGenNodes["negate"],
+		arguments: {
+				type: Sketch.SketchGenNodes["equal"],
+				arguments: args
+		}
+	});
+
+	return {type: "bool"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["negate"]] = function(args){
+	this.interpretNode([args]);
+	this.emit(MVM.opCodes.BNEG);
+
+	return {type: "bool"};
+}
+
 //Literals and identifiers.
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["num"]] = function(args){
 	this.emit(MVM.opCodes.LOADC);
@@ -123,6 +165,12 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess)
 		this.emit(d.entry.address);
 	}
 	return {type: "ident", data: d};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["bool"]] = function(args){
+	this.emit(MVM.opCodes.LOADC);
+	this.emit(args);
+	return {type: "bool"};
 }
 
 Sketch.bindInstructions = function(sketchgen){

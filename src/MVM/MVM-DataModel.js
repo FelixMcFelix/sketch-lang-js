@@ -43,14 +43,16 @@ MVM.DataModel.prototype = {
 		return this;
 	},
 
-	call: function(argc, rel){
+	call: function(argc, rel, ret){
 		var prev = this.current();
 		var parent = this.relative(rel);
 		this.stack.push(new MVM.DataModel.StackFrame(parent));
 
+		var c = this.current();
+		c.returnAddr = ret;
+
 		while (argc>0){
-			this.current()
-				.setVar(argc-1, prev.pop());	
+			c.setVar(argc-1, prev.pop());	
 			argc--;
 		}
 
@@ -58,11 +60,13 @@ MVM.DataModel.prototype = {
 	},
 
 	funcreturn: function(value){
-		this.stack.pop();
+		var p = this.stack.pop();
+		
+		if (value!==null) {
+			this.stack.current().push(value);
+		};
 
-		this.stack.current.push(value);
-
-		return this;
+		return p.returnAddr;
 	}
 }
 
@@ -70,6 +74,7 @@ MVM.DataModel.StackFrame = function(parent){
 	this.parent = parent;
 	this.variables = [];
 	this.stack = [];
+	this.returnAddr = undefined;
 }
 
 MVM.DataModel.StackFrame.prototype = {
