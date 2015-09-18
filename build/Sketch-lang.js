@@ -302,7 +302,7 @@ break;
 case 13:
 this.$ = "";
 break;
-case 14: case 19: case 20:
+case 14:
 this.$ = $$[$0-1];
 break;
 case 15:
@@ -317,8 +317,11 @@ break;
 case 18:
  this.$ = "";
 break;
+case 19: case 20:
+this.$ = {type: Sketch.SketchGenNodes["block"], arguments: $$[$0-1]};
+break;
 case 21:
-this.$= [$$[$0-2],$$[$0-1]];
+this.$ = {type: Sketch.SketchGenNodes["block"], arguments: [$$[$0-2],$$[$0-1]]};
 break;
 case 28:
  this.$ = { type: "if",
@@ -1904,14 +1907,18 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 				case opCodes.POPSC:
 					//Pop off and discard the current stack data frame, equivalent to leaving a code block. (Pop Scope)
 					//USE: POPSC
-					data.enter();
+					if(debugMode){
+						console.log("POPSC: exiting scope:");
+						console.log(data.current());
+					}
+					data.exit();
 
 					if(debugMode) console.log("POPSC: exited current block level.");
 					break;
 				case opCodes.PUSHSC:
 					//Create and push a new stack data frame, equivalent to entering a code block. (Push Scope)
 					//USE: PUSHSC
-					data.exit();
+					data.enter();
 
 					if(debugMode) console.log("PUSHSC: entered new block level.");
 					break;
@@ -2017,6 +2024,8 @@ Sketch.SketchGen = function(){
 	var scopeStack = [];
 	var stackPtr = 0;
 
+	var DEBUG = true;
+
 	var instructions = Sketch.bindInstructions(this);
 
 	this.emit = function(code){
@@ -2028,7 +2037,11 @@ Sketch.SketchGen = function(){
 		if(Array.isArray(node)){
 			node.forEach(this.interpretNode.bind(this));
 		} else{
-			console.log(node);
+			if(DEBUG){
+				console.log("{\n"+Sketch.SketchGenNodes._rev[node.type]+",");
+				console.log(node.arguments);
+				console.log("}");
+			}
 			return instructions[node.type](node.arguments);
 		}
 	};
@@ -2036,11 +2049,13 @@ Sketch.SketchGen = function(){
 	this.scopePush = function(){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
+		this.emit(MVM.opCodes.PUSHSC);
 	};
 
 	this.scopePop = function(){
 		scopeStack.pop();
 		stackPtr--;
+		this.emit(MVM.opCodes.POPSC);
 
 		// TODO: Patch missed function calls (equivalent to hoisting).
 		// TODO: Handle missed variable lookups in a different manner.
@@ -2096,7 +2111,7 @@ Sketch.SketchGen = function(){
 		outBuffer = [];
 		programCounter = 0;
 		scopeStack = [];
-		this.scopePush();
+		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
 	}
 
@@ -2167,7 +2182,9 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 Sketch.SketchGen.enume = "test";
 Sketch.EnumBase = function(){
 	_count = 0;
+	this._rev = [];
 	this.propAdd = function(name){
+		this._rev[_count] = name;
 		this[name] = _count++;
 	}
 }
@@ -2178,6 +2195,9 @@ Sketch.SketchGenNodes = new Sketch.EnumBase();
 
 //Program header.
 Sketch.SketchGenNodes.propAdd("program");
+
+//Program Structure
+Sketch.SketchGenNodes.propAdd("block");
 
 //Variable declaration and assignment
 Sketch.SketchGenNodes.propAdd("variable_decl");
@@ -2190,6 +2210,7 @@ Sketch.SketchGenNodes.propAdd("addition");
 Sketch.SketchGenNodes.propAdd("subtraction");
 Sketch.SketchGenNodes.propAdd("multiplication");
 Sketch.SketchGenNodes.propAdd("division");
+Sketch.SketchGenNodes.propAdd("modulo");
 
 //Arithmetic assignment instructions.
 
@@ -2210,6 +2231,15 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["template"]] = function(args){
 //Program header.
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
 	this.interpretNode(args);
+}
+
+//Program Structure
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args){
+	//HAS NO TYPE - ORGANISATIONAL TYPE
+
+	this.scopePush();
+	this.interpretNode(args);
+	this.scopePop();
 }
 
 //Variable declaration and assignment
@@ -2241,6 +2271,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	if(left.type != "ident"){
 		throw "ERROR: non-identity type on left side of assignment operator."
 	}
+	if(right.type != left.data.entry.type){
+		throw "ERROR: right side of assignment does not match type of identifier."
+	}
 
 	//TODO: check right matches the ident's resolved type.
 
@@ -2248,7 +2281,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	this.emit(left.data.stack);
 	this.emit(left.data.entry.address);
 
-	return left;
+	return right;
 }
 
 //Arithmetic Instructions
@@ -2280,6 +2313,14 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
 	this.interpretNode(args[0]);
 	this.interpretNode(args[1]);
 	this.emit(MVM.opCodes.FDIV);
+
+	return {type: "num"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.FMOD);
 
 	return {type: "num"};
 }

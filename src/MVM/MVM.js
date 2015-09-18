@@ -589,14 +589,18 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 				case opCodes.POPSC:
 					//Pop off and discard the current stack data frame, equivalent to leaving a code block. (Pop Scope)
 					//USE: POPSC
-					data.enter();
+					if(debugMode){
+						console.log("POPSC: exiting scope:");
+						console.log(data.current());
+					}
+					data.exit();
 
 					if(debugMode) console.log("POPSC: exited current block level.");
 					break;
 				case opCodes.PUSHSC:
 					//Create and push a new stack data frame, equivalent to entering a code block. (Push Scope)
 					//USE: PUSHSC
-					data.exit();
+					data.enter();
 
 					if(debugMode) console.log("PUSHSC: entered new block level.");
 					break;

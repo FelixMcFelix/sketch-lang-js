@@ -14,6 +14,8 @@ Sketch.SketchGen = function(){
 	var scopeStack = [];
 	var stackPtr = 0;
 
+	var DEBUG = true;
+
 	var instructions = Sketch.bindInstructions(this);
 
 	this.emit = function(code){
@@ -25,7 +27,11 @@ Sketch.SketchGen = function(){
 		if(Array.isArray(node)){
 			node.forEach(this.interpretNode.bind(this));
 		} else{
-			console.log(node);
+			if(DEBUG){
+				console.log("{\n"+Sketch.SketchGenNodes._rev[node.type]+",");
+				console.log(node.arguments);
+				console.log("}");
+			}
 			return instructions[node.type](node.arguments);
 		}
 	};
@@ -33,11 +39,13 @@ Sketch.SketchGen = function(){
 	this.scopePush = function(){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
+		this.emit(MVM.opCodes.PUSHSC);
 	};
 
 	this.scopePop = function(){
 		scopeStack.pop();
 		stackPtr--;
+		this.emit(MVM.opCodes.POPSC);
 
 		// TODO: Patch missed function calls (equivalent to hoisting).
 		// TODO: Handle missed variable lookups in a different manner.
@@ -93,7 +101,7 @@ Sketch.SketchGen = function(){
 		outBuffer = [];
 		programCounter = 0;
 		scopeStack = [];
-		this.scopePush();
+		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
 	}
 

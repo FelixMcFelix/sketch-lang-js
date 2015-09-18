@@ -165,11 +165,11 @@ body
   : OPEN_BRACE CLOSE_BRACE
       { $$ = "";}
   | OPEN_BRACE statement_list CLOSE_BRACE
-     {$$ = $2;}
+      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
   | OPEN_BRACE decl_list CLOSE_BRACE
-       {$$ = $2;}
+      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
   | OPEN_BRACE decl_list statement_list CLOSE_BRACE
-         {$$= [$2,$3];} 
+      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: [$2,$3]};}
 ;
 
 statement
@@ -241,7 +241,7 @@ jump_statements
 ;
 
 decl_list
- : in-decl 
+ : in-decl
  | out-decl 
  | decl_list in-decl
     {$$= [$1,$2];} 

@@ -14,6 +14,15 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
 	this.interpretNode(args);
 }
 
+//Program Structure
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args){
+	//HAS NO TYPE - ORGANISATIONAL TYPE
+
+	this.scopePush();
+	this.interpretNode(args);
+	this.scopePop();
+}
+
 //Variable declaration and assignment
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
 	this.interpretNode(args);
@@ -43,6 +52,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	if(left.type != "ident"){
 		throw "ERROR: non-identity type on left side of assignment operator."
 	}
+	if(right.type != left.data.entry.type){
+		throw "ERROR: right side of assignment does not match type of identifier."
+	}
 
 	//TODO: check right matches the ident's resolved type.
 
@@ -50,7 +62,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	this.emit(left.data.stack);
 	this.emit(left.data.entry.address);
 
-	return left;
+	return right;
 }
 
 //Arithmetic Instructions
@@ -82,6 +94,14 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
 	this.interpretNode(args[0]);
 	this.interpretNode(args[1]);
 	this.emit(MVM.opCodes.FDIV);
+
+	return {type: "num"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
+	this.interpretNode(args[0]);
+	this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.FMOD);
 
 	return {type: "num"};
 }
