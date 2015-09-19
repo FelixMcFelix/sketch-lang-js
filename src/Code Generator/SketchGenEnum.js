@@ -16,6 +16,8 @@ Sketch.SketchGenNodes.propAdd("program");
 
 //Program Structure
 Sketch.SketchGenNodes.propAdd("block");
+Sketch.SketchGenNodes.propAdd("function");
+Sketch.SketchGenNodes.propAdd("func_call");
 
 //Variable declaration and assignment
 Sketch.SketchGenNodes.propAdd("variable_decl");
@@ -32,6 +34,14 @@ Sketch.SketchGenNodes.propAdd("modulo");
 
 //Arithmetic assignment instructions.
 
+//Logical Instructions
+Sketch.SketchGenNodes.propAdd("and");
+Sketch.SketchGenNodes.propAdd("or");
+Sketch.SketchGenNodes.propAdd("equal");
+Sketch.SketchGenNodes.propAdd("not_equal");
+Sketch.SketchGenNodes.propAdd("negate");
+
 //Literals and identifiers.
 Sketch.SketchGenNodes.propAdd("num");
 Sketch.SketchGenNodes.propAdd("ident");
+Sketch.SketchGenNodes.propAdd("bool");

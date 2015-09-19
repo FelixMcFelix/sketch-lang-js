@@ -18,12 +18,10 @@
 "do"                                   return 'DO';
 "else"                                 return 'ELSE';
 "false"                                return 'FALSE';
-"float"                                return 'FLOAT';
 "for"                                  return 'FOR';
 "function"                             return 'FUNCTION'
 "if"                                   return 'IF';
 "Line"                                 return 'LINE';
-"int"                                  return 'INT';
 "num"                                  return 'NUM';
 "not"                                  return 'NOT';
 "null"                                 return 'NULL';
@@ -120,7 +118,7 @@ declarations
 
 out-decl
   :FUNCTION declarator declaration_list func_return body 
-   {$$ = {type: "function",
+   {$$ = {type: Sketch.SketchGenNodes["function"],
           arguments: [$2,$3,$4,$5]};}
 
   ;
@@ -144,7 +142,7 @@ func_return
 
  declaration_list 
   : OPEN_PARENS CLOSE_PARENS
-      {$$ = "";} 
+      {$$ = [];} 
   | OPEN_PARENS param_list CLOSE_PARENS
       {$$ = $2;}
   ;
@@ -163,7 +161,7 @@ param_list
 
 body
   : OPEN_BRACE CLOSE_BRACE
-      { $$ = "";}
+      { $$ = [];}
   | OPEN_BRACE statement_list CLOSE_BRACE
       {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
   | OPEN_BRACE decl_list CLOSE_BRACE
@@ -373,7 +371,7 @@ exp
 
     | prim_expr OP_AND exp 
                    {$$ = { 
-                        type: 'and',
+                        type: Sketch.SketchGenNodes["and"],
                         arguments:[
                             $1, 
                             $3]
@@ -382,7 +380,7 @@ exp
 
     | prim_expr OP_OR  exp 
                    {$$ = { 
-                        type: 'or',
+                        type: Sketch.SketchGenNodes["or"],
                         arguments:[
                             $1, 
                             $3]
@@ -391,7 +389,7 @@ exp
 
     | prim_expr OP_EQ exp 
                   {$$ = { 
-                        type: 'equality',
+                        type: Sketch.SketchGenNodes["equal"],
                         arguments:[
                             $1, 
                             $3]
@@ -418,7 +416,7 @@ exp
 
     | prim_expr OP_NE exp
                    {$$ = { 
-                        type: 'not_equal',
+                        type: Sketch.SketchGenNodes["not_equal"],
                         arguments:[
                             $1, 
                             $3]
@@ -457,21 +455,23 @@ exp
 
 prim_expr
     : IDENTIFIER
-          { $$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext};}
+          { $$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext}; }
     | NUMBER 
-          { $$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)};}
-    | TRUE 
+          { $$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)}; }
+    | TRUE
+          { $$ = {type: Sketch.SketchGenNodes["bool"], arguments: true}; }
     | FALSE
-    | NOT prim_expr
-           {$$ = [$1,$2];}
+          { $$ = {type: Sketch.SketchGenNodes["bool"], arguments: false}; }
+    | EXCL prim_expr
+          { $$ = {type: Sketch.SketchGenNodes["negate"], arguments: $2};}
     | OPEN_PARENS exp CLOSE_PARENS
-             { $$ = $2;}
-    |  IDENTIFIER OPEN_PARENS init_list CLOSE_PARENS semi
-         {$$ = [$1,$3];}
+          { $$ = $2;}
+    | IDENTIFIER OPEN_PARENS init_list CLOSE_PARENS
+          { $$ = { type: Sketch.SketchGenNodes["func_call"], arguments: [$1,$3]}; }
     | OPEN_BRACE init_list CLOSE_BRACE
-         { $$ = $2;}
+          { $$ = $2;}
     | OPEN_PARENS init_list CLOSE_PARENS
-         { $$ = $2;}
+          { $$ = $2;}
 ;
 
 
@@ -491,15 +491,15 @@ declaration
 
  init_list 
    : prim_expr
+      { $$ = [$1]; }
    | init_list COMMA prim_expr
-          {$$ = [$1,$3];}
+      { $$ = $1; $$.push($3); }
    |
+      { $$ = []; }
 ;
 
 type
    :VOID 
-   |INT
-   |FLOAT 
    |NUM
    |BOOL
    |POINT
