@@ -67,6 +67,8 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 
 	this.interpret = function() {
 
+		debugger;
+
 		var dataStore = window.MVM.dataStore;
 
 		if(debugMode) console.log(codeStore);
@@ -316,8 +318,12 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					if(debugMode) console.log("CMPGT: " + j + " > " + i + " = " + result);
 					break;
 				case opCodes.JUMP:
-					var address = labelTable[codeStore[cp]];
+					//Jump to another part of the program unconditionally.
+					//USE: JUMP address
+
+					var address = codeStore[cp];
 					cp = address;
+
 					if(debugMode) console.log("JUMP: " + address);
 					break;
 				case opCodes.JUMPT:
@@ -348,11 +354,11 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					break;
 				case opCodes.CALL:
 					//Call a function.
-					//USE: CALL codeAddress definitionHeight numArgs
-					//e.g. CALL 90 1 3 calls a function starting at code address 90, defined 1 scope frame above the call site with 3 parameters.
+					//USE: CALL definitionHeight codeAddress numArgs
+					//e.g. CALL 1 90 3 calls a function starting at code address 90, defined 1 scope frame above the call site with 3 parameters.
 
-					var codeAddress = codeStore[cp++];
 					var definitionHeight = codeStore[cp++];
+					var codeAddress = codeStore[cp++];
 					var numArgs = codeStore[cp++];
 
 					var returnAddress = cp;
@@ -369,15 +375,15 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					var value = data.current
 									.pop();
 
-					data.funcreturn(value);
+					cp = data.funcreturn(value);
 
-					if(debugMode) console.log("RETURNVAL: " + value + " returned, exiting function.");
+					if(debugMode) console.log("RETURNVAL: " + value + " returned, exiting function. New code pointer is "+cp);
 					break;
 				case opCodes.RETURN:
 					//Return from a function, returning no value.
 					//USE: RETURN
 
-					data.funcreturn(null);
+					cp = data.funcreturn(null);
 
 					if(debugMode) console.log("RETURN: void return, exiting function.");
 					break;

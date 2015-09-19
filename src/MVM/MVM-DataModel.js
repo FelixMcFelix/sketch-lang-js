@@ -1,5 +1,16 @@
+/**
+ * @namespace MVM
+ */
+
 var MVM = MVM || {};
 
+
+/**
+ * @classdesc The data management subsystem of MVM. It works by maintaining a stack of scope frames - themselves parts of a wider scope tree. Variable modifications are made by chaining up parent scopes when necessary.
+ * @class MVM.DataModel
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
 MVM.DataModel = function(){
 	this.root = new MVM.DataModel.StackFrame(null);
 	this.stack = [this.root];
@@ -70,6 +81,12 @@ MVM.DataModel.prototype = {
 	}
 }
 
+/**
+ * @classdesc An individual stack frame used by the {@link MVM.DataModel}.
+ * @class MVM.DataModel.StackFrame
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
 MVM.DataModel.StackFrame = function(parent){
 	this.parent = parent;
 	this.variables = [];

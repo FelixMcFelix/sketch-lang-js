@@ -118,7 +118,7 @@ declarations
 
 out-decl
   :FUNCTION declarator declaration_list func_return body 
-   {$$ = {type: "function",
+   {$$ = {type: Sketch.SketchGenNodes["function"],
           arguments: [$2,$3,$4,$5]};}
 
   ;
@@ -142,7 +142,7 @@ func_return
 
  declaration_list 
   : OPEN_PARENS CLOSE_PARENS
-      {$$ = "";} 
+      {$$ = [];} 
   | OPEN_PARENS param_list CLOSE_PARENS
       {$$ = $2;}
   ;
@@ -161,7 +161,7 @@ param_list
 
 body
   : OPEN_BRACE CLOSE_BRACE
-      { $$ = "";}
+      { $$ = [];}
   | OPEN_BRACE statement_list CLOSE_BRACE
       {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
   | OPEN_BRACE decl_list CLOSE_BRACE
@@ -465,13 +465,13 @@ prim_expr
     | EXCL prim_expr
           { $$ = {type: Sketch.SketchGenNodes["negate"], arguments: $2};}
     | OPEN_PARENS exp CLOSE_PARENS
-             { $$ = $2;}
-    |  IDENTIFIER OPEN_PARENS init_list CLOSE_PARENS semi
-         {$$ = [$1,$3];}
+          { $$ = $2;}
+    | IDENTIFIER OPEN_PARENS init_list CLOSE_PARENS
+          { $$ = { type: Sketch.SketchGenNodes["func_call"], arguments: [$1,$3]}; }
     | OPEN_BRACE init_list CLOSE_BRACE
-         { $$ = $2;}
+          { $$ = $2;}
     | OPEN_PARENS init_list CLOSE_PARENS
-         { $$ = $2;}
+          { $$ = $2;}
 ;
 
 
@@ -491,9 +491,11 @@ declaration
 
  init_list 
    : prim_expr
+      { $$ = [$1]; }
    | init_list COMMA prim_expr
-          {$$ = [$1,$3];}
+      { $$ = $1; $$.push($3); }
    |
+      { $$ = []; }
 ;
 
 type

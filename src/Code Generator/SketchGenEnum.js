@@ -16,6 +16,8 @@ Sketch.SketchGenNodes.propAdd("program");
 
 //Program Structure
 Sketch.SketchGenNodes.propAdd("block");
+Sketch.SketchGenNodes.propAdd("function");
+Sketch.SketchGenNodes.propAdd("func_call");
 
 //Variable declaration and assignment
 Sketch.SketchGenNodes.propAdd("variable_decl");

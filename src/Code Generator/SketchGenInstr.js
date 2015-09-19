@@ -12,15 +12,78 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["template"]] = function(args){
 //Program header.
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
 	this.interpretNode(args);
+	this.emit(MVM.opCodes.EXIT);
 }
 
 //Program Structure
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args){
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args, noCodes){
 	//HAS NO TYPE - ORGANISATIONAL TYPE
 
-	this.scopePush();
+	this.scopePush(noCodes);
 	this.interpretNode(args);
-	this.scopePop();
+	this.scopePop(noCodes);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
+	//args[0] = name, args[1] = decls[], args[2] = type, args[3] = block
+	//We need to extract info, and then transform the tree to place decls inside the block.
+
+	//TEMPORARY for now I think?
+	//Jump past the function so that we don't accidentally execute it.
+	this.emit(MVM.opCodes.JUMP);
+	var patchme = this.emit(0xff);
+
+	//Extract the amount of parameters and their types - names are unimportant for the table.
+	var pTypes = [];
+	args[1].forEach(function(curr){
+		pTypes.push(curr.arguments[0]);
+	});
+
+	this.scopeRegister(args[0], "function", {returnType: args[2], paramTypes: pTypes});
+
+	this.interpretNode(
+	{
+		type: Sketch.SketchGenNodes["block"],
+		arguments: [args[1], args[3].arguments]
+	}, true
+	);
+
+	//TEMPORARY
+	this.emit(MVM.opCodes.RETURN);
+	this.patch(patchme, this.pc());
+
+	return {type: "function"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
+	//args[0] = name, args[1] = params[]
+	//Lookup name, check for function type.
+	//Compare param types, count while accessing them.
+	//Check return type against 
+
+	var dat = this.scopeLookup(args[0]);
+
+	console.log(dat);
+
+	if(dat.entry.type !== "function")
+		throw "Tried to call "+args[0]+" as though it were a function - it is a "+dat.type+"!";
+	if(args[1].length === undefined)
+		args[1].length = 0;
+	if(dat.entry.extra.paramTypes.length !== args[1].length)
+		throw "Parameter length mismatch."
+
+	for(var i = 0; i<args[1].length; i++){
+		var t1 = this.interpretNode(args[1][i]).type;
+		var t2 = dat.entry.extra.paramTypes[i];
+
+		if (t1 !== t2)
+			throw "Type mismatch on parameter "+i+" of call to "+args[0]+": EXPECTED "+t2+", not"+t1+"."
+	}
+
+	this.emit(MVM.opCodes.CALL);
+	this.emit(dat.stack);
+	this.emit(dat.entry.address);
+	this.emit(args[1].length);
 }
 
 //Variable declaration and assignment
@@ -52,7 +115,8 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	if(left.type != "ident"){
 		throw "ERROR: non-identity type on left side of assignment operator."
 	}
-	if(right.type != left.data.entry.type){
+	if(right.type != left.data.entry.type && right.data.entry.type != left.data.entry.type){
+		console.log("Ltype: "+left.data.entry.type+", Rtype: "+right.type)
 		throw "ERROR: right side of assignment does not match type of identifier."
 	}
 

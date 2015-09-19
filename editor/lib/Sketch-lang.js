@@ -260,7 +260,7 @@ var parser = {trace: function trace() { },
 yy: {},
 symbols_: {"error":2,"start":3,"program":4,"EOF":5,"declarations":6,"out-decl":7,"in-decl":8,"statement":9,"FUNCTION":10,"declarator":11,"declaration_list":12,"func_return":13,"body":14,"param":15,"ASSIGN":16,"exp":17,"semi":18,"RETURN_TYPE":19,"type":20,"OPEN_PARENS":21,"CLOSE_PARENS":22,"param_list":23,"COMMA":24,"OPEN_BRACE":25,"CLOSE_BRACE":26,"statement_list":27,"decl_list":28,"function":29,"condition_statements":30,"iteration_statements":31,"jump_statements":32,"IF":33,"ELSE":34,"WHILE":35,"DO":36,"FOR":37,"CONTINUE":38,"BREAK":39,"RETURN":40,"prim_expr":41,"PLUS":42,"MINUS":43,"MULT":44,"DIV":45,"MODULO":46,"OP_ADD_ASSIGNMENT":47,"OP_SUB_ASSIGNMENT":48,"OP_MULT_ASSIGNMENT":49,"OP_DIV_ASSIGNMENT":50,"OP_MOD_ASSIGNMENT":51,"OP_INC":52,"OP_DEC":53,"OP_AND":54,"OP_OR":55,"OP_EQ":56,"LT":57,"GT":58,"OP_NE":59,"OP_LE":60,"OP_GE":61,"IDENTIFIER":62,"NUMBER":63,"TRUE":64,"FALSE":65,"EXCL":66,"init_list":67,"SEMICOLON":68,"declaration":69,"VOID":70,"NUM":71,"BOOL":72,"POINT":73,"LINE":74,"POLYGON":75,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",10:"FUNCTION",16:"ASSIGN",19:"RETURN_TYPE",21:"OPEN_PARENS",22:"CLOSE_PARENS",24:"COMMA",25:"OPEN_BRACE",26:"CLOSE_BRACE",29:"function",33:"IF",34:"ELSE",35:"WHILE",36:"DO",37:"FOR",38:"CONTINUE",39:"BREAK",40:"RETURN",42:"PLUS",43:"MINUS",44:"MULT",45:"DIV",46:"MODULO",47:"OP_ADD_ASSIGNMENT",48:"OP_SUB_ASSIGNMENT",49:"OP_MULT_ASSIGNMENT",50:"OP_DIV_ASSIGNMENT",51:"OP_MOD_ASSIGNMENT",52:"OP_INC",53:"OP_DEC",54:"OP_AND",55:"OP_OR",56:"OP_EQ",57:"LT",58:"GT",59:"OP_NE",60:"OP_LE",61:"OP_GE",62:"IDENTIFIER",63:"NUMBER",64:"TRUE",65:"FALSE",66:"EXCL",68:"SEMICOLON",70:"VOID",71:"NUM",72:"BOOL",73:"POINT",74:"LINE",75:"POLYGON"},
-productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[30,5],[30,7],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[41,1],[41,1],[41,1],[41,1],[41,2],[41,3],[41,5],[41,3],[41,3],[18,1],[18,0],[11,1],[69,1],[69,4],[67,1],[67,3],[67,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
+productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[30,5],[30,7],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[41,1],[41,1],[41,1],[41,1],[41,2],[41,3],[41,4],[41,3],[41,3],[18,1],[18,0],[11,1],[69,1],[69,4],[67,1],[67,3],[67,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -280,7 +280,7 @@ case 4:
 this.$ = [$$[$0-1],$$[$0]];
 break;
 case 8:
-this.$ = {type: "function",
+this.$ = {type: Sketch.SketchGenNodes["function"],
           arguments: [$$[$0-3],$$[$0-2],$$[$0-1],$$[$0]]};
 break;
 case 9:
@@ -300,7 +300,7 @@ case 12:
 this.$ = "void";
 break;
 case 13:
-this.$ = "";
+this.$ = [];
 break;
 case 14:
 this.$ = $$[$0-1];
@@ -315,7 +315,7 @@ case 17:
 this.$ = {type: Sketch.SketchGenNodes["decl"], arguments: [$$[$0-1], $$[$0]]};
 break;
 case 18:
- this.$ = "";
+ this.$ = [];
 break;
 case 19: case 20:
 this.$ = {type: Sketch.SketchGenNodes["block"], arguments: $$[$0-1]};
@@ -583,17 +583,23 @@ case 71: case 73: case 74:
  this.$ = $$[$0-1];
 break;
 case 72:
-this.$ = [$$[$0-4],$$[$0-2]];
+ this.$ = { type: Sketch.SketchGenNodes["func_call"], arguments: [$$[$0-3],$$[$0-1]]}; 
 break;
 case 79:
 this.$ = [$$[$0-3],$$[$0-1]];
 break;
+case 80:
+ this.$ = [$$[$0]]; 
+break;
 case 81:
-this.$ = [$$[$0-2],$$[$0]];
+ this.$ = $$[$0-2]; this.$.push($$[$0]); 
+break;
+case 82:
+ this.$ = []; 
 break;
 }
 },
-table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{1:[3]},{5:[1,38],6:39,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{1:[2,2]},o($Vm,[2,3]),o($Vm,[2,5]),o($Vm,[2,6]),o($Vm,[2,7]),{11:40,62:$Vn},o($Vo,$Vp,{18:43,16:[1,42],68:$Vq}),o($Vr,$Vp,{18:45,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($Vr,[2,23]),o($Vr,[2,24]),o($Vr,[2,25]),o($Vr,[2,26]),o($Vr,[2,27]),{11:51,62:$Vn},o($Vx,[2,44],{16:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,51:$VD,52:$VE,53:$VF,54:$VG,55:$VH,56:$VI,57:$VJ,58:$VK,59:$VL,60:$VM,61:$VN}),{7:74,8:73,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,24:$VO,25:$V2,26:$VP,27:69,28:70,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:75,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,67:71,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{21:[1,76]},{21:[1,77]},{9:78,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{21:[1,79]},o($Vr,$Vp,{18:80,68:$Vq}),o($Vr,$Vp,{18:81,68:$Vq}),o([5,10,26,29,33,34,35,36,37,38,39,40,70,71,72,73,74,75],$Vp,{41:17,17:82,18:83,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,68:$Vq}),o($VR,[2,83]),o($VR,[2,84]),o($VR,[2,85]),o($VR,[2,86]),o($VR,[2,87]),o($VR,[2,88]),o([5,10,16,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75],[2,66],{21:[1,85]}),o($VS,[2,67]),o($VS,[2,68]),o($VS,[2,69]),{21:$V1,25:$VQ,41:86,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VT,$VO,{41:75,17:87,67:88,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),{1:[2,1]},o($Vm,[2,4]),{12:89,21:[1,90]},o($VU,[2,77]),{17:91,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VV,[2,10]),o($VS,[2,75]),o($Vr,[2,22]),{17:92,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:93,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:94,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:95,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:96,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VU,[2,17]),{17:97,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:98,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:99,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:100,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:101,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vx,[2,55]),o($Vx,[2,56]),{17:102,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:103,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:104,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:105,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:106,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:107,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:108,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:109,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:110,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,18]),{7:74,8:73,9:112,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,111],28:113,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{7:117,8:116,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,114],27:115,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{24:$VW,26:[1,118]},o($VX,[2,41]),o($VX,[2,37]),o($VX,[2,38]),o([10,21,22,24,25,26,29,33,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75],$VY,{16:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,51:$VD,52:$VE,53:$VF,54:$VG,55:$VH,56:$VI,57:$VJ,58:$VK,59:$VL,60:$VM,61:$VN}),{17:120,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:121,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{35:[1,122]},{8:123,15:9,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vr,[2,33]),o($Vr,[2,34]),o($Vr,$Vp,{18:124,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($Vr,[2,36]),o([24,26],$VO,{67:71,41:125,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VT,$VO,{41:125,67:126,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VS,[2,70]),{22:[1,127],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{22:[1,128],24:$VW},{13:129,19:[1,130],25:[2,12]},{15:133,20:16,22:[1,131],23:132,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vo,$Vp,{18:134,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($VZ,[2,45],{44:$Vu,45:$Vv,46:$Vw}),o($VZ,[2,46],{44:$Vu,45:$Vv,46:$Vw}),o($V_,[2,47],{46:$Vw}),o($V_,[2,48],{46:$Vw}),o($V$,[2,49],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,50],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,51],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,52],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,53],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,54],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,57],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,58],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,59],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,60],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,61],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,62],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,63],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,64],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,65],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($Vr,[2,19]),o($VX,[2,42]),o([21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66],[2,43],{15:9,20:16,8:116,7:117,10:$V0,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl}),o($Vr,[2,20]),{7:74,8:73,9:112,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,135],28:113,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($VX,[2,39]),o($VX,[2,40]),o($VS,[2,73]),{21:$V1,25:$VQ,41:136,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{22:[1,137],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{22:[1,138],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{21:[1,139]},o($V01,$Vp,{18:140,68:$Vq}),o($Vr,[2,35]),o($V11,$VY),{22:[1,141],24:$VW},o($VS,[2,71]),o($VS,[2,74]),{14:142,25:[1,143]},{20:144,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($V21,[2,13]),{22:[1,145],24:[1,146]},o($VT,[2,15]),o($VV,[2,9]),o($Vr,[2,21]),o($V11,[2,81]),{9:147,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{9:148,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:149,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:150,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o([5,10,16,21,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,70,71,72,73,74,75],$Vp,{18:151,68:$Vq}),o($Vo,[2,8]),{7:74,8:73,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:$VP,27:69,28:70,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{25:[2,11]},o($V21,[2,14]),{15:152,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vo,[2,28],{34:[1,153]}),o($Vr,[2,30]),{22:[1,154],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},o($V01,$Vp,{18:155,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($VS,[2,72]),o($VT,[2,16]),{9:156,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,$Vp,{18:157,68:$Vq}),{17:158,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,29]),o($Vr,[2,31]),{22:[1,159],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{9:160,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,32])],
+table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{1:[3]},{5:[1,38],6:39,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{1:[2,2]},o($Vm,[2,3]),o($Vm,[2,5]),o($Vm,[2,6]),o($Vm,[2,7]),{11:40,62:$Vn},o($Vo,$Vp,{18:43,16:[1,42],68:$Vq}),o($Vr,$Vp,{18:45,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($Vr,[2,23]),o($Vr,[2,24]),o($Vr,[2,25]),o($Vr,[2,26]),o($Vr,[2,27]),{11:51,62:$Vn},o($Vx,[2,44],{16:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,51:$VD,52:$VE,53:$VF,54:$VG,55:$VH,56:$VI,57:$VJ,58:$VK,59:$VL,60:$VM,61:$VN}),{7:74,8:73,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,24:$VO,25:$V2,26:$VP,27:69,28:70,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:75,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,67:71,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{21:[1,76]},{21:[1,77]},{9:78,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{21:[1,79]},o($Vr,$Vp,{18:80,68:$Vq}),o($Vr,$Vp,{18:81,68:$Vq}),o([5,10,26,29,33,34,35,36,37,38,39,40,70,71,72,73,74,75],$Vp,{41:17,17:82,18:83,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,68:$Vq}),o($VR,[2,83]),o($VR,[2,84]),o($VR,[2,85]),o($VR,[2,86]),o($VR,[2,87]),o($VR,[2,88]),o([5,10,16,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75],[2,66],{21:[1,85]}),o($VS,[2,67]),o($VS,[2,68]),o($VS,[2,69]),{21:$V1,25:$VQ,41:86,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VT,$VO,{41:75,17:87,67:88,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),{1:[2,1]},o($Vm,[2,4]),{12:89,21:[1,90]},o($VU,[2,77]),{17:91,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VV,[2,10]),o([5,10,21,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75],[2,75]),o($Vr,[2,22]),{17:92,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:93,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:94,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:95,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:96,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VU,[2,17]),{17:97,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:98,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:99,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:100,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:101,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vx,[2,55]),o($Vx,[2,56]),{17:102,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:103,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:104,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:105,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:106,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:107,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:108,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:109,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:110,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,18]),{7:74,8:73,9:112,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,111],28:113,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{7:117,8:116,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,114],27:115,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{24:$VW,26:[1,118]},o($VX,[2,41]),o($VX,[2,37]),o($VX,[2,38]),o([10,21,22,24,25,26,29,33,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75],$VY,{16:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,51:$VD,52:$VE,53:$VF,54:$VG,55:$VH,56:$VI,57:$VJ,58:$VK,59:$VL,60:$VM,61:$VN}),{17:120,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:121,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{35:[1,122]},{8:123,15:9,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vr,[2,33]),o($Vr,[2,34]),o($Vr,$Vp,{18:124,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($Vr,[2,36]),o([24,26],$VO,{67:71,41:125,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VT,$VO,{41:125,67:126,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VS,[2,70]),{22:[1,127],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{22:[1,128],24:$VW},{13:129,19:[1,130],25:[2,12]},{15:133,20:16,22:[1,131],23:132,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vo,$Vp,{18:134,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($VZ,[2,45],{44:$Vu,45:$Vv,46:$Vw}),o($VZ,[2,46],{44:$Vu,45:$Vv,46:$Vw}),o($V_,[2,47],{46:$Vw}),o($V_,[2,48],{46:$Vw}),o($V$,[2,49],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,50],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,51],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,52],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,53],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,54],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,57],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,58],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,59],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,60],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,61],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,62],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,63],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,64],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,65],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($Vr,[2,19]),o($VX,[2,42]),o([21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66],[2,43],{15:9,20:16,8:116,7:117,10:$V0,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl}),o($Vr,[2,20]),{7:74,8:73,9:112,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,135],28:113,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($VX,[2,39]),o($VX,[2,40]),o($VS,[2,73]),{21:$V1,25:$VQ,41:136,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{22:[1,137],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{22:[1,138],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{21:[1,139]},o($V01,$Vp,{18:140,68:$Vq}),o($Vr,[2,35]),o($V11,$VY),{22:[1,141],24:$VW},o($VS,[2,71]),o($VS,[2,74]),{14:142,25:[1,143]},{20:144,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($V21,[2,13]),{22:[1,145],24:[1,146]},o($VT,[2,15]),o($VV,[2,9]),o($Vr,[2,21]),o($V11,[2,81]),{9:147,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{9:148,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:149,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:150,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VS,[2,72]),o($Vo,[2,8]),{7:74,8:73,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:$VP,27:69,28:70,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{25:[2,11]},o($V21,[2,14]),{15:151,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vo,[2,28],{34:[1,152]}),o($Vr,[2,30]),{22:[1,153],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},o($V01,$Vp,{18:154,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($VT,[2,16]),{9:155,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,$Vp,{18:156,68:$Vq}),{17:157,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,29]),o($Vr,[2,31]),{22:[1,158],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{9:159,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,32])],
 defaultActions: {3:[2,2],38:[2,1],144:[2,11]},
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
@@ -1218,8 +1224,19 @@ if (typeof module !== 'undefined' && require.main === module) {
 ;
 // end
 
+/**
+ * @namespace MVM
+ */
+
 var MVM = MVM || {};
 
+
+/**
+ * @classdesc The data management subsystem of MVM. It works by maintaining a stack of scope frames - themselves parts of a wider scope tree. Variable modifications are made by chaining up parent scopes when necessary.
+ * @class MVM.DataModel
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
 MVM.DataModel = function(){
 	this.root = new MVM.DataModel.StackFrame(null);
 	this.stack = [this.root];
@@ -1290,6 +1307,12 @@ MVM.DataModel.prototype = {
 	}
 }
 
+/**
+ * @classdesc An individual stack frame used by the {@link MVM.DataModel}.
+ * @class MVM.DataModel.StackFrame
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
 MVM.DataModel.StackFrame = function(parent){
 	this.parent = parent;
 	this.variables = [];
@@ -1394,6 +1417,8 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 	var needsUpdate = 0;
 
 	this.interpret = function() {
+
+		debugger;
 
 		var dataStore = window.MVM.dataStore;
 
@@ -1644,8 +1669,12 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					if(debugMode) console.log("CMPGT: " + j + " > " + i + " = " + result);
 					break;
 				case opCodes.JUMP:
-					var address = labelTable[codeStore[cp]];
+					//Jump to another part of the program unconditionally.
+					//USE: JUMP address
+
+					var address = codeStore[cp];
 					cp = address;
+
 					if(debugMode) console.log("JUMP: " + address);
 					break;
 				case opCodes.JUMPT:
@@ -1676,11 +1705,11 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					break;
 				case opCodes.CALL:
 					//Call a function.
-					//USE: CALL codeAddress definitionHeight numArgs
-					//e.g. CALL 90 1 3 calls a function starting at code address 90, defined 1 scope frame above the call site with 3 parameters.
+					//USE: CALL definitionHeight codeAddress numArgs
+					//e.g. CALL 1 90 3 calls a function starting at code address 90, defined 1 scope frame above the call site with 3 parameters.
 
-					var codeAddress = codeStore[cp++];
 					var definitionHeight = codeStore[cp++];
+					var codeAddress = codeStore[cp++];
 					var numArgs = codeStore[cp++];
 
 					var returnAddress = cp;
@@ -1697,15 +1726,15 @@ MVM.VM = function(glctx, manager, codeStore, constantPool, labelTable, debugMode
 					var value = data.current
 									.pop();
 
-					data.funcreturn(value);
+					cp = data.funcreturn(value);
 
-					if(debugMode) console.log("RETURNVAL: " + value + " returned, exiting function.");
+					if(debugMode) console.log("RETURNVAL: " + value + " returned, exiting function. New code pointer is "+cp);
 					break;
 				case opCodes.RETURN:
 					//Return from a function, returning no value.
 					//USE: RETURN
 
-					data.funcreturn(null);
+					cp = data.funcreturn(null);
 
 					if(debugMode) console.log("RETURN: void return, exiting function.");
 					break;
@@ -2076,14 +2105,53 @@ Sketch.SketchGen = function(){
 
 	var instructions = Sketch.bindInstructions(this);
 
+	/**
+	 * Write a value to the next available code word.
+	 * @method Sketch.SketchGen#emit
+	 * @param {*} code - the code word or data value to be written into the next slot.
+	 * @returns {number} - the address which was just written to.
+	 * @public
+	 */
 	this.emit = function(code){
 		outBuffer.push(code);
-		programCounter++;
+		return programCounter++;
 	}
 
+	/**
+	 * Replace a code value at a given address.
+	 * @method Sketch.SketchGen#patch
+	 * @param {number} addr - the code address to be replaced.
+	 * @param {*} code - the value to write to the code store.
+	 * @returns void
+	 * @public
+	 */
+	this.patch = function(addr, code){
+		outBuffer[addr] = code;
+	}
+
+	/**
+	 * Return the current program counter value.
+	 * @method Sketch.SketchGen#pc
+	 * @returns {number} - the current program counter value.
+	 * @public
+	 */
+	this.pc = function(){
+		return programCounter;
+	}
+
+	/**
+	 * Interpret an AST node using the current code generator.
+	 * @method Sketch.SketchGen#interpretNode
+	 * @param {{type: number, arguments: *}||Array} node - the AST node to be processed in the production of the current code store.
+	 * @param {*} opt - an optional parameter to be passed to the individual node handler function.
+	 * @returns {{type: string}}
+	 * @public
+	 */
 	this.interpretNode = function(node, opt){
 		if(Array.isArray(node)){
 			node.forEach(this.interpretNode.bind(this));
+		} else if(node === ""){
+			return;
 		} else{
 			if(DEBUG){
 				console.log("{\n"+Sketch.SketchGenNodes._rev[node.type]+",");
@@ -2094,31 +2162,64 @@ Sketch.SketchGen = function(){
 		}
 	};
 
-	this.scopePush = function(){
+	/**
+	 * Push a new program scope frame.
+	 * @method Sketch.SketchGen#scopePush
+	 * @param {boolean} [noEmit=false] - specifies whether push and pop commands should not be written to the program as a side effect. This should be true for function definitions.
+	 * @returns void
+	 * @public
+	 */
+	this.scopePush = function(noEmit){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
+		if(noEmit) return;
 		this.emit(MVM.opCodes.PUSHSC);
 	};
 
-	this.scopePop = function(){
+	/**
+	 * Pop off the current program scope frame.
+	 * @method Sketch.SketchGen#scopePop
+	 * @param {boolean} [noEmit=false] - specifies whether push and pop commands should not be written to the program as a side effect. This should be true for function definitions.
+	 * @returns void
+	 * @public
+	 */
+	this.scopePop = function(noEmit){
 		scopeStack.pop();
 		stackPtr--;
+		if(noEmit) return;
 		this.emit(MVM.opCodes.POPSC);
 
 		// TODO: Patch missed function calls (equivalent to hoisting).
 		// TODO: Handle missed variable lookups in a different manner.
 	};
 
+	/**
+	 * Register a label in the current scope frame.
+	 * @method Sketch.SketchGen#scopeRegister
+	 * @param {string} label - the variable name to register.
+	 * @param {string} type - the data type that the variable will be declared with.
+	 * @param {object=} extra - any extra data that could be required when handling this label (for example, function definitions).
+	 * @returns void
+	 * @public
+	 */
 	this.scopeRegister = function(label, type, extra){
 		var curFrame = scopeStack[stackPtr];
 
 		if (!curFrame.labelTable[label]){
 			var destAddr = (type === "function") ? programCounter : curFrame.nextData++;
-			curFrame.labelTable[label] = new Sketch.SketchGen.Label(destAddr, type);
+			curFrame.labelTable[label] = new Sketch.SketchGen.Label(destAddr, type, extra);
 		} else {
 			throw "Illegal attempt to redefine variable "+label+".";
 		}
 	};
+
+	/**
+	 * Search for a reference to a label (a variable) within the program scope.
+	 * @method Sketch.SketchGen#scopeLookup
+	 * @param {string} label - the variable name to lookup.
+	 * @returns {{entry: Sketch.SketchGen.Label, stack: number}} - an object detailing the height of the referenced label, its address and its type as well as any extra data.
+	 * @public
+	 */
 
 	this.scopeLookup = function(label){
 		var stack = 0;
@@ -2141,61 +2242,30 @@ Sketch.SketchGen = function(){
 
 	/**
 	 * Compile a Sketch program.
-	 * @method Sketch.Driver#compile
-	 * @param {Object} program - an AST object generated by 
+	 * @method Sketch.SketchGen#interpret
+	 * @param {Object} program - an AST object generated by the Jison parser.
 	 * @returns number[] - an array of opcodes and literals to be parsed by MVM.
 	 * @public
 	 */
 	this.interpret = function(program){
 		this.cleanState();
 
-		// this.testStack();
-
 		this.interpretNode({type: Sketch.SketchGenNodes["program"], arguments: program});
 		return outBuffer;
 	};
 
+	/**
+	 * Reset the internal object state to allow onject reuse when compiling a new program.
+	 * @method Sketch.SketchGen#cleanSlate
+	 * @returns void
+	 * @public
+	 */
 	this.cleanState = function(){
 		outBuffer = [];
 		programCounter = 0;
 		scopeStack = [];
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
-	}
-
-	this.testStack = function(){
-		//Test stack architecture
-		this.scopeRegister("globalInt", "int")
-		this.scopePush();
-		this.scopeRegister("intA", "int");
-		this.scopeRegister("intB", "int");
-
-		console.log("Registered a higher up int as well as two closer ones.");
-
-		console.log("Performing a lookup for each entry. Expect \n\t{entry:{address:0, type:\"int\"}, stack: 1}\n\t{entry:{address:1, type:\"int\"}, stack: 0}");
-		console.log(this.scopeLookup("globalInt"));
-		console.log(this.scopeLookup("intB"));
-
-		console.log("Performing a double registration.");
-		try {
-			this.scopeRegister("intA", "int");
-			console.log("Double registration of intA succeeded, something broke!");
-		} catch (e) {
-			console.log("Double registration of intA threw, as expected.");
-		}
-
-		console.log("Testing override of globalInt with a float. Expect \n\t{entry:{address:2, type:\"float\"}, stack: 0}");
-		this.scopeRegister("globalInt", "float");
-		console.log(this.scopeLookup("globalInt"));
-
-		console.log("Testing failed lookup.");
-		console.log(this.scopeLookup("notReal"));
-
-		console.log(this.scopeStack);
-
-		this.scopePop();
-
-		//End test
 	}
 }
 
@@ -2226,8 +2296,6 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 		this.extra = extra;
 	}
 }
-
-Sketch.SketchGen.enume = "test";
 Sketch.EnumBase = function(){
 	_count = 0;
 	this._rev = [];
@@ -2246,6 +2314,8 @@ Sketch.SketchGenNodes.propAdd("program");
 
 //Program Structure
 Sketch.SketchGenNodes.propAdd("block");
+Sketch.SketchGenNodes.propAdd("function");
+Sketch.SketchGenNodes.propAdd("func_call");
 
 //Variable declaration and assignment
 Sketch.SketchGenNodes.propAdd("variable_decl");
@@ -2287,15 +2357,78 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["template"]] = function(args){
 //Program header.
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
 	this.interpretNode(args);
+	this.emit(MVM.opCodes.EXIT);
 }
 
 //Program Structure
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args){
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args, noCodes){
 	//HAS NO TYPE - ORGANISATIONAL TYPE
 
-	this.scopePush();
+	this.scopePush(noCodes);
 	this.interpretNode(args);
-	this.scopePop();
+	this.scopePop(noCodes);
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
+	//args[0] = name, args[1] = decls[], args[2] = type, args[3] = block
+	//We need to extract info, and then transform the tree to place decls inside the block.
+
+	//TEMPORARY for now I think?
+	//Jump past the function so that we don't accidentally execute it.
+	this.emit(MVM.opCodes.JUMP);
+	var patchme = this.emit(0xff);
+
+	//Extract the amount of parameters and their types - names are unimportant for the table.
+	var pTypes = [];
+	args[1].forEach(function(curr){
+		pTypes.push(curr.arguments[0]);
+	});
+
+	this.scopeRegister(args[0], "function", {returnType: args[2], paramTypes: pTypes});
+
+	this.interpretNode(
+	{
+		type: Sketch.SketchGenNodes["block"],
+		arguments: [args[1], args[3].arguments]
+	}, true
+	);
+
+	//TEMPORARY
+	this.emit(MVM.opCodes.RETURN);
+	this.patch(patchme, this.pc());
+
+	return {type: "function"};
+}
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
+	//args[0] = name, args[1] = params[]
+	//Lookup name, check for function type.
+	//Compare param types, count while accessing them.
+	//Check return type against 
+
+	var dat = this.scopeLookup(args[0]);
+
+	console.log(dat);
+
+	if(dat.entry.type !== "function")
+		throw "Tried to call "+args[0]+" as though it were a function - it is a "+dat.type+"!";
+	if(args[1].length === undefined)
+		args[1].length = 0;
+	if(dat.entry.extra.paramTypes.length !== args[1].length)
+		throw "Parameter length mismatch."
+
+	for(var i = 0; i<args[1].length; i++){
+		var t1 = this.interpretNode(args[1][i]).type;
+		var t2 = dat.entry.extra.paramTypes[i];
+
+		if (t1 !== t2)
+			throw "Type mismatch on parameter "+i+" of call to "+args[0]+": EXPECTED "+t2+", not"+t1+"."
+	}
+
+	this.emit(MVM.opCodes.CALL);
+	this.emit(dat.stack);
+	this.emit(dat.entry.address);
+	this.emit(args[1].length);
 }
 
 //Variable declaration and assignment
@@ -2327,7 +2460,8 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	if(left.type != "ident"){
 		throw "ERROR: non-identity type on left side of assignment operator."
 	}
-	if(right.type != left.data.entry.type){
+	if(right.type != left.data.entry.type && right.data.entry.type != left.data.entry.type){
+		console.log("Ltype: "+left.data.entry.type+", Rtype: "+right.type)
 		throw "ERROR: right side of assignment does not match type of identifier."
 	}
 
