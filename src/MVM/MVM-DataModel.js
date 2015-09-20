@@ -74,7 +74,7 @@ MVM.DataModel.prototype = {
 		var p = this.stack.pop();
 		
 		if (value!==null) {
-			this.stack.current().push(value);
+			this.current().push(value);
 		};
 
 		return p.returnAddr;

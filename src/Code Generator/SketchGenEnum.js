@@ -1,13 +1,41 @@
+/**
+ * @classdesc A base class to construct enumerations, without coupling the label to the constant it represents.
+ * @class Sketch.EnumBase
+ * @public
+ * @author FelixMcFelix (Kyle S.)
+ */
+
 Sketch.EnumBase = function(){
 	_count = 0;
+	/**
+	 * Array matching numbers to their original names. Not to be used unless reverse lookup is specifically required.
+	 * @name Sketch.EnumBase._rev
+	 * @type {string[]}
+	 * @protected
+	 */
 	this._rev = [];
+
+	/**
+	 * Add a new property to the enum.
+	 * @method Sketch.EnumBase#propAdd
+	 * @returns void
+	 * @public
+	 */
 	this.propAdd = function(name){
 		this._rev[_count] = name;
 		this[name] = _count++;
 	}
 }
 
-Sketch.SketchGenInstructions = [];
+/**
+ * Enum for all supported nodes within the code generator.
+ * @readonly
+ * @enum {number}
+ */
+
+/*
+Sketch.SketchGenNodes.propAdd("template");
+*/
 
 Sketch.SketchGenNodes = new Sketch.EnumBase();
 
@@ -18,6 +46,7 @@ Sketch.SketchGenNodes.propAdd("program");
 Sketch.SketchGenNodes.propAdd("block");
 Sketch.SketchGenNodes.propAdd("function");
 Sketch.SketchGenNodes.propAdd("func_call");
+Sketch.SketchGenNodes.propAdd("return");
 
 //Variable declaration and assignment
 Sketch.SketchGenNodes.propAdd("variable_decl");

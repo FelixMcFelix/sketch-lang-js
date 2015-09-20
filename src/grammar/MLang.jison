@@ -234,8 +234,9 @@ jump_statements
   : CONTINUE semi
   | BREAK semi 
   | RETURN exp  semi 
-      { $$ = [$1, $2];}
+      { $$ = {type: Sketch.SketchGenNodes["return"], arguments: $2}; }
   | RETURN  semi 
+      { $$ = {type: Sketch.SketchGenNodes["return"], arguments: null}; }
 ;
 
 decl_list

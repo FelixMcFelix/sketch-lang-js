@@ -184,17 +184,37 @@
 </div>
 <div id="texty">
 	<textarea id="mlang-box" autofocus="true" cols="50" rows="6">
-//Comment
-Line a;
-function init()->void{
-    a = {0,0} + {width, height};
-    # Inline Comment
+num ans = 0;
+num ans2 = 7;
+num ans3 = 99.65;
+
+function k (num i, bool b, num j) -> bool {
+    //This function doesn't use any of its parameters.
+    //They merely demonstrate operation and param type checking.
+    num m = 3;
+    function l (){
+        m = m + 1;
+    }
+    l();
+    l();
+    l();
+    
+    ans = ans + m;
 }
 
-function render(){
-    clear;
-    draw a;
-}
+k(4, true, 6); 
+
+//Comment
+//Line a;
+//function init()->void{
+//    a = {0,0} + {width, height};
+//    # Inline Comment
+//}
+
+//function render(){
+//    clear;
+//    draw a;
+//}
 </textarea>
 <a href="#" class="myButton" onclick="renderClick()">Render</a>
 </div>

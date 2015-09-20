@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: Sketch</title>
+    <title>JSDoc: Class: EnumBase</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Namespace: Sketch</h1>
+    <h1 class="page-title">Class: EnumBase</h1>
 
     
 
@@ -27,8 +27,12 @@
 
 <header>
     <h2>
-    Sketch
+        <span class="ancestors"><a href="Sketch.html">Sketch</a>.</span>
+    
+    EnumBase
     </h2>
+    
+        <div class="class-description">A base class to construct enumerations, without coupling the label to the constant it represents.</div>
     
 </header>
 
@@ -38,211 +42,19 @@
 
     
         
-
-        
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sketch.js.html">Sketch/Sketch.js</a>, <a href="Sketch.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="Sketch.Driver.html">Driver</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Sketch.EnumBase.html">EnumBase</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Sketch.SketchGen.html">SketchGen</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        <dl>
-            
 <dt>
-    <h4 class="name" id="SketchGenNodes"><span class="type-signature">&lt;static, readonly> </span>SketchGenNodes<span class="type-signature"> :number</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Enum for all supported nodes within the code generator.
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">number</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="SketchGenEnum.js.html">Code Generator/SketchGenEnum.js</a>, <a href="SketchGenEnum.js.html#line40">line 40</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-</dd>
-
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        <dl>
-            
-<dt>
-    <h4 class="name" id="createSketch"><span class="type-signature">&lt;static> </span>createSketch<span class="signature">(inCanvas)</span><span class="type-signature"> &rarr; {<a href="Sketch.Driver.html">Sketch.Driver</a>}</span></h4>
+    <h4 class="name" id="EnumBase"><span class="type-signature"></span>new EnumBase<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
 
     
-    <div class="description">
-        Creates an instance of the Sketch module with standard configuration.
-    </div>
-    
 
     
 
     
 
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>inCanvas</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLCanvasElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
     
 
     
@@ -275,7 +87,166 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sketch.js.html">Sketch/Sketch.js</a>, <a href="Sketch.js.html#line6">line 6</a>
+        <a href="SketchGenEnum.js.html">Code Generator/SketchGenEnum.js</a>, <a href="SketchGenEnum.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="_rev"><span class="type-signature">&lt;protected, static> </span>_rev<span class="type-signature"> :string[]</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Array matching numbers to their original names. Not to be used unless reverse lookup is specifically required.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string[]</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SketchGenEnum.js.html">Code Generator/SketchGenEnum.js</a>, <a href="SketchGenEnum.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="propAdd"><span class="type-signature"></span>propAdd<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Add a new property to the enum.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SketchGenEnum.js.html">Code Generator/SketchGenEnum.js</a>, <a href="SketchGenEnum.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -301,19 +272,11 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    void
+</div>
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Sketch.Driver.html">Sketch.Driver</a></span>
-
-
-    </dd>
-</dl>
 
         
 
