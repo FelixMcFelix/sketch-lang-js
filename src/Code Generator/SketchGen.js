@@ -56,7 +56,7 @@ Sketch.SketchGen = function(){
 	/**
 	 * Interpret an AST node using the current code generator.
 	 * @method Sketch.SketchGen#interpretNode
-	 * @param {{type: number, arguments: *}||Array} node - the AST node to be processed in the production of the current code store.
+	 * @param {{type: number, arguments: *}} node - the AST node to be processed in the production of the current code store.
 	 * @param {*} opt - an optional parameter to be passed to the individual node handler function.
 	 * @returns {{type: string}}
 	 * @public

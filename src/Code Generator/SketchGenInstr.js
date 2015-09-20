@@ -1,7 +1,7 @@
 /**
  * Table of unbound functions used in code generation.
  * These correspond to keys in {@link Sketch.SketchGenNodes}, and MUST be bound to an instance of {@link Sketch.SketchGen} to function.
- * @constant Sketch.SketchGen.ScopeStackFrame
+ * @constant Sketch.SketchGen.SketchGenInstr
  * @author FelixMcFelix (Kyle S.)
  */
 Sketch.SketchGenInstr = [];
