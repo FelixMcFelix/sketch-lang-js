@@ -1,5 +1,4 @@
 /* global Sketch */
-/* global MVM */
 /**
  * @classdesc A base class to construct enumerations, without coupling the label to the constant it represents.
  * @class Sketch.EnumBase
