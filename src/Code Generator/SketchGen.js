@@ -1,4 +1,5 @@
 /* global Sketch */
+/* global MVM */
 var Sketch = Sketch || {};
 
 /**

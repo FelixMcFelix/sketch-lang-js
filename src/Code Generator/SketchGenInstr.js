@@ -1,4 +1,6 @@
 /* global Sketch */
+/* global MVM */
+/*jshint sub: true */
 /**
  * Table of unbound functions used in code generation.
  * These correspond to keys in {@link Sketch.SketchGenNodes}, and MUST be bound to an instance of {@link Sketch.SketchGen} to function.
@@ -85,12 +87,15 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
 
 	console.log(dat);
 
-	if(dat.entry.type !== "function")
+	if(dat.entry.type !== "function"){
 		throw "Tried to call "+args[0]+" as though it were a function - it is a "+dat.type+"!";
-	if(args[1].length === undefined)
+	}
+	if(args[1].length === undefined){
 		args[1].length = 0;
-	if(dat.entry.extra.paramTypes.length !== args[1].length)
+	}
+	if(dat.entry.extra.paramTypes.length !== args[1].length){
 		throw "Parameter length mismatch.";
+	}
 
 	for(var i = 0; i<args[1].length; i++){
 		var t1 = this.interpretNode(args[1][i]).type;
@@ -116,8 +121,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["return"]] = function(args){
 		this.emit(MVM.opCodes.RETURNVAL);
 
 		var t2 = this.currentFunctionType();
-		if (t1 !== t2)
+		if (t1 !== t2){
 			throw "ERROR: expected return type of "+t2+", given "+t1+".";
+		}
 	}
 
 	return {type: null};
@@ -185,7 +191,40 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
 	return loadAndOperate(this, args, "%");
 };
 
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["increment"]] = function(args){
+	var t1 = this.interpretNode(args[0]);
+	var t2 = assignmentOperand(this, [args[0], {type: Sketch.SketchGenNodes["num"], arguments: 1}], "addition");
+
+	return Sketch.SketchGenOperandTable.lookup("++", [Sketch.SketchGenNodes._rev[args[0].type]]).value;
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["decrement"]] = function(args){
+	var t1 = this.interpretNode(args[0]);
+	var t2 = assignmentOperand(this, [args[0], {type: Sketch.SketchGenNodes["num"], arguments: 1}], "subtraction");
+
+	return Sketch.SketchGenOperandTable.lookup("--", [Sketch.SketchGenNodes._rev[args[0].type]]).value;
+};
+
 //Arithmetic assignment Instructions.
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["add_assign"]] = function(args){
+	return assignmentOperand(this, args, "addition");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["sub_assign"]] = function(args){
+	return assignmentOperand(this, args, "subtraction");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["mul_assign"]] = function(args){
+	return assignmentOperand(this, args, "multiplication");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["div_assign"]] = function(args){
+	return assignmentOperand(this, args, "division");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["mod_assign"]] = function(args){
+	return assignmentOperand(this, args, "modulo");
+};
 
 //Logical Instructions
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["and"]] = function(args){
@@ -259,6 +298,16 @@ var primitive = function(context, value, type){
 	context.emit(MVM.opCodes.LOADC);
 	context.emit(value);
 	return {type: type};
+};
+
+var assignmentOperand = function(context, nodes, operandNode){
+	context.interpretNode({
+		type: Sketch.SketchGenNodes["assign"],
+		arguments: [nodes[0], {
+			type: Sketch.SketchGenNodes[operandNode],
+			arguments: [nodes[0], nodes[1]]
+		}]
+	});
 };
 
 Sketch.bindInstructions = function(sketchgen){

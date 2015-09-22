@@ -1,4 +1,5 @@
 /* global Sketch */
+/* global MVM */
 //Class definitions for the lookup table.
 
 Sketch.MultiKeyTable = function(){
@@ -13,7 +14,7 @@ Sketch.MultiKeyTable.prototype = {
 			this.store[operand] = {};
 		}
 
-		cursor = this.store[operand];
+		var cursor = this.store[operand];
 
 		for(var i = 0; i<keys.length; i++){
 			if(!cursor[keys[i]]){
@@ -39,7 +40,7 @@ Sketch.MultiKeyTable.prototype = {
 			if(k.content){
 				return k.content;
 			} else{
-				throw "No associated entry..."
+				throw "No associated entry...";
 			}
 		} catch(e){
 			throw "Operand and key combination not found for: "+operand+" and "+keys;
@@ -127,6 +128,20 @@ Sketch.SketchGenOperandTable.add("/", ["num", "num"],
 //---//
 Sketch.SketchGenOperandTable.add("%", ["num", "num"],
 							  new Sketch.OpCheckValue("num", MVM.opCodes.FMOD)
+							);
+
+//----//
+// ++ //
+//----//
+Sketch.SketchGenOperandTable.add("++", ["ident"],
+							  new Sketch.OpCheckValue("num", null)
+							);
+
+//----//
+// -- //
+//----//
+Sketch.SketchGenOperandTable.add("--", ["ident"],
+							  new Sketch.OpCheckValue("num", null)
 							);
 
 //----//

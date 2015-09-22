@@ -426,7 +426,7 @@ this.$ = {
 break;
 case 50:
 this.$ = { 
-                        type: 'add_assign',
+                        type: Sketch.SketchGenNodes["add_assign"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -435,7 +435,7 @@ this.$ = {
 break;
 case 51:
 this.$ = { 
-                        type: 'sub_assign',
+                        type: Sketch.SketchGenNodes["sub_assign"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -444,7 +444,7 @@ this.$ = {
 break;
 case 52:
 this.$ = { 
-                        type: 'multi_assign',
+                        type: Sketch.SketchGenNodes["mul_assign"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -453,7 +453,7 @@ this.$ = {
 break;
 case 53:
 this.$ = { 
-                        type: 'div_assign',
+                        type: Sketch.SketchGenNodes["div_assign"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -462,7 +462,7 @@ this.$ = {
 break;
 case 54:
 this.$ = { 
-                        type: 'mod_assign',
+                        type: Sketch.SketchGenNodes["mod_assign"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -471,7 +471,7 @@ this.$ = {
 break;
 case 55:
 this.$ = { 
-                        type: 'increment',
+                        type: Sketch.SketchGenNodes["increment"],
                         arguments:[
                             $$[$0-1]]
                        };
@@ -479,7 +479,7 @@ this.$ = {
 break;
 case 56:
 this.$ = { 
-                        type: 'decrement',
+                        type: Sketch.SketchGenNodes["decrement"],
                         arguments:[
                             $$[$0-1]]
                        };
@@ -2175,6 +2175,7 @@ MVM.opCodes = {
 // end
 
 /* global Sketch */
+/* global MVM */
 var Sketch = Sketch || {};
 
 /**
@@ -2430,6 +2431,7 @@ Sketch.sketchGenDefaultReturns = {
 	polygon: [0,0,0,0,0,0]
 };
 /* global Sketch */
+/* global MVM */
 /**
  * @classdesc A base class to construct enumerations, without coupling the label to the constant it represents.
  * @class Sketch.EnumBase
@@ -2493,7 +2495,15 @@ Sketch.SketchGenNodes.propAdd("multiplication");
 Sketch.SketchGenNodes.propAdd("division");
 Sketch.SketchGenNodes.propAdd("modulo");
 
+Sketch.SketchGenNodes.propAdd("increment");
+Sketch.SketchGenNodes.propAdd("decrement");
+
 //Arithmetic assignment instructions.
+Sketch.SketchGenNodes.propAdd("add_assign");
+Sketch.SketchGenNodes.propAdd("sub_assign");
+Sketch.SketchGenNodes.propAdd("mul_assign");
+Sketch.SketchGenNodes.propAdd("div_assign");
+Sketch.SketchGenNodes.propAdd("mod_assign");
 
 //Logical Instructions
 Sketch.SketchGenNodes.propAdd("and");
@@ -2507,6 +2517,8 @@ Sketch.SketchGenNodes.propAdd("num");
 Sketch.SketchGenNodes.propAdd("ident");
 Sketch.SketchGenNodes.propAdd("bool");
 /* global Sketch */
+/* global MVM */
+/*jshint sub: true */
 /**
  * Table of unbound functions used in code generation.
  * These correspond to keys in {@link Sketch.SketchGenNodes}, and MUST be bound to an instance of {@link Sketch.SketchGen} to function.
@@ -2593,12 +2605,15 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
 
 	console.log(dat);
 
-	if(dat.entry.type !== "function")
+	if(dat.entry.type !== "function"){
 		throw "Tried to call "+args[0]+" as though it were a function - it is a "+dat.type+"!";
-	if(args[1].length === undefined)
+	}
+	if(args[1].length === undefined){
 		args[1].length = 0;
-	if(dat.entry.extra.paramTypes.length !== args[1].length)
+	}
+	if(dat.entry.extra.paramTypes.length !== args[1].length){
 		throw "Parameter length mismatch.";
+	}
 
 	for(var i = 0; i<args[1].length; i++){
 		var t1 = this.interpretNode(args[1][i]).type;
@@ -2624,8 +2639,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["return"]] = function(args){
 		this.emit(MVM.opCodes.RETURNVAL);
 
 		var t2 = this.currentFunctionType();
-		if (t1 !== t2)
+		if (t1 !== t2){
 			throw "ERROR: expected return type of "+t2+", given "+t1+".";
+		}
 	}
 
 	return {type: null};
@@ -2693,7 +2709,40 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
 	return loadAndOperate(this, args, "%");
 };
 
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["increment"]] = function(args){
+	var t1 = this.interpretNode(args[0]);
+	var t2 = assignmentOperand(this, [args[0], {type: Sketch.SketchGenNodes["num"], arguments: 1}], "addition");
+
+	return Sketch.SketchGenOperandTable.lookup("++", [Sketch.SketchGenNodes._rev[args[0].type]]).value;
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["decrement"]] = function(args){
+	var t1 = this.interpretNode(args[0]);
+	var t2 = assignmentOperand(this, [args[0], {type: Sketch.SketchGenNodes["num"], arguments: 1}], "subtraction");
+
+	return Sketch.SketchGenOperandTable.lookup("--", [Sketch.SketchGenNodes._rev[args[0].type]]).value;
+};
+
 //Arithmetic assignment Instructions.
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["add_assign"]] = function(args){
+	return assignmentOperand(this, args, "addition");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["sub_assign"]] = function(args){
+	return assignmentOperand(this, args, "subtraction");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["mul_assign"]] = function(args){
+	return assignmentOperand(this, args, "multiplication");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["div_assign"]] = function(args){
+	return assignmentOperand(this, args, "division");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["mod_assign"]] = function(args){
+	return assignmentOperand(this, args, "modulo");
+};
 
 //Logical Instructions
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["and"]] = function(args){
@@ -2769,6 +2818,16 @@ var primitive = function(context, value, type){
 	return {type: type};
 };
 
+var assignmentOperand = function(context, nodes, operandNode){
+	context.interpretNode({
+		type: Sketch.SketchGenNodes["assign"],
+		arguments: [nodes[0], {
+			type: Sketch.SketchGenNodes[operandNode],
+			arguments: [nodes[0], nodes[1]]
+		}]
+	});
+};
+
 Sketch.bindInstructions = function(sketchgen){
 	var out = [];
 	for (var i = 0; i < Sketch.SketchGenInstr.length; i++){
@@ -2777,6 +2836,7 @@ Sketch.bindInstructions = function(sketchgen){
 	return out;
 };
 /* global Sketch */
+/* global MVM */
 //Class definitions for the lookup table.
 
 Sketch.MultiKeyTable = function(){
@@ -2791,7 +2851,7 @@ Sketch.MultiKeyTable.prototype = {
 			this.store[operand] = {};
 		}
 
-		cursor = this.store[operand];
+		var cursor = this.store[operand];
 
 		for(var i = 0; i<keys.length; i++){
 			if(!cursor[keys[i]]){
@@ -2817,7 +2877,7 @@ Sketch.MultiKeyTable.prototype = {
 			if(k.content){
 				return k.content;
 			} else{
-				throw "No associated entry..."
+				throw "No associated entry...";
 			}
 		} catch(e){
 			throw "Operand and key combination not found for: "+operand+" and "+keys;
@@ -2905,6 +2965,20 @@ Sketch.SketchGenOperandTable.add("/", ["num", "num"],
 //---//
 Sketch.SketchGenOperandTable.add("%", ["num", "num"],
 							  new Sketch.OpCheckValue("num", MVM.opCodes.FMOD)
+							);
+
+//----//
+// ++ //
+//----//
+Sketch.SketchGenOperandTable.add("++", ["ident"],
+							  new Sketch.OpCheckValue("num", null)
+							);
+
+//----//
+// -- //
+//----//
+Sketch.SketchGenOperandTable.add("--", ["ident"],
+							  new Sketch.OpCheckValue("num", null)
 							);
 
 //----//

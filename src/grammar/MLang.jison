@@ -96,7 +96,7 @@
 start 
  : program EOF
     {
-           {typeof console !== 'undefined' ? console.log("%j",$1) : print($1); console.log(Sketch.SketchGen.enume);
+           {typeof console !== 'undefined' ? console.log("%j",$1) : print($1);
           return $1;
            }
         }
@@ -311,7 +311,7 @@ exp
 
     | prim_expr OP_ADD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'add_assign',
+                        type: Sketch.SketchGenNodes["add_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -320,7 +320,7 @@ exp
 
     | prim_expr OP_SUB_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'sub_assign',
+                        type: Sketch.SketchGenNodes["sub_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -329,7 +329,7 @@ exp
 
     | prim_expr OP_MULT_ASSIGNMENT exp
                    {$$ = { 
-                        type: 'multi_assign',
+                        type: Sketch.SketchGenNodes["mul_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -338,7 +338,7 @@ exp
 
     | prim_expr OP_DIV_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'div_assign',
+                        type: Sketch.SketchGenNodes["div_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -347,7 +347,7 @@ exp
 
     | prim_expr OP_MOD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'mod_assign',
+                        type: Sketch.SketchGenNodes["mod_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -356,7 +356,7 @@ exp
 
     | prim_expr OP_INC  
                    {$$ = { 
-                        type: 'increment',
+                        type: Sketch.SketchGenNodes["increment"],
                         arguments:[
                             $1]
                        };
@@ -364,7 +364,7 @@ exp
 
     | prim_expr OP_DEC  
                    {$$ = { 
-                        type: 'decrement',
+                        type: Sketch.SketchGenNodes["decrement"],
                         arguments:[
                             $1]
                        };

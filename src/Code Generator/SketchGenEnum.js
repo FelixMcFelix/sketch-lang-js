@@ -1,4 +1,5 @@
 /* global Sketch */
+/* global MVM */
 /**
  * @classdesc A base class to construct enumerations, without coupling the label to the constant it represents.
  * @class Sketch.EnumBase
@@ -62,7 +63,15 @@ Sketch.SketchGenNodes.propAdd("multiplication");
 Sketch.SketchGenNodes.propAdd("division");
 Sketch.SketchGenNodes.propAdd("modulo");
 
+Sketch.SketchGenNodes.propAdd("increment");
+Sketch.SketchGenNodes.propAdd("decrement");
+
 //Arithmetic assignment instructions.
+Sketch.SketchGenNodes.propAdd("add_assign");
+Sketch.SketchGenNodes.propAdd("sub_assign");
+Sketch.SketchGenNodes.propAdd("mul_assign");
+Sketch.SketchGenNodes.propAdd("div_assign");
+Sketch.SketchGenNodes.propAdd("mod_assign");
 
 //Logical Instructions
 Sketch.SketchGenNodes.propAdd("and");
