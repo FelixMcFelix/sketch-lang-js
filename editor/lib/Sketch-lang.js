@@ -16,6 +16,7 @@ Sketch.createSketch = function(inCanvas){
 	out.addShaderURL("shaders/sketch-default.json");
 	return out;
 };
+/* global Sketch */
 /**
  * @classdesc The driver class for the sketch module. Initialise via Sketch.createSketch(...) for default configs.
  * @class Sketch.Driver
@@ -2173,7 +2174,7 @@ MVM.opCodes = {
 ;
 // end
 
-
+/* global Sketch */
 var Sketch = Sketch || {};
 
 /**
@@ -2419,6 +2420,7 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 		this.extra = extra;
 	}
 }
+/* global Sketch */
 Sketch.sketchGenDefaultReturns = {
 	void: null,
 	num: 0,
@@ -2427,6 +2429,7 @@ Sketch.sketchGenDefaultReturns = {
 	line: [0,0,0,0],
 	polygon: [0,0,0,0,0,0]
 };
+/* global Sketch */
 /**
  * @classdesc A base class to construct enumerations, without coupling the label to the constant it represents.
  * @class Sketch.EnumBase
@@ -2454,7 +2457,7 @@ Sketch.EnumBase = function(){
 		this._rev[_count] = name;
 		this[name] = _count++;
 	}
-}
+};
 
 /**
  * Enum for all supported nodes within the code generator.
@@ -2503,6 +2506,7 @@ Sketch.SketchGenNodes.propAdd("negate");
 Sketch.SketchGenNodes.propAdd("num");
 Sketch.SketchGenNodes.propAdd("ident");
 Sketch.SketchGenNodes.propAdd("bool");
+/* global Sketch */
 /**
  * Table of unbound functions used in code generation.
  * These correspond to keys in {@link Sketch.SketchGenNodes}, and MUST be bound to an instance of {@link Sketch.SketchGen} to function.
@@ -2594,14 +2598,14 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
 	if(args[1].length === undefined)
 		args[1].length = 0;
 	if(dat.entry.extra.paramTypes.length !== args[1].length)
-		throw "Parameter length mismatch."
+		throw "Parameter length mismatch.";
 
 	for(var i = 0; i<args[1].length; i++){
 		var t1 = this.interpretNode(args[1][i]).type;
 		var t2 = dat.entry.extra.paramTypes[i];
 
 		if (t1 !== t2)
-			throw "Type mismatch on parameter "+i+" of call to "+args[0]+": EXPECTED "+t2+", not"+t1+"."
+			throw "Type mismatch on parameter "+i+" of call to "+args[0]+": EXPECTED "+t2+", not"+t1+".";
 	}
 
 	this.emit(MVM.opCodes.CALL);
@@ -2654,11 +2658,11 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	var right = this.interpretNode(args[1]);
 
 	if(left.type != "ident"){
-		throw "ERROR: non-identity type on left side of assignment operator."
+		throw "ERROR: non-identity type on left side of assignment operator.";
 	}
 	if(right.type != left.data.entry.type && right.data.entry.type != left.data.entry.type){
 		console.log("Ltype: "+left.data.entry.type+", Rtype: "+right.type)
-		throw "ERROR: right side of assignment does not match type of identifier."
+		throw "ERROR: right side of assignment does not match type of identifier.";
 	}
 
 	this.emit(MVM.opCodes.STORER);
@@ -2722,9 +2726,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["negate"]] = function(args){
 
 //Literals and identifiers.
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["num"]] = function(args){
-	this.emit(MVM.opCodes.LOADC);
-	this.emit(args);
-	return {type: "num"};
+	return primitive(this, args, "num");
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess){
@@ -2738,9 +2740,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess)
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["bool"]] = function(args){
-	this.emit(MVM.opCodes.LOADC);
-	this.emit(args);
-	return {type: "bool"};
+	return primitive(this, args, "bool");
 };
 
 //HELPERS
@@ -2763,6 +2763,12 @@ var loadAndOperate = function(context, nodes, operand){
 	return o.value;
 };
 
+var primitive = function(context, value, type){
+	context.emit(MVM.opCodes.LOADC);
+	context.emit(value);
+	return {type: type};
+};
+
 Sketch.bindInstructions = function(sketchgen){
 	var out = [];
 	for (var i = 0; i < Sketch.SketchGenInstr.length; i++){
@@ -2770,11 +2776,12 @@ Sketch.bindInstructions = function(sketchgen){
 	}
 	return out;
 };
+/* global Sketch */
 //Class definitions for the lookup table.
 
 Sketch.MultiKeyTable = function(){
 	this.store = {};
-}
+};
 
 Sketch.MultiKeyTable.prototype = {
 	add: function(operand, keys, value){
@@ -2816,24 +2823,24 @@ Sketch.MultiKeyTable.prototype = {
 			throw "Operand and key combination not found for: "+operand+" and "+keys;
 		}
 	}
-}
+};
 
 Sketch.MultiKeyTableEntry = function(table, operand, keys, value){
 	this.parent = table;
 	this.keys = keys;
 	this.value = value;
-}
+};
 
 Sketch.MultiKeyTableEntry.prototype = {
 	reflexive: function(){
 		this.parent.add(this.keys.reverse(), this.value);
 	}
-}
+};
 
 Sketch.OpCheckValue = function(type, code){
 	this.type = type;
 	this.code = code;
-}
+};
 
 Sketch.SketchGenOperandTable = new Sketch.MultiKeyTable();
 

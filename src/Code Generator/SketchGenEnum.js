@@ -1,3 +1,4 @@
+/* global Sketch */
 /**
  * @classdesc A base class to construct enumerations, without coupling the label to the constant it represents.
  * @class Sketch.EnumBase
@@ -25,7 +26,7 @@ Sketch.EnumBase = function(){
 		this._rev[_count] = name;
 		this[name] = _count++;
 	}
-}
+};
 
 /**
  * Enum for all supported nodes within the code generator.

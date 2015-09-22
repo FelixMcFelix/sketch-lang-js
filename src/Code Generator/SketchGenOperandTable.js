@@ -1,8 +1,9 @@
+/* global Sketch */
 //Class definitions for the lookup table.
 
 Sketch.MultiKeyTable = function(){
 	this.store = {};
-}
+};
 
 Sketch.MultiKeyTable.prototype = {
 	add: function(operand, keys, value){
@@ -44,24 +45,24 @@ Sketch.MultiKeyTable.prototype = {
 			throw "Operand and key combination not found for: "+operand+" and "+keys;
 		}
 	}
-}
+};
 
 Sketch.MultiKeyTableEntry = function(table, operand, keys, value){
 	this.parent = table;
 	this.keys = keys;
 	this.value = value;
-}
+};
 
 Sketch.MultiKeyTableEntry.prototype = {
 	reflexive: function(){
 		this.parent.add(this.keys.reverse(), this.value);
 	}
-}
+};
 
 Sketch.OpCheckValue = function(type, code){
 	this.type = type;
 	this.code = code;
-}
+};
 
 Sketch.SketchGenOperandTable = new Sketch.MultiKeyTable();
 

@@ -1,3 +1,4 @@
+/* global Sketch */
 /**
  * @classdesc The driver class for the sketch module. Initialise via Sketch.createSketch(...) for default configs.
  * @class Sketch.Driver

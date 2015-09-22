@@ -1,3 +1,4 @@
+/* global Sketch */
 Sketch.sketchGenDefaultReturns = {
 	void: null,
 	num: 0,
