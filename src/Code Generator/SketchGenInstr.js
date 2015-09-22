@@ -1,6 +1,50 @@
 /* global Sketch */
 /* global MVM */
 /*jshint sub: true */
+
+//HELPERS
+var loadAndOperate = function(context, nodes, operand){
+	var types = [];
+	for(var i = 0; i< nodes.length; i++){
+		var n = context.interpretNode(nodes[i]);
+
+		if(n.type === "ident"){
+			types.push(n.data.entry.type);
+		} else{
+			types.push(n.type);
+		}
+	}
+
+	var o = Sketch.SketchGenOperandTable.lookup(operand, types);
+
+	context.emit(o.value.code);
+
+	return o.value;
+};
+
+var primitive = function(context, value, type){
+	context.emit(MVM.opCodes.LOADC);
+	context.emit(value);
+	return {type: type};
+};
+
+var assignmentOperand = function(context, nodes, operandNode){
+	context.interpretNode({
+		type: Sketch.SketchGenNodes["assign"],
+		arguments: [nodes[0], {
+			type: Sketch.SketchGenNodes[operandNode],
+			arguments: [nodes[0], nodes[1]]
+		}]
+	});
+};
+
+var increment = function(context, nodes, value){
+	context.interpretNode(nodes[0]);
+	assignmentOperand(context, [nodes[0], {type: Sketch.SketchGenNodes["num"], arguments: value}], "addition");
+
+	return Sketch.SketchGenOperandTable.lookup((value>0)?"++":"--", [Sketch.SketchGenNodes._rev[nodes[0].type]]).value;
+};
+
 /**
  * Table of unbound functions used in code generation.
  * These correspond to keys in {@link Sketch.SketchGenNodes}, and MUST be bound to an instance of {@link Sketch.SketchGen} to function.
@@ -101,8 +145,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
 		var t1 = this.interpretNode(args[1][i]).type;
 		var t2 = dat.entry.extra.paramTypes[i];
 
-		if (t1 !== t2)
+		if (t1 !== t2){
 			throw "Type mismatch on parameter "+i+" of call to "+args[0]+": EXPECTED "+t2+", not"+t1+".";
+		}
 	}
 
 	this.emit(MVM.opCodes.CALL);
@@ -127,7 +172,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["return"]] = function(args){
 	}
 
 	return {type: null};
-}
+};
 
 //Variable declaration and assignment
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
@@ -155,11 +200,11 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	var left = this.interpretNode(args[0], true);
 	var right = this.interpretNode(args[1]);
 
-	if(left.type != "ident"){
+	if(left.type !== "ident"){
 		throw "ERROR: non-identity type on left side of assignment operator.";
 	}
-	if(right.type != left.data.entry.type && right.data.entry.type != left.data.entry.type){
-		console.log("Ltype: "+left.data.entry.type+", Rtype: "+right.type)
+	if(right.type !== left.data.entry.type && right.data.entry.type !== left.data.entry.type){
+		console.log("Ltype: "+left.data.entry.type+", Rtype: "+right.type);
 		throw "ERROR: right side of assignment does not match type of identifier.";
 	}
 
@@ -192,17 +237,11 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["increment"]] = function(args){
-	var t1 = this.interpretNode(args[0]);
-	var t2 = assignmentOperand(this, [args[0], {type: Sketch.SketchGenNodes["num"], arguments: 1}], "addition");
-
-	return Sketch.SketchGenOperandTable.lookup("++", [Sketch.SketchGenNodes._rev[args[0].type]]).value;
+	return increment(this, args, 1);
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["decrement"]] = function(args){
-	var t1 = this.interpretNode(args[0]);
-	var t2 = assignmentOperand(this, [args[0], {type: Sketch.SketchGenNodes["num"], arguments: 1}], "subtraction");
-
-	return Sketch.SketchGenOperandTable.lookup("--", [Sketch.SketchGenNodes._rev[args[0].type]]).value;
+	return increment(this, args, -1);
 };
 
 //Arithmetic assignment Instructions.
@@ -272,42 +311,6 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess)
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["bool"]] = function(args){
 	return primitive(this, args, "bool");
-};
-
-//HELPERS
-var loadAndOperate = function(context, nodes, operand){
-	var types = [];
-	for(var i = 0; i< nodes.length; i++){
-		var n = context.interpretNode(nodes[i]);
-
-		if(n.type === "ident"){
-			types.push(n.data.entry.type);
-		} else{
-			types.push(n.type);
-		}
-	}
-
-	var o = Sketch.SketchGenOperandTable.lookup(operand, types);
-
-	context.emit(o.value.code);
-
-	return o.value;
-};
-
-var primitive = function(context, value, type){
-	context.emit(MVM.opCodes.LOADC);
-	context.emit(value);
-	return {type: type};
-};
-
-var assignmentOperand = function(context, nodes, operandNode){
-	context.interpretNode({
-		type: Sketch.SketchGenNodes["assign"],
-		arguments: [nodes[0], {
-			type: Sketch.SketchGenNodes[operandNode],
-			arguments: [nodes[0], nodes[1]]
-		}]
-	});
 };
 
 Sketch.bindInstructions = function(sketchgen){
