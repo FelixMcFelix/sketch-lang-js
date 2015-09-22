@@ -1242,7 +1242,7 @@ var MVM = MVM || {};
 MVM.DataModel = function(){
 	this.root = new MVM.StackFrame(null);
 	this.stack = [this.root];
-}
+};
 
 MVM.DataModel.prototype = {
 	/**
@@ -1273,7 +1273,9 @@ MVM.DataModel.prototype = {
 			count--;
 		}
 
-		if(count>0) throw "Invalid relative call - too few parents.";
+		if(count>0){
+			throw "Invalid relative call - too few parents.";
+		}
 
 		return cursor;
 	},
@@ -1301,7 +1303,7 @@ MVM.DataModel.prototype = {
 		if(this.current() !== this.root){
 			this.stack[this.stack.length - 1] = this.current().parent;
 		} else{
-			throw "Tried to exit from scope past root level."
+			throw "Tried to exit from scope past root level.";
 		}
 
 		return this;
@@ -1344,11 +1346,11 @@ MVM.DataModel.prototype = {
 		
 		if (value!==null) {
 			this.current().push(value);
-		};
+		}
 
 		return p.returnAddr;
 	}
-}
+};
 
 /**
  * @classdesc An individual stack frame used by the {@link MVM.DataModel}.
@@ -1361,7 +1363,7 @@ MVM.StackFrame = function(parent){
 	this.variables = [];
 	this.stack = [];
 	this.returnAddr = undefined;
-}
+};
 
 MVM.StackFrame.prototype = {
 	/**
@@ -1425,7 +1427,7 @@ MVM.StackFrame.prototype = {
 	getVar: function(varNo){
 		return this.variables[varNo];
 	}
-}
+};
 /*
 * Sketch Virtual Machine
 * Darren Findlay
@@ -2179,6 +2181,7 @@ MVM.opCodes = {
 // end
 
 /* global MVM */
+/*jshint sub: true */
 var Sketch = Sketch || {};
 
 /**
@@ -2209,7 +2212,7 @@ Sketch.SketchGen = function(){
 	this.emit = function(code){
 		outBuffer.push(code);
 		return programCounter++;
-	}
+	};
 
 	/**
 	 * Replace a code value at a given address.
@@ -2221,7 +2224,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.patch = function(addr, code){
 		outBuffer[addr] = code;
-	}
+	};
 
 	/**
 	 * Return the current program counter value.
@@ -2231,7 +2234,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.pc = function(){
 		return programCounter;
-	}
+	};
 
 	/**
 	 * Interpret an AST node using the current code generator.
@@ -2266,7 +2269,9 @@ Sketch.SketchGen = function(){
 	this.scopePush = function(noEmit){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
-		if(noEmit) return;
+		if(noEmit){
+			return;
+		}
 		this.emit(MVM.opCodes.PUSHSC);
 	};
 
@@ -2280,7 +2285,9 @@ Sketch.SketchGen = function(){
 	this.scopePop = function(noEmit){
 		scopeStack.pop();
 		stackPtr--;
-		if(noEmit) return;
+		if(noEmit){
+			return;
+		}
 		this.emit(MVM.opCodes.POPSC);
 
 		// TODO: Patch missed function calls (equivalent to hoisting).
@@ -2328,8 +2335,9 @@ Sketch.SketchGen = function(){
 			}
 		}
 
-		if (out === null)
+		if (out === null){
 			throw "BAD LOOKUP.";
+		}
 
 		return out;
 	};
@@ -2361,7 +2369,7 @@ Sketch.SketchGen = function(){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
 		functionStack = [];
-	}
+	};
 
 	/**
 	 * Tell the generator that we are beginning a function definition, so that we can ensure that returns have the right type.
@@ -2372,7 +2380,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.beginFunction = function(type){
 		functionStack.push(type);
-	}
+	};
 
 	/**
 	 * Tell the generator that we are ending a function definition.
@@ -2382,7 +2390,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.endFunction = function(){
 		functionStack.pop();
-	}
+	};
 
 	/**
 	 * Request the type of the current function definition.
@@ -2391,10 +2399,11 @@ Sketch.SketchGen = function(){
 	 * @public
 	 */
 	this.currentFunctionType = function(){
-		if(functionStack.length === 0)
+		if(functionStack.length === 0){
 			throw "Not currently defining a function, can't find its type!"
+		}
 		return functionStack[functionStack.length-1];
-	}
+	};
 }
 
 /**
@@ -2406,7 +2415,7 @@ Sketch.SketchGen = function(){
 Sketch.SketchGen.ScopeStackFrame = function(){
 	this.labelTable = {};
 	this.nextData = 0;
-}
+};
 
 /**
  * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen.ScopeStackFrame} label table.
@@ -2423,7 +2432,7 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 	if(extra){
 		this.extra = extra;
 	}
-}
+};
 /* global Sketch */
 Sketch.sketchGenDefaultReturns = {
 	void: null,
@@ -2442,7 +2451,7 @@ Sketch.sketchGenDefaultReturns = {
  */
 
 Sketch.EnumBase = function(){
-	_count = 0;
+	var _count = 0;
 	/**
 	 * Array matching numbers to their original names. Not to be used unless reverse lookup is specifically required.
 	 * @name Sketch.EnumBase._rev
@@ -2460,7 +2469,7 @@ Sketch.EnumBase = function(){
 	this.propAdd = function(name){
 		this._rev[_count] = name;
 		this[name] = _count++;
-	}
+	};
 };
 
 /**
@@ -2533,11 +2542,11 @@ var createNode = function(type, args){
 		type: Sketch.SketchGenNodes[type],
 		arguments: args
 	};
-}
+};
 
 var boolNegateNode = function(node){
 	return createNode("negate", node);
-}
+};
 
 
 var loadAndOperate = function(context, nodes, operand){
@@ -2631,12 +2640,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 
 	this.scopeRegister(args[0], "function", {returnType: args[2], paramTypes: pTypes});
 
-	this.interpretNode(
-		{
-			type: Sketch.SketchGenNodes["block"],
-			arguments: [args[1], args[3].arguments]
-		}, true
-	);
+	this.interpretNode(createNode("block", [args[1], args[3].arguments]), true);
 
 	//All functions return a null value for their type automatically.
 	//This allows runoff at the end, implicit zero return,
@@ -2647,10 +2651,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 	if(defaultRet === null){
 		this.emit(MVM.opCodes.RETURN);
 	} else{
-		this.interpretNode({
-			type: Sketch.SketchGenNodes[args[2]],
-			arguments: defaultRet
-		});
+		this.interpretNode(createNode(args[2], defaultRet));
 		this.emit(MVM.opCodes.RETURNVAL);
 	}
 	
@@ -2722,13 +2723,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(args){
 	this.interpretNode(args[0]);
 
-	this.interpretNode({
-		type: Sketch.SketchGenNodes["assign"], 
-		arguments: [{
-			type: Sketch.SketchGenNodes["ident"], 
-			arguments: args[0].arguments[1]
-		}, args[1]]
-	});
+	this.interpretNode(createNode("assign", 
+			[createNode("ident", args[0].arguments[1]), args[1]]
+		));
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){

@@ -8,11 +8,11 @@ var createNode = function(type, args){
 		type: Sketch.SketchGenNodes[type],
 		arguments: args
 	};
-}
+};
 
 var boolNegateNode = function(node){
 	return createNode("negate", node);
-}
+};
 
 
 var loadAndOperate = function(context, nodes, operand){
@@ -106,12 +106,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 
 	this.scopeRegister(args[0], "function", {returnType: args[2], paramTypes: pTypes});
 
-	this.interpretNode(
-		{
-			type: Sketch.SketchGenNodes["block"],
-			arguments: [args[1], args[3].arguments]
-		}, true
-	);
+	this.interpretNode(createNode("block", [args[1], args[3].arguments]), true);
 
 	//All functions return a null value for their type automatically.
 	//This allows runoff at the end, implicit zero return,
@@ -122,10 +117,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 	if(defaultRet === null){
 		this.emit(MVM.opCodes.RETURN);
 	} else{
-		this.interpretNode({
-			type: Sketch.SketchGenNodes[args[2]],
-			arguments: defaultRet
-		});
+		this.interpretNode(createNode(args[2], defaultRet));
 		this.emit(MVM.opCodes.RETURNVAL);
 	}
 	
@@ -197,13 +189,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(args){
 	this.interpretNode(args[0]);
 
-	this.interpretNode({
-		type: Sketch.SketchGenNodes["assign"], 
-		arguments: [{
-			type: Sketch.SketchGenNodes["ident"], 
-			arguments: args[0].arguments[1]
-		}, args[1]]
-	});
+	this.interpretNode(createNode("assign", [createNode("ident", args[0].arguments[1]), args[1]]));
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){

@@ -1,4 +1,5 @@
 /* global MVM */
+/*jshint sub: true */
 var Sketch = Sketch || {};
 
 /**
@@ -29,7 +30,7 @@ Sketch.SketchGen = function(){
 	this.emit = function(code){
 		outBuffer.push(code);
 		return programCounter++;
-	}
+	};
 
 	/**
 	 * Replace a code value at a given address.
@@ -41,7 +42,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.patch = function(addr, code){
 		outBuffer[addr] = code;
-	}
+	};
 
 	/**
 	 * Return the current program counter value.
@@ -51,7 +52,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.pc = function(){
 		return programCounter;
-	}
+	};
 
 	/**
 	 * Interpret an AST node using the current code generator.
@@ -86,7 +87,9 @@ Sketch.SketchGen = function(){
 	this.scopePush = function(noEmit){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr++;
-		if(noEmit) return;
+		if(noEmit){
+			return;
+		}
 		this.emit(MVM.opCodes.PUSHSC);
 	};
 
@@ -100,7 +103,9 @@ Sketch.SketchGen = function(){
 	this.scopePop = function(noEmit){
 		scopeStack.pop();
 		stackPtr--;
-		if(noEmit) return;
+		if(noEmit){
+			return;
+		}
 		this.emit(MVM.opCodes.POPSC);
 
 		// TODO: Patch missed function calls (equivalent to hoisting).
@@ -148,8 +153,9 @@ Sketch.SketchGen = function(){
 			}
 		}
 
-		if (out === null)
+		if (out === null){
 			throw "BAD LOOKUP.";
+		}
 
 		return out;
 	};
@@ -181,7 +187,7 @@ Sketch.SketchGen = function(){
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
 		functionStack = [];
-	}
+	};
 
 	/**
 	 * Tell the generator that we are beginning a function definition, so that we can ensure that returns have the right type.
@@ -192,7 +198,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.beginFunction = function(type){
 		functionStack.push(type);
-	}
+	};
 
 	/**
 	 * Tell the generator that we are ending a function definition.
@@ -202,7 +208,7 @@ Sketch.SketchGen = function(){
 	 */
 	this.endFunction = function(){
 		functionStack.pop();
-	}
+	};
 
 	/**
 	 * Request the type of the current function definition.
@@ -211,10 +217,11 @@ Sketch.SketchGen = function(){
 	 * @public
 	 */
 	this.currentFunctionType = function(){
-		if(functionStack.length === 0)
+		if(functionStack.length === 0){
 			throw "Not currently defining a function, can't find its type!"
+		}
 		return functionStack[functionStack.length-1];
-	}
+	};
 }
 
 /**
@@ -226,7 +233,7 @@ Sketch.SketchGen = function(){
 Sketch.SketchGen.ScopeStackFrame = function(){
 	this.labelTable = {};
 	this.nextData = 0;
-}
+};
 
 /**
  * @classdesc Simple semantic class for use in the {@link Sketch.SketchGen.ScopeStackFrame} label table.
@@ -243,4 +250,4 @@ Sketch.SketchGen.Label = function(addr, type, extra){
 	if(extra){
 		this.extra = extra;
 	}
-}
+};
