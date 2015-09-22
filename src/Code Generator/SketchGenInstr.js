@@ -3,6 +3,18 @@
 /*jshint sub: true */
 
 //HELPERS
+var createNode = function(type, args){
+	return {
+		type: Sketch.SketchGenNodes[type],
+		arguments: args
+	};
+}
+
+var boolNegateNode = function(node){
+	return createNode("negate", node);
+}
+
+
 var loadAndOperate = function(context, nodes, operand){
 	var types = [];
 	for(var i = 0; i< nodes.length; i++){
@@ -282,15 +294,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["equal"]] = function(args){
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["not_equal"]] = function(args){
-	this.interpretNode({
-		type: Sketch.SketchGenNodes["negate"],
-		arguments: {
-				type: Sketch.SketchGenNodes["equal"],
-				arguments: args
-		}
-	});
-
-	return {type: "bool"};
+	return this.interpretNode(boolNegateNode(createNode("equal", args)));
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["negate"]] = function(args){
@@ -308,23 +312,11 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than"]] = function(args){
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["less_than_or_equal"]] = function(args){
-	return this.interpretNode({
-		type: Sketch.SketchGenNodes["negate"],
-		arguments: {
-			type: Sketch.SketchGenNodes["greater_than"],
-			arguments: args
-		}
-	});
+	return this.interpretNode(boolNegateNode(createNode("greater_than", args)));
 };
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than_or_equal"]] = function(args){
-	return this.interpretNode({
-		type: Sketch.SketchGenNodes["negate"],
-		arguments: {
-			type: Sketch.SketchGenNodes["less_than"],
-			arguments: args
-		}
-	});
+	return this.interpretNode(boolNegateNode(createNode("less_than", args)));
 };
 
 //Literals and identifiers.
