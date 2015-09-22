@@ -96,7 +96,7 @@
 start 
  : program EOF
     {
-           {typeof console !== 'undefined' ? console.log("%j",$1) : print($1); console.log(Sketch.SketchGen.enume);
+           {typeof console !== 'undefined' ? console.log("%j",$1) : print($1);
           return $1;
            }
         }
@@ -161,13 +161,13 @@ param_list
 
 body
   : OPEN_BRACE CLOSE_BRACE
-      { $$ = [];}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: []}; }
   | OPEN_BRACE statement_list CLOSE_BRACE
-      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: $2}; }
   | OPEN_BRACE decl_list CLOSE_BRACE
-      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: $2}; }
   | OPEN_BRACE decl_list statement_list CLOSE_BRACE
-      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: [$2,$3]};}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: [$2,$3]}; }
 ;
 
 statement
@@ -234,8 +234,9 @@ jump_statements
   : CONTINUE semi
   | BREAK semi 
   | RETURN exp  semi 
-      { $$ = [$1, $2];}
+      { $$ = {type: Sketch.SketchGenNodes["return"], arguments: $2}; }
   | RETURN  semi 
+      { $$ = {type: Sketch.SketchGenNodes["return"], arguments: null}; }
 ;
 
 decl_list
@@ -310,7 +311,7 @@ exp
 
     | prim_expr OP_ADD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'add_assign',
+                        type: Sketch.SketchGenNodes["add_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -319,7 +320,7 @@ exp
 
     | prim_expr OP_SUB_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'sub_assign',
+                        type: Sketch.SketchGenNodes["sub_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -328,7 +329,7 @@ exp
 
     | prim_expr OP_MULT_ASSIGNMENT exp
                    {$$ = { 
-                        type: 'multi_assign',
+                        type: Sketch.SketchGenNodes["mul_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -337,7 +338,7 @@ exp
 
     | prim_expr OP_DIV_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'div_assign',
+                        type: Sketch.SketchGenNodes["div_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -346,7 +347,7 @@ exp
 
     | prim_expr OP_MOD_ASSIGNMENT exp 
                    {$$ = { 
-                        type: 'mod_assign',
+                        type: Sketch.SketchGenNodes["mod_assign"],
                         arguments:[
                             $1, 
                             $3]
@@ -355,7 +356,7 @@ exp
 
     | prim_expr OP_INC  
                    {$$ = { 
-                        type: 'increment',
+                        type: Sketch.SketchGenNodes["increment"],
                         arguments:[
                             $1]
                        };
@@ -363,7 +364,7 @@ exp
 
     | prim_expr OP_DEC  
                    {$$ = { 
-                        type: 'decrement',
+                        type: Sketch.SketchGenNodes["decrement"],
                         arguments:[
                             $1]
                        };
@@ -398,7 +399,7 @@ exp
 
     | prim_expr LT exp 
                    {$$ = { 
-                        type: 'less_than',
+                        type: Sketch.SketchGenNodes["less_than"],
                         arguments:[
                             $1, 
                             $3]
@@ -407,7 +408,7 @@ exp
 
     | prim_expr GT  exp
                    {$$ = { 
-                        type: 'greater_than',
+                        type: Sketch.SketchGenNodes["greater_than"],
                         arguments:[
                             $1, 
                             $3]
@@ -425,7 +426,7 @@ exp
 
     | prim_expr OP_LE exp
                    {$$ = { 
-                        type: 'less_than_or_equal ',
+                        type: Sketch.SketchGenNodes["less_than_or_equal"],
                         arguments:[
                             $1, 
                             $3]
@@ -434,7 +435,7 @@ exp
 
     | prim_expr OP_GE exp
                    {$$ = { 
-                        type: 'greater_than_or_equal' ,
+                        type: Sketch.SketchGenNodes["greater_than_or_equal"],
                         arguments:[
                             $1, 
                             $3]

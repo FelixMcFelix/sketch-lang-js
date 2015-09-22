@@ -1,4 +1,4 @@
-
+/* global MVM */
 var Sketch = Sketch || {};
 
 /**
@@ -13,6 +13,7 @@ Sketch.SketchGen = function(){
 	var programCounter = 0;
 	var scopeStack = [];
 	var stackPtr = 0;
+	var functionStack = [];
 
 	var DEBUG = true;
 
@@ -55,7 +56,7 @@ Sketch.SketchGen = function(){
 	/**
 	 * Interpret an AST node using the current code generator.
 	 * @method Sketch.SketchGen#interpretNode
-	 * @param {{type: number, arguments: *}||Array} node - the AST node to be processed in the production of the current code store.
+	 * @param {{type: number, arguments: *}} node - the AST node to be processed in the production of the current code store.
 	 * @param {*} opt - an optional parameter to be passed to the individual node handler function.
 	 * @returns {{type: string}}
 	 * @public
@@ -179,6 +180,40 @@ Sketch.SketchGen = function(){
 		scopeStack = [];
 		scopeStack.push(new Sketch.SketchGen.ScopeStackFrame());
 		stackPtr = 0;
+		functionStack = [];
+	}
+
+	/**
+	 * Tell the generator that we are beginning a function definition, so that we can ensure that returns have the right type.
+	 * @method Sketch.SketchGen#beginFunction
+	 * @param {string} type - the return type of the function we are working on.
+	 * @returns void
+	 * @public
+	 */
+	this.beginFunction = function(type){
+		functionStack.push(type);
+	}
+
+	/**
+	 * Tell the generator that we are ending a function definition.
+	 * @method Sketch.SketchGen#endFunction
+	 * @returns void
+	 * @public
+	 */
+	this.endFunction = function(){
+		functionStack.pop();
+	}
+
+	/**
+	 * Request the type of the current function definition.
+	 * @method Sketch.SketchGen#currentFunctionType
+	 * @returns {string}
+	 * @public
+	 */
+	this.currentFunctionType = function(){
+		if(functionStack.length === 0)
+			throw "Not currently defining a function, can't find its type!"
+		return functionStack[functionStack.length-1];
 	}
 }
 

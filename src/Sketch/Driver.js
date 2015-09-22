@@ -1,3 +1,4 @@
+/* global Sketch */
 /**
  * @classdesc The driver class for the sketch module. Initialise via Sketch.createSketch(...) for default configs.
  * @class Sketch.Driver
@@ -136,17 +137,15 @@ Sketch.Driver.prototype = {
 			" If it's been excessively long then you may have tried to add a malformed shader.");
 			return false;
 		}
-		codeStore = [];
-		constantPool = [];
-		labelTable = [];
 		this.vm = null;
 		try{
 			var ast = this.parser.parse(text);
 
 			var code = this.codeGen.interpret(ast);
 
-			this.vm = new MVM.VM(this.context, this.shaderManager, code, constantPool, labelTable, true);
+			this.vm = new MVM.VM(this.context, this.shaderManager, code, true);
 			var d = this.vm.interpret().current();
+			alert("The final values of global scope variables are (in order of definition):\n"+d.variables);
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print the stack's top value to demonstrate our wonderful
 			//calculator.

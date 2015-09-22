@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: DataModel</title>
+    <title>JSDoc: Class: StackFrame</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: DataModel</h1>
+    <h1 class="page-title">Class: StackFrame</h1>
 
     
 
@@ -29,10 +29,10 @@
     <h2>
         <span class="ancestors"><a href="MVM.html">MVM</a>.</span>
     
-    DataModel
+    StackFrame
     </h2>
     
-        <div class="class-description">The data management subsystem of MVM. It works by maintaining a stack of scope frames - themselves parts of a wider scope tree. Variable modifications are made by chaining up parent scopes when necessary.</div>
+        <div class="class-description">An individual stack frame used by the <a href="MVM.DataModel.html">MVM.DataModel</a>.</div>
     
 </header>
 
@@ -43,7 +43,7 @@
     
         
 <dt>
-    <h4 class="name" id="DataModel"><span class="type-signature"></span>new DataModel<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="StackFrame"><span class="type-signature"></span>new StackFrame<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line8">line 8</a>
+        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -135,7 +135,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="call"><span class="type-signature"></span>call<span class="signature">(argc, rel, ret)</span><span class="type-signature"> &rarr; {<a href="MVM.DataModel.html">MVM.DataModel</a>}</span></h4>
+    <h4 class="name" id="getVar"><span class="type-signature"></span>getVar<span class="signature">(varNo)</span><span class="type-signature"> &rarr; {*}</span></h4>
 
     
 </dt>
@@ -143,7 +143,7 @@
 
     
     <div class="description">
-        Call a function at another point in the code, moving any relevant data into the new <a href="MVM.StackFrame.html">MVM.StackFrame</a>.
+        Get the value of a variable in this stack frame.
     </div>
     
 
@@ -177,7 +177,7 @@
 
         <tr>
             
-                <td class="name"><code>argc</code></td>
+                <td class="name"><code>varNo</code></td>
             
 
             <td class="type">
@@ -193,53 +193,7 @@
 
             
 
-            <td class="description last">the amount of arguments to copy into the new scope.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rel</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the relative height in scope frames of where the function declaration occurred.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ret</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the address the <a href="MVM.VM.html">MVM.VM</a> must return to once the function ends.</td>
+            <td class="description last">the index of the variable's location.</td>
         </tr>
 
     
@@ -270,7 +224,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line82">line 82</a>
+        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line190">line 190</a>
     </li></ul></dd>
     
 
@@ -297,7 +251,7 @@
     
             
 <div class="param-desc">
-    Returns self to allow for some degree of method chaining.
+    The value obtained from the specified variable index.
 </div>
 
 
@@ -308,7 +262,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="MVM.DataModel.html">MVM.DataModel</a></span>
+<span class="param-type">*</span>
 
 
     </dd>
@@ -322,7 +276,7 @@
         
             
 <dt>
-    <h4 class="name" id="current"><span class="type-signature"></span>current<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="MVM.StackFrame.html">MVM.StackFrame</a>}</span></h4>
+    <h4 class="name" id="peek"><span class="type-signature"></span>peek<span class="signature">()</span><span class="type-signature"> &rarr; {*}</span></h4>
 
     
 </dt>
@@ -330,7 +284,7 @@
 
     
     <div class="description">
-        Retrieve the currently active scope frame.
+        Return the top value of the stack without modifying the frame's state.
     </div>
     
 
@@ -363,7 +317,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line20">line 20</a>
+        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -389,6 +343,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    The value retrieved from the top of the stack.
+</div>
+
 
 
 <dl>
@@ -397,7 +355,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="MVM.StackFrame.html">MVM.StackFrame</a></span>
+<span class="param-type">*</span>
 
 
     </dd>
@@ -411,7 +369,7 @@
         
             
 <dt>
-    <h4 class="name" id="enter"><span class="type-signature"></span>enter<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="MVM.DataModel.html">MVM.DataModel</a>}</span></h4>
+    <h4 class="name" id="pop"><span class="type-signature"></span>pop<span class="signature">()</span><span class="type-signature"> &rarr; {*}</span></h4>
 
     
 </dt>
@@ -419,7 +377,7 @@
 
     
     <div class="description">
-        Enter a new <a href="MVM.StackFrame.html">MVM.StackFrame</a> - signifying a new block scope.
+        Pop off the top value from the stack, and return it.
     </div>
     
 
@@ -452,7 +410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line53">line 53</a>
+        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -479,7 +437,7 @@
     
             
 <div class="param-desc">
-    Returns self to allow for some degree of method chaining.
+    The value retrieved from the top of the stack.
 </div>
 
 
@@ -490,7 +448,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="MVM.DataModel.html">MVM.DataModel</a></span>
+<span class="param-type">*</span>
 
 
     </dd>
@@ -504,7 +462,7 @@
         
             
 <dt>
-    <h4 class="name" id="exit"><span class="type-signature"></span>exit<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="MVM.DataModel.html">MVM.DataModel</a>}</span></h4>
+    <h4 class="name" id="push"><span class="type-signature"></span>push<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="MVM.StackFrame.html">MVM.StackFrame</a>}</span></h4>
 
     
 </dt>
@@ -512,100 +470,7 @@
 
     
     <div class="description">
-        Leave the current <a href="MVM.StackFrame.html">MVM.StackFrame</a> - signifying an end to a block scope.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line66">line 66</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    Returns self to allow for some degree of method chaining.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="MVM.DataModel.html">MVM.DataModel</a></span>
-
-
-    </dd>
-</dl>
-
-        
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="funcreturn"><span class="type-signature"></span>funcreturn<span class="signature">(value)</span><span class="type-signature"> &rarr; {number}</span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Return from the current function, moving back to the original scope.
+        Push a new value to the top of the stack.
     </div>
     
 
@@ -655,7 +520,7 @@
 
             
 
-            <td class="description last">the value to place into the <a href="MVM.StackFrame.html">MVM.StackFrame</a> which we are returning to.</td>
+            <td class="description last">the value to place onto the top of the stack.</td>
         </tr>
 
     
@@ -686,7 +551,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line107">line 107</a>
+        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -713,7 +578,7 @@
     
             
 <div class="param-desc">
-    The return address that the <a href="MVM.VM.html">MVM.VM</a> must utilise.
+    Returns self to allow for some degree of method chaining.
 </div>
 
 
@@ -724,7 +589,7 @@
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><a href="MVM.StackFrame.html">MVM.StackFrame</a></span>
 
 
     </dd>
@@ -738,7 +603,7 @@
         
             
 <dt>
-    <h4 class="name" id="relative"><span class="type-signature"></span>relative<span class="signature">(count)</span><span class="type-signature"> &rarr; {<a href="MVM.StackFrame.html">MVM.StackFrame</a>}</span></h4>
+    <h4 class="name" id="setVar"><span class="type-signature"></span>setVar<span class="signature">(varNo, value)</span><span class="type-signature"> &rarr; {<a href="MVM.StackFrame.html">MVM.StackFrame</a>}</span></h4>
 
     
 </dt>
@@ -746,7 +611,7 @@
 
     
     <div class="description">
-        Retrieve the scope frame a set height above the current frame, where 0 retrieves the current frame.
+        Set a variable in this stack frame to a given value.
     </div>
     
 
@@ -780,7 +645,7 @@
 
         <tr>
             
-                <td class="name"><code>count</code></td>
+                <td class="name"><code>varNo</code></td>
             
 
             <td class="type">
@@ -796,7 +661,30 @@
 
             
 
-            <td class="description last">the target relative height to retrieve a scope frame from.</td>
+            <td class="description last">the index of the variable's location.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the value to place into the variable store.</td>
         </tr>
 
     
@@ -827,7 +715,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line34">line 34</a>
+        <a href="MVM-DataModel.js.html">MVM/MVM-DataModel.js</a>, <a href="MVM-DataModel.js.html#line176">line 176</a>
     </li></ul></dd>
     
 
@@ -853,6 +741,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    Returns self to allow for some degree of method chaining.
+</div>
+
 
 
 <dl>
