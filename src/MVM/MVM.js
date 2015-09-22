@@ -310,23 +310,27 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("CMPEQ: " + j + " == " + i + " = " + result);
 					break;
 				case opCodes.CMPLT:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					var result = (j < i) ? 1 : 0;
-					dataStore[sp] = result;
-					sp++;
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+
+					var result = (j < i);
+					
+					data.current()
+						.push(result);
 					if(debugMode) console.log("CMPLT: " + j + " < " + i + " = " + result);
 					break;
 				case opCodes.CMPGT:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					var result = (j > i) ? 1 : 0;
-					dataStore[sp] = result;
-					sp++;
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+
+					var result = (j > i);
+					
+					data.current()
+						.push(result);
 					if(debugMode) console.log("CMPGT: " + j + " > " + i + " = " + result);
 					break;
 				case opCodes.JUMP:

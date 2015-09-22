@@ -161,13 +161,13 @@ param_list
 
 body
   : OPEN_BRACE CLOSE_BRACE
-      { $$ = [];}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: []}; }
   | OPEN_BRACE statement_list CLOSE_BRACE
-      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: $2}; }
   | OPEN_BRACE decl_list CLOSE_BRACE
-      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: $2};}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: $2}; }
   | OPEN_BRACE decl_list statement_list CLOSE_BRACE
-      {$$ = {type: Sketch.SketchGenNodes["block"], arguments: [$2,$3]};}
+      { $$ = {type: Sketch.SketchGenNodes["block"], arguments: [$2,$3]}; }
 ;
 
 statement
@@ -399,7 +399,7 @@ exp
 
     | prim_expr LT exp 
                    {$$ = { 
-                        type: 'less_than',
+                        type: Sketch.SketchGenNodes["less_than"],
                         arguments:[
                             $1, 
                             $3]
@@ -408,7 +408,7 @@ exp
 
     | prim_expr GT  exp
                    {$$ = { 
-                        type: 'greater_than',
+                        type: Sketch.SketchGenNodes["greater_than"],
                         arguments:[
                             $1, 
                             $3]
@@ -426,7 +426,7 @@ exp
 
     | prim_expr OP_LE exp
                    {$$ = { 
-                        type: 'less_than_or_equal ',
+                        type: Sketch.SketchGenNodes["less_than_or_equal"],
                         arguments:[
                             $1, 
                             $3]
@@ -435,7 +435,7 @@ exp
 
     | prim_expr OP_GE exp
                    {$$ = { 
-                        type: 'greater_than_or_equal' ,
+                        type: Sketch.SketchGenNodes["greater_than_or_equal"],
                         arguments:[
                             $1, 
                             $3]

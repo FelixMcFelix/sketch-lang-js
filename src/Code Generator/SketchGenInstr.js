@@ -110,8 +110,11 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 	if(defaultRet === null){
 		this.emit(MVM.opCodes.RETURN);
 	} else{
+		this.interpretNode({
+			type: Sketch.SketchGenNodes[args[2]],
+			arguments: defaultRet
+		});
 		this.emit(MVM.opCodes.RETURNVAL);
-		this.emit(defaultRet);
 	}
 	
 	this.patch(patchme, this.pc());
@@ -292,6 +295,36 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["not_equal"]] = function(args){
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["negate"]] = function(args){
 	return loadAndOperate(this, [args], "!");
+};
+
+
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["less_than"]] = function(args){
+	return loadAndOperate(this, args, "?<");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than"]] = function(args){
+	return loadAndOperate(this, args, "?>");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["less_than_or_equal"]] = function(args){
+	return this.interpretNode({
+		type: Sketch.SketchGenNodes["negate"],
+		arguments: {
+			type: Sketch.SketchGenNodes["greater_than"],
+			arguments: args
+		}
+	});
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than_or_equal"]] = function(args){
+	return this.interpretNode({
+		type: Sketch.SketchGenNodes["negate"],
+		arguments: {
+			type: Sketch.SketchGenNodes["less_than"],
+			arguments: args
+		}
+	});
 };
 
 //Literals and identifiers.

@@ -79,6 +79,11 @@ Sketch.SketchGenNodes.propAdd("equal");
 Sketch.SketchGenNodes.propAdd("not_equal");
 Sketch.SketchGenNodes.propAdd("negate");
 
+Sketch.SketchGenNodes.propAdd("less_than");
+Sketch.SketchGenNodes.propAdd("greater_than");
+Sketch.SketchGenNodes.propAdd("less_than_or_equal");
+Sketch.SketchGenNodes.propAdd("greater_than_or_equal");
+
 //Literals and identifiers.
 Sketch.SketchGenNodes.propAdd("num");
 Sketch.SketchGenNodes.propAdd("ident");

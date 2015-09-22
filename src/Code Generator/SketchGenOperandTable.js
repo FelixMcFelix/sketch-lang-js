@@ -178,6 +178,19 @@ Sketch.SketchGenOperandTable.add("?=", ["polygon", "polygon"],
 							  new Sketch.OpCheckValue("bool", MVM.opCodes.CMPEQ)
 							);
 
+//----//
+// ?< //
+//----//
+Sketch.SketchGenOperandTable.add("?<", ["num", "num"],
+							  new Sketch.OpCheckValue("bool", MVM.opCodes.CMPLT)
+							);
+
+//----//
+// ?> //
+//----//
+Sketch.SketchGenOperandTable.add("?>", ["num", "num"],
+							  new Sketch.OpCheckValue("bool", MVM.opCodes.CMPGT)
+							);
 
 //---//
 // ! //

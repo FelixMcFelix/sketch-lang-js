@@ -314,13 +314,13 @@ case 17:
 this.$ = {type: Sketch.SketchGenNodes["decl"], arguments: [$$[$0-1], $$[$0]]};
 break;
 case 18:
- this.$ = [];
+ this.$ = {type: Sketch.SketchGenNodes["block"], arguments: []}; 
 break;
 case 19: case 20:
-this.$ = {type: Sketch.SketchGenNodes["block"], arguments: $$[$0-1]};
+ this.$ = {type: Sketch.SketchGenNodes["block"], arguments: $$[$0-1]}; 
 break;
 case 21:
-this.$ = {type: Sketch.SketchGenNodes["block"], arguments: [$$[$0-2],$$[$0-1]]};
+ this.$ = {type: Sketch.SketchGenNodes["block"], arguments: [$$[$0-2],$$[$0-1]]}; 
 break;
 case 28:
  this.$ = { type: "if",
@@ -514,7 +514,7 @@ this.$ = {
 break;
 case 60:
 this.$ = { 
-                        type: 'less_than',
+                        type: Sketch.SketchGenNodes["less_than"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -523,7 +523,7 @@ this.$ = {
 break;
 case 61:
 this.$ = { 
-                        type: 'greater_than',
+                        type: Sketch.SketchGenNodes["greater_than"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -541,7 +541,7 @@ this.$ = {
 break;
 case 63:
 this.$ = { 
-                        type: 'less_than_or_equal ',
+                        type: Sketch.SketchGenNodes["less_than_or_equal"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -550,7 +550,7 @@ this.$ = {
 break;
 case 64:
 this.$ = { 
-                        type: 'greater_than_or_equal' ,
+                        type: Sketch.SketchGenNodes["greater_than_or_equal"],
                         arguments:[
                             $$[$0-2], 
                             $$[$0]]
@@ -1738,23 +1738,27 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("CMPEQ: " + j + " == " + i + " = " + result);
 					break;
 				case opCodes.CMPLT:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					var result = (j < i) ? 1 : 0;
-					dataStore[sp] = result;
-					sp++;
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+
+					var result = (j < i);
+					
+					data.current()
+						.push(result);
 					if(debugMode) console.log("CMPLT: " + j + " < " + i + " = " + result);
 					break;
 				case opCodes.CMPGT:
-					sp--;
-					var i = dataStore[sp];
-					sp--;
-					var j = dataStore[sp];
-					var result = (j > i) ? 1 : 0;
-					dataStore[sp] = result;
-					sp++;
+					var i = data.current()
+							.pop();
+					var j = data.current()
+							.pop();
+
+					var result = (j > i);
+					
+					data.current()
+						.push(result);
 					if(debugMode) console.log("CMPGT: " + j + " > " + i + " = " + result);
 					break;
 				case opCodes.JUMP:
@@ -2174,7 +2178,6 @@ MVM.opCodes = {
 ;
 // end
 
-/* global Sketch */
 /* global MVM */
 var Sketch = Sketch || {};
 
@@ -2431,7 +2434,6 @@ Sketch.sketchGenDefaultReturns = {
 	polygon: [0,0,0,0,0,0]
 };
 /* global Sketch */
-/* global MVM */
 /**
  * @classdesc A base class to construct enumerations, without coupling the label to the constant it represents.
  * @class Sketch.EnumBase
@@ -2511,6 +2513,11 @@ Sketch.SketchGenNodes.propAdd("or");
 Sketch.SketchGenNodes.propAdd("equal");
 Sketch.SketchGenNodes.propAdd("not_equal");
 Sketch.SketchGenNodes.propAdd("negate");
+
+Sketch.SketchGenNodes.propAdd("less_than");
+Sketch.SketchGenNodes.propAdd("greater_than");
+Sketch.SketchGenNodes.propAdd("less_than_or_equal");
+Sketch.SketchGenNodes.propAdd("greater_than_or_equal");
 
 //Literals and identifiers.
 Sketch.SketchGenNodes.propAdd("num");
@@ -2628,8 +2635,11 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 	if(defaultRet === null){
 		this.emit(MVM.opCodes.RETURN);
 	} else{
+		this.interpretNode({
+			type: Sketch.SketchGenNodes[args[2]],
+			arguments: defaultRet
+		});
 		this.emit(MVM.opCodes.RETURNVAL);
-		this.emit(defaultRet);
 	}
 	
 	this.patch(patchme, this.pc());
@@ -2810,6 +2820,36 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["not_equal"]] = function(args){
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["negate"]] = function(args){
 	return loadAndOperate(this, [args], "!");
+};
+
+
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["less_than"]] = function(args){
+	return loadAndOperate(this, args, "?<");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than"]] = function(args){
+	return loadAndOperate(this, args, "?>");
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["less_than_or_equal"]] = function(args){
+	return this.interpretNode({
+		type: Sketch.SketchGenNodes["negate"],
+		arguments: {
+			type: Sketch.SketchGenNodes["greater_than"],
+			arguments: args
+		}
+	});
+};
+
+Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than_or_equal"]] = function(args){
+	return this.interpretNode({
+		type: Sketch.SketchGenNodes["negate"],
+		arguments: {
+			type: Sketch.SketchGenNodes["less_than"],
+			arguments: args
+		}
+	});
 };
 
 //Literals and identifiers.
@@ -3018,6 +3058,19 @@ Sketch.SketchGenOperandTable.add("?=", ["polygon", "polygon"],
 							  new Sketch.OpCheckValue("bool", MVM.opCodes.CMPEQ)
 							);
 
+//----//
+// ?< //
+//----//
+Sketch.SketchGenOperandTable.add("?<", ["num", "num"],
+							  new Sketch.OpCheckValue("bool", MVM.opCodes.CMPLT)
+							);
+
+//----//
+// ?> //
+//----//
+Sketch.SketchGenOperandTable.add("?>", ["num", "num"],
+							  new Sketch.OpCheckValue("bool", MVM.opCodes.CMPGT)
+							);
 
 //---//
 // ! //
