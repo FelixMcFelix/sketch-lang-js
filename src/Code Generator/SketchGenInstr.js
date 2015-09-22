@@ -19,7 +19,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["template"]] = function(args){
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
 	this.interpretNode(args);
 	this.emit(MVM.opCodes.EXIT);
-}
+};
 
 //Program Structure
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args, noCodes){
@@ -28,7 +28,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args, noCodes){
 	this.scopePush(noCodes);
 	this.interpretNode(args);
 	this.scopePop(noCodes);
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 	//args[0] = name, args[1] = decls[], args[2] = type, args[3] = block
@@ -72,7 +72,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 	this.endFunction();
 
 	return {type: "function"};
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
 	//args[0] = name, args[1] = params[]
@@ -105,7 +105,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
 	this.emit(args[1].length);
 
 	return {type: dat.entry.extra.returnType};
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["return"]] = function(args){
 	if(args === null){
@@ -125,7 +125,7 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["return"]] = function(args){
 //Variable declaration and assignment
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
 	this.interpretNode(args);
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(args){
 	this.interpretNode(args[0]);
@@ -137,12 +137,12 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(
 			arguments: args[0].arguments[1]
 		}, args[1]]
 	});
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){
 	this.scopeRegister(args[1],args[0]);
 	return args[0];
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	var left = this.interpretNode(args[0], true);
@@ -161,75 +161,43 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	this.emit(left.data.entry.address);
 
 	return right;
-}
+};
 
 //Arithmetic Instructions
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["addition"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.FADD);
-
-	return {type: "num"};
-}
+	return loadAndOperate(this, args, "+");
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["subtraction"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.FSUB);
-
-	return {type: "num"};
-}
+	return loadAndOperate(this, args, "-");
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["multiplication"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.FMUL);
-
-	return {type: "num"};
-}
+	return loadAndOperate(this, args, "*");
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.FDIV);
-
-	return {type: "num"};
-}
+	return loadAndOperate(this, args, "/");
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.FMOD);
-
-	return {type: "num"};
-}
+	return loadAndOperate(this, args, "%");
+};
 
 //Arithmetic assignment Instructions.
 
 //Logical Instructions
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["and"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.BAND);
-	
-	return {type: "bool"};
-}
+	return loadAndOperate(this, args, "&&");
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["or"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.BOR);
-	
-	return {type: "bool"};
-}
+	return loadAndOperate(this, args, "||");
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["equal"]] = function(args){
-	this.interpretNode(args[0]);
-	this.interpretNode(args[1]);
-	this.emit(MVM.opCodes.CMPEQ);
-	
-	return {type: "bool"};
-}
+	return loadAndOperate(this, args, "?=");
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["not_equal"]] = function(args){
 	this.interpretNode({
@@ -241,21 +209,18 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["not_equal"]] = function(args){
 	});
 
 	return {type: "bool"};
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["negate"]] = function(args){
-	this.interpretNode([args]);
-	this.emit(MVM.opCodes.BNEG);
-
-	return {type: "bool"};
-}
+	return loadAndOperate(this, [args], "!");
+};
 
 //Literals and identifiers.
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["num"]] = function(args){
 	this.emit(MVM.opCodes.LOADC);
 	this.emit(args);
 	return {type: "num"};
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess){
 	var d = this.scopeLookup(args);
@@ -265,13 +230,33 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess)
 		this.emit(d.entry.address);
 	}
 	return {type: "ident", data: d};
-}
+};
 
 Sketch.SketchGenInstr[Sketch.SketchGenNodes["bool"]] = function(args){
 	this.emit(MVM.opCodes.LOADC);
 	this.emit(args);
 	return {type: "bool"};
-}
+};
+
+//HELPERS
+var loadAndOperate = function(context, nodes, operand){
+	var types = [];
+	for(var i = 0; i< nodes.length; i++){
+		var n = context.interpretNode(nodes[i]);
+
+		if(n.type === "ident"){
+			types.push(n.data.entry.type);
+		} else{
+			types.push(n.type);
+		}
+	}
+
+	var o = Sketch.SketchGenOperandTable.lookup(operand, types);
+
+	context.emit(o.value.code);
+
+	return o.value;
+};
 
 Sketch.bindInstructions = function(sketchgen){
 	var out = [];
@@ -279,4 +264,4 @@ Sketch.bindInstructions = function(sketchgen){
 		out[i] = Sketch.SketchGenInstr[i].bind(sketchgen);
 	}
 	return out;
-}
+};
