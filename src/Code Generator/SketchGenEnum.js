@@ -7,7 +7,7 @@
  */
 
 Sketch.EnumBase = function(){
-	_count = 0;
+	var _count = 0;
 	/**
 	 * Array matching numbers to their original names. Not to be used unless reverse lookup is specifically required.
 	 * @name Sketch.EnumBase._rev
@@ -25,7 +25,7 @@ Sketch.EnumBase = function(){
 	this.propAdd = function(name){
 		this._rev[_count] = name;
 		this[name] = _count++;
-	}
+	};
 };
 
 /**
@@ -72,6 +72,9 @@ Sketch.SketchGenNodes.propAdd("mul_assign");
 Sketch.SketchGenNodes.propAdd("div_assign");
 Sketch.SketchGenNodes.propAdd("mod_assign");
 
+//Graphical operands
+Sketch.SketchGenNodes.propAdd("colour");
+
 //Logical Instructions
 Sketch.SketchGenNodes.propAdd("and");
 Sketch.SketchGenNodes.propAdd("or");
@@ -88,3 +91,11 @@ Sketch.SketchGenNodes.propAdd("greater_than_or_equal");
 Sketch.SketchGenNodes.propAdd("num");
 Sketch.SketchGenNodes.propAdd("ident");
 Sketch.SketchGenNodes.propAdd("bool");
+Sketch.SketchGenNodes.propAdd("point");
+
+Sketch.SketchGenNodes.propAdd("width");
+Sketch.SketchGenNodes.propAdd("height");
+
+//Render instructions.
+Sketch.SketchGenNodes.propAdd("draw");
+Sketch.SketchGenNodes.propAdd("clear");

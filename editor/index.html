@@ -202,10 +202,23 @@ function k (num i, bool b, num j) -> bool {
     ans = ans + m;
 }
 
-k(4, true, 6); 
+k(4, true, 6);
+
+#Here, we demonstrate drawing and colouring!
+clear;
+
+line l = {0,0}+{width,height};
+
+polygon p1 = {width*1/4,height/2}+{width*3/4,height/2}+{width/2,0};
+polygon p2 = {width*1/4,height/2}+{0,height}+{width/2,height};
+polygon p3 = {width*3/4,height/2}+{width,height}+{width/2,height};
+
+draw p1 ~ {1,1,0,1};
+draw p2 ~ {1,1,0,1};
+draw p3 ~ {1,1,0,1};
 
 //Comment
-//Line a;
+//line a;
 //function init()->void{
 //    a = {0,0} + {width, height};
 //    # Inline Comment

@@ -7,7 +7,7 @@ Sketch.MultiKeyTable = function(){
 };
 
 Sketch.MultiKeyTable.prototype = {
-	add: function(operand, keys, value){
+	add: function(operand, keys, value, predicate){
 		var entry = new Sketch.MultiKeyTableEntry(this, operand, keys, value);
 
 		if(!this.store[operand]){
@@ -25,6 +25,7 @@ Sketch.MultiKeyTable.prototype = {
 		}
 
 		cursor.content = entry;
+		cursor.predicate = predicate;
 
 		return entry;
 	},
@@ -34,29 +35,40 @@ Sketch.MultiKeyTable.prototype = {
 			var k = this.store[operand];
 
 			for(var i = 0; i< keys.length; i++){
-				k = k[keys[i]];
+				k = k[keys[i].type];
 			}
 
-			if(k.content){
+			if (k.content && k.predicate){
+				var pred = k.predicate(keys);
+				if(pred.answer){
+					return k.content;
+				} else{
+					throw pred.reason;
+				}
+			} else if (k.content) {
 				return k.content;
 			} else{
 				throw "No associated entry...";
 			}
 		} catch(e){
-			throw "Operand and key combination not found for: "+operand+" and "+keys;
+			var keysStr = "";
+			keys.forEach(function(curr, ind, arr){keysStr+=curr.type; if(ind!==arr.length-1){keysStr+=", ";}});
+
+			throw "Operand and key combination not found for: "+operand+" and "+keysStr+": \n"+e;
 		}
 	}
 };
 
 Sketch.MultiKeyTableEntry = function(table, operand, keys, value){
 	this.parent = table;
+	this.operand = operand;
 	this.keys = keys;
 	this.value = value;
 };
 
 Sketch.MultiKeyTableEntry.prototype = {
 	reflexive: function(){
-		this.parent.add(this.keys.reverse(), this.value);
+		this.parent.add(this.operand, this.keys.reverse(), this.value);
 	}
 };
 
@@ -87,18 +99,31 @@ Sketch.SketchGenOperandTable.add("+", ["num", "num"],
 							);
 
 Sketch.SketchGenOperandTable.add("+", ["point", "point"],
-							  new Sketch.OpCheckValue("line", MVM.opCodes.PTADD)
+							  new Sketch.OpCheckValue("line", MVM.opCodes.PTADD),
+							  function(keys){
+							  	var out;
+							  	if(keys[0].size>2){
+							  		out = {answer: false, reason: "Shapes over 2D are not yet supported."};
+							  	} else{
+							  		out = {
+  								  		answer: keys[0].size === keys[1].size,
+  								  		reason: "Mismatch between point sizes at addition: "+keys[0].size+" !== "+keys[1].size
+  								  	};
+	  							}
+
+							  	return out;
+							  }
 							);
 
 //TODO: add opcode.
 Sketch.SketchGenOperandTable.add("+", ["point", "line"],
-							  new Sketch.OpCheckValue("polygon", null)
+							  new Sketch.OpCheckValue("polygon", MVM.opCodes.AUGPT)
 							)
 							.reflexive();
 
 //TODO: add opcode.
 Sketch.SketchGenOperandTable.add("+", ["point", "polygon"],
-							  new Sketch.OpCheckValue("polygon", null)
+							  new Sketch.OpCheckValue("polygon", MVM.opCodes.AUGPT)
 							)
 							.reflexive();
 
@@ -197,4 +222,34 @@ Sketch.SketchGenOperandTable.add("?>", ["num", "num"],
 //---//
 Sketch.SketchGenOperandTable.add("!", ["bool"],
 							  new Sketch.OpCheckValue("bool", MVM.opCodes.BNEG)
+							);
+
+//------//
+// draw //
+//------//
+Sketch.SketchGenOperandTable.add("draw", ["line"],
+							  new Sketch.OpCheckValue(null, MVM.opCodes.LNDRAW)
+							);
+
+Sketch.SketchGenOperandTable.add("draw", ["polygon"],
+							  new Sketch.OpCheckValue(null, MVM.opCodes.PGDRAW)
+							);
+
+//---//
+// ~ //
+//---//
+var colourSizeCheck = function(keys){
+	return {
+		answer: (keys[1].size === 3) || (keys[1].size === 4),
+		reason: "Size of a colour must be 3 or 4 numbers." 
+	};
+}
+
+Sketch.SketchGenOperandTable.add("~", ["line", "point"],
+							  new Sketch.OpCheckValue("line", MVM.opCodes.SETCOLOUR),
+							  colourSizeCheck
+							);
+Sketch.SketchGenOperandTable.add("~", ["polygon", "point"],
+							  new Sketch.OpCheckValue("polygon", MVM.opCodes.SETCOLOUR),
+							  colourSizeCheck
 							);

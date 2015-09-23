@@ -14,7 +14,7 @@ var MVM = MVM || {};
 MVM.DataModel = function(){
 	this.root = new MVM.StackFrame(null);
 	this.stack = [this.root];
-}
+};
 
 MVM.DataModel.prototype = {
 	/**
@@ -45,7 +45,9 @@ MVM.DataModel.prototype = {
 			count--;
 		}
 
-		if(count>0) throw "Invalid relative call - too few parents.";
+		if(count>0){
+			throw "Invalid relative call - too few parents.";
+		}
 
 		return cursor;
 	},
@@ -73,7 +75,7 @@ MVM.DataModel.prototype = {
 		if(this.current() !== this.root){
 			this.stack[this.stack.length - 1] = this.current().parent;
 		} else{
-			throw "Tried to exit from scope past root level."
+			throw "Tried to exit from scope past root level.";
 		}
 
 		return this;
@@ -116,11 +118,11 @@ MVM.DataModel.prototype = {
 		
 		if (value!==null) {
 			this.current().push(value);
-		};
+		}
 
 		return p.returnAddr;
 	}
-}
+};
 
 /**
  * @classdesc An individual stack frame used by the {@link MVM.DataModel}.
@@ -133,7 +135,7 @@ MVM.StackFrame = function(parent){
 	this.variables = [];
 	this.stack = [];
 	this.returnAddr = undefined;
-}
+};
 
 MVM.StackFrame.prototype = {
 	/**
@@ -197,4 +199,4 @@ MVM.StackFrame.prototype = {
 	getVar: function(varNo){
 		return this.variables[varNo];
 	}
-}
+};

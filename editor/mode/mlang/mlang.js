@@ -10,9 +10,9 @@ CodeMirror.defineSimpleMode("mlang",{
 			token: "number"},
 		{regex: /\/(?:[^\\]|\\.)*?\//, token: "variable"},
 		{regex: /\b(?:function|return|if|for|while|else|do|this|draw|clear|width|height)\b/, token: "keyword"},
-		{regex: /\b(?:num|bool|Line|Point|Polygon|void|color|Circle)\b/, token: "keyword"},
+		{regex: /\b(?:num|bool|line|point|polygon|void|color|Circle)\b/, token: "keyword"},
 		{regex: /\b(?:vector\([234]\))\b/, token: "keyword"},
-		{regex: /[-+\/*=<>!]+/, token: "operator"},
+		{regex: /[-+\/*=<>!#]+/, token: "operator"},
 		{regex: /[a-z$][\w$]*/, token: "variable"},
 		{regex: /([a-z$][\w$]*)(?=(\s*)\()/, token:"keyword"}
     ],
