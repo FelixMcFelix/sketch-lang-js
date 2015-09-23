@@ -14,6 +14,7 @@
 "bool"                                 return 'BOOL';
 "break"                                return 'BREAK';
 "clear"                                return 'CLEAR'; 
+"draw"								                 return 'DRAW';
 "continue"                             return 'CONTINUE';
 "do"                                   return 'DO';
 "else"                                 return 'ELSE';
@@ -21,16 +22,18 @@
 "for"                                  return 'FOR';
 "function"                             return 'FUNCTION'
 "if"                                   return 'IF';
-"Line"                                 return 'LINE';
+"line"                                 return 'LINE';
 "num"                                  return 'NUM';
 "not"                                  return 'NOT';
 "null"                                 return 'NULL';
-"Point"                                return 'POINT';
-"Polygon"                              return 'POLYGON';
+"point"                                return 'POINT';
+"polygon"                              return 'POLYGON';
 "return"                               return 'RETURN';
 "true"                                 return 'TRUE';
 "void"                                 return 'VOID';
 "while"                                return 'WHILE';
+"width"						                     return 'WIDTH';
+"height"					                     return 'HEIGHT';
 
 
 
@@ -43,7 +46,7 @@
 ","                        return 'COMMA';
 ":"                        return 'COLON';
 ";"                        return 'SEMICOLON';
-"->"                       return 'RETURN_TYPE';
+"->"                       return 'ARROW';
 "="                        return 'ASSIGN';
 "+="                       return 'OP_ADD_ASSIGNMENT';
 "++"                       return 'OP_INC';
@@ -134,7 +137,7 @@ in-decl
     }
 ;
 func_return  
-  : RETURN_TYPE type
+  : ARROW type
      {$$ = $2;}
   |
     {$$ = "void";}
@@ -177,11 +180,16 @@ statement
   | condition_statements
   | iteration_statements
   | jump_statements
-
+  | render_statements
 ;
 
 
-
+render_statements
+  : CLEAR semi
+    { $$ = {type: Sketch.SketchGenNodes["clear"], arguments: null}; }
+  | DRAW exp semi
+    { $$ = {type: Sketch.SketchGenNodes["draw"], arguments: $2}; }
+;
 
 
 
@@ -254,7 +262,7 @@ statement_list
       {$$= [$1]}
   | statement_list statement
       {$$ = $1; $$.push($2);} 
- | statement_list decl_list
+  | statement_list decl_list
       {$$ = $1; $$.push($2);} 
 
 ;
@@ -470,9 +478,13 @@ prim_expr
     | IDENTIFIER OPEN_PARENS init_list CLOSE_PARENS
           { $$ = { type: Sketch.SketchGenNodes["func_call"], arguments: [$1,$3]}; }
     | OPEN_BRACE init_list CLOSE_BRACE
-          { $$ = $2;}
+          { $$ = { type: Sketch.SketchGenNodes["point"], arguments: $2};}
     | OPEN_PARENS init_list CLOSE_PARENS
           { $$ = $2;}
+    | WIDTH
+          { $$ = { type: Sketch.SketchGenNodes["width"], arguments: null};}
+    | HEIGHT
+          { $$ = { type: Sketch.SketchGenNodes["height"], arguments: null};}
 ;
 
 
@@ -491,9 +503,9 @@ declaration
   ;
 
  init_list 
-   : prim_expr
+   : exp
       { $$ = [$1]; }
-   | init_list COMMA prim_expr
+   | init_list COMMA exp
       { $$ = $1; $$.push($3); }
    |
       { $$ = []; }

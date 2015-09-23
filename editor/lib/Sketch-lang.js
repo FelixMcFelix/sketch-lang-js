@@ -254,12 +254,12 @@ Sketch.Driver.prototype = {
   }
 */
 var sketchParse = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,37],$V2=[1,18],$V3=[1,12],$V4=[1,19],$V5=[1,20],$V6=[1,21],$V7=[1,22],$V8=[1,23],$V9=[1,24],$Va=[1,25],$Vb=[1,32],$Vc=[1,33],$Vd=[1,34],$Ve=[1,35],$Vf=[1,36],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[5,10,21,25,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75],$Vn=[1,41],$Vo=[5,10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75],$Vp=[2,76],$Vq=[1,44],$Vr=[5,10,21,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75],$Vs=[1,46],$Vt=[1,47],$Vu=[1,48],$Vv=[1,49],$Vw=[1,50],$Vx=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75],$Vy=[1,67],$Vz=[1,52],$VA=[1,53],$VB=[1,54],$VC=[1,55],$VD=[1,56],$VE=[1,57],$VF=[1,58],$VG=[1,59],$VH=[1,60],$VI=[1,61],$VJ=[1,62],$VK=[1,63],$VL=[1,64],$VM=[1,65],$VN=[1,66],$VO=[2,82],$VP=[1,68],$VQ=[1,84],$VR=[25,62],$VS=[5,10,16,21,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75],$VT=[22,24],$VU=[5,10,16,21,22,24,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75],$VV=[5,10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75],$VW=[1,119],$VX=[10,21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66,70,71,72,73,74,75],$VY=[2,80],$VZ=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,62,63,64,65,66,68,70,71,72,73,74,75],$V_=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,62,63,64,65,66,68,70,71,72,73,74,75],$V$=[5,10,21,22,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75],$V01=[21,25,62,63,64,65,66],$V11=[22,24,26],$V21=[19,25];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,40],$V2=[1,19],$V3=[1,12],$V4=[1,27],$V5=[1,28],$V6=[1,20],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,24],$Vb=[1,25],$Vc=[1,26],$Vd=[1,35],$Ve=[1,36],$Vf=[1,37],$Vg=[1,38],$Vh=[1,39],$Vi=[1,41],$Vj=[1,42],$Vk=[1,29],$Vl=[1,30],$Vm=[1,31],$Vn=[1,32],$Vo=[1,33],$Vp=[1,34],$Vq=[5,10,21,25,29,34,35,36,38,39,40,41,42,43,65,66,67,68,69,71,72,75,76,77,78,79,80],$Vr=[1,46],$Vs=[5,10,21,25,26,29,34,35,36,38,39,40,41,42,43,65,66,67,68,69,71,72,75,76,77,78,79,80],$Vt=[2,81],$Vu=[1,49],$Vv=[5,10,21,25,26,29,34,35,36,37,38,39,40,41,42,43,65,66,67,68,69,71,72,75,76,77,78,79,80],$Vw=[1,51],$Vx=[1,52],$Vy=[1,53],$Vz=[1,54],$VA=[1,55],$VB=[5,10,21,22,24,25,26,29,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,65,66,67,68,69,71,72,73,75,76,77,78,79,80],$VC=[2,87],$VD=[1,73],$VE=[1,89],$VF=[25,65],$VG=[5,10,16,21,22,24,25,26,29,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,71,72,73,75,76,77,78,79,80],$VH=[22,24],$VI=[5,10,16,21,22,24,25,26,29,34,35,36,38,39,40,41,42,43,65,66,67,68,69,71,72,73,75,76,77,78,79,80],$VJ=[5,10,21,25,26,29,34,35,36,38,39,40,41,42,43,65,66,67,68,69,71,72,73,75,76,77,78,79,80],$VK=[1,126],$VL=[10,21,25,26,29,34,35,36,38,39,40,41,42,43,65,66,67,68,69,71,72,75,76,77,78,79,80],$VM=[2,85],$VN=[5,10,21,22,24,25,26,29,34,35,36,37,38,39,40,41,42,43,45,46,65,66,67,68,69,71,72,73,75,76,77,78,79,80],$VO=[5,10,21,22,24,25,26,29,34,35,36,37,38,39,40,41,42,43,45,46,47,48,65,66,67,68,69,71,72,73,75,76,77,78,79,80],$VP=[5,10,21,22,24,25,26,29,34,35,36,37,38,39,40,41,42,43,65,66,67,68,69,71,72,73,75,76,77,78,79,80],$VQ=[21,25,65,66,67,68,69,71,72],$VR=[22,24,26],$VS=[19,25];
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"start":3,"program":4,"EOF":5,"declarations":6,"out-decl":7,"in-decl":8,"statement":9,"FUNCTION":10,"declarator":11,"declaration_list":12,"func_return":13,"body":14,"param":15,"ASSIGN":16,"exp":17,"semi":18,"RETURN_TYPE":19,"type":20,"OPEN_PARENS":21,"CLOSE_PARENS":22,"param_list":23,"COMMA":24,"OPEN_BRACE":25,"CLOSE_BRACE":26,"statement_list":27,"decl_list":28,"function":29,"condition_statements":30,"iteration_statements":31,"jump_statements":32,"IF":33,"ELSE":34,"WHILE":35,"DO":36,"FOR":37,"CONTINUE":38,"BREAK":39,"RETURN":40,"prim_expr":41,"PLUS":42,"MINUS":43,"MULT":44,"DIV":45,"MODULO":46,"OP_ADD_ASSIGNMENT":47,"OP_SUB_ASSIGNMENT":48,"OP_MULT_ASSIGNMENT":49,"OP_DIV_ASSIGNMENT":50,"OP_MOD_ASSIGNMENT":51,"OP_INC":52,"OP_DEC":53,"OP_AND":54,"OP_OR":55,"OP_EQ":56,"LT":57,"GT":58,"OP_NE":59,"OP_LE":60,"OP_GE":61,"IDENTIFIER":62,"NUMBER":63,"TRUE":64,"FALSE":65,"EXCL":66,"init_list":67,"SEMICOLON":68,"declaration":69,"VOID":70,"NUM":71,"BOOL":72,"POINT":73,"LINE":74,"POLYGON":75,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",10:"FUNCTION",16:"ASSIGN",19:"RETURN_TYPE",21:"OPEN_PARENS",22:"CLOSE_PARENS",24:"COMMA",25:"OPEN_BRACE",26:"CLOSE_BRACE",29:"function",33:"IF",34:"ELSE",35:"WHILE",36:"DO",37:"FOR",38:"CONTINUE",39:"BREAK",40:"RETURN",42:"PLUS",43:"MINUS",44:"MULT",45:"DIV",46:"MODULO",47:"OP_ADD_ASSIGNMENT",48:"OP_SUB_ASSIGNMENT",49:"OP_MULT_ASSIGNMENT",50:"OP_DIV_ASSIGNMENT",51:"OP_MOD_ASSIGNMENT",52:"OP_INC",53:"OP_DEC",54:"OP_AND",55:"OP_OR",56:"OP_EQ",57:"LT",58:"GT",59:"OP_NE",60:"OP_LE",61:"OP_GE",62:"IDENTIFIER",63:"NUMBER",64:"TRUE",65:"FALSE",66:"EXCL",68:"SEMICOLON",70:"VOID",71:"NUM",72:"BOOL",73:"POINT",74:"LINE",75:"POLYGON"},
-productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[30,5],[30,7],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[41,1],[41,1],[41,1],[41,1],[41,2],[41,3],[41,4],[41,3],[41,3],[18,1],[18,0],[11,1],[69,1],[69,4],[67,1],[67,3],[67,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
+symbols_: {"error":2,"start":3,"program":4,"EOF":5,"declarations":6,"out-decl":7,"in-decl":8,"statement":9,"FUNCTION":10,"declarator":11,"declaration_list":12,"func_return":13,"body":14,"param":15,"ASSIGN":16,"exp":17,"semi":18,"ARROW":19,"type":20,"OPEN_PARENS":21,"CLOSE_PARENS":22,"param_list":23,"COMMA":24,"OPEN_BRACE":25,"CLOSE_BRACE":26,"statement_list":27,"decl_list":28,"function":29,"condition_statements":30,"iteration_statements":31,"jump_statements":32,"render_statements":33,"CLEAR":34,"DRAW":35,"IF":36,"ELSE":37,"WHILE":38,"DO":39,"FOR":40,"CONTINUE":41,"BREAK":42,"RETURN":43,"prim_expr":44,"PLUS":45,"MINUS":46,"MULT":47,"DIV":48,"MODULO":49,"OP_ADD_ASSIGNMENT":50,"OP_SUB_ASSIGNMENT":51,"OP_MULT_ASSIGNMENT":52,"OP_DIV_ASSIGNMENT":53,"OP_MOD_ASSIGNMENT":54,"OP_INC":55,"OP_DEC":56,"OP_AND":57,"OP_OR":58,"OP_EQ":59,"LT":60,"GT":61,"OP_NE":62,"OP_LE":63,"OP_GE":64,"IDENTIFIER":65,"NUMBER":66,"TRUE":67,"FALSE":68,"EXCL":69,"init_list":70,"WIDTH":71,"HEIGHT":72,"SEMICOLON":73,"declaration":74,"VOID":75,"NUM":76,"BOOL":77,"POINT":78,"LINE":79,"POLYGON":80,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",10:"FUNCTION",16:"ASSIGN",19:"ARROW",21:"OPEN_PARENS",22:"CLOSE_PARENS",24:"COMMA",25:"OPEN_BRACE",26:"CLOSE_BRACE",29:"function",34:"CLEAR",35:"DRAW",36:"IF",37:"ELSE",38:"WHILE",39:"DO",40:"FOR",41:"CONTINUE",42:"BREAK",43:"RETURN",45:"PLUS",46:"MINUS",47:"MULT",48:"DIV",49:"MODULO",50:"OP_ADD_ASSIGNMENT",51:"OP_SUB_ASSIGNMENT",52:"OP_MULT_ASSIGNMENT",53:"OP_DIV_ASSIGNMENT",54:"OP_MOD_ASSIGNMENT",55:"OP_INC",56:"OP_DEC",57:"OP_AND",58:"OP_OR",59:"OP_EQ",60:"LT",61:"GT",62:"OP_NE",63:"OP_LE",64:"OP_GE",65:"IDENTIFIER",66:"NUMBER",67:"TRUE",68:"FALSE",69:"EXCL",71:"WIDTH",72:"HEIGHT",73:"SEMICOLON",75:"VOID",76:"NUM",77:"BOOL",78:"POINT",79:"LINE",80:"POLYGON"},
+productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[9,1],[33,2],[33,3],[30,5],[30,7],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[44,1],[44,1],[44,1],[44,1],[44,2],[44,3],[44,4],[44,3],[44,3],[44,1],[44,1],[18,1],[18,0],[11,1],[74,1],[74,4],[70,1],[70,3],[70,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -322,14 +322,20 @@ break;
 case 21:
  this.$ = {type: Sketch.SketchGenNodes["block"], arguments: [$$[$0-2],$$[$0-1]]}; 
 break;
-case 28:
+case 29:
+ this.$ = {type: Sketch.SketchGenNodes["clear"], arguments: null}; 
+break;
+case 30:
+ this.$ = {type: Sketch.SketchGenNodes["draw"], arguments: $$[$0-1]}; 
+break;
+case 31:
  this.$ = { type: "if",
                 arguments : [$$[$0-2],
                              $$[$0]]
                };
        
 break;
-case 29:
+case 32:
 this.$ = { type : "if_else",
                arguments : [ $$[$0-4],
                              $$[$0-2],
@@ -338,7 +344,7 @@ this.$ = { type : "if_else",
              };
      
 break;
-case 30:
+case 33:
 this.$ = {type : "while", 
               arguments: [ $$[$0-2],
                            $$[$0-1]
@@ -346,7 +352,7 @@ this.$ = {type : "while",
             }; 
      
 break;
-case 31:
+case 34:
 this.$ = {type : "do_while", 
               arguments: [ $$[$0-5],
                            $$[$0-2]
@@ -354,7 +360,7 @@ this.$ = {type : "do_while",
             }; 
      
 break;
-case 32:
+case 35:
 this.$ = {type : "for", 
               arguments: [ $$[$0-6],
                            $$[$0-4],
@@ -364,22 +370,22 @@ this.$ = {type : "for",
             }; 
      
 break;
-case 35:
+case 38:
  this.$ = {type: Sketch.SketchGenNodes["return"], arguments: $$[$0-1]}; 
 break;
-case 36:
+case 39:
  this.$ = {type: Sketch.SketchGenNodes["return"], arguments: null}; 
 break;
-case 39: case 40:
+case 42: case 43:
 this.$= [$$[$0-1],$$[$0]];
 break;
-case 41:
+case 44:
 this.$= [$$[$0]]
 break;
-case 42: case 43:
+case 45: case 46:
 this.$ = $$[$0-1]; this.$.push($$[$0]);
 break;
-case 45:
+case 48:
 this.$ = {
                         type: Sketch.SketchGenNodes["addition"],
                         arguments: [ 
@@ -388,7 +394,7 @@ this.$ = {
                         }; 
                 
 break;
-case 46:
+case 49:
 this.$ = { 
                         type: Sketch.SketchGenNodes["subtraction"],
                         arguments:[
@@ -397,7 +403,7 @@ this.$ = {
                        };
                 
 break;
-case 47:
+case 50:
 this.$ = { 
                         type: Sketch.SketchGenNodes["multiplication"],
                         arguments:[
@@ -406,7 +412,7 @@ this.$ = {
                        };
                 
 break;
-case 48:
+case 51:
 this.$ = { 
                         type: Sketch.SketchGenNodes["division"],
                         arguments:[
@@ -415,7 +421,7 @@ this.$ = {
                        };
                 
 break;
-case 49:
+case 52:
 this.$ = { 
                         type: Sketch.SketchGenNodes["modulo"],
                         arguments:[
@@ -424,7 +430,7 @@ this.$ = {
                        };
                 
 break;
-case 50:
+case 53:
 this.$ = { 
                         type: Sketch.SketchGenNodes["add_assign"],
                         arguments:[
@@ -433,7 +439,7 @@ this.$ = {
                        };
                 
 break;
-case 51:
+case 54:
 this.$ = { 
                         type: Sketch.SketchGenNodes["sub_assign"],
                         arguments:[
@@ -442,7 +448,7 @@ this.$ = {
                        };
                 
 break;
-case 52:
+case 55:
 this.$ = { 
                         type: Sketch.SketchGenNodes["mul_assign"],
                         arguments:[
@@ -451,7 +457,7 @@ this.$ = {
                        };
                 
 break;
-case 53:
+case 56:
 this.$ = { 
                         type: Sketch.SketchGenNodes["div_assign"],
                         arguments:[
@@ -460,7 +466,7 @@ this.$ = {
                        };
                 
 break;
-case 54:
+case 57:
 this.$ = { 
                         type: Sketch.SketchGenNodes["mod_assign"],
                         arguments:[
@@ -469,7 +475,7 @@ this.$ = {
                        };
                 
 break;
-case 55:
+case 58:
 this.$ = { 
                         type: Sketch.SketchGenNodes["increment"],
                         arguments:[
@@ -477,7 +483,7 @@ this.$ = {
                        };
                 
 break;
-case 56:
+case 59:
 this.$ = { 
                         type: Sketch.SketchGenNodes["decrement"],
                         arguments:[
@@ -485,7 +491,7 @@ this.$ = {
                        };
                 
 break;
-case 57:
+case 60:
 this.$ = { 
                         type: Sketch.SketchGenNodes["and"],
                         arguments:[
@@ -494,7 +500,7 @@ this.$ = {
                        };
                 
 break;
-case 58:
+case 61:
 this.$ = { 
                         type: Sketch.SketchGenNodes["or"],
                         arguments:[
@@ -503,7 +509,7 @@ this.$ = {
                        };
                 
 break;
-case 59:
+case 62:
 this.$ = { 
                         type: Sketch.SketchGenNodes["equal"],
                         arguments:[
@@ -512,7 +518,7 @@ this.$ = {
                        };
                 
 break;
-case 60:
+case 63:
 this.$ = { 
                         type: Sketch.SketchGenNodes["less_than"],
                         arguments:[
@@ -521,7 +527,7 @@ this.$ = {
                        };
                 
 break;
-case 61:
+case 64:
 this.$ = { 
                         type: Sketch.SketchGenNodes["greater_than"],
                         arguments:[
@@ -530,7 +536,7 @@ this.$ = {
                        };
                 
 break;
-case 62:
+case 65:
 this.$ = { 
                         type: Sketch.SketchGenNodes["not_equal"],
                         arguments:[
@@ -539,7 +545,7 @@ this.$ = {
                        };
                 
 break;
-case 63:
+case 66:
 this.$ = { 
                         type: Sketch.SketchGenNodes["less_than_or_equal"],
                         arguments:[
@@ -548,7 +554,7 @@ this.$ = {
                        };
                 
 break;
-case 64:
+case 67:
 this.$ = { 
                         type: Sketch.SketchGenNodes["greater_than_or_equal"],
                         arguments:[
@@ -557,7 +563,7 @@ this.$ = {
                        };
                 
 break;
-case 65:
+case 68:
 this.$ = { 
                         type: Sketch.SketchGenNodes["assign"],
                         arguments:[
@@ -566,43 +572,52 @@ this.$ = {
                        };
                 
 break;
-case 66:
+case 69:
  this.$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext}; 
 break;
-case 67:
+case 70:
  this.$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)}; 
 break;
-case 68:
+case 71:
  this.$ = {type: Sketch.SketchGenNodes["bool"], arguments: true}; 
 break;
-case 69:
+case 72:
  this.$ = {type: Sketch.SketchGenNodes["bool"], arguments: false}; 
 break;
-case 70:
+case 73:
  this.$ = {type: Sketch.SketchGenNodes["negate"], arguments: $$[$0]};
 break;
-case 71: case 73: case 74:
+case 74: case 77:
  this.$ = $$[$0-1];
 break;
-case 72:
+case 75:
  this.$ = { type: Sketch.SketchGenNodes["func_call"], arguments: [$$[$0-3],$$[$0-1]]}; 
 break;
+case 76:
+ this.$ = { type: Sketch.SketchGenNodes["point"], arguments: $$[$0-1]};
+break;
+case 78:
+ this.$ = { type: Sketch.SketchGenNodes["width"], arguments: null};
+break;
 case 79:
+ this.$ = { type: Sketch.SketchGenNodes["height"], arguments: null};
+break;
+case 84:
 this.$ = [$$[$0-3],$$[$0-1]];
 break;
-case 80:
+case 85:
  this.$ = [$$[$0]]; 
 break;
-case 81:
+case 86:
  this.$ = $$[$0-2]; this.$.push($$[$0]); 
 break;
-case 82:
+case 87:
  this.$ = []; 
 break;
 }
 },
-table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{1:[3]},{5:[1,38],6:39,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{1:[2,2]},o($Vm,[2,3]),o($Vm,[2,5]),o($Vm,[2,6]),o($Vm,[2,7]),{11:40,62:$Vn},o($Vo,$Vp,{18:43,16:[1,42],68:$Vq}),o($Vr,$Vp,{18:45,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($Vr,[2,23]),o($Vr,[2,24]),o($Vr,[2,25]),o($Vr,[2,26]),o($Vr,[2,27]),{11:51,62:$Vn},o($Vx,[2,44],{16:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,51:$VD,52:$VE,53:$VF,54:$VG,55:$VH,56:$VI,57:$VJ,58:$VK,59:$VL,60:$VM,61:$VN}),{7:74,8:73,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,24:$VO,25:$V2,26:$VP,27:69,28:70,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:75,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,67:71,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{21:[1,76]},{21:[1,77]},{9:78,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{21:[1,79]},o($Vr,$Vp,{18:80,68:$Vq}),o($Vr,$Vp,{18:81,68:$Vq}),o([5,10,26,29,33,34,35,36,37,38,39,40,70,71,72,73,74,75],$Vp,{41:17,17:82,18:83,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,68:$Vq}),o($VR,[2,83]),o($VR,[2,84]),o($VR,[2,85]),o($VR,[2,86]),o($VR,[2,87]),o($VR,[2,88]),o([5,10,16,22,24,25,26,29,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,68,70,71,72,73,74,75],[2,66],{21:[1,85]}),o($VS,[2,67]),o($VS,[2,68]),o($VS,[2,69]),{21:$V1,25:$VQ,41:86,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VT,$VO,{41:75,17:87,67:88,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),{1:[2,1]},o($Vm,[2,4]),{12:89,21:[1,90]},o($VU,[2,77]),{17:91,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VV,[2,10]),o([5,10,21,25,26,29,33,34,35,36,37,38,39,40,62,63,64,65,66,68,70,71,72,73,74,75],[2,75]),o($Vr,[2,22]),{17:92,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:93,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:94,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:95,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:96,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VU,[2,17]),{17:97,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:98,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:99,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:100,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:101,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vx,[2,55]),o($Vx,[2,56]),{17:102,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:103,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:104,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:105,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:106,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:107,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:108,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:109,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:110,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,18]),{7:74,8:73,9:112,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,111],28:113,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{7:117,8:116,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,114],27:115,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{24:$VW,26:[1,118]},o($VX,[2,41]),o($VX,[2,37]),o($VX,[2,38]),o([10,21,22,24,25,26,29,33,35,36,37,38,39,40,42,43,44,45,46,62,63,64,65,66,68,70,71,72,73,74,75],$VY,{16:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,51:$VD,52:$VE,53:$VF,54:$VG,55:$VH,56:$VI,57:$VJ,58:$VK,59:$VL,60:$VM,61:$VN}),{17:120,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:121,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{35:[1,122]},{8:123,15:9,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vr,[2,33]),o($Vr,[2,34]),o($Vr,$Vp,{18:124,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($Vr,[2,36]),o([24,26],$VO,{67:71,41:125,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VT,$VO,{41:125,67:126,21:$V1,25:$VQ,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf}),o($VS,[2,70]),{22:[1,127],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{22:[1,128],24:$VW},{13:129,19:[1,130],25:[2,12]},{15:133,20:16,22:[1,131],23:132,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vo,$Vp,{18:134,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($VZ,[2,45],{44:$Vu,45:$Vv,46:$Vw}),o($VZ,[2,46],{44:$Vu,45:$Vv,46:$Vw}),o($V_,[2,47],{46:$Vw}),o($V_,[2,48],{46:$Vw}),o($V$,[2,49],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,50],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,51],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,52],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,53],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,54],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,57],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,58],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,59],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,60],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,61],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,62],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,63],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,64],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($V$,[2,65],{42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw}),o($Vr,[2,19]),o($VX,[2,42]),o([21,25,26,29,33,35,36,37,38,39,40,62,63,64,65,66],[2,43],{15:9,20:16,8:116,7:117,10:$V0,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl}),o($Vr,[2,20]),{7:74,8:73,9:112,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:[1,135],28:113,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($VX,[2,39]),o($VX,[2,40]),o($VS,[2,73]),{21:$V1,25:$VQ,41:136,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{22:[1,137],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{22:[1,138],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{21:[1,139]},o($V01,$Vp,{18:140,68:$Vq}),o($Vr,[2,35]),o($V11,$VY),{22:[1,141],24:$VW},o($VS,[2,71]),o($VS,[2,74]),{14:142,25:[1,143]},{20:144,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($V21,[2,13]),{22:[1,145],24:[1,146]},o($VT,[2,15]),o($VV,[2,9]),o($Vr,[2,21]),o($V11,[2,81]),{9:147,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{9:148,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:149,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},{17:150,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($VS,[2,72]),o($Vo,[2,8]),{7:74,8:73,9:72,10:$V0,14:11,15:9,17:10,20:16,21:$V1,25:$V2,26:$VP,27:69,28:70,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},{25:[2,11]},o($V21,[2,14]),{15:151,20:16,70:$Vg,71:$Vh,72:$Vi,73:$Vj,74:$Vk,75:$Vl},o($Vo,[2,28],{34:[1,152]}),o($Vr,[2,30]),{22:[1,153],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},o($V01,$Vp,{18:154,42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw,68:$Vq}),o($VT,[2,16]),{9:155,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,$Vp,{18:156,68:$Vq}),{17:157,21:$V1,25:$VQ,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,29]),o($Vr,[2,31]),{22:[1,158],42:$Vs,43:$Vt,44:$Vu,45:$Vv,46:$Vw},{9:159,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:$V4,35:$V5,36:$V6,37:$V7,38:$V8,39:$V9,40:$Va,41:17,62:$Vb,63:$Vc,64:$Vd,65:$Ve,66:$Vf},o($Vr,[2,32])],
-defaultActions: {3:[2,2],38:[2,1],144:[2,11]},
+table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},{1:[3]},{5:[1,43],6:44,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},{1:[2,2]},o($Vq,[2,3]),o($Vq,[2,5]),o($Vq,[2,6]),o($Vq,[2,7]),{11:45,65:$Vr},o($Vs,$Vt,{18:48,16:[1,47],73:$Vu}),o($Vv,$Vt,{18:50,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,73:$Vu}),o($Vv,[2,23]),o($Vv,[2,24]),o($Vv,[2,25]),o($Vv,[2,26]),o($Vv,[2,27]),o($Vv,[2,28]),{11:56,65:$Vr},o($VB,[2,47],{16:[1,72],50:[1,57],51:[1,58],52:[1,59],53:[1,60],54:[1,61],55:[1,62],56:[1,63],57:[1,64],58:[1,65],59:[1,66],60:[1,67],61:[1,68],62:[1,69],63:[1,70],64:[1,71]}),{7:79,8:78,9:77,10:$V0,14:11,15:9,17:80,20:17,21:$V1,24:$VC,25:$V2,26:$VD,27:74,28:75,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,70:76,71:$Vi,72:$Vj,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},{21:[1,81]},{21:[1,82]},{9:83,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{21:[1,84]},o($Vv,$Vt,{18:85,73:$Vu}),o($Vv,$Vt,{18:86,73:$Vu}),o([5,10,26,29,34,35,36,37,38,39,40,41,42,43,75,76,77,78,79,80],$Vt,{44:18,17:87,18:88,21:$V1,25:$VE,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj,73:$Vu}),o($Vv,$Vt,{18:90,73:$Vu}),{17:91,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($VF,[2,88]),o($VF,[2,89]),o($VF,[2,90]),o($VF,[2,91]),o($VF,[2,92]),o($VF,[2,93]),o([5,10,16,22,24,25,26,29,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,71,72,73,75,76,77,78,79,80],[2,69],{21:[1,92]}),o($VG,[2,70]),o($VG,[2,71]),o($VG,[2,72]),{21:$V1,25:$VE,44:93,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($VH,$VC,{44:18,17:94,70:95,21:$V1,25:$VE,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj}),o($VG,[2,78]),o($VG,[2,79]),{1:[2,1]},o($Vq,[2,4]),{12:96,21:[1,97]},o($VI,[2,82]),{17:98,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($VJ,[2,10]),o([5,10,21,25,26,29,34,35,36,37,38,39,40,41,42,43,65,66,67,68,69,71,72,73,75,76,77,78,79,80],[2,80]),o($Vv,[2,22]),{17:99,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:100,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:101,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:102,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:103,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($VI,[2,17]),{17:104,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:105,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:106,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:107,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:108,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($VB,[2,58]),o($VB,[2,59]),{17:109,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:110,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:111,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:112,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:113,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:114,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:115,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:116,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:117,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($Vv,[2,18]),{7:79,8:78,9:119,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,118],28:120,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},{7:124,8:123,9:77,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,121],27:122,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},{24:$VK,26:[1,125]},o($VL,[2,44]),o($VL,[2,40]),o($VL,[2,41]),o([10,21,25,29,34,35,36,38,39,40,41,42,43,65,66,67,68,69,71,72,75,76,77,78,79,80],$Vt,{18:50,24:$VM,26:$VM,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,73:$Vu}),{17:127,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:128,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{38:[1,129]},{8:130,15:9,20:17,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},o($Vv,[2,36]),o($Vv,[2,37]),o($Vv,$Vt,{18:131,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,73:$Vu}),o($Vv,[2,39]),o([24,26],$VC,{44:18,70:76,17:132,21:$V1,25:$VE,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj}),o($Vv,[2,29]),o($Vv,$Vt,{18:133,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,73:$Vu}),o($VH,$VC,{44:18,17:132,70:134,21:$V1,25:$VE,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj}),o($VG,[2,73]),{22:[1,135],24:$VM,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA},{22:[1,136],24:$VK},{13:137,19:[1,138],25:[2,12]},{15:141,20:17,22:[1,139],23:140,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},o($Vs,$Vt,{18:142,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,73:$Vu}),o($VN,[2,48],{47:$Vy,48:$Vz,49:$VA}),o($VN,[2,49],{47:$Vy,48:$Vz,49:$VA}),o($VO,[2,50],{49:$VA}),o($VO,[2,51],{49:$VA}),o($VP,[2,52],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,53],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,54],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,55],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,56],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,57],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,60],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,61],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,62],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,63],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,64],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,65],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,66],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,67],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($VP,[2,68],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($Vv,[2,19]),o($VL,[2,45]),o([21,25,26,29,34,35,36,38,39,40,41,42,43,65,66,67,68,69,71,72],[2,46],{15:9,20:17,8:123,7:124,10:$V0,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp}),o($Vv,[2,20]),{7:79,8:78,9:119,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,143],28:120,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},o($VL,[2,42]),o($VL,[2,43]),o($VG,[2,76]),{17:144,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{22:[1,145],45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA},{22:[1,146],45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA},{21:[1,147]},o($VQ,$Vt,{18:148,73:$Vu}),o($Vv,[2,38]),o($VR,$VM,{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),o($Vv,[2,30]),{22:[1,149],24:$VK},o($VG,[2,74]),o($VG,[2,77]),{14:150,25:[1,151]},{20:152,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},o($VS,[2,13]),{22:[1,153],24:[1,154]},o($VH,[2,15]),o($VJ,[2,9]),o($Vv,[2,21]),o($VR,[2,86],{45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA}),{9:155,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{9:156,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:157,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},{17:158,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($VG,[2,75]),o($Vs,[2,8]),{7:79,8:78,9:77,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:$VD,27:74,28:75,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},{25:[2,11]},o($VS,[2,14]),{15:159,20:17,75:$Vk,76:$Vl,77:$Vm,78:$Vn,79:$Vo,80:$Vp},o($Vs,[2,31],{37:[1,160]}),o($Vv,[2,33]),{22:[1,161],45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA},o($VQ,$Vt,{18:162,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,73:$Vu}),o($VH,[2,16]),{9:163,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($Vv,$Vt,{18:164,73:$Vu}),{17:165,21:$V1,25:$VE,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($Vv,[2,32]),o($Vv,[2,34]),{22:[1,166],45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA},{9:167,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,38:$V7,39:$V8,40:$V9,41:$Va,42:$Vb,43:$Vc,44:18,65:$Vd,66:$Ve,67:$Vf,68:$Vg,69:$Vh,71:$Vi,72:$Vj},o($Vv,[2,35])],
+defaultActions: {3:[2,2],43:[2,1],152:[2,11]},
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1081,97 +1096,97 @@ case 1:/* ignore comment */
 break;
 case 2:/* ignore comment */
 break;
-case 3:return 72;
+case 3:return 77;
 break;
-case 4:return 39;
+case 4:return 42;
 break;
-case 5:return 'CLEAR'; 
+case 5:return 34; 
 break;
-case 6:return 38;
+case 6:return 35;
 break;
-case 7:return 36;
+case 7:return 41;
 break;
-case 8:return 34;
+case 8:return 39;
 break;
-case 9:return 65;
+case 9:return 37;
 break;
-case 10:return 37;
+case 10:return 68;
 break;
-case 11:return 10
+case 11:return 40;
 break;
-case 12:return 33;
+case 12:return 10
 break;
-case 13:return 74;
+case 13:return 36;
 break;
-case 14:return 71;
+case 14:return 79;
 break;
-case 15:return 'NOT';
+case 15:return 76;
 break;
-case 16:return 'NULL';
+case 16:return 'NOT';
 break;
-case 17:return 73;
+case 17:return 'NULL';
 break;
-case 18:return 75;
+case 18:return 78;
 break;
-case 19:return 40;
+case 19:return 80;
 break;
-case 20:return 64;
+case 20:return 43;
 break;
-case 21:return 70;
+case 21:return 67;
 break;
-case 22:return 35;
+case 22:return 75;
 break;
-case 23:return 25;
+case 23:return 38;
 break;
-case 24:return 26;
+case 24:return 71;
 break;
-case 25:return 'OPEN_BRACKET';
+case 25:return 72;
 break;
-case 26:return 'CLOSE_BRACKET';
+case 26:return 25;
 break;
-case 27:return 21;
+case 27:return 26;
 break;
-case 28:return 22;
+case 28:return 'OPEN_BRACKET';
 break;
-case 29:return 24;
+case 29:return 'CLOSE_BRACKET';
 break;
-case 30:return 'COLON';
+case 30:return 21;
 break;
-case 31:return 68;
+case 31:return 22;
 break;
-case 32:return 19;
+case 32:return 24;
 break;
-case 33:return 16;
+case 33:return 'COLON';
 break;
-case 34:return 47;
+case 34:return 73;
 break;
-case 35:return 52;
+case 35:return 19;
 break;
-case 36:return 42;
+case 36:return 16;
 break;
-case 37:return 48;
+case 37:return 50;
 break;
-case 38:return 53;
+case 38:return 55;
 break;
-case 39:return 43;
+case 39:return 45;
 break;
-case 40:return 49;
+case 40:return 51;
 break;
-case 41:return 44;
+case 41:return 56;
 break;
-case 42:return 50;
+case 42:return 46;
 break;
-case 43:return 45;
+case 43:return 52;
 break;
-case 44:return 51;
+case 44:return 47;
 break;
-case 45:return 46;
+case 45:return 53;
 break;
-case 46:return 54;
+case 46:return 48;
 break;
-case 47:return 55;
+case 47:return 54;
 break;
-case 48:return 56;
+case 48:return 49;
 break;
 case 49:return 57;
 break;
@@ -1183,18 +1198,24 @@ case 52:return 60;
 break;
 case 53:return 61;
 break;
-case 54:return 66;
+case 54:return 62;
 break;
-case 55:return 5;
+case 55:return 63;
 break;
-case 56:return 63;
+case 56:return 64;
 break;
-case 57:return 62;
+case 57:return 69;
+break;
+case 58:return 5;
+break;
+case 59:return 66;
+break;
+case 60:return 65;
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:#.*)/,/^(?:bool\b)/,/^(?:break\b)/,/^(?:clear\b)/,/^(?:continue\b)/,/^(?:do\b)/,/^(?:else\b)/,/^(?:false\b)/,/^(?:for\b)/,/^(?:function\b)/,/^(?:if\b)/,/^(?:Line\b)/,/^(?:num\b)/,/^(?:not\b)/,/^(?:null\b)/,/^(?:Point\b)/,/^(?:Polygon\b)/,/^(?:return\b)/,/^(?:true\b)/,/^(?:void\b)/,/^(?:while\b)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?::)/,/^(?:;)/,/^(?:->)/,/^(?:=)/,/^(?:\+=)/,/^(?:\+\+)/,/^(?:\+)/,/^(?:-=)/,/^(?:--)/,/^(?:-)/,/^(?:\*=)/,/^(?:\*)/,/^(?:\/=)/,/^(?:\/)/,/^(?:%=)/,/^(?:%)/,/^(?:&&)/,/^(?:\|\|)/,/^(?:\?=)/,/^(?:\?<)/,/^(?:\?>)/,/^(?:!=)/,/^(?:!>)/,/^(?:!<)/,/^(?:!)/,/^(?:$)/,/^(?:[0-9]+(\.[0-9]*)?)/,/^(?:[a-zA-Z_]+[a-zA-Z0-9_]*)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:#.*)/,/^(?:bool\b)/,/^(?:break\b)/,/^(?:clear\b)/,/^(?:draw\b)/,/^(?:continue\b)/,/^(?:do\b)/,/^(?:else\b)/,/^(?:false\b)/,/^(?:for\b)/,/^(?:function\b)/,/^(?:if\b)/,/^(?:line\b)/,/^(?:num\b)/,/^(?:not\b)/,/^(?:null\b)/,/^(?:point\b)/,/^(?:polygon\b)/,/^(?:return\b)/,/^(?:true\b)/,/^(?:void\b)/,/^(?:while\b)/,/^(?:width\b)/,/^(?:height\b)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?::)/,/^(?:;)/,/^(?:->)/,/^(?:=)/,/^(?:\+=)/,/^(?:\+\+)/,/^(?:\+)/,/^(?:-=)/,/^(?:--)/,/^(?:-)/,/^(?:\*=)/,/^(?:\*)/,/^(?:\/=)/,/^(?:\/)/,/^(?:%=)/,/^(?:%)/,/^(?:&&)/,/^(?:\|\|)/,/^(?:\?=)/,/^(?:\?<)/,/^(?:\?>)/,/^(?:!=)/,/^(?:!>)/,/^(?:!<)/,/^(?:!)/,/^(?:$)/,/^(?:[0-9]+(\.[0-9]*)?)/,/^(?:[a-zA-Z_]+[a-zA-Z0-9_]*)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60],"inclusive":true}}
 });
 return lexer;
 })();
@@ -1834,10 +1855,10 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("RETURN: void return, exiting function.");
 					break;
 				case opCodes.LNDRAW:
-					// Get line
-					sp--;
-					var lineAddress = dataStore[sp];
-					var lineStruct = constantPool[lineAddress];
+					// Get line from top of stack, and then draw it? What more is there to say?
+					var lineStruct = data.current()
+								  		 .pop();
+
 					var r = lineStruct[0];
 					var g = lineStruct[1];
 					var b = lineStruct[2];
@@ -1859,9 +1880,10 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("LNDRAW: " + lineStruct);
 					break;
 				case opCodes.PGDRAW:
-					sp--
-					var polygonAddress = dataStore[sp];
-					var polygonStruct = constantPool[polygonAddress];
+					// Get polygon from top of stack, and then draw it? What more is there to say?
+					var polygonStruct = data.current()
+								  			.pop();
+
 					var r = polygonStruct[0];
 					var g = polygonStruct[1];
 					var b = polygonStruct[2];
@@ -1959,16 +1981,17 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("LNTOPG " + polygon);
 					break;
 				case opCodes.PTADD:
-					sp--;
-					var pt2Address = dataStore[sp];
-					var pt2 = constantPool[pt2Address];
-					sp--;
-					var pt1Address = dataStore[sp];
-					var pt1 = constantPool[pt1Address];
-					var line = [0,1,0,1,pt1[0],pt1[1],pt2[0],pt2[1]];
-					var lineAddress = codeStore[cp];
-					cp++;
-					constantPool[lineAddress] = line;
+					//Pop two points off the stack, then place a white line generated by this back onto the stack.
+					var pt2 = data.current()
+								  .pop();
+					var pt1 = data.current()
+								  .pop();
+					
+					var line = [1,1,1,1,pt1[0],pt1[1],pt2[0],pt2[1]];
+					
+					data.current()
+						.push(line);
+
 					if(debugMode) console.log("PTADD " + line);
 					break;
 				case opCodes.LNMUL:
@@ -2081,7 +2104,7 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 				case opCodes.BNEG:
 					//Pop one value off the stack, push !A.
 					var i = data.current()
-							.pop();
+								.pop();
 
 					var result = !i;
 					
@@ -2089,6 +2112,58 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 						.push(result);
 
 					if(debugMode) console.log("BNEG: !" + i + " = " + result);
+					break;
+				case opCodes.AGGR:
+					//Aggregate a set of elements from the stack into an array.
+					//USE: AGGR num
+					//e.g. AGGR 3 pops 3 elements a, b, anc c from the stack and pushes [a,b,c] to the stack.
+					var num = codeStore[cp++];
+					var out = [];
+
+					while(num-- > 0){
+						var i = data.current()
+									.pop();
+						out.unshift(i);
+					}
+
+					data.current()
+						.push(out);
+
+					if(debugMode) console.log("AGGR: output " + out);
+					break;
+				case opCodes.WIDTH:
+					//Push the width of the canvas onto the stack. Since this can't be gleaned normally.
+					data.current()
+						.push(glctx.canvas.width);
+
+					if(debugMode) console.log("WIDTH: " + glctx.canvas.width);
+					break;
+				case opCodes.HEIGHT:
+					//Push the height of the canvas onto the stack. Since this can't be gleaned normally.
+					data.current()
+						.push(glctx.canvas.height);
+
+					if(debugMode) console.log("WIDTH: " + glctx.canvas.height);
+					break;
+				case opCodes.AUGPT:
+					//Pop two structs off the stack, identify which is the point and append it to the line/poly.
+					var i = data.current()
+								.pop();
+					var j = data.current()
+								.pop();
+
+					var out;
+
+					if(i.length>j.length){
+						out = i.concat(j);
+					} else{
+						out = j.concat(i);
+					}
+
+					data.current()
+						.push(out);
+
+					if(debugMode) console.log("AUGPT: " +i+ " + " +j+ " = " +out);
 					break;
 			}
 			// remove garbage from stack
@@ -2173,8 +2248,12 @@ MVM.opCodes = {
 	PUSHSC:	36,
 	RETURNVAL: 37,
 	BAND:	38,
-	BOR:	39 ,
-	BNEG:	40
+	BOR:	39,
+	BNEG:	40,
+	AGGR: 	41,
+	WIDTH:	42,
+	HEIGHT:	43,
+	AUGPT:	44
 };
 
 ;
@@ -2532,9 +2611,16 @@ Sketch.SketchGenNodes.propAdd("greater_than_or_equal");
 Sketch.SketchGenNodes.propAdd("num");
 Sketch.SketchGenNodes.propAdd("ident");
 Sketch.SketchGenNodes.propAdd("bool");
+Sketch.SketchGenNodes.propAdd("point");
+
+Sketch.SketchGenNodes.propAdd("width");
+Sketch.SketchGenNodes.propAdd("height");
+
+//Render instructions.
+Sketch.SketchGenNodes.propAdd("draw");
+Sketch.SketchGenNodes.propAdd("clear");
 /* global Sketch */
 /* global MVM */
-/*jshint sub: true */
 
 //HELPERS
 var createNode = function(type, args){
@@ -2555,9 +2641,9 @@ var loadAndOperate = function(context, nodes, operand){
 		var n = context.interpretNode(nodes[i]);
 
 		if(n.type === "ident"){
-			types.push(n.data.entry.type);
+			types.push(n.data.entry);
 		} else{
-			types.push(n.type);
+			types.push(n);
 		}
 	}
 
@@ -2575,20 +2661,14 @@ var primitive = function(context, value, type){
 };
 
 var assignmentOperand = function(context, nodes, operandNode){
-	context.interpretNode({
-		type: Sketch.SketchGenNodes["assign"],
-		arguments: [nodes[0], {
-			type: Sketch.SketchGenNodes[operandNode],
-			arguments: [nodes[0], nodes[1]]
-		}]
-	});
+	context.interpretNode(createNode("assign", [nodes[0], createNode(operandNode, [nodes[0], nodes[1]])]));
 };
 
 var increment = function(context, nodes, value){
 	context.interpretNode(nodes[0]);
 	assignmentOperand(context, [nodes[0], {type: Sketch.SketchGenNodes["num"], arguments: value}], "addition");
 
-	return Sketch.SketchGenOperandTable.lookup((value>0)?"++":"--", [Sketch.SketchGenNodes._rev[nodes[0].type]]).value;
+	return Sketch.SketchGenOperandTable.lookup((value>0)?"++":"--", [Sketch.SketchGenNodes._rev[nodes[0]]]).value;
 };
 
 /**
@@ -2598,32 +2678,35 @@ var increment = function(context, nodes, value){
  * @author FelixMcFelix (Kyle S.)
  */
 Sketch.SketchGenInstr = [];
+Sketch.addInstruction = function(key, func){
+	Sketch.SketchGenInstr[Sketch.SketchGenNodes[key]] = func;
+};
 
 //CONVENTION: All functions return an object with their return type. This is how we do type checking.
 
 /*
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["template"]] = function(args){
+Sketch.addInstruction("template", function(args){
 	var type;
 	return type;
-}
+});
 */
 
 //Program header.
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["program"]] = function(args){
+Sketch.addInstruction("program", function(args){
 	this.interpretNode(args);
 	this.emit(MVM.opCodes.EXIT);
-};
+});
 
 //Program Structure
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["block"]] = function(args, noCodes){
+Sketch.addInstruction("block", function(args, noCodes){
 	//HAS NO TYPE - ORGANISATIONAL TYPE
 
 	this.scopePush(noCodes);
 	this.interpretNode(args);
 	this.scopePop(noCodes);
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
+Sketch.addInstruction("function", function(args){
 	//args[0] = name, args[1] = decls[], args[2] = type, args[3] = block
 	//We need to extract info, and then transform the tree to place decls inside the block.
 
@@ -2660,9 +2743,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["function"]] = function(args){
 	this.endFunction();
 
 	return {type: "function"};
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
+Sketch.addInstruction("func_call", function(args){
 	//args[0] = name, args[1] = params[]
 	//Lookup name, check for function type.
 	//Compare param types, count while accessing them.
@@ -2697,9 +2780,9 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["func_call"]] = function(args){
 	this.emit(args[1].length);
 
 	return {type: dat.entry.extra.returnType};
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["return"]] = function(args){
+Sketch.addInstruction("return", function(args){
 	if(args === null){
 		this.emit(MVM.opCodes.RETURN);
 	} else{
@@ -2713,27 +2796,25 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["return"]] = function(args){
 	}
 
 	return {type: null};
-};
+});
 
 //Variable declaration and assignment
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl"]] = function(args){
+Sketch.addInstruction("variable_decl", function(args){
 	this.interpretNode(args);
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["variable_decl_assign"]] = function(args){
+Sketch.addInstruction("variable_decl_assign", function(args){
 	this.interpretNode(args[0]);
 
-	this.interpretNode(createNode("assign", 
-			[createNode("ident", args[0].arguments[1]), args[1]]
-		));
-};
+	this.interpretNode(createNode("assign", [createNode("ident", args[0].arguments[1]), args[1]]));
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["decl"]] = function(args){
+Sketch.addInstruction("decl", function(args){
 	this.scopeRegister(args[1],args[0]);
 	return args[0];
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
+Sketch.addInstruction("assign", function(args){
 	var left = this.interpretNode(args[0], true);
 	var right = this.interpretNode(args[1]);
 
@@ -2750,103 +2831,103 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["assign"]] = function(args){
 	this.emit(left.data.entry.address);
 
 	return right;
-};
+});
 
 //Arithmetic Instructions
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["addition"]] = function(args){
+Sketch.addInstruction("addition", function(args){
 	return loadAndOperate(this, args, "+");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["subtraction"]] = function(args){
+Sketch.addInstruction("subtraction", function(args){
 	return loadAndOperate(this, args, "-");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["multiplication"]] = function(args){
+Sketch.addInstruction("multiplication", function(args){
 	return loadAndOperate(this, args, "*");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["division"]] = function(args){
+Sketch.addInstruction("division", function(args){
 	return loadAndOperate(this, args, "/");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["modulo"]] = function(args){
+Sketch.addInstruction("modulo", function(args){
 	return loadAndOperate(this, args, "%");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["increment"]] = function(args){
+Sketch.addInstruction("increment", function(args){
 	return increment(this, args, 1);
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["decrement"]] = function(args){
+Sketch.addInstruction("decrement", function(args){
 	return increment(this, args, -1);
-};
+});
 
 //Arithmetic assignment Instructions.
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["add_assign"]] = function(args){
+Sketch.addInstruction("add_assign", function(args){
 	return assignmentOperand(this, args, "addition");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["sub_assign"]] = function(args){
+Sketch.addInstruction("sub_assign", function(args){
 	return assignmentOperand(this, args, "subtraction");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["mul_assign"]] = function(args){
+Sketch.addInstruction("mul_assign", function(args){
 	return assignmentOperand(this, args, "multiplication");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["div_assign"]] = function(args){
+Sketch.addInstruction("div_assign", function(args){
 	return assignmentOperand(this, args, "division");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["mod_assign"]] = function(args){
+Sketch.addInstruction("mod_assign", function(args){
 	return assignmentOperand(this, args, "modulo");
-};
+});
 
 //Logical Instructions
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["and"]] = function(args){
+Sketch.addInstruction("and", function(args){
 	return loadAndOperate(this, args, "&&");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["or"]] = function(args){
+Sketch.addInstruction("or", function(args){
 	return loadAndOperate(this, args, "||");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["equal"]] = function(args){
+Sketch.addInstruction("equal", function(args){
 	return loadAndOperate(this, args, "?=");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["not_equal"]] = function(args){
+Sketch.addInstruction("not_equal", function(args){
 	return this.interpretNode(boolNegateNode(createNode("equal", args)));
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["negate"]] = function(args){
+Sketch.addInstruction("negate", function(args){
 	return loadAndOperate(this, [args], "!");
-};
+});
 
 
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["less_than"]] = function(args){
+Sketch.addInstruction("less_than", function(args){
 	return loadAndOperate(this, args, "?<");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than"]] = function(args){
+Sketch.addInstruction("greater_than", function(args){
 	return loadAndOperate(this, args, "?>");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["less_than_or_equal"]] = function(args){
+Sketch.addInstruction("less_than_or_equal", function(args){
 	return this.interpretNode(boolNegateNode(createNode("greater_than", args)));
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["greater_than_or_equal"]] = function(args){
+Sketch.addInstruction("greater_than_or_equal", function(args){
 	return this.interpretNode(boolNegateNode(createNode("less_than", args)));
-};
+});
 
 //Literals and identifiers.
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["num"]] = function(args){
+Sketch.addInstruction("num", function(args){
 	return primitive(this, args, "num");
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess){
+Sketch.addInstruction("ident", function(args, noaccess){
 	var d = this.scopeLookup(args);
 	if(!noaccess){
 		this.emit(MVM.opCodes.LOADR);
@@ -2854,11 +2935,52 @@ Sketch.SketchGenInstr[Sketch.SketchGenNodes["ident"]] = function(args, noaccess)
 		this.emit(d.entry.address);
 	}
 	return {type: "ident", data: d};
-};
+});
 
-Sketch.SketchGenInstr[Sketch.SketchGenNodes["bool"]] = function(args){
+Sketch.addInstruction("bool", function(args){
 	return primitive(this, args, "bool");
-};
+});
+
+Sketch.addInstruction("point", function(args){
+	var size = args.length;
+	
+	if(size){
+		//Okay, all elements must be num.
+		args.forEach(function(curr){
+			var t = this.interpretNode(curr);
+			if(t.type !== "num" && t.data.entry.type !== "num"){
+				throw "Tried to place a non-numeric value into a point type.";
+			}
+		}.bind(this));
+	
+		this.emit(MVM.opCodes.AGGR);
+		this.emit(size);
+	} else{
+		throw "Can't define a zero-size point!";
+	}
+
+	return {type: "point", size: size};
+});
+
+Sketch.addInstruction("width", function(){
+	this.emit(MVM.opCodes.WIDTH);
+	return {type: "num"};
+});
+
+Sketch.addInstruction("height", function(){
+	this.emit(MVM.opCodes.HEIGHT);
+	return {type: "num"};
+});
+
+//Render instructions.
+Sketch.addInstruction("draw", function(args){
+	return loadAndOperate(this, [args], "draw");
+});
+
+Sketch.addInstruction("clear", function(args){
+	this.emit(MVM.opCodes.CLEAR);
+	return {type: null};
+});
 
 Sketch.bindInstructions = function(sketchgen){
 	var out = [];
@@ -2876,7 +2998,7 @@ Sketch.MultiKeyTable = function(){
 };
 
 Sketch.MultiKeyTable.prototype = {
-	add: function(operand, keys, value){
+	add: function(operand, keys, value, predicate){
 		var entry = new Sketch.MultiKeyTableEntry(this, operand, keys, value);
 
 		if(!this.store[operand]){
@@ -2894,6 +3016,7 @@ Sketch.MultiKeyTable.prototype = {
 		}
 
 		cursor.content = entry;
+		cursor.predicate = predicate;
 
 		return entry;
 	},
@@ -2903,29 +3026,40 @@ Sketch.MultiKeyTable.prototype = {
 			var k = this.store[operand];
 
 			for(var i = 0; i< keys.length; i++){
-				k = k[keys[i]];
+				k = k[keys[i].type];
 			}
 
-			if(k.content){
+			if (k.content && k.predicate){
+				var pred = k.predicate(keys);
+				if(pred.answer){
+					return k.content;
+				} else{
+					throw pred.reason;
+				}
+			} else if (k.content) {
 				return k.content;
 			} else{
 				throw "No associated entry...";
 			}
 		} catch(e){
-			throw "Operand and key combination not found for: "+operand+" and "+keys;
+			var keysStr = "";
+			keys.forEach(function(curr, ind, arr){keysStr+=curr.type; if(ind!==arr.length-1){keysStr+=", "}});
+
+			throw "Operand and key combination not found for: "+operand+" and "+keysStr+": \n"+e;
 		}
 	}
 };
 
 Sketch.MultiKeyTableEntry = function(table, operand, keys, value){
 	this.parent = table;
+	this.operand = operand;
 	this.keys = keys;
 	this.value = value;
 };
 
 Sketch.MultiKeyTableEntry.prototype = {
 	reflexive: function(){
-		this.parent.add(this.keys.reverse(), this.value);
+		this.parent.add(this.operand, this.keys.reverse(), this.value);
 	}
 };
 
@@ -2956,18 +3090,31 @@ Sketch.SketchGenOperandTable.add("+", ["num", "num"],
 							);
 
 Sketch.SketchGenOperandTable.add("+", ["point", "point"],
-							  new Sketch.OpCheckValue("line", MVM.opCodes.PTADD)
+							  new Sketch.OpCheckValue("line", MVM.opCodes.PTADD),
+							  function(keys){
+							  	var out;
+							  	if(keys[0].size>2){
+							  		out = {answer: false, reason: "Shapes over 2D are not yet supported."};
+							  	} else{
+							  		out = {
+  								  		answer: keys[0].size === keys[1].size,
+  								  		reason: "Mismatch between point sizes at addition: "+keys[0].size+" !== "+keys[1].size
+  								  	};
+	  							}
+
+							  	return out;
+							  }
 							);
 
 //TODO: add opcode.
 Sketch.SketchGenOperandTable.add("+", ["point", "line"],
-							  new Sketch.OpCheckValue("polygon", null)
+							  new Sketch.OpCheckValue("polygon", MVM.opCodes.AUGPT)
 							)
 							.reflexive();
 
 //TODO: add opcode.
 Sketch.SketchGenOperandTable.add("+", ["point", "polygon"],
-							  new Sketch.OpCheckValue("polygon", null)
+							  new Sketch.OpCheckValue("polygon", MVM.opCodes.AUGPT)
 							)
 							.reflexive();
 
@@ -3068,6 +3215,16 @@ Sketch.SketchGenOperandTable.add("!", ["bool"],
 							  new Sketch.OpCheckValue("bool", MVM.opCodes.BNEG)
 							);
 
+//------//
+// draw //
+//------//
+Sketch.SketchGenOperandTable.add("draw", ["line"],
+							  new Sketch.OpCheckValue(null, MVM.opCodes.LNDRAW)
+							);
+
+Sketch.SketchGenOperandTable.add("draw", ["polygon"],
+							  new Sketch.OpCheckValue(null, MVM.opCodes.PGDRAW)
+							);
 ;
 // end
 

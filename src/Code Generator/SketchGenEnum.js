@@ -88,3 +88,11 @@ Sketch.SketchGenNodes.propAdd("greater_than_or_equal");
 Sketch.SketchGenNodes.propAdd("num");
 Sketch.SketchGenNodes.propAdd("ident");
 Sketch.SketchGenNodes.propAdd("bool");
+Sketch.SketchGenNodes.propAdd("point");
+
+Sketch.SketchGenNodes.propAdd("width");
+Sketch.SketchGenNodes.propAdd("height");
+
+//Render instructions.
+Sketch.SketchGenNodes.propAdd("draw");
+Sketch.SketchGenNodes.propAdd("clear");
