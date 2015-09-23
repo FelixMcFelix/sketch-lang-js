@@ -52,7 +52,7 @@ Sketch.MultiKeyTable.prototype = {
 			}
 		} catch(e){
 			var keysStr = "";
-			keys.forEach(function(curr, ind, arr){keysStr+=curr.type; if(ind!==arr.length-1){keysStr+=", "}});
+			keys.forEach(function(curr, ind, arr){keysStr+=curr.type; if(ind!==arr.length-1){keysStr+=", ";}});
 
 			throw "Operand and key combination not found for: "+operand+" and "+keysStr+": \n"+e;
 		}

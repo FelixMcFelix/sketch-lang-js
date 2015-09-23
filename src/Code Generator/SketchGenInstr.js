@@ -45,7 +45,7 @@ var assignmentOperand = function(context, nodes, operandNode){
 
 var increment = function(context, nodes, value){
 	context.interpretNode(nodes[0]);
-	assignmentOperand(context, [nodes[0], {type: Sketch.SketchGenNodes["num"], arguments: value}], "addition");
+	assignmentOperand(context, [nodes[0], createNode("num", value)], "addition");
 
 	return Sketch.SketchGenOperandTable.lookup((value>0)?"++":"--", [Sketch.SketchGenNodes._rev[nodes[0]]]).value;
 };
@@ -356,7 +356,7 @@ Sketch.addInstruction("draw", function(args){
 	return loadAndOperate(this, [args], "draw");
 });
 
-Sketch.addInstruction("clear", function(args){
+Sketch.addInstruction("clear", function(){
 	this.emit(MVM.opCodes.CLEAR);
 	return {type: null};
 });
