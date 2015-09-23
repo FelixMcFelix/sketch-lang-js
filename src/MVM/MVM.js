@@ -752,6 +752,18 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 		window.requestAnimationFrame(window.mvm.interpret);
 	}
 
+	this.call = function(address, args){
+		var returnAddress = codeStore.length;
+		for (var i = 0; i < args.length; i++) {
+			data.current()
+				.push(args[i]);
+		};
+		data.call(args.length, 0, returnAddress);
+		cp = address;
+
+		return this.interpret();
+	}
+
 	// angle parameter in deegrees
 	function rotatePoint(pivot, point, angle) {
 		// Get origin x, y

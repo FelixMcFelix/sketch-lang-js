@@ -50,22 +50,6 @@ Sketch.Driver = function(canvas){
 	 */
 	this.context = canvas.getContext("webgl", {preserveDrawingBuffer: true});
 
-	//Space hold-y stuff.
-	/**
-	 * The VM's code store.
-	 * @name Sketch.Driver#codeStore
-	 * @type Array
-	 * @protected
-	 */
-	this.codeStore = [];
-	/**
-	 * The VM's constant pool.
-	 * @name Sketch.Driver#constantPool
-	 * @type Array
-	 * @protected
-	 */
-	this.constantPool = [];
-
 	//Modules.
 	/**
 	 * A reference to the parser.
@@ -159,10 +143,27 @@ Sketch.Driver.prototype = {
 		try{
 			var ast = this.parser.parse(text);
 
-			var code = this.codeGen.interpret(ast);
+			var prog = this.codeGen.interpret(ast);
 
-			this.vm = new MVM.VM(this.context, this.shaderManager, code, true);
+			this.vm = new MVM.VM(this.context, this.shaderManager, prog.code, true);
 			var d = this.vm.interpret().current();
+
+			if(prog.initAddr !== null){
+				this.vm.call(prog.initAddr, []);
+			}
+
+			var initTime = Date.now();
+			if(prog.renderAddr !== null){
+				var t = this;
+
+				var fn = function(){
+					t.vm.call(prog.renderAddr, [Date.now()-initTime]);
+					window.requestAnimationFrame(fn);
+				}
+
+				window.requestAnimationFrame(fn);
+				
+			}
 			alert("The final values of global scope variables are (in order of definition):\n"+d.variables);
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print the stack's top value to demonstrate our wonderful
@@ -2212,6 +2213,18 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 		window.requestAnimationFrame(window.mvm.interpret);
 	}
 
+	this.call = function(address, args){
+		var returnAddress = codeStore.length;
+		for (var i = 0; i < args.length; i++) {
+			data.current()
+				.push(args[i]);
+		};
+		data.call(args.length, 0, returnAddress);
+		cp = address;
+
+		return this.interpret();
+	}
+
 	// angle parameter in deegrees
 	function rotatePoint(pivot, point, angle) {
 		// Get origin x, y
@@ -2463,7 +2476,23 @@ Sketch.SketchGen = function(){
 		this.cleanState();
 
 		this.interpretNode({type: Sketch.SketchGenNodes["program"], arguments: program});
-		return outBuffer;
+
+		var iaddr = null, raddr = null;
+
+		try{
+			var t = this.scopeLookup("init");
+			if(t.entry.type === "function"){
+				iaddr = t.entry.address;
+			}
+		} catch(e){}
+		try{
+			var d = this.scopeLookup("render");
+			if(d.entry.type === "function"){
+				raddr = d.entry.address;
+			}
+		} catch(e){}
+
+		return {code: outBuffer, initAddr: iaddr, renderAddr: raddr};
 	};
 
 	/**

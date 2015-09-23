@@ -171,7 +171,23 @@ Sketch.SketchGen = function(){
 		this.cleanState();
 
 		this.interpretNode({type: Sketch.SketchGenNodes["program"], arguments: program});
-		return outBuffer;
+
+		var iaddr = null, raddr = null;
+
+		try{
+			var t = this.scopeLookup("init");
+			if(t.entry.type === "function"){
+				iaddr = t.entry.address;
+			}
+		} catch(e){}
+		try{
+			var d = this.scopeLookup("render");
+			if(d.entry.type === "function"){
+				raddr = d.entry.address;
+			}
+		} catch(e){}
+
+		return {code: outBuffer, initAddr: iaddr, renderAddr: raddr};
 	};
 
 	/**
