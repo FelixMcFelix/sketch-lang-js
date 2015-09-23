@@ -96,6 +96,8 @@ Sketch.addInstruction("block", function(args, noCodes){
 	this.scopePush(noCodes);
 	this.interpretNode(args);
 	this.scopePop(noCodes);
+
+	return {type: null}
 });
 
 Sketch.addInstruction("function", function(args){
@@ -188,6 +190,54 @@ Sketch.addInstruction("return", function(args){
 	}
 
 	return {type: null};
+});
+
+Sketch.addInstruction("if", function(args){
+	//args is an array of the other classes.
+	//each returns an object with property "patch", the address to patch with the end 
+	var patches = [];
+	var t = this;
+
+	args.forEach(function(c){
+		var k = t.interpretNode(c);
+		patches.push(k.patch);
+	});
+
+	var end = this.pc();
+
+	patches.forEach(function(c){
+		if(c !== null){
+			t.patch(c, end);
+		}
+	});
+
+	return {type: null};
+});
+
+Sketch.addInstruction("else_if", function(args){
+	//args[0] is the expression to test.
+	//args[1] is the block.
+	var t1 = this.interpretNode(args[0]);
+	if(resolveType(t1).type !== "bool"){
+		throw "Expressions in an if-else block must be boolean type (true or false).";
+	}
+	this.emit(MVM.opCodes.JUMPF);
+	var patch1 = this.emit(0xFF);
+
+	var t2 = this.interpretNode(args[1]);
+	this.emit(MVM.opCodes.JUMP);
+	t2.patch = this.emit(0xFF);
+
+	this.patch(patch1, this.pc());
+
+	return t2;
+});
+
+Sketch.addInstruction("else", function(args){
+	//args should just be a block;
+	var d = this.interpretNode(args);
+	d.patch = null;
+	return d;
 });
 
 //Variable declaration and assignment

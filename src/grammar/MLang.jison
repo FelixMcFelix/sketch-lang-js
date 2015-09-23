@@ -198,21 +198,23 @@ render_statements
 
 
 condition_statements  
-  : IF OPEN_PARENS exp CLOSE_PARENS statement %prec IF_WITHOUT_ELSE
-       { $$ = { type: "if",
-                arguments : [$3,
-                             $5]
-               };
-       }
+  : IF OPEN_PARENS exp CLOSE_PARENS body else_ifs
+    { $$ = {type: Sketch.SketchGenNodes["if"], arguments: [{type: Sketch.SketchGenNodes["else_if"], arguments:[$3, $5]}].concat($6)}; }
+;
 
-  | IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement 
-       {$$ = { type : "if_else",
-               arguments : [ $3,
-                             $5,
-                             $7
-                           ]
-             };
-     }
+else_ifs
+  : ELSE IF OPEN_PARENS exp CLOSE_PARENS body else_ifs
+    {
+      $$ = $7; 
+      $$.unshift({
+        type: Sketch.SketchGenNodes["else_if"],
+        arguments: [$4, $6]
+      }); 
+    }
+  | ELSE body
+    { $$ = [{type: Sketch.SketchGenNodes["else"], arguments: $2}]; }
+  |
+    { $$ = []; }
 ;
 
 iteration_statements  

@@ -343,30 +343,32 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("JUMP: " + address);
 					break;
 				case opCodes.JUMPT:
-					var address = labelTable[codeStore[cp]];
-					sp--;
-					var i = dataStore[sp];
-					result = i == 1;
-					if (result) {
-						cp = codeStore[cp];
+					//Jump to another part of the program if the top value on the stack is true.
+					//USE: JUMPT address
+
+					var address = codeStore[cp++];
+					
+					var i = data.current()
+								.pop();
+					if (i) {
+						cp = address;
 					}
-					else {
-						cp++;
-					}
-					if(debugMode) console.log("JUMPT: " + i + " " + result);
+
+					if(debugMode) console.log("JUMPT: to " + address + ", cond is " + i);
 					break;
 				case opCodes.JUMPF:
-					var address = labelTable[codeStore[cp]];
-					sp--;
-					var i = dataStore[sp];
-					var result = i == 0;
-					if(debugMode) console.log("JUMPF: " + i + " " + result);
-					if (result) {
-						cp = codeStore[cp];
+					//Jump to another part of the program if the top value on the stack is false.
+					//USE: JUMPF address
+
+					var address = codeStore[cp++];
+					
+					var i = data.current()
+								.pop();
+					if (!i) {
+						cp = address;
 					}
-					else {
-						cp++;
-					}
+					
+					if(debugMode) console.log("JUMPF: to " + address + ", cond is " + i);
 					break;
 				case opCodes.CALL:
 					//Call a function.

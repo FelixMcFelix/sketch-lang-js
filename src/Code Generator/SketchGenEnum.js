@@ -49,6 +49,10 @@ Sketch.SketchGenNodes.propAdd("function");
 Sketch.SketchGenNodes.propAdd("func_call");
 Sketch.SketchGenNodes.propAdd("return");
 
+Sketch.SketchGenNodes.propAdd("if");
+Sketch.SketchGenNodes.propAdd("else");
+Sketch.SketchGenNodes.propAdd("else_if");
+
 //Variable declaration and assignment
 Sketch.SketchGenNodes.propAdd("variable_decl");
 Sketch.SketchGenNodes.propAdd("variable_decl_assign");
