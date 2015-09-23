@@ -69,6 +69,7 @@
 "!>"                       return 'OP_LE';
 "!<"                       return 'OP_GE';
 "!"                        return 'EXCL';
+"~"                        return 'TILDE';
 <<EOF>>                    return 'EOF';
 
 
@@ -84,6 +85,7 @@
 /* operator associations and precedence */
 
 /* TODO: Use C precedence for all operators */
+%left TILDE
 
 %left PLUS MINUS
 %left MULT DIV
@@ -458,6 +460,12 @@ exp
                             $1, 
                             $3]
                        };
+                }
+    | exp TILDE exp
+                { $$ = {
+                    type: Sketch.SketchGenNodes["colour"],
+                    arguments: [$1, $3]
+                  };
                 }
       
 ;

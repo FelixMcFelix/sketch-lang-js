@@ -234,3 +234,22 @@ Sketch.SketchGenOperandTable.add("draw", ["line"],
 Sketch.SketchGenOperandTable.add("draw", ["polygon"],
 							  new Sketch.OpCheckValue(null, MVM.opCodes.PGDRAW)
 							);
+
+//---//
+// ~ //
+//---//
+var colourSizeCheck = function(keys){
+	return {
+		answer: (keys[1].size === 3) || (keys[1].size === 4),
+		reason: "Size of a colour must be 3 or 4 numbers." 
+	};
+}
+
+Sketch.SketchGenOperandTable.add("~", ["line", "point"],
+							  new Sketch.OpCheckValue("line", MVM.opCodes.SETCOLOUR),
+							  colourSizeCheck
+							);
+Sketch.SketchGenOperandTable.add("~", ["polygon", "point"],
+							  new Sketch.OpCheckValue("polygon", MVM.opCodes.SETCOLOUR),
+							  colourSizeCheck
+							);

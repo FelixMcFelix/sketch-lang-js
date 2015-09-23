@@ -72,6 +72,9 @@ Sketch.SketchGenNodes.propAdd("mul_assign");
 Sketch.SketchGenNodes.propAdd("div_assign");
 Sketch.SketchGenNodes.propAdd("mod_assign");
 
+//Graphical operands
+Sketch.SketchGenNodes.propAdd("colour");
+
 //Logical Instructions
 Sketch.SketchGenNodes.propAdd("and");
 Sketch.SketchGenNodes.propAdd("or");

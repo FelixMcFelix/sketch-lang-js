@@ -678,6 +678,7 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					data.current()
 						.push(out);
 
+					console.log(data.current().stack)
 					if(debugMode) console.log("AGGR: output " + out);
 					break;
 				case opCodes.WIDTH:
@@ -713,6 +714,26 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 						.push(out);
 
 					if(debugMode) console.log("AUGPT: " +i+ " + " +j+ " = " +out);
+					break;
+				case opCodes.SETCOLOUR:
+					//Pop one line/poly and one point, use the point to define the colour for that shape...
+					var colour = data.current()
+								.pop();
+					var shape = data.current()
+								.pop();
+
+					if(colour.size === 3){
+						colour[3] = 1;
+					}
+
+					for(var i = 0; i< colour.length; i++){
+						shape[i] = colour[i];
+					}
+
+					data.current()
+						.push(shape);
+
+					if(debugMode) console.log("SETCOLOUR: " +shape+ " ~ " +colour+ " = " +out);
 					break;
 			}
 			// remove garbage from stack
@@ -802,5 +823,6 @@ MVM.opCodes = {
 	AGGR: 	41,
 	WIDTH:	42,
 	HEIGHT:	43,
-	AUGPT:	44
+	AUGPT:	44,
+	SETCOLOUR:	45 
 };

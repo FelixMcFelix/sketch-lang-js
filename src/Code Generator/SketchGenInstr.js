@@ -262,6 +262,11 @@ Sketch.addInstruction("mod_assign", function(args){
 	return assignmentOperand(this, args, "modulo");
 });
 
+//Graphical operands
+Sketch.addInstruction("colour", function(args){
+	return loadAndOperate(this, args, "~");
+});
+
 //Logical Instructions
 Sketch.addInstruction("and", function(args){
 	return loadAndOperate(this, args, "&&");
