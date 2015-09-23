@@ -7,7 +7,7 @@ Sketch.MultiKeyTable = function(){
 };
 
 Sketch.MultiKeyTable.prototype = {
-	add: function(operand, keys, value, predicate){
+	add: function(operand, keys, value, predicate, extraSelector){
 		var entry = new Sketch.MultiKeyTableEntry(this, operand, keys, value);
 
 		if(!this.store[operand]){
@@ -26,6 +26,7 @@ Sketch.MultiKeyTable.prototype = {
 
 		cursor.content = entry;
 		cursor.predicate = predicate;
+		cursor.extraSelector = extraSelector;
 
 		return entry;
 	},
@@ -38,18 +39,26 @@ Sketch.MultiKeyTable.prototype = {
 				k = k[keys[i].type];
 			}
 
+			var out;
+
 			if (k.content && k.predicate){
 				var pred = k.predicate(keys);
 				if(pred.answer){
-					return k.content;
+					out = k.content;
 				} else{
 					throw pred.reason;
 				}
 			} else if (k.content) {
-				return k.content;
+				out = k.content;
 			} else{
 				throw "No associated entry...";
 			}
+
+			if(k.extraSelector){
+				out.extra = k.extraSelector(keys);
+			}
+
+			return out;
 		} catch(e){
 			var keysStr = "";
 			keys.forEach(function(curr, ind, arr){keysStr+=curr.type; if(ind!==arr.length-1){keysStr+=", ";}});
@@ -98,21 +107,28 @@ Sketch.SketchGenOperandTable.add("+", ["num", "num"],
 							  new Sketch.OpCheckValue("num", MVM.opCodes.FADD)
 							);
 
+var pointPointChecker = function(keys){
+	var out;
+	if(keys[0].extra.size>2){
+		out = {answer: false, reason: "Shapes over 2D are not yet supported."};
+	} else{
+		out = {
+	  		answer: keys[0].extra.size === keys[1].extra.size,
+	  		reason: "Mismatch between point sizes at addition: "+keys[0].extra.size+" !== "+keys[1].extra.size
+	  	};
+	}
+
+	return out;
+};
+
+var extraOfSecond = function(keys){
+	return keys[1].extra;
+};
+
 Sketch.SketchGenOperandTable.add("+", ["point", "point"],
 							  new Sketch.OpCheckValue("line", MVM.opCodes.PTADD),
-							  function(keys){
-							  	var out;
-							  	if(keys[0].size>2){
-							  		out = {answer: false, reason: "Shapes over 2D are not yet supported."};
-							  	} else{
-							  		out = {
-  								  		answer: keys[0].size === keys[1].size,
-  								  		reason: "Mismatch between point sizes at addition: "+keys[0].size+" !== "+keys[1].size
-  								  	};
-	  							}
-
-							  	return out;
-							  }
+							  pointPointChecker,
+							  extraOfSecond
 							);
 
 //TODO: add opcode.
@@ -239,8 +255,9 @@ Sketch.SketchGenOperandTable.add("draw", ["polygon"],
 // ~ //
 //---//
 var colourSizeCheck = function(keys){
+	var target = keys[keys.length - 1];
 	return {
-		answer: (keys[1].size === 3) || (keys[1].size === 4),
+		answer: (target.extra.size === 3) || (target.extra.size === 4),
 		reason: "Size of a colour must be 3 or 4 numbers." 
 	};
 }
@@ -251,5 +268,37 @@ Sketch.SketchGenOperandTable.add("~", ["line", "point"],
 							);
 Sketch.SketchGenOperandTable.add("~", ["polygon", "point"],
 							  new Sketch.OpCheckValue("polygon", MVM.opCodes.SETCOLOUR),
+							  colourSizeCheck
+							);
+
+//----//
+// -> //
+//----//
+var pointIs2d = function(keys){
+	return {
+		answer: keys[1].extra.size === 2,
+		reason: "Shapes over 2D are not yet supported."
+	};
+};
+
+Sketch.SketchGenOperandTable.add("->", ["point", "point"],
+							  new Sketch.OpCheckValue("point", MVM.opCodes.TRANSLATEPT),
+							  pointPointChecker,
+							  extraOfSecond
+							);
+Sketch.SketchGenOperandTable.add("->", ["line", "point"],
+							  new Sketch.OpCheckValue("line", MVM.opCodes.TRANSLATESTRUCT),
+							  pointIs2d
+							);
+Sketch.SketchGenOperandTable.add("->", ["polygon", "point"],
+							  new Sketch.OpCheckValue("polygon", MVM.opCodes.TRANSLATESTRUCT),
+							  pointIs2d
+							);
+
+//-------//
+// clear //
+//-------//
+Sketch.SketchGenOperandTable.add("clear", ["point"],
+							  new Sketch.OpCheckValue(null, MVM.opCodes.CLEAR),
 							  colourSizeCheck
 							);

@@ -74,6 +74,7 @@ Sketch.SketchGenNodes.propAdd("mod_assign");
 
 //Graphical operands
 Sketch.SketchGenNodes.propAdd("colour");
+Sketch.SketchGenNodes.propAdd("translate");
 
 //Logical Instructions
 Sketch.SketchGenNodes.propAdd("and");
@@ -99,3 +100,4 @@ Sketch.SketchGenNodes.propAdd("height");
 //Render instructions.
 Sketch.SketchGenNodes.propAdd("draw");
 Sketch.SketchGenNodes.propAdd("clear");
+Sketch.SketchGenNodes.propAdd("clear_colour");

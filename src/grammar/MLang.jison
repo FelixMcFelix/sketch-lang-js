@@ -189,6 +189,8 @@ statement
 render_statements
   : CLEAR semi
     { $$ = {type: Sketch.SketchGenNodes["clear"], arguments: null}; }
+  | CLEAR exp semi
+    { $$ = {type: Sketch.SketchGenNodes["clear_colour"], arguments: $2}; }
   | DRAW exp semi
     { $$ = {type: Sketch.SketchGenNodes["draw"], arguments: $2}; }
 ;
@@ -464,6 +466,12 @@ exp
     | exp TILDE exp
                 { $$ = {
                     type: Sketch.SketchGenNodes["colour"],
+                    arguments: [$1, $3]
+                  };
+                }
+    | exp ARROW exp
+                { $$ = {
+                    type: Sketch.SketchGenNodes["translate"],
                     arguments: [$1, $3]
                   };
                 }

@@ -13,24 +13,37 @@ var boolNegateNode = function(node){
 	return createNode("negate", node);
 };
 
+var resolveType = function(typeObj){
+	if(typeObj.type === "ident"){
+		typeObj = typeObj.data.entry
+	}
+
+	return typeObj
+};
 
 var loadAndOperate = function(context, nodes, operand){
 	var types = [];
 	for(var i = 0; i< nodes.length; i++){
 		var n = context.interpretNode(nodes[i]);
 
-		if(n.type === "ident"){
-			types.push(n.data.entry);
-		} else{
-			types.push(n);
-		}
+		// if(n.type === "ident"){
+		// 	types.push(n.data.entry);
+		// } else{
+		// 	types.push(n);
+		// }
+		types.push(resolveType(n));
 	}
 
 	var o = Sketch.SketchGenOperandTable.lookup(operand, types);
 
 	context.emit(o.value.code);
 
-	return o.value;
+	var d = o.value;
+	if(o.extra){
+		d.extra = o.extra;
+	}
+
+	return d;
 };
 
 var primitive = function(context, value, type){
@@ -200,9 +213,13 @@ Sketch.addInstruction("assign", function(args){
 	if(left.type !== "ident"){
 		throw "ERROR: non-identity type on left side of assignment operator.";
 	}
-	if(right.type !== left.data.entry.type && right.data.entry.type !== left.data.entry.type){
-		console.log("Ltype: "+left.data.entry.type+", Rtype: "+right.type);
+	if(resolveType(right).type !== resolveType(left).type){
+		console.log("Ltype: "+resolveType(left).type+", Rtype: "+resolveType(right).type);
 		throw "ERROR: right side of assignment does not match type of identifier.";
+	}
+
+	if(right.extra){
+		left.data.entry.extra = right.extra;
 	}
 
 	this.emit(MVM.opCodes.STORER);
@@ -265,6 +282,10 @@ Sketch.addInstruction("mod_assign", function(args){
 //Graphical operands
 Sketch.addInstruction("colour", function(args){
 	return loadAndOperate(this, args, "~");
+});
+
+Sketch.addInstruction("translate", function(args){
+	return loadAndOperate(this, args, "->");
 });
 
 //Logical Instructions
@@ -343,7 +364,7 @@ Sketch.addInstruction("point", function(args){
 		throw "Can't define a zero-size point!";
 	}
 
-	return {type: "point", size: size};
+	return {type: "point", extra: {size: size}};
 });
 
 Sketch.addInstruction("width", function(){
@@ -362,8 +383,13 @@ Sketch.addInstruction("draw", function(args){
 });
 
 Sketch.addInstruction("clear", function(){
+	primitive(this, null, null);
 	this.emit(MVM.opCodes.CLEAR);
 	return {type: null};
+});
+
+Sketch.addInstruction("clear_colour", function(args){
+	return loadAndOperate(this, [args], "clear");
 });
 
 Sketch.bindInstructions = function(sketchgen){
