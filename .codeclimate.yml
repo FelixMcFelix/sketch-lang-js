@@ -42,6 +42,7 @@ ratings:
 
 exclude_paths:
 - build/**/*
+- examples/**/*
 - docs/**/*
 - editor/**/*
 - "gulpfile.js"
