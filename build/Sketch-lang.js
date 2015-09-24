@@ -2295,7 +2295,6 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 	}
 
 	this.call = function(address, args){
-		debugger;
 		var returnAddress = codeStore.length;
 		for (var i = 0; i < args.length; i++) {
 			data.current()

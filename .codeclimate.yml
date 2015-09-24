@@ -41,7 +41,7 @@ ratings:
 # exclude_paths key.
 
 exclude_paths:
-- "build/*"
-- "docs/*"
-- "editor/*"
+- build/**/*
+- docs/**/*
+- editor/**/*
 - "gulpfile.js"
