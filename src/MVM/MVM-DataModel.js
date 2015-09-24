@@ -97,6 +97,7 @@ MVM.DataModel.prototype = {
 
 		var c = this.current();
 		c.returnAddr = ret;
+		c.functionBase = true;
 
 		while (argc>0){
 			c.setVar(argc-1, prev.pop());	
@@ -115,6 +116,10 @@ MVM.DataModel.prototype = {
 	 */
 	funcreturn: function(value){
 		var p = this.stack.pop();
+
+		while(!p.functionBase){
+			p = p.parent;
+		}
 		
 		if (value!==null) {
 			this.current().push(value);
@@ -135,6 +140,7 @@ MVM.StackFrame = function(parent){
 	this.variables = [];
 	this.stack = [];
 	this.returnAddr = undefined;
+	this.functionBase = false;
 };
 
 MVM.StackFrame.prototype = {

@@ -79,7 +79,12 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 	// to the browser so te canvas can be rendered
 	var needsUpdate = 0;
 
+	this.dead = false;
+
 	this.interpret = function() {
+		if(this.dead === true){
+			return;
+		}
 
 		var dataStore = window.MVM.dataStore;
 
@@ -389,7 +394,6 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 				case opCodes.RETURNVAL:
 					//Return from a function, taking the top value from the stack from the function scope and placing it onto the resumed scope.
 					//USE: RETURNVAL
-
 					var value = data.current()
 									.pop();
 
@@ -400,7 +404,6 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 				case opCodes.RETURN:
 					//Return from a function, returning no value.
 					//USE: RETURN
-
 					cp = data.funcreturn(null);
 
 					if(debugMode) console.log("RETURN: void return, exiting function.");
@@ -441,16 +444,17 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					var a = polygonStruct[3];
 					var theColor = new Float32Array([r,g,b,a]);
 
-					var points = [];
-					var i;
-					for (i = 4; i < polygonStruct.length; i+=2) {
-						var pt = [polygonStruct[i],polygonStruct[i+1]];
-						points.push(pt);
-					}
+					var points = polygonStruct.slice(4);
+					// var i;
+					// for (i = 4; i < polygonStruct.length; i+=2) {
+					// 	var pt = [polygonStruct[i],polygonStruct[i+1]];
+					// 	points.push(pt);
+					// }
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.POLYGON);
 					var canWidth = glctx.canvas.width;
 					var canHeight = glctx.canvas.height;
+
 					prog.draw(points, {width:[canWidth], height: [canHeight]}, {color: theColor})
 					if(debugMode) console.log("PGDRAW: " + polygonStruct);
 					break;
@@ -477,7 +481,7 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					//Ends program operation.
 					//USE: EXIT
 					cp = cl;
-					console.log("EXIT");
+					if(debugMode) console.log("EXIT");
 					break;
 				case opCodes.LOADIDX:
 					var constPoolindex = codeStore[cp];
@@ -690,7 +694,6 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					data.current()
 						.push(out);
 
-					console.log(data.current().stack)
 					if(debugMode) console.log("AGGR: output " + out);
 					break;
 				case opCodes.WIDTH:
@@ -809,10 +812,15 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 				.push(args[i]);
 		};
 		data.call(args.length, 0, returnAddress);
+		// data.funcreturn();
 		cp = address;
 
 		return this.interpret();
-	}
+	};
+
+	this.kill = function(){
+		this.dead = true;
+	};
 
 	// angle parameter in deegrees
 	function rotatePoint(pivot, point, angle) {

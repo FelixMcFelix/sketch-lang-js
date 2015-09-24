@@ -66,6 +66,8 @@ Sketch.SketchGenNodes.propAdd("multiplication");
 Sketch.SketchGenNodes.propAdd("division");
 Sketch.SketchGenNodes.propAdd("modulo");
 
+Sketch.SketchGenNodes.propAdd("unary_minus");
+
 Sketch.SketchGenNodes.propAdd("increment");
 Sketch.SketchGenNodes.propAdd("decrement");
 

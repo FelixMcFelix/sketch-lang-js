@@ -147,8 +147,6 @@ Sketch.addInstruction("func_call", function(args){
 
 	var dat = this.scopeLookup(args[0]);
 
-	console.log(dat);
-
 	if(dat.entry.type !== "function"){
 		throw "Tried to call "+args[0]+" as though it were a function - it is a "+dat.type+"!";
 	}
@@ -160,7 +158,7 @@ Sketch.addInstruction("func_call", function(args){
 	}
 
 	for(var i = 0; i<args[1].length; i++){
-		var t1 = this.interpretNode(args[1][i]).type;
+		var t1 = resolveType(this.interpretNode(args[1][i])).type;
 		var t2 = dat.entry.extra.paramTypes[i];
 
 		if (t1 !== t2){
@@ -180,7 +178,7 @@ Sketch.addInstruction("return", function(args){
 	if(args === null){
 		this.emit(MVM.opCodes.RETURN);
 	} else{
-		var t1 = this.interpretNode(args).type;
+		var t1 = resolveType(this.interpretNode(args)).type;
 		this.emit(MVM.opCodes.RETURNVAL);
 
 		var t2 = this.currentFunctionType();
@@ -306,6 +304,10 @@ Sketch.addInstruction("increment", function(args){
 
 Sketch.addInstruction("decrement", function(args){
 	return increment(this, args, -1);
+});
+
+Sketch.addInstruction("unary_minus", function(args){
+	return this.interpretNode(createNode("multiplication", [args, createNode("num", [-1])]));
 });
 
 //Arithmetic assignment Instructions.

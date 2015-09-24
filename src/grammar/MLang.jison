@@ -91,6 +91,7 @@
 %left MULT DIV
 %right '!'
 %right '%'
+%left UNARY
 %nonassoc IF_WITHOUT_ELSE
 %nonassoc ELSE
 
@@ -477,6 +478,9 @@ exp
                     arguments: [$1, $3]
                   };
                 }
+    | MINUS exp %prec UNARY
+      { $$ = {type: Sketch.SketchGenNodes["unary_minus"], arguments: $2};
+      }
       
 ;
 

@@ -66,7 +66,7 @@ Sketch.Driver = function(canvas){
 	 * @protected
 	 * @readonly
 	 */
-	this.codeGen = new Sketch.SketchGen();
+	this.codeGen = null;
 	/**
 	 * The module's reference to the shader manager.
 	 * @name Sketch.Driver#shaderManager
@@ -139,14 +139,21 @@ Sketch.Driver.prototype = {
 			" If it's been excessively long then you may have tried to add a malformed shader.");
 			return false;
 		}
+		if(this.vm){
+			this.vm.kill();
+		}
 		this.vm = null;
+		this.codeGen = null;
 		try{
+			this.codeGen = new Sketch.SketchGen();
 			var ast = this.parser.parse(text);
 
 			var prog = this.codeGen.interpret(ast);
 
-			this.vm = new MVM.VM(this.context, this.shaderManager, prog.code, true);
-			var d = this.vm.interpret().current();
+			var vm = new MVM.VM(this.context, this.shaderManager, prog.code, false);
+
+			this.vm = vm;
+			var d = this.vm.interpret();
 
 			if(prog.initAddr !== null){
 				this.vm.call(prog.initAddr, []);
@@ -157,18 +164,20 @@ Sketch.Driver.prototype = {
 				var t = this;
 
 				var fn = function(){
-					t.vm.call(prog.renderAddr, [Date.now()-initTime]);
-					window.requestAnimationFrame(fn);
+					if(!vm.dead){
+						vm.call(prog.renderAddr, [Date.now()-initTime]);
+						var k = window.requestAnimationFrame(fn, t.canvas);
+					}
 				}
 
-				window.requestAnimationFrame(fn);
+				window.requestAnimationFrame(fn, this.canvas);
 				
 			}
-			alert("The final values of global scope variables are (in order of definition):\n"+d.variables);
+			// alert("The final values of global scope variables are (in order of definition):\n"+d.variables);
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print the stack's top value to demonstrate our wonderful
 			//calculator.
-			alert("The Virtual Machine's final state is in the console.");
+			// alert("The Virtual Machine's final state is in the console.");
 			console.log(d);
 		} catch (e){
 			alert("Error detected while rendering! See console for stack trace.");
@@ -255,12 +264,12 @@ Sketch.Driver.prototype = {
   }
 */
 var sketchParse = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,40],$V2=[1,19],$V3=[1,12],$V4=[1,27],$V5=[1,28],$V6=[1,20],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,24],$Vb=[1,25],$Vc=[1,26],$Vd=[1,35],$Ve=[1,36],$Vf=[1,37],$Vg=[1,38],$Vh=[1,39],$Vi=[1,41],$Vj=[1,42],$Vk=[1,29],$Vl=[1,30],$Vm=[1,31],$Vn=[1,32],$Vo=[1,33],$Vp=[1,34],$Vq=[5,10,21,25,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,77,78,79,80,81,82],$Vr=[1,46],$Vs=[5,10,21,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,77,78,79,80,81,82],$Vt=[2,86],$Vu=[1,49],$Vv=[1,57],$Vw=[1,51],$Vx=[1,52],$Vy=[1,53],$Vz=[1,54],$VA=[1,55],$VB=[1,56],$VC=[5,10,19,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,50,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VD=[2,92],$VE=[1,75],$VF=[5,10,26,29,34,35,36,39,40,41,42,43,44,77,78,79,80,81,82],$VG=[1,91],$VH=[25,67],$VI=[5,10,16,19,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VJ=[22,24],$VK=[5,10,16,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VL=[5,10,21,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VM=[5,10,21,25,26,29,34,35,36,38,39,40,41,42,43,44,67,68,69,70,71,73,74,77,78,79,80,81,82],$VN=[1,131],$VO=[10,21,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,77,78,79,80,81,82],$VP=[2,90],$VQ=[5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VR=[5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VS=[5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VT=[21,25,67,68,69,70,71,73,74],$VU=[22,24,26],$VV=[1,157],$VW=[19,25],$VX=[2,35],$VY=[1,167];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,41],$V2=[1,20],$V3=[1,12],$V4=[1,28],$V5=[1,29],$V6=[1,21],$V7=[1,22],$V8=[1,23],$V9=[1,24],$Va=[1,25],$Vb=[1,26],$Vc=[1,27],$Vd=[1,19],$Ve=[1,36],$Vf=[1,37],$Vg=[1,38],$Vh=[1,39],$Vi=[1,40],$Vj=[1,42],$Vk=[1,43],$Vl=[1,30],$Vm=[1,31],$Vn=[1,32],$Vo=[1,33],$Vp=[1,34],$Vq=[1,35],$Vr=[5,10,21,25,29,34,35,36,39,40,41,42,43,44,47,67,68,69,70,71,73,74,77,78,79,80,81,82],$Vs=[1,47],$Vt=[5,10,21,25,26,29,34,35,36,39,40,41,42,43,44,47,67,68,69,70,71,73,74,77,78,79,80,81,82],$Vu=[2,87],$Vv=[1,50],$Vw=[5,10,21,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,77,78,79,80,81,82],$Vx=[1,58],$Vy=[1,52],$Vz=[1,53],$VA=[1,54],$VB=[1,55],$VC=[1,56],$VD=[1,57],$VE=[5,10,19,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,50,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VF=[1,77],$VG=[2,93],$VH=[1,78],$VI=[5,10,26,29,34,35,36,39,40,41,42,43,44,77,78,79,80,81,82],$VJ=[25,67],$VK=[5,10,16,19,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VL=[22,24],$VM=[5,10,16,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,47,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VN=[5,10,21,25,26,29,34,35,36,39,40,41,42,43,44,47,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VO=[5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VP=[5,10,21,25,26,29,34,35,36,38,39,40,41,42,43,44,47,67,68,69,70,71,73,74,77,78,79,80,81,82],$VQ=[1,134],$VR=[10,21,25,26,29,34,35,36,39,40,41,42,43,44,47,67,68,69,70,71,73,74,77,78,79,80,81,82],$VS=[2,91],$VT=[5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VU=[5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,75,77,78,79,80,81,82],$VV=[22,24,26],$VW=[1,159],$VX=[19,25],$VY=[2,35],$VZ=[1,169];
 var parser = {trace: function trace() { },
 yy: {},
 symbols_: {"error":2,"start":3,"program":4,"EOF":5,"declarations":6,"out-decl":7,"in-decl":8,"statement":9,"FUNCTION":10,"declarator":11,"declaration_list":12,"func_return":13,"body":14,"param":15,"ASSIGN":16,"exp":17,"semi":18,"ARROW":19,"type":20,"OPEN_PARENS":21,"CLOSE_PARENS":22,"param_list":23,"COMMA":24,"OPEN_BRACE":25,"CLOSE_BRACE":26,"statement_list":27,"decl_list":28,"function":29,"condition_statements":30,"iteration_statements":31,"jump_statements":32,"render_statements":33,"CLEAR":34,"DRAW":35,"IF":36,"else_ifs":37,"ELSE":38,"WHILE":39,"DO":40,"FOR":41,"CONTINUE":42,"BREAK":43,"RETURN":44,"prim_expr":45,"PLUS":46,"MINUS":47,"MULT":48,"DIV":49,"MODULO":50,"OP_ADD_ASSIGNMENT":51,"OP_SUB_ASSIGNMENT":52,"OP_MULT_ASSIGNMENT":53,"OP_DIV_ASSIGNMENT":54,"OP_MOD_ASSIGNMENT":55,"OP_INC":56,"OP_DEC":57,"OP_AND":58,"OP_OR":59,"OP_EQ":60,"LT":61,"GT":62,"OP_NE":63,"OP_LE":64,"OP_GE":65,"TILDE":66,"IDENTIFIER":67,"NUMBER":68,"TRUE":69,"FALSE":70,"EXCL":71,"init_list":72,"WIDTH":73,"HEIGHT":74,"SEMICOLON":75,"declaration":76,"VOID":77,"NUM":78,"BOOL":79,"POINT":80,"LINE":81,"POLYGON":82,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",10:"FUNCTION",16:"ASSIGN",19:"ARROW",21:"OPEN_PARENS",22:"CLOSE_PARENS",24:"COMMA",25:"OPEN_BRACE",26:"CLOSE_BRACE",29:"function",34:"CLEAR",35:"DRAW",36:"IF",38:"ELSE",39:"WHILE",40:"DO",41:"FOR",42:"CONTINUE",43:"BREAK",44:"RETURN",46:"PLUS",47:"MINUS",48:"MULT",49:"DIV",50:"MODULO",51:"OP_ADD_ASSIGNMENT",52:"OP_SUB_ASSIGNMENT",53:"OP_MULT_ASSIGNMENT",54:"OP_DIV_ASSIGNMENT",55:"OP_MOD_ASSIGNMENT",56:"OP_INC",57:"OP_DEC",58:"OP_AND",59:"OP_OR",60:"OP_EQ",61:"LT",62:"GT",63:"OP_NE",64:"OP_LE",65:"OP_GE",66:"TILDE",67:"IDENTIFIER",68:"NUMBER",69:"TRUE",70:"FALSE",71:"EXCL",73:"WIDTH",74:"HEIGHT",75:"SEMICOLON",77:"VOID",78:"NUM",79:"BOOL",80:"POINT",81:"LINE",82:"POLYGON"},
-productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[9,1],[33,2],[33,3],[33,3],[30,6],[37,7],[37,2],[37,0],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[45,1],[45,1],[45,1],[45,1],[45,2],[45,3],[45,4],[45,3],[45,3],[45,1],[45,1],[18,1],[18,0],[11,1],[76,1],[76,4],[72,1],[72,3],[72,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
+productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,1],[6,1],[6,1],[7,5],[8,4],[8,2],[13,2],[13,0],[12,2],[12,3],[23,1],[23,3],[15,2],[14,2],[14,3],[14,3],[14,4],[9,2],[9,1],[9,1],[9,1],[9,1],[9,1],[9,1],[33,2],[33,3],[33,3],[30,6],[37,7],[37,2],[37,0],[31,5],[31,7],[31,9],[32,2],[32,2],[32,3],[32,2],[28,1],[28,1],[28,2],[28,2],[27,1],[27,2],[27,2],[17,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[45,1],[45,1],[45,1],[45,1],[45,2],[45,3],[45,4],[45,3],[45,3],[45,1],[45,1],[18,1],[18,0],[11,1],[76,1],[76,4],[72,1],[72,3],[72,0],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -347,7 +356,7 @@ break;
 case 34:
  this.$ = [{type: Sketch.SketchGenNodes["else"], arguments: $$[$0]}]; 
 break;
-case 35: case 92:
+case 35: case 93:
  this.$ = []; 
 break;
 case 36:
@@ -593,48 +602,52 @@ case 73:
                 
 break;
 case 74:
- this.$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext}; 
+ this.$ = {type: Sketch.SketchGenNodes["unary_minus"], arguments: $$[$0]};
+      
 break;
 case 75:
- this.$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)}; 
+ this.$ = {type: Sketch.SketchGenNodes["ident"], arguments: yytext}; 
 break;
 case 76:
- this.$ = {type: Sketch.SketchGenNodes["bool"], arguments: true}; 
+ this.$ = {type: Sketch.SketchGenNodes["num"], arguments: Number(yytext)}; 
 break;
 case 77:
- this.$ = {type: Sketch.SketchGenNodes["bool"], arguments: false}; 
+ this.$ = {type: Sketch.SketchGenNodes["bool"], arguments: true}; 
 break;
 case 78:
+ this.$ = {type: Sketch.SketchGenNodes["bool"], arguments: false}; 
+break;
+case 79:
  this.$ = {type: Sketch.SketchGenNodes["negate"], arguments: $$[$0]};
 break;
-case 79: case 82:
+case 80: case 83:
  this.$ = $$[$0-1];
 break;
-case 80:
+case 81:
  this.$ = { type: Sketch.SketchGenNodes["func_call"], arguments: [$$[$0-3],$$[$0-1]]}; 
 break;
-case 81:
+case 82:
  this.$ = { type: Sketch.SketchGenNodes["point"], arguments: $$[$0-1]};
 break;
-case 83:
+case 84:
  this.$ = { type: Sketch.SketchGenNodes["width"], arguments: null};
 break;
-case 84:
+case 85:
  this.$ = { type: Sketch.SketchGenNodes["height"], arguments: null};
 break;
-case 89:
+case 90:
 this.$ = [$$[$0-3],$$[$0-1]];
 break;
-case 90:
+case 91:
  this.$ = [$$[$0]]; 
 break;
-case 91:
+case 92:
  this.$ = $$[$0-2]; this.$.push($$[$0]); 
 break;
 }
 },
-table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},{1:[3]},{5:[1,43],6:44,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},{1:[2,2]},o($Vq,[2,3]),o($Vq,[2,5]),o($Vq,[2,6]),o($Vq,[2,7]),{11:45,67:$Vr},o($Vs,$Vt,{18:48,16:[1,47],75:$Vu}),o($Vs,$Vt,{18:50,19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB,75:$Vu}),o($Vs,[2,23]),o($Vs,[2,24]),o($Vs,[2,25]),o($Vs,[2,26]),o($Vs,[2,27]),o($Vs,[2,28]),{11:58,67:$Vr},o($VC,[2,50],{16:[1,74],51:[1,59],52:[1,60],53:[1,61],54:[1,62],55:[1,63],56:[1,64],57:[1,65],58:[1,66],59:[1,67],60:[1,68],61:[1,69],62:[1,70],63:[1,71],64:[1,72],65:[1,73]}),{7:81,8:80,9:79,10:$V0,14:11,15:9,17:82,20:17,21:$V1,24:$VD,25:$V2,26:$VE,27:76,28:77,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,72:78,73:$Vi,74:$Vj,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},{21:[1,83]},{21:[1,84]},{9:85,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{21:[1,86]},o($Vs,$Vt,{18:87,75:$Vu}),o($Vs,$Vt,{18:88,75:$Vu}),o($VF,$Vt,{45:18,17:89,18:90,21:$V1,25:$VG,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,75:$Vu}),o($VF,$Vt,{45:18,18:92,17:93,21:$V1,25:$VG,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,75:$Vu}),{17:94,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},o($VH,[2,93]),o($VH,[2,94]),o($VH,[2,95]),o($VH,[2,96]),o($VH,[2,97]),o($VH,[2,98]),o([5,10,16,19,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],[2,74],{21:[1,95]}),o($VI,[2,75]),o($VI,[2,76]),o($VI,[2,77]),{21:$V1,25:$VG,45:96,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},o($VJ,$VD,{45:18,17:97,72:98,21:$V1,25:$VG,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj}),o($VI,[2,83]),o($VI,[2,84]),{1:[2,1]},o($Vq,[2,4]),{12:99,21:[1,100]},o($VK,[2,87]),{17:101,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},o($VL,[2,10]),o($VL,[2,85]),o($Vs,[2,22]),{17:102,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:103,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:104,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:105,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:106,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:107,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:108,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},o($VK,[2,17]),{17:109,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:110,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:111,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:112,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:113,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},o($VC,[2,61]),o($VC,[2,62]),{17:114,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:115,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:116,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:117,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:118,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:119,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:120,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:121,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:122,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},o($VM,[2,18]),{7:81,8:80,9:124,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,123],28:125,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},{7:129,8:128,9:79,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,126],27:127,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},{24:$VN,26:[1,130]},o($VO,[2,47]),o($VO,[2,43]),o($VO,[2,44]),o([10,21,25,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,77,78,79,80,81,82],$Vt,{18:50,19:$Vv,24:$VP,26:$VP,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB,75:$Vu}),{17:132,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:133,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{39:[1,134]},{8:135,15:9,20:17,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},o($Vs,[2,39]),o($Vs,[2,40]),o($Vs,$Vt,{18:136,19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB,75:$Vu}),o($Vs,[2,42]),o([24,26],$VD,{45:18,72:78,17:137,21:$V1,25:$VG,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj}),o($Vs,[2,29]),o($Vs,$Vt,{18:138,19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB,75:$Vu}),o($Vs,$Vt,{18:139,19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB,75:$Vu}),o($VJ,$VD,{45:18,17:137,72:140,21:$V1,25:$VG,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj}),o($VI,[2,78]),{19:$Vv,22:[1,141],24:$VP,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB},{22:[1,142],24:$VN},{13:143,19:[1,144],25:[2,12]},{15:147,20:17,22:[1,145],23:146,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},o($Vs,$Vt,{18:148,19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB,75:$Vu}),o($VQ,[2,51],{19:$Vv,48:$Vy,49:$Vz,50:$VA}),o($VQ,[2,52],{19:$Vv,48:$Vy,49:$Vz,50:$VA}),o($VR,[2,53],{19:$Vv,50:$VA}),o($VR,[2,54],{19:$Vv,50:$VA}),o($VS,[2,55],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o([5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],[2,72],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA}),o($VS,[2,73],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,56],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,57],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,58],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,59],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,60],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,63],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,64],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,65],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,66],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,67],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,68],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,69],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,70],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VS,[2,71],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($VM,[2,19]),o($VO,[2,48]),o([21,25,26,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74],[2,49],{15:9,20:17,8:128,7:129,10:$V0,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp}),o($VM,[2,20]),{7:81,8:80,9:124,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,149],28:125,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},o($VO,[2,45]),o($VO,[2,46]),o($VI,[2,81]),{17:150,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{19:$Vv,22:[1,151],46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB},{19:$Vv,22:[1,152],46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB},{21:[1,153]},o($VT,$Vt,{18:154,75:$Vu}),o($Vs,[2,41]),o($VU,$VP,{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),o($Vs,[2,30]),o($Vs,[2,31]),{22:[1,155],24:$VN},o($VI,[2,79]),o($VI,[2,82]),{14:156,25:$VV},{20:158,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},o($VW,[2,13]),{22:[1,159],24:[1,160]},o($VJ,[2,15]),o($VL,[2,9]),o($VM,[2,21]),o($VU,[2,91],{19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB}),{14:161,25:$VV},{9:162,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:163,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{17:164,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},o($VI,[2,80]),o($Vs,[2,8]),{7:81,8:80,9:79,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:$VE,27:76,28:77,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},{25:[2,11]},o($VW,[2,14]),{15:165,20:17,77:$Vk,78:$Vl,79:$Vm,80:$Vn,81:$Vo,82:$Vp},o($Vs,$VX,{37:166,38:$VY}),o($Vs,[2,36]),{19:$Vv,22:[1,168],46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB},o($VT,$Vt,{18:169,19:$Vv,46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB,75:$Vu}),o($VJ,[2,16]),o($Vs,[2,32]),{14:171,25:$VV,36:[1,170]},o($Vs,$Vt,{18:172,75:$Vu}),{17:173,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{21:[1,174]},o($Vs,[2,34]),o($Vs,[2,37]),{19:$Vv,22:[1,175],46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB},{17:176,21:$V1,25:$VG,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{9:177,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,67:$Vd,68:$Ve,69:$Vf,70:$Vg,71:$Vh,73:$Vi,74:$Vj},{19:$Vv,22:[1,178],46:$Vw,47:$Vx,48:$Vy,49:$Vz,50:$VA,66:$VB},o($Vs,[2,38]),{14:179,25:$VV},o($Vs,$VX,{37:180,38:$VY}),o($Vs,[2,33])],
-defaultActions: {3:[2,2],43:[2,1],158:[2,11]},
+table: [{3:1,4:2,5:[1,3],6:4,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},{1:[3]},{5:[1,44],6:45,7:5,8:6,9:7,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},{1:[2,2]},o($Vr,[2,3]),o($Vr,[2,5]),o($Vr,[2,6]),o($Vr,[2,7]),{11:46,67:$Vs},o($Vt,$Vu,{18:49,16:[1,48],75:$Vv}),o($Vw,$Vu,{18:51,19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD,75:$Vv}),o($Vt,[2,23]),o($Vt,[2,24]),o($Vt,[2,25]),o($Vt,[2,26]),o($Vt,[2,27]),o($Vt,[2,28]),{11:59,67:$Vs},o($VE,[2,50],{16:[1,75],51:[1,60],52:[1,61],53:[1,62],54:[1,63],55:[1,64],56:[1,65],57:[1,66],58:[1,67],59:[1,68],60:[1,69],61:[1,70],62:[1,71],63:[1,72],64:[1,73],65:[1,74]}),{17:76,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{7:84,8:83,9:82,10:$V0,14:11,15:9,17:85,20:17,21:$V1,24:$VG,25:$V2,26:$VH,27:79,28:80,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,72:81,73:$Vj,74:$Vk,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},{21:[1,86]},{21:[1,87]},{9:88,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{21:[1,89]},o($Vt,$Vu,{18:90,75:$Vv}),o($Vt,$Vu,{18:91,75:$Vv}),o($VI,$Vu,{45:18,17:92,18:93,21:$V1,25:$VF,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,75:$Vv}),o($VI,$Vu,{45:18,18:94,17:95,21:$V1,25:$VF,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,75:$Vv}),{17:96,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},o($VJ,[2,94]),o($VJ,[2,95]),o($VJ,[2,96]),o($VJ,[2,97]),o($VJ,[2,98]),o($VJ,[2,99]),o([5,10,16,19,22,24,25,26,29,34,35,36,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],[2,75],{21:[1,97]}),o($VK,[2,76]),o($VK,[2,77]),o($VK,[2,78]),{21:$V1,25:$VF,45:98,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},o($VL,$VG,{45:18,17:99,72:100,21:$V1,25:$VF,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk}),o($VK,[2,84]),o($VK,[2,85]),{1:[2,1]},o($Vr,[2,4]),{12:101,21:[1,102]},o($VM,[2,88]),{17:103,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},o($VN,[2,10]),o($VN,[2,86]),o($Vt,[2,22]),{17:104,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:105,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:106,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:107,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:108,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:109,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:110,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},o($VM,[2,17]),{17:111,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:112,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:113,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:114,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:115,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},o($VE,[2,61]),o($VE,[2,62]),{17:116,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:117,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:118,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:119,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:120,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:121,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:122,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:123,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:124,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},o($VO,[2,74],{19:$Vx,50:$VC}),o([24,26],$VG,{45:18,72:81,17:125,21:$V1,25:$VF,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk}),o($VP,[2,18]),{7:84,8:83,9:127,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,126],28:128,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},{7:132,8:131,9:82,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,129],27:130,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},{24:$VQ,26:[1,133]},o($VR,[2,47]),o($VR,[2,43]),o($VR,[2,44]),o([10,21,25,29,34,35,36,39,40,41,42,43,44,67,68,69,70,71,73,74,77,78,79,80,81,82],$Vu,{18:51,19:$Vx,24:$VS,26:$VS,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD,75:$Vv}),{17:135,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:136,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{39:[1,137]},{8:138,15:9,20:17,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},o($Vt,[2,39]),o($Vt,[2,40]),o($Vw,$Vu,{18:139,19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD,75:$Vv}),o($Vt,[2,42]),o($Vt,[2,29]),o($Vw,$Vu,{18:140,19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD,75:$Vv}),o($Vw,$Vu,{18:141,19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD,75:$Vv}),o($VL,$VG,{45:18,17:125,72:142,21:$V1,25:$VF,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk}),o($VK,[2,79]),{19:$Vx,22:[1,143],24:$VS,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD},{22:[1,144],24:$VQ},{13:145,19:[1,146],25:[2,12]},{15:149,20:17,22:[1,147],23:148,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},o($Vw,$Vu,{18:150,19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD,75:$Vv}),o($VT,[2,51],{19:$Vx,48:$VA,49:$VB,50:$VC}),o($VT,[2,52],{19:$Vx,48:$VA,49:$VB,50:$VC}),o($VO,[2,53],{19:$Vx,50:$VC}),o($VO,[2,54],{19:$Vx,50:$VC}),o($VU,[2,55],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o([5,10,21,22,24,25,26,29,34,35,36,39,40,41,42,43,44,66,67,68,69,70,71,73,74,75,77,78,79,80,81,82],[2,72],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC}),o($VU,[2,73],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,56],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,57],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,58],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,59],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,60],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,63],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,64],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,65],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,66],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,67],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,68],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,69],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,70],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VU,[2,71],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VV,$VS,{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),o($VP,[2,19]),o($VR,[2,48]),o([21,25,26,29,34,35,36,39,40,41,42,43,44,47,67,68,69,70,71,73,74],[2,49],{15:9,20:17,8:131,7:132,10:$V0,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq}),o($VP,[2,20]),{7:84,8:83,9:127,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:[1,151],28:128,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},o($VR,[2,45]),o($VR,[2,46]),o($VK,[2,82]),{17:152,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{19:$Vx,22:[1,153],46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD},{19:$Vx,22:[1,154],46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD},{21:[1,155]},o([21,25,47,67,68,69,70,71,73,74],$Vu,{18:156,75:$Vv}),o($Vt,[2,41]),o($Vt,[2,30]),o($Vt,[2,31]),{22:[1,157],24:$VQ},o($VK,[2,80]),o($VK,[2,83]),{14:158,25:$VW},{20:160,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},o($VX,[2,13]),{22:[1,161],24:[1,162]},o($VL,[2,15]),o($VN,[2,9]),o($VP,[2,21]),o($VV,[2,92],{19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD}),{14:163,25:$VW},{9:164,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:165,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{17:166,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},o($VK,[2,81]),o($Vt,[2,8]),{7:84,8:83,9:82,10:$V0,14:11,15:9,17:10,20:17,21:$V1,25:$V2,26:$VH,27:79,28:80,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},{25:[2,11]},o($VX,[2,14]),{15:167,20:17,77:$Vl,78:$Vm,79:$Vn,80:$Vo,81:$Vp,82:$Vq},o($Vt,$VY,{37:168,38:$VZ}),o($Vt,[2,36]),{19:$Vx,22:[1,170],46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD},o([21,25,67,68,69,70,71,73,74],$Vu,{18:171,19:$Vx,46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD,75:$Vv}),o($VL,[2,16]),o($Vt,[2,32]),{14:173,25:$VW,36:[1,172]},o($Vt,$Vu,{18:174,75:$Vv}),{17:175,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{21:[1,176]},o($Vt,[2,34]),o($Vt,[2,37]),{19:$Vx,22:[1,177],46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD},{17:178,21:$V1,25:$VF,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{9:179,14:11,17:10,21:$V1,25:$V2,29:$V3,30:13,31:14,32:15,33:16,34:$V4,35:$V5,36:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:18,47:$Vd,67:$Ve,68:$Vf,69:$Vg,70:$Vh,71:$Vi,73:$Vj,74:$Vk},{19:$Vx,22:[1,180],46:$Vy,47:$Vz,48:$VA,49:$VB,50:$VC,66:$VD},o($Vt,[2,38]),{14:181,25:$VW},o($Vt,$VY,{37:182,38:$VZ}),o($Vt,[2,33])],
+defaultActions: {3:[2,2],44:[2,1],160:[2,11]},
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1365,6 +1378,7 @@ MVM.DataModel.prototype = {
 
 		var c = this.current();
 		c.returnAddr = ret;
+		c.functionBase = true;
 
 		while (argc>0){
 			c.setVar(argc-1, prev.pop());	
@@ -1383,6 +1397,10 @@ MVM.DataModel.prototype = {
 	 */
 	funcreturn: function(value){
 		var p = this.stack.pop();
+
+		while(!p.functionBase){
+			p = p.parent;
+		}
 		
 		if (value!==null) {
 			this.current().push(value);
@@ -1403,6 +1421,7 @@ MVM.StackFrame = function(parent){
 	this.variables = [];
 	this.stack = [];
 	this.returnAddr = undefined;
+	this.functionBase = false;
 };
 
 MVM.StackFrame.prototype = {
@@ -1549,7 +1568,12 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 	// to the browser so te canvas can be rendered
 	var needsUpdate = 0;
 
+	this.dead = false;
+
 	this.interpret = function() {
+		if(this.dead === true){
+			return;
+		}
 
 		var dataStore = window.MVM.dataStore;
 
@@ -1859,7 +1883,6 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 				case opCodes.RETURNVAL:
 					//Return from a function, taking the top value from the stack from the function scope and placing it onto the resumed scope.
 					//USE: RETURNVAL
-
 					var value = data.current()
 									.pop();
 
@@ -1870,7 +1893,6 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 				case opCodes.RETURN:
 					//Return from a function, returning no value.
 					//USE: RETURN
-
 					cp = data.funcreturn(null);
 
 					if(debugMode) console.log("RETURN: void return, exiting function.");
@@ -1911,16 +1933,17 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					var a = polygonStruct[3];
 					var theColor = new Float32Array([r,g,b,a]);
 
-					var points = [];
-					var i;
-					for (i = 4; i < polygonStruct.length; i+=2) {
-						var pt = [polygonStruct[i],polygonStruct[i+1]];
-						points.push(pt);
-					}
+					var points = polygonStruct.slice(4);
+					// var i;
+					// for (i = 4; i < polygonStruct.length; i+=2) {
+					// 	var pt = [polygonStruct[i],polygonStruct[i+1]];
+					// 	points.push(pt);
+					// }
 					var prog = manager.getProgram("square", "square");
 					prog.setDrawMode(Palette.Program.POLYGON);
 					var canWidth = glctx.canvas.width;
 					var canHeight = glctx.canvas.height;
+
 					prog.draw(points, {width:[canWidth], height: [canHeight]}, {color: theColor})
 					if(debugMode) console.log("PGDRAW: " + polygonStruct);
 					break;
@@ -1947,7 +1970,7 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					//Ends program operation.
 					//USE: EXIT
 					cp = cl;
-					console.log("EXIT");
+					if(debugMode) console.log("EXIT");
 					break;
 				case opCodes.LOADIDX:
 					var constPoolindex = codeStore[cp];
@@ -2160,7 +2183,6 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					data.current()
 						.push(out);
 
-					console.log(data.current().stack)
 					if(debugMode) console.log("AGGR: output " + out);
 					break;
 				case opCodes.WIDTH:
@@ -2279,10 +2301,15 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 				.push(args[i]);
 		};
 		data.call(args.length, 0, returnAddress);
+		// data.funcreturn();
 		cp = address;
 
 		return this.interpret();
-	}
+	};
+
+	this.kill = function(){
+		this.dead = true;
+	};
 
 	// angle parameter in deegrees
 	function rotatePoint(pivot, point, angle) {
@@ -2382,7 +2409,7 @@ Sketch.SketchGen = function(){
 	var stackPtr = 0;
 	var functionStack = [];
 
-	var DEBUG = true;
+	var DEBUG = false;
 
 	var instructions = Sketch.bindInstructions(this);
 
@@ -2710,6 +2737,8 @@ Sketch.SketchGenNodes.propAdd("multiplication");
 Sketch.SketchGenNodes.propAdd("division");
 Sketch.SketchGenNodes.propAdd("modulo");
 
+Sketch.SketchGenNodes.propAdd("unary_minus");
+
 Sketch.SketchGenNodes.propAdd("increment");
 Sketch.SketchGenNodes.propAdd("decrement");
 
@@ -2898,8 +2927,6 @@ Sketch.addInstruction("func_call", function(args){
 
 	var dat = this.scopeLookup(args[0]);
 
-	console.log(dat);
-
 	if(dat.entry.type !== "function"){
 		throw "Tried to call "+args[0]+" as though it were a function - it is a "+dat.type+"!";
 	}
@@ -2911,7 +2938,7 @@ Sketch.addInstruction("func_call", function(args){
 	}
 
 	for(var i = 0; i<args[1].length; i++){
-		var t1 = this.interpretNode(args[1][i]).type;
+		var t1 = resolveType(this.interpretNode(args[1][i])).type;
 		var t2 = dat.entry.extra.paramTypes[i];
 
 		if (t1 !== t2){
@@ -2931,7 +2958,7 @@ Sketch.addInstruction("return", function(args){
 	if(args === null){
 		this.emit(MVM.opCodes.RETURN);
 	} else{
-		var t1 = this.interpretNode(args).type;
+		var t1 = resolveType(this.interpretNode(args)).type;
 		this.emit(MVM.opCodes.RETURNVAL);
 
 		var t2 = this.currentFunctionType();
@@ -3057,6 +3084,10 @@ Sketch.addInstruction("increment", function(args){
 
 Sketch.addInstruction("decrement", function(args){
 	return increment(this, args, -1);
+});
+
+Sketch.addInstruction("unary_minus", function(args){
+	return this.interpretNode(createNode("multiplication", [args, createNode("num", [-1])]));
 });
 
 //Arithmetic assignment Instructions.
@@ -3747,28 +3778,27 @@ Palette.Program.prototype = {
 		this.context.useProgram(this.program);
 		if(!conf1) conf1 = {};
 		var tempDrawMode = this.drawMode;
-
 		if(verts !== null){
 		switch(this.drawMode){
 			case Palette.Program.POLYGON:
-				var temp = earcut([verts], true);
+				var temp = earcut(verts, null, 2);
 				var itemSize = this.attrs.vs.access.vertexBuffer.itemSize;
-				var temper = new Float32Array(temp.indices.length * itemSize);
+				var temper = new Float32Array(temp.length * itemSize);
 
-				var vertSize = verts[0].length;
+				var vertSize = 2;
 
-				for(var i=0; i<temp.indices.length; i++){
-					var vertIndex = temp.indices[i];
+				for(var i=0; i<temp.length; i++){
+					var vertIndex = temp[i];
 
 					switch(vertSize){
 						case 3:
-							temper[itemSize*i+2] = temp.vertices[vertIndex*vertSize +2];
+							temper[itemSize*i+2] = verts[vertIndex*vertSize +2];
 							/*falls through*/
 						case 2:
-							temper[itemSize*i+1] = temp.vertices[vertIndex*vertSize +1];
+							temper[itemSize*i+1] = verts[vertIndex*vertSize +1];
 							/*falls through*/
 						case 1:
-							temper[itemSize*i] = temp.vertices[vertIndex*vertSize];
+							temper[itemSize*i] = verts[vertIndex*vertSize];
 							/*falls through*/
 					}
 				}
@@ -4360,69 +4390,67 @@ Palette.ShaderFactory.prototype.constructor = Palette.ShaderFactory;
 
 module.exports = earcut;
 
-function earcut(points, returnIndices) {
+function earcut(data, holeIndices, dim) {
 
-    var outerNode = filterPoints(linkedList(points[0], true)),
-        triangles = returnIndices ? {vertices: [], indices: []} : [];
+    dim = dim || 2;
+
+    var hasHoles = holeIndices && holeIndices.length,
+        outerLen = hasHoles ? holeIndices[0] * dim : data.length,
+        outerNode = filterPoints(data, linkedList(data, 0, outerLen, dim, true)),
+        triangles = [];
 
     if (!outerNode) return triangles;
 
-    var node, minX, minY, maxX, maxY, x, y, size, i,
-        threshold = 80;
+    var minX, minY, maxX, maxY, x, y, size;
 
-    for (i = 0; threshold >= 0 && i < points.length; i++) threshold -= points[i].length;
+    if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
 
     // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
-    if (threshold < 0) {
-        node = outerNode.next;
-        minX = maxX = node.p[0];
-        minY = maxY = node.p[1];
-        do {
-            x = node.p[0];
-            y = node.p[1];
+    if (data.length > 80 * dim) {
+        minX = maxX = data[0];
+        minY = maxY = data[1];
+
+        for (var i = dim; i < outerLen; i += dim) {
+            x = data[i];
+            y = data[i + 1];
             if (x < minX) minX = x;
             if (y < minY) minY = y;
             if (x > maxX) maxX = x;
             if (y > maxY) maxY = y;
-            node = node.next;
-        } while (node !== outerNode);
+        }
 
         // minX, minY and size are later used to transform coords into integers for z-order calculation
         size = Math.max(maxX - minX, maxY - minY);
     }
 
-    if (points.length > 1) outerNode = eliminateHoles(points, outerNode);
-
-    earcutLinked(outerNode, triangles, minX, minY, size);
+    earcutLinked(data, outerNode, triangles, dim, minX, minY, size);
 
     return triangles;
 }
 
 // create a circular doubly linked list from polygon points in the specified winding order
-function linkedList(points, clockwise) {
+function linkedList(data, start, end, dim, clockwise) {
     var sum = 0,
-        len = points.length,
-        i, j, p1, p2, last;
+        i, j, last;
 
     // calculate original winding order of a polygon ring
-    for (i = 0, j = len - 1; i < len; j = i++) {
-        p1 = points[i];
-        p2 = points[j];
-        sum += (p2[0] - p1[0]) * (p1[1] + p2[1]);
+    for (i = start, j = end - dim; i < end; i += dim) {
+        sum += (data[j] - data[i]) * (data[i + 1] + data[j + 1]);
+        j = i;
     }
 
     // link points into circular doubly-linked list in the specified winding order
     if (clockwise === (sum > 0)) {
-        for (i = 0; i < len; i++) last = insertNode(points[i], last);
+        for (i = start; i < end; i += dim) last = insertNode(i, last);
     } else {
-        for (i = len - 1; i >= 0; i--) last = insertNode(points[i], last);
+        for (i = end - dim; i >= start; i -= dim) last = insertNode(i, last);
     }
 
     return last;
 }
 
 // eliminate colinear or duplicate points
-function filterPoints(start, end) {
+function filterPoints(data, start, end) {
     if (!end) end = start;
 
     var node = start,
@@ -4430,7 +4458,7 @@ function filterPoints(start, end) {
     do {
         again = false;
 
-        if (equals(node.p, node.next.p) || orient(node.prev.p, node.p, node.next.p) === 0) {
+        if (!node.steiner && (equals(data, node.i, node.next.i) || orient(data, node.prev.i, node.i, node.next.i) === 0)) {
 
             // remove node
             node.prev.next = node.next;
@@ -4453,13 +4481,11 @@ function filterPoints(start, end) {
 }
 
 // main ear slicing loop which triangulates a polygon (given as a linked list)
-function earcutLinked(ear, triangles, minX, minY, size, pass) {
+function earcutLinked(data, ear, triangles, dim, minX, minY, size, pass) {
     if (!ear) return;
 
-    var indexed = triangles.vertices !== undefined;
-
     // interlink polygon nodes in z-order
-    if (!pass && minX !== undefined) indexCurve(ear, minX, minY, size);
+    if (!pass && minX !== undefined) indexCurve(data, ear, minX, minY, size);
 
     var stop = ear,
         prev, next;
@@ -4469,17 +4495,11 @@ function earcutLinked(ear, triangles, minX, minY, size, pass) {
         prev = ear.prev;
         next = ear.next;
 
-        if (isEar(ear, minX, minY, size)) {
+        if (isEar(data, ear, minX, minY, size)) {
             // cut off the triangle
-            if (indexed) {
-                addIndexedVertex(triangles, prev);
-                addIndexedVertex(triangles, ear);
-                addIndexedVertex(triangles, next);
-            } else {
-                triangles.push(prev.p);
-                triangles.push(ear.p);
-                triangles.push(next.p);
-            }
+            triangles.push(prev.i / dim);
+            triangles.push(ear.i / dim);
+            triangles.push(next.i / dim);
 
             // remove ear node
             next.prev = prev;
@@ -4501,16 +4521,16 @@ function earcutLinked(ear, triangles, minX, minY, size, pass) {
         if (ear === stop) {
             // try filtering points and slicing again
             if (!pass) {
-                earcutLinked(filterPoints(ear), triangles, minX, minY, size, 1);
+                earcutLinked(data, filterPoints(data, ear), triangles, dim, minX, minY, size, 1);
 
             // if this didn't work, try curing all small self-intersections locally
             } else if (pass === 1) {
-                ear = cureLocalIntersections(ear, triangles);
-                earcutLinked(ear, triangles, minX, minY, size, 2);
+                ear = cureLocalIntersections(data, ear, triangles, dim);
+                earcutLinked(data, ear, triangles, dim, minX, minY, size, 2);
 
             // as a last resort, try splitting the remaining polygon into two
             } else if (pass === 2) {
-                splitEarcut(ear, triangles, minX, minY, size);
+                splitEarcut(data, ear, triangles, dim, minX, minY, size);
             }
 
             break;
@@ -4518,29 +4538,16 @@ function earcutLinked(ear, triangles, minX, minY, size, pass) {
     }
 }
 
-function addIndexedVertex(triangles, node) {
-    if (node.source) node = node.source;
-
-    var i = node.index;
-    if (i === null) {
-        var dim = node.p.length;
-        var vertices = triangles.vertices;
-        node.index = i = vertices.length / dim;
-
-        for (var d = 0; d < dim; d++) vertices.push(node.p[d]);
-    }
-    triangles.indices.push(i);
-}
-
 // check whether a polygon node forms a valid ear with adjacent nodes
-function isEar(ear, minX, minY, size) {
+function isEar(data, ear, minX, minY, size) {
 
-    var a = ear.prev.p,
-        b = ear.p,
-        c = ear.next.p,
+    var a = ear.prev.i,
+        b = ear.i,
+        c = ear.next.i,
 
-        ax = a[0], bx = b[0], cx = c[0],
-        ay = a[1], by = b[1], cy = c[1],
+        ax = data[a], ay = data[a + 1],
+        bx = data[b], by = data[b + 1],
+        cx = data[c], cy = data[c + 1],
 
         abd = ax * by - ay * bx,
         acd = ax * cy - ay * cx,
@@ -4556,7 +4563,7 @@ function isEar(ear, minX, minY, size) {
         acx = ax - cx,
         aby = ay - by,
         bax = bx - ax,
-        p, px, py, s, t, k, node;
+        i, px, py, s, t, k, node;
 
     // if we use z-order curve hashing, iterate through the curve
     if (minX !== undefined) {
@@ -4575,12 +4582,12 @@ function isEar(ear, minX, minY, size) {
         node = ear.nextZ;
 
         while (node && node.z <= maxZ) {
-            p = node.p;
+            i = node.i;
             node = node.nextZ;
-            if (p === a || p === c) continue;
+            if (i === a || i === c) continue;
 
-            px = p[0];
-            py = p[1];
+            px = data[i];
+            py = data[i + 1];
 
             s = cay * px + acx * py - acd;
             if (s >= 0) {
@@ -4596,12 +4603,12 @@ function isEar(ear, minX, minY, size) {
         node = ear.prevZ;
 
         while (node && node.z >= minZ) {
-            p = node.p;
+            i = node.i;
             node = node.prevZ;
-            if (p === a || p === c) continue;
+            if (i === a || i === c) continue;
 
-            px = p[0];
-            py = p[1];
+            px = data[i];
+            py = data[i + 1];
 
             s = cay * px + acx * py - acd;
             if (s >= 0) {
@@ -4618,11 +4625,11 @@ function isEar(ear, minX, minY, size) {
         node = ear.next.next;
 
         while (node !== ear.prev) {
-            p = node.p;
+            i = node.i;
             node = node.next;
 
-            px = p[0];
-            py = p[1];
+            px = data[i];
+            py = data[i + 1];
 
             s = cay * px + acx * py - acd;
             if (s >= 0) {
@@ -4639,26 +4646,19 @@ function isEar(ear, minX, minY, size) {
 }
 
 // go through all polygon nodes and cure small local self-intersections
-function cureLocalIntersections(start, triangles) {
-    var indexed = !!triangles.vertices;
-
+function cureLocalIntersections(data, start, triangles, dim) {
     var node = start;
     do {
         var a = node.prev,
             b = node.next.next;
 
         // a self-intersection where edge (v[i-1],v[i]) intersects (v[i+1],v[i+2])
-        if (a.p !== b.p && intersects(a.p, node.p, node.next.p, b.p) && locallyInside(a, b) && locallyInside(b, a)) {
+        if (a.i !== b.i && intersects(data, a.i, node.i, node.next.i, b.i) &&
+                locallyInside(data, a, b) && locallyInside(data, b, a)) {
 
-            if (indexed) {
-                addIndexedVertex(triangles, a);
-                addIndexedVertex(triangles, node);
-                addIndexedVertex(triangles, b);
-            } else {
-                triangles.push(a.p);
-                triangles.push(node.p);
-                triangles.push(b.p);
-            }
+            triangles.push(a.i / dim);
+            triangles.push(node.i / dim);
+            triangles.push(b.i / dim);
 
             // remove two nodes involved
             a.next = b;
@@ -4679,23 +4679,23 @@ function cureLocalIntersections(start, triangles) {
 }
 
 // try splitting polygon into two and triangulate them independently
-function splitEarcut(start, triangles, minX, minY, size) {
+function splitEarcut(data, start, triangles, dim, minX, minY, size) {
     // look for a valid diagonal that divides the polygon into two
     var a = start;
     do {
         var b = a.next.next;
         while (b !== a.prev) {
-            if (a.p !== b.p && isValidDiagonal(a, b)) {
+            if (a.i !== b.i && isValidDiagonal(data, a, b)) {
                 // split the polygon in two by the diagonal
                 var c = splitPolygon(a, b);
 
                 // filter colinear points around the cuts
-                a = filterPoints(a, a.next);
-                c = filterPoints(c, c.next);
+                a = filterPoints(data, a, a.next);
+                c = filterPoints(data, c, c.next);
 
                 // run earcut on each half
-                earcutLinked(a, triangles, minX, minY, size);
-                earcutLinked(c, triangles, minX, minY, size);
+                earcutLinked(data, a, triangles, dim, minX, minY, size);
+                earcutLinked(data, c, triangles, dim, minX, minY, size);
                 return;
             }
             b = b.next;
@@ -4705,54 +4705,61 @@ function splitEarcut(start, triangles, minX, minY, size) {
 }
 
 // link every hole into the outer loop, producing a single-ring polygon without holes
-function eliminateHoles(points, outerNode) {
-    var len = points.length;
+function eliminateHoles(data, holeIndices, outerNode, dim) {
+    var queue = [],
+        i, len, start, end, list;
 
-    var queue = [];
-    for (var i = 1; i < len; i++) {
-        var list = filterPoints(linkedList(points[i], false));
-        if (list) queue.push(getLeftmost(list));
+    for (i = 0, len = holeIndices.length; i < len; i++) {
+        start = holeIndices[i] * dim;
+        end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
+        list = linkedList(data, start, end, dim, false);
+        if (list === list.next) list.steiner = true;
+        list = filterPoints(data, list);
+        if (list) queue.push(getLeftmost(data, list));
     }
-    queue.sort(compareX);
+
+    queue.sort(function (a, b) {
+        return data[a.i] - data[b.i];
+    });
 
     // process holes from left to right
     for (i = 0; i < queue.length; i++) {
-        eliminateHole(queue[i], outerNode);
-        outerNode = filterPoints(outerNode, outerNode.next);
+        eliminateHole(data, queue[i], outerNode);
+        outerNode = filterPoints(data, outerNode, outerNode.next);
     }
 
     return outerNode;
 }
 
 // find a bridge between vertices that connects hole with an outer ring and and link it
-function eliminateHole(holeNode, outerNode) {
-    outerNode = findHoleBridge(holeNode, outerNode);
+function eliminateHole(data, holeNode, outerNode) {
+    outerNode = findHoleBridge(data, holeNode, outerNode);
     if (outerNode) {
         var b = splitPolygon(outerNode, holeNode);
-        filterPoints(b, b.next);
+        filterPoints(data, b, b.next);
     }
 }
 
 // David Eberly's algorithm for finding a bridge between hole and outer polygon
-function findHoleBridge(holeNode, outerNode) {
+function findHoleBridge(data, holeNode, outerNode) {
     var node = outerNode,
-        p = holeNode.p,
-        px = p[0],
-        py = p[1],
+        i = holeNode.i,
+        px = data[i],
+        py = data[i + 1],
         qMax = -Infinity,
         mNode, a, b;
 
     // find a segment intersected by a ray from the hole's leftmost point to the left;
     // segment's endpoint with lesser x will be potential connection point
     do {
-        a = node.p;
-        b = node.next.p;
+        a = node.i;
+        b = node.next.i;
 
-        if (py <= a[1] && py >= b[1]) {
-            var qx = a[0] + (py - a[1]) * (b[0] - a[0]) / (b[1] - a[1]);
+        if (py <= data[a + 1] && py >= data[b + 1]) {
+            var qx = data[a] + (py - data[a + 1]) * (data[b] - data[a]) / (data[b + 1] - data[a + 1]);
             if (qx <= px && qx > qMax) {
                 qMax = qx;
-                mNode = a[0] < b[0] ? node : node.next;
+                mNode = data[a] < data[b] ? node : node.next;
             }
         }
         node = node.next;
@@ -4764,8 +4771,8 @@ function findHoleBridge(holeNode, outerNode) {
     // if there are no points found, we have a valid connection;
     // otherwise choose the point of the minimum angle with the ray as connection point
 
-    var bx = mNode.p[0],
-        by = mNode.p[1],
+    var bx = data[mNode.i],
+        by = data[mNode.i + 1],
         pbd = px * by - py * bx,
         pcd = px * py - py * qMax,
         cpy = py - py,
@@ -4782,8 +4789,8 @@ function findHoleBridge(holeNode, outerNode) {
 
     while (node !== stop) {
 
-        mx = node.p[0];
-        my = node.p[1];
+        mx = data[node.i];
+        my = data[node.i + 1];
         amx = px - mx;
 
         if (amx >= 0 && mx >= bx) {
@@ -4793,7 +4800,7 @@ function findHoleBridge(holeNode, outerNode) {
 
                 if (t >= 0 && A * sign - s - t >= 0) {
                     tan = Math.abs(py - my) / amx; // tangential
-                    if (tan < tanMin && locallyInside(node, holeNode)) {
+                    if (tan < tanMin && locallyInside(data, node, holeNode)) {
                         mNode = node;
                         tanMin = tan;
                     }
@@ -4808,11 +4815,11 @@ function findHoleBridge(holeNode, outerNode) {
 }
 
 // interlink polygon nodes in z-order
-function indexCurve(start, minX, minY, size) {
+function indexCurve(data, start, minX, minY, size) {
     var node = start;
 
     do {
-        if (node.z === null) node.z = zOrder(node.p[0], node.p[1], minX, minY, size);
+        if (node.z === null) node.z = zOrder(data[node.i], data[node.i + 1], minX, minY, size);
         node.prevZ = node.prev;
         node.nextZ = node.next;
         node = node.next;
@@ -4830,7 +4837,7 @@ function sortLinked(list) {
     var i, p, q, e, tail, numMerges, pSize, qSize,
         inSize = 1;
 
-    while (true) {
+    do {
         p = list;
         list = null;
         tail = null;
@@ -4879,11 +4886,11 @@ function sortLinked(list) {
         }
 
         tail.nextZ = null;
-
-        if (numMerges <= 1) return list;
-
         inSize *= 2;
-    }
+
+    } while (numMerges > 1);
+
+    return list;
 }
 
 // z-order of a point given coords and size of the data bounding box
@@ -4905,11 +4912,11 @@ function zOrder(x, y, minX, minY, size) {
 }
 
 // find the leftmost node of a polygon ring
-function getLeftmost(start) {
+function getLeftmost(data, start) {
     var node = start,
         leftmost = start;
     do {
-        if (node.p[0] < leftmost.p[0]) leftmost = node;
+        if (data[node.i] < data[leftmost.i]) leftmost = node;
         node = node.next;
     } while (node !== start);
 
@@ -4917,38 +4924,39 @@ function getLeftmost(start) {
 }
 
 // check if a diagonal between two polygon nodes is valid (lies in polygon interior)
-function isValidDiagonal(a, b) {
-    return !intersectsPolygon(a, a.p, b.p) &&
-           locallyInside(a, b) && locallyInside(b, a) &&
-           middleInside(a, a.p, b.p);
+function isValidDiagonal(data, a, b) {
+    return a.next.i !== b.i && a.prev.i !== b.i &&
+           !intersectsPolygon(data, a, a.i, b.i) &&
+           locallyInside(data, a, b) && locallyInside(data, b, a) &&
+           middleInside(data, a, a.i, b.i);
 }
 
 // winding order of triangle formed by 3 given points
-function orient(p, q, r) {
-    var o = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+function orient(data, p, q, r) {
+    var o = (data[q + 1] - data[p + 1]) * (data[r] - data[q]) - (data[q] - data[p]) * (data[r + 1] - data[q + 1]);
     return o > 0 ? 1 :
            o < 0 ? -1 : 0;
 }
 
 // check if two points are equal
-function equals(p1, p2) {
-    return p1[0] === p2[0] && p1[1] === p2[1];
+function equals(data, p1, p2) {
+    return data[p1] === data[p2] && data[p1 + 1] === data[p2 + 1];
 }
 
 // check if two segments intersect
-function intersects(p1, q1, p2, q2) {
-    return orient(p1, q1, p2) !== orient(p1, q1, q2) &&
-           orient(p2, q2, p1) !== orient(p2, q2, q1);
+function intersects(data, p1, q1, p2, q2) {
+    return orient(data, p1, q1, p2) !== orient(data, p1, q1, q2) &&
+           orient(data, p2, q2, p1) !== orient(data, p2, q2, q1);
 }
 
 // check if a polygon diagonal intersects any polygon segments
-function intersectsPolygon(start, a, b) {
+function intersectsPolygon(data, start, a, b) {
     var node = start;
     do {
-        var p1 = node.p,
-            p2 = node.next.p;
+        var p1 = node.i,
+            p2 = node.next.i;
 
-        if (p1 !== a && p2 !== a && p1 !== b && p2 !== b && intersects(p1, p2, a, b)) return true;
+        if (p1 !== a && p2 !== a && p1 !== b && p2 !== b && intersects(data, p1, p2, a, b)) return true;
 
         node = node.next;
     } while (node !== start);
@@ -4957,24 +4965,25 @@ function intersectsPolygon(start, a, b) {
 }
 
 // check if a polygon diagonal is locally inside the polygon
-function locallyInside(a, b) {
-    return orient(a.prev.p, a.p, a.next.p) === -1 ?
-        orient(a.p, b.p, a.next.p) !== -1 && orient(a.p, a.prev.p, b.p) !== -1 :
-        orient(a.p, b.p, a.prev.p) === -1 || orient(a.p, a.next.p, b.p) === -1;
+function locallyInside(data, a, b) {
+    return orient(data, a.prev.i, a.i, a.next.i) === -1 ?
+        orient(data, a.i, b.i, a.next.i) !== -1 && orient(data, a.i, a.prev.i, b.i) !== -1 :
+        orient(data, a.i, b.i, a.prev.i) === -1 || orient(data, a.i, a.next.i, b.i) === -1;
 }
 
 // check if the middle point of a polygon diagonal is inside the polygon
-function middleInside(start, a, b) {
+function middleInside(data, start, a, b) {
     var node = start,
         inside = false,
-        px = (a[0] + b[0]) / 2,
-        py = (a[1] + b[1]) / 2;
+        px = (data[a] + data[b]) / 2,
+        py = (data[a + 1] + data[b + 1]) / 2;
     do {
-        var p1 = node.p,
-            p2 = node.next.p;
+        var p1 = node.i,
+            p2 = node.next.i;
 
-        if (((p1[1] > py) !== (p2[1] > py)) &&
-            (px < (p2[0] - p1[0]) * (py - p1[1]) / (p2[1] - p1[1]) + p1[0])) inside = !inside;
+        if (((data[p1 + 1] > py) !== (data[p2 + 1] > py)) &&
+            (px < (data[p2] - data[p1]) * (py - data[p1 + 1]) / (data[p2 + 1] - data[p1 + 1]) + data[p1]))
+                inside = !inside;
 
         node = node.next;
     } while (node !== start);
@@ -4982,20 +4991,13 @@ function middleInside(start, a, b) {
     return inside;
 }
 
-function compareX(a, b) {
-    return a.p[0] - b.p[0];
-}
-
 // link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
 // if one belongs to the outer ring and another to a hole, it merges it into a single ring
 function splitPolygon(a, b) {
-    var a2 = new Node(a.p),
-        b2 = new Node(b.p),
+    var a2 = new Node(a.i),
+        b2 = new Node(b.i),
         an = a.next,
         bp = b.prev;
-
-    a2.source = a;
-    b2.source = b;
 
     a.next = b;
     b.prev = a;
@@ -5013,8 +5015,8 @@ function splitPolygon(a, b) {
 }
 
 // create a node and optionally link it with previous one (in a circular doubly linked list)
-function insertNode(point, last) {
-    var node = new Node(point);
+function insertNode(i, last) {
+    var node = new Node(i);
 
     if (!last) {
         node.prev = node;
@@ -5029,9 +5031,9 @@ function insertNode(point, last) {
     return node;
 }
 
-function Node(p) {
+function Node(i) {
     // vertex coordinates
-    this.p = p;
+    this.i = i;
 
     // previous and next vertice nodes in a polygon ring
     this.prev = null;
@@ -5044,9 +5046,8 @@ function Node(p) {
     this.prevZ = null;
     this.nextZ = null;
 
-    // used for indexed output
-    this.source = null;
-    this.index = null;
+    // indicates whether this is a steiner point
+    this.steiner = false;
 }
 
 ;
