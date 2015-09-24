@@ -226,33 +226,38 @@ function draw_shadow(){
     draw tcopy -> vec1to3;
 }
 
+function colour_triangles(point light, point mid, point dark)->void{
+    t1 = t1 ~ dark;
+    t2 = t2 ~ light;
+    t3 = t3 ~ mid;
+}
+
+function draw_triforce(point shift, point hover)->void{
+    draw (t1 -> shift) -> hover;
+    draw (t2 -> shift) -> hover;
+    draw (t3 -> shift) -> hover;
+}
+
 function render(num time)->void{
     clear;
     
     draw_shadow();
     
-    num k = 0.5+(oscillator(time, 1200)+1)/2;
-    num l = ((oscillator(time, 1200)+1)/4);
+    num k = 0.5+(oscillator(time, 7000)+1)/2;
+    num l = ((oscillator(time, 7000)+1)/4);
    
     point white = {1,1,k};
     point yellow = {1,1,l/2};
     point orange = {1, 0.75, l/4}
     
-    point hover = {0, oscillator(time,10000)*10};
+    point hover = {0, oscillator(time+3500,7000)*10};
     
-    draw (t1 ~ orange) -> hover;
-    draw (t2 ~ white) -> hover;
-    draw (t3 ~ yellow) -> hover;
+    colour_triangles(white, yellow, orange);
     
-    draw (t1 -> vec1to2) -> hover;
-    draw (t2 -> vec1to2) -> hover;
-    draw (t3 -> vec1to2) -> hover;
-    
-    draw (t1 -> vec1to3) -> hover;
-    draw (t2 -> vec1to3) -> hover;
-    draw (t3 -> vec1to3) -> hover;
+    draw_triforce({0,0}, hover);
+    draw_triforce(vec1to2, hover);
+    draw_triforce(vec1to3, hover);
 }
-
 </textarea>
 <a href="#" class="myButton" onclick="renderClick()">Render</a>
 </div>

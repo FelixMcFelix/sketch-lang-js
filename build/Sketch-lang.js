@@ -3490,7 +3490,7 @@ Sketch.SketchGenOperandTable.add("draw", ["polygon"],
 var colourSizeCheck = function(keys){
 	var target = keys[keys.length - 1];
 	return {
-		answer: (target.extra.size === 3) || (target.extra.size === 4),
+		answer: (target.extra === undefined) || (target.extra.size === 3) || (target.extra.size === 4) , //Assume the user knows what the hell they're doing if they pass a colour to a function.
 		reason: "Size of a colour must be 3 or 4 numbers." 
 	};
 }
@@ -3509,7 +3509,7 @@ Sketch.SketchGenOperandTable.add("~", ["polygon", "point"],
 //----//
 var pointIs2d = function(keys){
 	return {
-		answer: keys[1].extra.size === 2,
+		answer: (keys[1].extra === undefined) || (keys[1].extra.size === 2),
 		reason: "Shapes over 2D are not yet supported."
 	};
 };
