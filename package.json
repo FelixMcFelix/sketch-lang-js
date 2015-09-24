@@ -13,7 +13,7 @@
   "devDependencies": {
     "browserify": "^9.0.3",
     "del": "^1.1.1",
-    "earcut": "^1.4.2",
+    "earcut": "^2.0.2",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.4.3",
     "gulp-concat-util": "^0.5.2",

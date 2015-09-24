@@ -184,60 +184,74 @@
 </div>
 <div id="texty">
 	<textarea id="mlang-box" autofocus="true" cols="50" rows="6">
-num ans = 0;
-num ans2 = 7;
-num ans3 = 99.65;
+point yellow = {1,1,0};
+point orange = {1,0.75,0};
+point white = {1,1,1};
 
-function k (num i, bool b, num j) -> bool {
-    //This function doesn't use any of its parameters.
-    //They merely demonstrate operation and param type checking.
-    num m = 3;
-    function l (){
-        m = m + 1;
+point vec1to2 = {-width*1/4, height/2};
+point vec1to3 = {width*1/4, height/2};
+
+polygon t1 = ({width*1/4,height/2}+{width*3/4,height/2})+{width/2,0};
+polygon t2 = {width/2,0} + {width*3/4,height/2} + {width*3/4 - 43.3, height/2 -25} + {width/2,50};
+polygon t3 = {width/2,50} + {width*3/4 - 43.3, height/2 -25} + {width/4 + 46.3,height/2-25};
+
+function init()->void{
+}
+
+function sub_osc(num t, num p)->num{
+    return 4*((t%(p/2))/p);
+}
+
+function oscillator(num time, num period)->num{
+    num mode = (2*time/period)%2;
+    num sub = sub_osc(time, period);
+    num out;
+    if(mode ?< 1){
+        return -1 + sub;
+    } else{
+        return 1 - sub;
     }
-    l();
-    l();
-    l();
+    return out;
+}
+
+function draw_shadow(){
+    polygon tcopy = t1;
+    point shadowvec = {20, -15};
+    point shadowcolour = {47/255, 30/255, 46/255};
     
-    ans = ans + m;
+    tcopy = (tcopy ~ shadowcolour) -> shadowvec;
+    
+    draw tcopy;
+    draw tcopy -> vec1to2;
+    draw tcopy -> vec1to3;
 }
 
-function init(){
-    ans3 = 999999;
+function render(num time)->void{
+    clear;
+    
+    draw_shadow();
+    
+    num k = 0.5+(oscillator(time, 1200)+1)/2;
+    num l = ((oscillator(time, 1200)+1)/4);
+   
+    point white = {1,1,k};
+    point yellow = {1,1,l/2};
+    point orange = {1, 0.75, l/4}
+    
+    point hover = {0, oscillator(time,10000)*10};
+    
+    draw (t1 ~ orange) -> hover;
+    draw (t2 ~ white) -> hover;
+    draw (t3 ~ yellow) -> hover;
+    
+    draw (t1 -> vec1to2) -> hover;
+    draw (t2 -> vec1to2) -> hover;
+    draw (t3 -> vec1to2) -> hover;
+    
+    draw (t1 -> vec1to3) -> hover;
+    draw (t2 -> vec1to3) -> hover;
+    draw (t3 -> vec1to3) -> hover;
 }
-
-function render(num delta){
-    num k = delta%256;
-    num l = k/255
-    draw {0,0} + {width, height} ~ {l,l,l}
-}
-
-k(4, true, 6);
-
-#Here, we demonstrate drawing and colouring!
-clear;
-
-line l = {0,0}+{width,height};
-
-polygon p1 = {width*1/4,height/2}+{width*3/4,height/2}+{width/2,0};
-polygon p2 = {width*1/4,height/2}+{0,height}+{width/2,height};
-polygon p3 = {width*3/4,height/2}+{width,height}+{width/2,height};
-
-draw p1 ~ {1,1,0,1};
-draw p2 ~ {1,1,0,1};
-draw p3 ~ {1,1,0,1};
-
-//Comment
-//line a;
-//function init()->void{
-//    a = {0,0} + {width, height};
-//    # Inline Comment
-//}
-
-//function render(){
-//    clear;
-//    draw a;
-//}
 
 </textarea>
 <a href="#" class="myButton" onclick="renderClick()">Render</a>

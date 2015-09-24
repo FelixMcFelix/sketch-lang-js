@@ -16,7 +16,7 @@ Sketch.SketchGen = function(){
 	var stackPtr = 0;
 	var functionStack = [];
 
-	var DEBUG = true;
+	var DEBUG = false;
 
 	var instructions = Sketch.bindInstructions(this);
 

@@ -91,28 +91,27 @@ Palette.Program.prototype = {
 		this.context.useProgram(this.program);
 		if(!conf1) conf1 = {};
 		var tempDrawMode = this.drawMode;
-
 		if(verts !== null){
 		switch(this.drawMode){
 			case Palette.Program.POLYGON:
-				var temp = earcut([verts], true);
+				var temp = earcut(verts, null, 2);
 				var itemSize = this.attrs.vs.access.vertexBuffer.itemSize;
-				var temper = new Float32Array(temp.indices.length * itemSize);
+				var temper = new Float32Array(temp.length * itemSize);
 
-				var vertSize = verts[0].length;
+				var vertSize = 2;
 
-				for(var i=0; i<temp.indices.length; i++){
-					var vertIndex = temp.indices[i];
+				for(var i=0; i<temp.length; i++){
+					var vertIndex = temp[i];
 
 					switch(vertSize){
 						case 3:
-							temper[itemSize*i+2] = temp.vertices[vertIndex*vertSize +2];
+							temper[itemSize*i+2] = verts[vertIndex*vertSize +2];
 							/*falls through*/
 						case 2:
-							temper[itemSize*i+1] = temp.vertices[vertIndex*vertSize +1];
+							temper[itemSize*i+1] = verts[vertIndex*vertSize +1];
 							/*falls through*/
 						case 1:
-							temper[itemSize*i] = temp.vertices[vertIndex*vertSize];
+							temper[itemSize*i] = verts[vertIndex*vertSize];
 							/*falls through*/
 					}
 				}

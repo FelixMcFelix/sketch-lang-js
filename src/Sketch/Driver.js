@@ -48,7 +48,7 @@ Sketch.Driver = function(canvas){
 	 * @protected
 	 * @readonly
 	 */
-	this.codeGen = new Sketch.SketchGen();
+	this.codeGen = null;
 	/**
 	 * The module's reference to the shader manager.
 	 * @name Sketch.Driver#shaderManager
@@ -121,14 +121,21 @@ Sketch.Driver.prototype = {
 			" If it's been excessively long then you may have tried to add a malformed shader.");
 			return false;
 		}
+		if(this.vm){
+			this.vm.kill();
+		}
 		this.vm = null;
+		this.codeGen = null;
 		try{
+			this.codeGen = new Sketch.SketchGen();
 			var ast = this.parser.parse(text);
 
 			var prog = this.codeGen.interpret(ast);
 
-			this.vm = new MVM.VM(this.context, this.shaderManager, prog.code, true);
-			var d = this.vm.interpret().current();
+			var vm = new MVM.VM(this.context, this.shaderManager, prog.code, false);
+
+			this.vm = vm;
+			var d = this.vm.interpret();
 
 			if(prog.initAddr !== null){
 				this.vm.call(prog.initAddr, []);
@@ -139,18 +146,20 @@ Sketch.Driver.prototype = {
 				var t = this;
 
 				var fn = function(){
-					t.vm.call(prog.renderAddr, [Date.now()-initTime]);
-					window.requestAnimationFrame(fn);
+					if(!vm.dead){
+						vm.call(prog.renderAddr, [Date.now()-initTime]);
+						var k = window.requestAnimationFrame(fn, t.canvas);
+					}
 				}
 
-				window.requestAnimationFrame(fn);
+				window.requestAnimationFrame(fn, this.canvas);
 				
 			}
-			alert("The final values of global scope variables are (in order of definition):\n"+d.variables);
+			// alert("The final values of global scope variables are (in order of definition):\n"+d.variables);
 			//Since the code generator is not capable of outputting graphical operations
 			//we shall simply print the stack's top value to demonstrate our wonderful
 			//calculator.
-			alert("The Virtual Machine's final state is in the console.");
+			// alert("The Virtual Machine's final state is in the console.");
 			console.log(d);
 		} catch (e){
 			alert("Error detected while rendering! See console for stack trace.");
