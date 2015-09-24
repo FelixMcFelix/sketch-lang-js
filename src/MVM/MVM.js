@@ -343,30 +343,32 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("JUMP: " + address);
 					break;
 				case opCodes.JUMPT:
-					var address = labelTable[codeStore[cp]];
-					sp--;
-					var i = dataStore[sp];
-					result = i == 1;
-					if (result) {
-						cp = codeStore[cp];
+					//Jump to another part of the program if the top value on the stack is true.
+					//USE: JUMPT address
+
+					var address = codeStore[cp++];
+					
+					var i = data.current()
+								.pop();
+					if (i) {
+						cp = address;
 					}
-					else {
-						cp++;
-					}
-					if(debugMode) console.log("JUMPT: " + i + " " + result);
+
+					if(debugMode) console.log("JUMPT: to " + address + ", cond is " + i);
 					break;
 				case opCodes.JUMPF:
-					var address = labelTable[codeStore[cp]];
-					sp--;
-					var i = dataStore[sp];
-					var result = i == 0;
-					if(debugMode) console.log("JUMPF: " + i + " " + result);
-					if (result) {
-						cp = codeStore[cp];
+					//Jump to another part of the program if the top value on the stack is false.
+					//USE: JUMPF address
+
+					var address = codeStore[cp++];
+					
+					var i = data.current()
+								.pop();
+					if (!i) {
+						cp = address;
 					}
-					else {
-						cp++;
-					}
+					
+					if(debugMode) console.log("JUMPF: to " + address + ", cond is " + i);
 					break;
 				case opCodes.CALL:
 					//Call a function.
@@ -457,7 +459,17 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 					if(debugMode) console.log("RENDER");
 					break;
 				case opCodes.CLEAR:
-					glctx.clearColor(0.0,0.0,0.0,1.0);
+					//Pop an element off the stack. If it is a colour, set it as the clear colour - if not, use the current clear colour.
+					var colour = data.current()
+									 .pop();
+					if(colour){
+						if(colour.length<4){
+							colour[3] = 1.0;
+						}
+
+						glctx.clearColor(colour[0],colour[1],colour[2],colour[3]);
+					}
+					
 					glctx.clear(glctx.COLOR_BUFFER_BIT|glctx.DEPTH_BUFFER_BIT);
 					if(debugMode) console.log("CLEAR");
 					break;
@@ -735,6 +747,44 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 
 					if(debugMode) console.log("SETCOLOUR: " +shape+ " ~ " +colour+ " = " +out);
 					break;
+				case opCodes.TRANSLATEPT:
+					//Pop off twom points, move top of stack by the necessary distance.
+					var vectr = data.current()
+									.pop();
+					var point = data.current()
+									.pop();
+
+					var out = point.slice();
+
+					for (var i = 0; i < vectr.length; i++) {
+						out[i] += vectr[i];
+					};
+
+					data.current()
+						.push(out);
+
+					if(debugMode) console.log("TRASLATEPT: [" +point+ "] -> [" +vectr+ "] = [" +out+"]");
+					break;
+				case opCodes.TRANSLATESTRUCT:
+					//Pop off twom points, move top of stack by the necessary distance.
+					var vectr = data.current()
+									.pop();
+					var strct = data.current()
+									.pop();
+
+					var out = strct.slice();
+
+					// alert("["+out+"]");
+
+					for (var i = 4; i < strct.length; i++) {
+						out[i] += vectr[i%2];
+					};
+
+					data.current()
+						.push(out);
+
+					if(debugMode) console.log("TRASLATESTRUCT: [" +strct+ "] -> [" +vectr+ "] = [" +out+"]");
+					break;
 			}
 			// remove garbage from stack
 			//dataStore.splice(sp,dataStore.length - sp);
@@ -750,6 +800,18 @@ MVM.VM = function(glctx, manager, codeStore, debugMode) {
 	render = function() {
 		needsUpdate = 0;
 		window.requestAnimationFrame(window.mvm.interpret);
+	}
+
+	this.call = function(address, args){
+		var returnAddress = codeStore.length;
+		for (var i = 0; i < args.length; i++) {
+			data.current()
+				.push(args[i]);
+		};
+		data.call(args.length, 0, returnAddress);
+		cp = address;
+
+		return this.interpret();
 	}
 
 	// angle parameter in deegrees
@@ -824,5 +886,7 @@ MVM.opCodes = {
 	WIDTH:	42,
 	HEIGHT:	43,
 	AUGPT:	44,
-	SETCOLOUR:	45 
+	SETCOLOUR:	45,
+	TRANSLATEPT:	46, 
+	TRANSLATESTRUCT:	47
 };

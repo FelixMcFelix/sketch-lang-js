@@ -189,6 +189,8 @@ statement
 render_statements
   : CLEAR semi
     { $$ = {type: Sketch.SketchGenNodes["clear"], arguments: null}; }
+  | CLEAR exp semi
+    { $$ = {type: Sketch.SketchGenNodes["clear_colour"], arguments: $2}; }
   | DRAW exp semi
     { $$ = {type: Sketch.SketchGenNodes["draw"], arguments: $2}; }
 ;
@@ -196,21 +198,23 @@ render_statements
 
 
 condition_statements  
-  : IF OPEN_PARENS exp CLOSE_PARENS statement %prec IF_WITHOUT_ELSE
-       { $$ = { type: "if",
-                arguments : [$3,
-                             $5]
-               };
-       }
+  : IF OPEN_PARENS exp CLOSE_PARENS body else_ifs
+    { $$ = {type: Sketch.SketchGenNodes["if"], arguments: [{type: Sketch.SketchGenNodes["else_if"], arguments:[$3, $5]}].concat($6)}; }
+;
 
-  | IF OPEN_PARENS exp CLOSE_PARENS statement ELSE statement 
-       {$$ = { type : "if_else",
-               arguments : [ $3,
-                             $5,
-                             $7
-                           ]
-             };
-     }
+else_ifs
+  : ELSE IF OPEN_PARENS exp CLOSE_PARENS body else_ifs
+    {
+      $$ = $7; 
+      $$.unshift({
+        type: Sketch.SketchGenNodes["else_if"],
+        arguments: [$4, $6]
+      }); 
+    }
+  | ELSE body
+    { $$ = [{type: Sketch.SketchGenNodes["else"], arguments: $2}]; }
+  |
+    { $$ = []; }
 ;
 
 iteration_statements  
@@ -464,6 +468,12 @@ exp
     | exp TILDE exp
                 { $$ = {
                     type: Sketch.SketchGenNodes["colour"],
+                    arguments: [$1, $3]
+                  };
+                }
+    | exp ARROW exp
+                { $$ = {
+                    type: Sketch.SketchGenNodes["translate"],
                     arguments: [$1, $3]
                   };
                 }

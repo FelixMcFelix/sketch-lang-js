@@ -202,6 +202,16 @@ function k (num i, bool b, num j) -> bool {
     ans = ans + m;
 }
 
+function init(){
+    ans3 = 999999;
+}
+
+function render(num delta){
+    num k = delta%256;
+    num l = k/255
+    draw {0,0} + {width, height} ~ {l,l,l}
+}
+
 k(4, true, 6);
 
 #Here, we demonstrate drawing and colouring!
@@ -228,6 +238,7 @@ draw p3 ~ {1,1,0,1};
 //    clear;
 //    draw a;
 //}
+
 </textarea>
 <a href="#" class="myButton" onclick="renderClick()">Render</a>
 </div>
