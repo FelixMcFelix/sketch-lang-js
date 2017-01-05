@@ -22,4 +22,4 @@ $ gulp
 
 and the project should build automatically. This produces a "main.js" file for now, which acts as the module to be embedded.
 
-Demo: https://dl.dropboxusercontent.com/u/15574345/sketch-lang-js/editor/index.html
+Demo: https://mcfelix.me/proj-pages/sketch/
